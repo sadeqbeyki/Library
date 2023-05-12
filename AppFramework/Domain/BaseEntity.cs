@@ -4,7 +4,7 @@ namespace AppFramework.Domain
 {
     public class BaseEntity
     {
-        public long Id { get; private set; }
+        public Guid Id { get; private set; }
         public DateTime CreationDate { get; private set; }
 
         public BaseEntity()
