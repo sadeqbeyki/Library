@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BMS.Domain.AuthorAgg
+namespace BMS.Domain.TranslatorAgg
 {
-    public interface IAutherRepository : IRepository<Author>
+    public interface ITranslatorRepository : IRepository<Translator>
     {
     }
 }

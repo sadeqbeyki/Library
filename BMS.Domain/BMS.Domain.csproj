@@ -10,8 +10,4 @@
     <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="BookAgg\NewFolder\" />
-  </ItemGroup>
-
 </Project>

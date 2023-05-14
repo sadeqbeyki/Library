@@ -1,4 +1,5 @@
-﻿using BMS.Domain.BookAgg;
+﻿using AppFramework.Domain;
+using BMS.Domain.BookAgg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BMS.Domain.AuthorAgg
 {
-    public class Author
+    public class Author : BaseEntity
     {
         public string Name { get; set; }
         public string Description { get; set; }
