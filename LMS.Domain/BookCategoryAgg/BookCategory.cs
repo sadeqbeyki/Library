@@ -1,7 +1,7 @@
 ﻿using AppFramework.Domain;
-using BMS.Domain.BookAgg;
+using LMS.Domain.BookAgg;
 
-namespace BMS.Domain.BookCategoryAgg
+namespace LMS.Domain.BookCategoryAgg
 {
     public class BookCategory : BaseEntity
     {

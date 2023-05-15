@@ -1,7 +1,7 @@
 ﻿using AppFramework.Domain;
-using BMS.Domain.ReservationAgg;
+using LMS.Domain.ReservationAgg;
 
-namespace BMS.Domain.UserAgg;
+namespace LMS.Domain.UserAgg;
 
 public class User:BaseEntity
 {

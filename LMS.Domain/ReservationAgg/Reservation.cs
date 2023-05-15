@@ -1,12 +1,13 @@
 ﻿using AppFramework.Domain;
-using BMS.Domain.BookAgg;
-using BMS.Domain.UserAgg;
+using LMS.Domain.BookAgg;
+using LMS.Domain.UserAgg;
 
-namespace BMS.Domain.ReservationAgg;
+namespace LMS.Domain.ReservationAgg;
 
 public class Reservation:BaseEntity
 {
     public Book Book { get; set; }
+    public int UserId { get; set; }
     public User User { get; set; }
     public DateTime ReservationDate { get; init; }
 }

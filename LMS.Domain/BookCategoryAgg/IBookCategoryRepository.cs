@@ -1,6 +1,6 @@
 ﻿using AppFramework.Domain;
 
-namespace BMS.Domain.BookCategoryAgg;
+namespace LMS.Domain.BookCategoryAgg;
 
 public interface IBookCategoryRepository:IRepository<BookCategory>
 {

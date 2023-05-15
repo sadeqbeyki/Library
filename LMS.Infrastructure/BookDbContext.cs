@@ -1,4 +1,10 @@
-﻿using BMS.Domain.BookAgg;
+﻿using LMS.Domain;
+using LMS.Domain.AuthorAgg;
+using LMS.Domain.BookAgg;
+using LMS.Domain.BookCategoryAgg;
+using LMS.Domain.PublisherAgg;
+using LMS.Domain.ReservationAgg;
+using LMS.Domain.TranslatorAgg;
 using LMS.Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -8,6 +14,14 @@ namespace LMS.Infrastructure
     public class BookDbContext : DbContext
     {
         public DbSet<Book> Books { get; set; }
+        public DbSet<Author> Authors  { get; set; }
+        public DbSet<Translator> Translators{ get; set; }
+        public DbSet<Publisher> Publishers{ get; set; }
+        public DbSet<BookCategory> BookCategories{ get; set; }
+        public DbSet<Reservation> Reservations{ get; set; }
+        public DbSet<AuthorBook> AuthorBooks{ get; set; }
+        public DbSet<TranslatorBook> TranslatorBooks{ get; set; }
+        public DbSet<PublisherBook> PublisherBooks{ get; set; }
         public BookDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -18,7 +32,7 @@ namespace LMS.Infrastructure
             optionsBuilder.UseSqlServer("Server=.;" +
                 "Database=LibraryDB;" +
                 "Trusted_Connection=True;" +
-                "TrustServerCertificate=True;" +
+                //"TrustServerCertificate=True;" +
                 "User ID=sa;" +
                 "Password=7410");
         }

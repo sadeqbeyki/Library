@@ -1,6 +1,6 @@
 ﻿using AppFramework.Domain;
 
-namespace BMS.Domain.PublisherAgg;
+namespace LMS.Domain.PublisherAgg;
 
 public interface IPublisherRepository : IRepository<Publisher>
 {

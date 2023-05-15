@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using BMS.Domain.PublisherAgg;
+using LMS.Domain.PublisherAgg;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories;

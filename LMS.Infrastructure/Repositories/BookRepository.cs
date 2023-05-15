@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using BMS.Domain.BookAgg;
+using LMS.Domain.BookAgg;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories;

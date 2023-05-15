@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using BMS.Domain.TranslatorAgg;
+using LMS.Domain.TranslatorAgg;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories
