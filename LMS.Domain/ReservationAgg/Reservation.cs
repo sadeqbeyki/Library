@@ -7,7 +7,7 @@ namespace LMS.Domain.ReservationAgg;
 public class Reservation:BaseEntity
 {
     public Book Book { get; set; }
-    public int UserId { get; set; }
-    public User User { get; set; }
+    //public long UserId { get; set; }
+    //public User User { get; set; }
     public DateTime ReservationDate { get; init; }
 }

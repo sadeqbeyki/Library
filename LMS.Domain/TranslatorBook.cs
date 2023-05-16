@@ -5,9 +5,9 @@ namespace LMS.Domain;
 
 public class TranslatorBook
 {
-    public long TranslatorId { get; set; }
+    public Guid TranslatorId { get; set; }
     public Translator Translator { get; set; }
 
-    public long BookId { get; set; }
+    public Guid BookId { get; set; }
     public Book Book { get; set; }
 }
