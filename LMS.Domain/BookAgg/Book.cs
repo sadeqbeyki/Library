@@ -1,9 +1,6 @@
 ﻿using AppFramework.Domain;
-using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookCategoryAgg;
-using LMS.Domain.PublisherAgg;
 using LMS.Domain.ReservationAgg;
-using LMS.Domain.TranslatorAgg;
 
 namespace LMS.Domain.BookAgg;
 
@@ -16,7 +13,7 @@ public class Book : BaseEntity
 
     public long CategoryId { get; private set; }
     public BookCategory Category { get; private set; }
-    public List<BookCategory> Categories { get; private set; }
+    //public List<BookCategory> Categories { get; private set; }
 
     //public long AuthorId { get; private set; }
     //public Author Author { get; set; }
