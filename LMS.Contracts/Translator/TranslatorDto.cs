@@ -1,4 +1,4 @@
-﻿namespace LMS.Contracts
+﻿namespace LMS.Contracts.Translator
 {
     public class TranslatorDto
     {
