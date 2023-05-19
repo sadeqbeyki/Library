@@ -6,7 +6,7 @@ namespace LMS.Infrastructure.Repositories;
 
 public class PublisherRepository : Repository<Publisher>, IPublisherRepository
 {
-    public PublisherRepository(DbContext dbContext) : base(dbContext)
+    public PublisherRepository(BookDbContext dbContext) : base(dbContext)
     {
     }
 }
