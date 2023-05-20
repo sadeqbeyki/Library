@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories
 {
-    public class AutherRepository : Repository<Author>, IAutherRepository
+    public class AuthorRepository : Repository<Author>, IAuthorRepository
     {
-        public AutherRepository(DbContext dbContext) : base(dbContext)
+        public AuthorRepository(BookDbContext dbContext) : base(dbContext)
         {
         }
     }
