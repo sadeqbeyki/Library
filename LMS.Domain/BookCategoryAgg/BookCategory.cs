@@ -9,10 +9,10 @@ namespace LMS.Domain.BookCategoryAgg
         public string Description { get; set; }
         public List<Book> Books { get; set; } = new List<Book>();
 
-        public BookCategory(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
+        //public BookCategory(string name, string description)
+        //{
+        //    Name = name;
+        //    Description = description;
+        //}
     }
 }
