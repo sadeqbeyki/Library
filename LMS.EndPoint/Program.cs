@@ -1,8 +1,10 @@
 using LMS.Contracts.Author;
+using LMS.Contracts.Book;
 using LMS.Contracts.BookCategory;
 using LMS.Contracts.Publisher;
 using LMS.Contracts.Translator;
 using LMS.Domain.AuthorAgg;
+using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
 using LMS.Domain.PublisherAgg;
 using LMS.Domain.TranslatorAgg;
@@ -19,6 +21,9 @@ builder.Services.AddDbContext<BookDbContext>(opt=>opt.UseSqlServer(builder.Confi
 
 builder.Services.AddScoped<IBookCategoryRepository, BookCategoryRepository>();
 builder.Services.AddScoped<IBookCategoryService, BookCategoryService>();
+
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IBookService, BookService>();
 
 builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();

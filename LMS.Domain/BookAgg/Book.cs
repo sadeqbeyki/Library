@@ -8,10 +8,10 @@ public class Book : BaseEntity
 {
     public string Title { get; set; }
     public string ISBN { get; set; }
-    public string Code { get; private set; }
-    public string Description { get; private set; }
+    public string Code { get; set; }
+    public string Description { get; set; }
 
-    public long CategoryId { get; private set; }
+    public Guid BookCategoryId { get; set; }
     public BookCategory Category { get; private set; }
     //public List<BookCategory> Categories { get; private set; }
 
@@ -33,11 +33,16 @@ public class Book : BaseEntity
 
     public List<Reservation> Reservations { get; set; }
 
-    public Book(string code, string title, string description, long categoryId)
-    {
-        Code = code;
-        Title = title;
-        Description = description;
-        CategoryId = categoryId;
-    }
+    public Guid PublisherId { get; set; }
+    public Guid AuthorId { get; set; }
+    public Guid TranslatorId { get; set; }
+    
+
+    //public Book(string code, string title, string description, long categoryId)
+    //{
+    //    Code = code;
+    //    Title = title;
+    //    Description = description;
+    //    CategoryId = categoryId;
+    //}
 }

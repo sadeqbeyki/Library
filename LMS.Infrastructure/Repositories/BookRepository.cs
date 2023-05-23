@@ -6,7 +6,7 @@ namespace LMS.Infrastructure.Repositories;
 
 public class BookRepository : Repository<Book>, IBookRepository
 {
-    public BookRepository(DbContext dbContext) : base(dbContext)
+    public BookRepository(BookDbContext dbContext) : base(dbContext)
     {
     }
 }

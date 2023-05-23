@@ -6,11 +6,11 @@ namespace LMS.Services
 {
     public class AuthorService : IAuthorService
     {
-        private readonly IAuthorRepository _autherRepository;
+        private readonly IAuthorRepository _authorRepository;
 
         public AuthorService(IAuthorRepository autherRepository)
         {
-            _autherRepository = autherRepository;
+            _authorRepository = autherRepository;
         }
 
         public async Task<AuthorDto> Create(AuthorDto dto)
@@ -20,7 +20,7 @@ namespace LMS.Services
                 Name = dto.Name,
                 Description = dto.Description,
             };
-            var addAuther = await _autherRepository.AddAsync(auther);
+            var addAuther = await _authorRepository.AddAsync(auther);
 
             var result = new AuthorDto
             {
@@ -33,12 +33,12 @@ namespace LMS.Services
 
         public Task<List<AuthorDto>> GetAll()
         {
-            var result = _autherRepository.GetAll()
-                .Select(auther => new AuthorDto
+            var result = _authorRepository.GetAll()
+                .Select(author => new AuthorDto
                 {
-                    Id = auther.Id,
-                    Name = auther.Name,
-                    Description = auther.Description,
+                    Id = author.Id,
+                    Name = author.Name,
+                    Description = author.Description,
                 }).ToList();
 
             return Task.FromResult(result);
@@ -46,7 +46,7 @@ namespace LMS.Services
 
         public async Task<AuthorDto> GetById(Guid id)
         {
-            var result = await _autherRepository.GetByIdAsync(id);
+            var result = await _authorRepository.GetByIdAsync(id);
             AuthorDto dto = new()
             {
                 Id = id,
@@ -58,20 +58,20 @@ namespace LMS.Services
 
         public async Task Delete(Guid id)
         {
-            var result = await _autherRepository.GetByIdAsync(id);
-            await _autherRepository.DeleteAsync(result);
+            var result = await _authorRepository.GetByIdAsync(id);
+            await _authorRepository.DeleteAsync(result);
         }
 
         public async Task<AuthorDto> Update(Guid id, AuthorDto entity)
         {
-            var existingAuther = await _autherRepository.GetByIdAsync(id);
-            if (existingAuther == null)
+            var existingAuthor = await _authorRepository.GetByIdAsync(id);
+            if (existingAuthor == null)
                 return null;
 
-            existingAuther.Name = entity.Name;
-            existingAuther.Description = entity.Description;
+            existingAuthor.Name = entity.Name;
+            existingAuthor.Description = entity.Description;
 
-            await _autherRepository.UpdateAsync(existingAuther);
+            await _authorRepository.UpdateAsync(existingAuthor);
             return entity;
         }
 
