@@ -33,7 +33,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] BookCategoryDto dto)
+        public async Task<IActionResult> Create([FromBody] BookDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -42,11 +42,11 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<BookCategoryDto> Update(Guid id, [FromBody] BookCategoryDto bookCategory)
+        public async Task<BookDto> Update(Guid id, [FromBody] BookDto book)
         {
-            var updatedBookCategory = await _bookService.Update(id, bookCategory);
+            var updatedBook = await _bookService.Update(id, book);
 
-            return updatedBookCategory;
+            return updatedBook;
         }
 
         [HttpDelete("{id}")]
