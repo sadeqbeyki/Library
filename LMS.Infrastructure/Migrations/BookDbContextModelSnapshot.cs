@@ -56,16 +56,20 @@ namespace LMS.Infrastructure.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("AuthorBooks", (string)null);
+                    b.ToTable("AuthorBooks");
                 });
 
             modelBuilder.Entity("LMS.Domain.BookAgg.Book", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -85,12 +89,20 @@ namespace LMS.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<Guid>("PublisherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid>("TranslatorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Books");
                 });
@@ -99,9 +111,6 @@ namespace LMS.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BookId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationDate")
@@ -116,8 +125,6 @@ namespace LMS.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("BookCategories", (string)null);
                 });
@@ -156,7 +163,7 @@ namespace LMS.Infrastructure.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("PublisherBooks", (string)null);
+                    b.ToTable("PublisherBooks");
                 });
 
             modelBuilder.Entity("LMS.Domain.ReservationAgg.Reservation", b =>
@@ -215,7 +222,7 @@ namespace LMS.Infrastructure.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("TranslatorBooks", (string)null);
+                    b.ToTable("TranslatorBooks");
                 });
 
             modelBuilder.Entity("LMS.Domain.AuthorBook", b =>
@@ -241,18 +248,11 @@ namespace LMS.Infrastructure.Migrations
                 {
                     b.HasOne("LMS.Domain.BookCategoryAgg.BookCategory", "Category")
                         .WithMany("Books")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("LMS.Domain.BookCategoryAgg.BookCategory", b =>
-                {
-                    b.HasOne("LMS.Domain.BookAgg.Book", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("BookId");
                 });
 
             modelBuilder.Entity("LMS.Domain.PublisherBook", b =>
@@ -312,8 +312,6 @@ namespace LMS.Infrastructure.Migrations
             modelBuilder.Entity("LMS.Domain.BookAgg.Book", b =>
                 {
                     b.Navigation("AuthorBooks");
-
-                    b.Navigation("Categories");
 
                     b.Navigation("PublisherBooks");
 

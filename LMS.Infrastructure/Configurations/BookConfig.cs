@@ -17,7 +17,7 @@ public class BookConfig : IEntityTypeConfiguration<Book>
         builder.Property(b => b.Code).IsRequired().HasMaxLength(10);
         builder.Property(b => b.Description).HasMaxLength(500);
 
-        builder.HasOne(bc => bc.Category).WithMany(b => b.Books).HasForeignKey(fk => fk.Id);
+        builder.HasOne(bc => bc.Category).WithMany(b => b.Books).HasForeignKey(fk => fk.CategoryId);
 
 
         //builder.HasMany(b => b.Authors)

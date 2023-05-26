@@ -11,7 +11,7 @@ public class Book : BaseEntity
     public string Code { get; set; }
     public string Description { get; set; }
 
-    public Guid BookCategoryId { get; set; }
+    public Guid CategoryId { get; set; }
     public BookCategory Category { get; private set; }
     //public List<BookCategory> Categories { get; private set; }
 

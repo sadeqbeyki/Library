@@ -24,7 +24,7 @@ public class BookService : IBookService
             AuthorId = dto.AuthorId,
             PublisherId = dto.PublisherId,
             TranslatorId = dto.TranslatorId,
-            BookCategoryId = dto.BookCategoryId,
+            CategoryId = dto.BookCategoryId,
 
         };
         var addBook = await _bookRepository.AddAsync(book);
@@ -38,7 +38,7 @@ public class BookService : IBookService
             AuthorId = addBook.AuthorId,
             PublisherId = addBook.PublisherId,
             TranslatorId = addBook.TranslatorId,
-            BookCategoryId = addBook.BookCategoryId,
+            BookCategoryId = addBook.CategoryId,
         };
 
         return result;
@@ -57,7 +57,7 @@ public class BookService : IBookService
                 AuthorId = book.AuthorId,
                 PublisherId = book.PublisherId,
                 TranslatorId = book.TranslatorId,
-                BookCategoryId = book.BookCategoryId,
+                BookCategoryId = book.CategoryId,
             }).ToList();
 
         return Task.FromResult(result);
@@ -76,7 +76,7 @@ public class BookService : IBookService
             AuthorId = result.AuthorId,
             PublisherId = result.PublisherId,
             TranslatorId = result.TranslatorId,
-            BookCategoryId = result.BookCategoryId,
+            BookCategoryId = result.CategoryId,
         };
         return dto;
     }
@@ -100,7 +100,7 @@ public class BookService : IBookService
         existingBook.AuthorId = entity.AuthorId;
         existingBook.PublisherId = entity.PublisherId;
         existingBook.TranslatorId = entity.TranslatorId;
-        existingBook.BookCategoryId = entity.BookCategoryId;
+        existingBook.CategoryId = entity.BookCategoryId;
 
         await _bookRepository.UpdateAsync(existingBook);
         return entity;
