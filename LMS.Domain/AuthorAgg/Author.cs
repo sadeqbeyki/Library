@@ -7,7 +7,6 @@ namespace LMS.Domain.AuthorAgg
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        //public List<Book> Books { get; set; }=new List<Book>();
         public List<AuthorBook> AuthorBooks { get; set; }
     }
 }

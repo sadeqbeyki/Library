@@ -1,6 +1,6 @@
 using LMS.Contracts.Author;
-using LMS.Contracts.Publisher;
-using LMS.Domain.PublisherAgg;
+using LMS.Contracts.Book;
+using LMS.Domain.AuthorAgg;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.EndPoint.Controllers
@@ -13,7 +13,7 @@ namespace LMS.EndPoint.Controllers
 
         public AuthorController(IAuthorService authorService)
         {
-            _authorService = authorService; 
+            _authorService = authorService;
         }
 
         [HttpGet]
@@ -56,6 +56,7 @@ namespace LMS.EndPoint.Controllers
             await _authorService.Delete(id);
             return NoContent();
         }
+
     }
 
 }

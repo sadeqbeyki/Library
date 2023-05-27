@@ -1,6 +1,7 @@
 ﻿using LMS.Contracts.Author;
+using LMS.Contracts.Book;
 using LMS.Domain.AuthorAgg;
-
+using LMS.Domain.BookAgg;
 
 namespace LMS.Services
 {
@@ -8,9 +9,12 @@ namespace LMS.Services
     {
         private readonly IAuthorRepository _authorRepository;
 
-        public AuthorService(IAuthorRepository autherRepository)
+        private readonly IBookRepository _bookRepository;
+
+        public AuthorService(IAuthorRepository autherRepository, IBookRepository bookRepository)
         {
             _authorRepository = autherRepository;
+            _bookRepository = bookRepository;
         }
 
         public async Task<AuthorDto> Create(AuthorDto dto)
@@ -75,6 +79,21 @@ namespace LMS.Services
             return entity;
         }
 
-
+        public async Task<List<BookDto>> GetAuthorBooks(Guid id)
+        {
+            var books = await _authorRepository.GetAuthorBooks(id);
+            var result = books.Select(b => new BookDto
+            {
+                Title = b.Title,
+                ISBN = b.ISBN,
+                Code = b.Code,
+                Description = b.Description,
+                PublisherId = b.PublisherId,
+                AuthorId = b.AuthorId,
+                TranslatorId = b.TranslatorId,
+                CategoryId = b.CategoryId,
+            }).ToList();
+            return result;
+        }
     }
 }

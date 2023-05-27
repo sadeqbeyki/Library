@@ -24,7 +24,7 @@ public class BookService : IBookService
             AuthorId = dto.AuthorId,
             PublisherId = dto.PublisherId,
             TranslatorId = dto.TranslatorId,
-            CategoryId = dto.BookCategoryId,
+            CategoryId = dto.CategoryId,
 
         };
         var addBook = await _bookRepository.AddAsync(book);
@@ -38,16 +38,16 @@ public class BookService : IBookService
             AuthorId = addBook.AuthorId,
             PublisherId = addBook.PublisherId,
             TranslatorId = addBook.TranslatorId,
-            BookCategoryId = addBook.CategoryId,
+            CategoryId = addBook.CategoryId,
         };
 
         return result;
     }
 
-    public Task<List<BookDto>> GetAll()
+    public Task<List<BookViewModel>> GetAll()
     {
         var result = _bookRepository.GetAll()
-            .Select(book => new BookDto
+            .Select(book => new BookViewModel
             {
                 Id = book.Id,
                 Title = book.Title,
@@ -57,16 +57,16 @@ public class BookService : IBookService
                 AuthorId = book.AuthorId,
                 PublisherId = book.PublisherId,
                 TranslatorId = book.TranslatorId,
-                BookCategoryId = book.CategoryId,
+                CategoryId = book.CategoryId,
             }).ToList();
 
         return Task.FromResult(result);
     }
 
-    public async Task<BookDto> GetById(Guid id)
+    public async Task<BookViewModel> GetById(Guid id)
     {
         var result = await _bookRepository.GetByIdAsync(id);
-        BookDto dto = new()
+        BookViewModel dto = new()
         {
             Id = id,
             Title = result.Title,
@@ -76,7 +76,7 @@ public class BookService : IBookService
             AuthorId = result.AuthorId,
             PublisherId = result.PublisherId,
             TranslatorId = result.TranslatorId,
-            BookCategoryId = result.CategoryId,
+            CategoryId = result.CategoryId,
         };
         return dto;
     }
@@ -100,7 +100,7 @@ public class BookService : IBookService
         existingBook.AuthorId = entity.AuthorId;
         existingBook.PublisherId = entity.PublisherId;
         existingBook.TranslatorId = entity.TranslatorId;
-        existingBook.CategoryId = entity.BookCategoryId;
+        existingBook.CategoryId = entity.CategoryId;
 
         await _bookRepository.UpdateAsync(existingBook);
         return entity;

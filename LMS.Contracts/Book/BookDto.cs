@@ -2,11 +2,10 @@
 {
     public class BookDto
     {
-        public Guid Id { get; set; }
         public Guid PublisherId { get; set; }
         public Guid AuthorId { get; set; }
         public Guid TranslatorId { get; set; }
-        public Guid BookCategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         public string Title { get; set; }
         public string ISBN { get; set; }
