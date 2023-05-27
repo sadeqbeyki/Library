@@ -56,7 +56,14 @@ namespace LMS.EndPoint.Controllers
             await _authorService.Delete(id);
             return NoContent();
         }
-
+        [HttpGet("AuthorBooks/{id}")]
+        public async Task<ActionResult<List<BookDto>>> GetAuthorBooks(Guid id)
+        {
+            var books = await _authorService.GetAuthorBooks(id);
+            if (books == null)
+                return NoContent();
+            return Ok(books);
+        }
     }
 
 }

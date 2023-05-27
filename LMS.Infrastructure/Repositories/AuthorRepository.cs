@@ -15,7 +15,7 @@ namespace LMS.Infrastructure.Repositories
 
         public async Task<List<Book>> GetAuthorBooks(Guid id)
         {
-            List<Book> books = new (await _bookDbContext.Books.Where(b => b.AuthorId == id).ToListAsync());
+            List<Book> books = await _bookDbContext.Books.Where(b => b.AuthorId == id).ToListAsync();
             return  books;
         }
     }
