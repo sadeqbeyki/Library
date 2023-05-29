@@ -1,3 +1,4 @@
+using LMS.Contracts.Book;
 using LMS.Contracts.BookCategory;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,6 +54,15 @@ namespace LMS.EndPoint.Controllers
         {
             await _bookCategoryService.Delete(id);
             return NoContent();
+        }
+
+        [HttpGet("CategoryBooks/{id}")]
+        public async Task<ActionResult<List<BookDto>>> GetCategoryWithBooks(Guid id)
+        {
+            var books = await _bookCategoryService.GetCategoryWithBooks(id);
+            if (books == null)
+                return NoContent();
+            return Ok(books);
         }
     }
 

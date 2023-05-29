@@ -1,4 +1,6 @@
-﻿using LMS.Contracts.BookCategory;
+﻿using LMS.Contracts.Book;
+using LMS.Contracts.BookCategory;
+using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookCategoryAgg;
 
 
@@ -75,6 +77,21 @@ namespace LMS.Services
             return entity;
         }
 
-
+        public async Task<List<BookDto>> GetCategoryWithBooks(Guid id)
+        {
+            var books = await _repository.GetCategoryWithBooks(id);
+            var result = books.Select(b => new BookDto
+            {
+                Title = b.Title,
+                ISBN = b.ISBN,
+                Code = b.Code,
+                Description = b.Description,
+                PublisherId = b.PublisherId,
+                AuthorId = b.AuthorId,
+                TranslatorId = b.TranslatorId,
+                CategoryId = b.CategoryId,
+            }).ToList();
+            return result;
+        }
     }
 }
