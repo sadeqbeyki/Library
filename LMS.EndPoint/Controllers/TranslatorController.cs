@@ -1,5 +1,5 @@
+using LMS.Contracts.Book;
 using LMS.Contracts.Translator;
-using LMS.Domain.TranslatorAgg;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.EndPoint.Controllers
@@ -56,6 +56,14 @@ namespace LMS.EndPoint.Controllers
         {
             await _translatorService.DeleteTranslator(id);
             return NoContent();
+        }
+        [HttpGet("TranslatorBooks/{id}")]
+        public async Task<ActionResult<List<BookDto>>> GetTranslatorBooks(Guid id)
+        {
+            var books = await _translatorService.GetTranslatorBooks(id);
+            if (books == null)
+                return NoContent();
+            return Ok(books);
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using LMS.Contracts.Translator;
+﻿using LMS.Contracts.Book;
+using LMS.Contracts.Translator;
 using LMS.Domain.TranslatorAgg;
 
 namespace LMS.Services
@@ -65,7 +66,7 @@ namespace LMS.Services
         {
             var existingTranslator = await _translatorRepository.GetByIdAsync(id);
             if (existingTranslator == null)
-                return null;
+                throw new  KeyNotFoundException("i couldn't find a translator with this id!");
 
             existingTranslator.Name = entity.Name;
             existingTranslator.Description = entity.Description;
@@ -74,6 +75,21 @@ namespace LMS.Services
             return entity;
         }
 
-
+        public async Task<List<BookDto>> GetTranslatorBooks(Guid id)
+        {
+            var books = await _translatorRepository.GetTranslatorBooks(id);
+            var result = books.Select(b => new BookDto
+            {
+                Title = b.Title,
+                ISBN = b.ISBN,
+                Code = b.Code,
+                Description = b.Description,
+                PublisherId = b.PublisherId,
+                AuthorId = b.AuthorId,
+                TranslatorId = b.TranslatorId,
+                CategoryId = b.CategoryId,
+            }).ToList();
+            return result;
+        }
     }
 }
