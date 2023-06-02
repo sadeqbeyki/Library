@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
     <ProjectReference Include="..\BI.ApplicationContracts\BI.ApplicationContracts.csproj" />
+    <ProjectReference Include="..\BI.Domain\BI.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
 ﻿using AppFramework.Domain;
-using InventoryManagement.Application.Contract.Inventory;
+using BI.ApplicationContracts.Inventory;
 
 namespace BI.Domain.InventoryAgg
 {
-    public interface IInventoryRepository : IBaseRepository<long, Inventory>
+    public interface IInventoryRepository : IRepository<Inventory>
     {
         EditInventory GetDetails(long id);
-        Inventory GetBy(long productId);
+        Inventory GetBy(Guid bookId);
         List<InventoryViewModel> Search(InventorySearchModel searchModel);
         List<InventoryOperationViewModel> GetOperationLog(long inventoryId);
     }

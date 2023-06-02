@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace AppFramework.Domain
@@ -12,6 +14,9 @@ namespace AppFramework.Domain
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
+
+        bool Exists(Expression<Func<TEntity, bool>> expression);
+        void SaveChanges();
     }
 
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
@@ -52,6 +57,16 @@ namespace AppFramework.Domain
         {
             _dbSet.Remove(entity);
             await _dbContext.SaveChangesAsync();
+        }
+        //add inventory
+        public bool Exists(Expression<Func<TEntity, bool>> expression)
+        {
+            return _dbContext.Set<TEntity>().Any(expression);
+        }
+
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
         }
     }
 
