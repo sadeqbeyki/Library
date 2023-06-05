@@ -3,9 +3,8 @@ using LMS.Domain.ReservationAgg;
 
 namespace LMS.Domain.UserAgg;
 
-public class User:BaseEntity
+public class Borrower : BaseEntity
 {
     public string Username { get; set; }
-    public string Password { get; set; }
-    public List<Reservation> Reservations { get; set; }
+    public List<Borrow> Reservations { get; set; }
 }

@@ -31,7 +31,7 @@ public class Book : BaseEntity
     //public List<Translator> Translators { get; set; }
     public List<TranslatorBook> TranslatorBooks { get; set; }
 
-    public List<Reservation> Reservations { get; set; }
+    public List<Borrow> Reservations { get; set; }
 
     public Guid PublisherId { get; set; }
     public Guid AuthorId { get; set; }

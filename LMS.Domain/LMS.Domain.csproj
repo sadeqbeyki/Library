@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
+    <ProjectReference Include="..\BI.ApplicationContracts\BI.ApplicationContracts.csproj" />
+    <ProjectReference Include="..\BI.Domain\BI.Domain.csproj" />
+    <ProjectReference Include="..\LI.Domain\LI.Domain.csproj" />
     <ProjectReference Include="..\LMS.Contracts\LMS.Contracts.csproj" />
   </ItemGroup>
 

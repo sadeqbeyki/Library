@@ -2,7 +2,7 @@
 {
     public class InventoryViewModel
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         public string Book { get; set; }
         public Guid BookId { get; set; }
         public double UnitPrice { get; set; }

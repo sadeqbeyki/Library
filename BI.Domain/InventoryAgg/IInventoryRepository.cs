@@ -5,9 +5,9 @@ namespace BI.Domain.InventoryAgg
 {
     public interface IInventoryRepository : IRepository<Inventory>
     {
-        EditInventory GetDetails(long id);
-        Inventory GetBy(Guid bookId);
+        EditInventory GetDetails(Guid id);
+        Inventory GetBookBy(Guid bookId);
         List<InventoryViewModel> Search(InventorySearchModel searchModel);
-        List<InventoryOperationViewModel> GetOperationLog(long inventoryId);
+        List<InventoryOperationViewModel> GetOperationLog(Guid inventoryId);
     }
 }

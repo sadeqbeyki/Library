@@ -1,18 +1,20 @@
 ﻿using AppFramework.Application;
 using BI.ApplicationContracts.Inventory;
 using BI.Domain.InventoryAgg;
+using LI.ApplicationContracts.Auth;
+using LI.Infrastructure;
 
 namespace BI.ApplicationServices
 {
     public class InventoryApplication : IInventoryApplication
     {
-
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IAuthHelper _authHelper;
 
-        public InventoryApplication(IInventoryRepository inventoryRepository)
+        public InventoryApplication(IInventoryRepository inventoryRepository, IAuthHelper authHelper)
         {
-
             _inventoryRepository = inventoryRepository;
+            _authHelper = authHelper;
         }
 
         public OperationResult Create(CreateInventory command)
@@ -30,7 +32,7 @@ namespace BI.ApplicationServices
         public OperationResult Edit(EditInventory command)
         {
             var operation = new OperationResult();
-            var inventory = _inventoryRepository.GetBy(command.Id);
+            var inventory = _inventoryRepository.GetBookBy(command.Id);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
@@ -42,12 +44,12 @@ namespace BI.ApplicationServices
             return operation.Succeeded();
         }
 
-        public EditInventory GetDetails(long id)
+        public EditInventory GetDetails(Guid id)
         {
             return _inventoryRepository.GetDetails(id);
         }
 
-        public List<InventoryOperationViewModel> GetOperationLog(long operationId)
+        public List<InventoryOperationViewModel> GetOperationLog(Guid operationId)
         {
             return _inventoryRepository.GetOperationLog(operationId);
         }
@@ -55,11 +57,11 @@ namespace BI.ApplicationServices
         public OperationResult Increase(IncreaseInventory command)
         {
             var operation = new OperationResult();
-            var inventory = _inventoryRepository.GetBy(command.InventoryId);
+            var inventory = _inventoryRepository.GetBookBy(command.InventoryId);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
-
+            var operatorId = _authHelper.CurrentAccountId();
             inventory.Increase(command.Count, operatorId, command.Description);
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
@@ -68,11 +70,11 @@ namespace BI.ApplicationServices
         public OperationResult Reduce(ReduceInventory command)
         {
             var operation = new OperationResult();
-            var inventory = _inventoryRepository.GetBy(command.InventoryId);
+            var inventory = _inventoryRepository.GetBookBy(command.InventoryId);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
-
+            var operatorId = _authHelper.CurrentAccountId();
             inventory.Reduce(command.Count, operatorId, command.Description, 0);
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
@@ -81,10 +83,10 @@ namespace BI.ApplicationServices
         public OperationResult Reduce(List<ReduceInventory> command)
         {
             var operation = new OperationResult();
-
+            var operatorId = _authHelper.CurrentAccountId();
             foreach (var item in command)
             {
-                var inventory = _inventoryRepository.GetBy(item.BookId);
+                var inventory = _inventoryRepository.GetBookBy(item.BookId);
                 inventory.Reduce(item.Count, operatorId, item.Description, item.BorrowId);
             }
             _inventoryRepository.SaveChanges();

@@ -4,18 +4,18 @@ namespace BI.Domain.InventoryAgg
 {
     public class Inventory : BaseEntity
     {
-        public long BookId { get; private set; }
+        public Guid BookId { get; private set; }
         public double UnitPrice { get; private set; }
         public bool InStock { get; private set; }
         public List<InventoryOperation> Operations { get; private set; }
 
-        public Inventory(long bookId, double unitPrice)
+        public Inventory(Guid bookId, double unitPrice)
         {
             BookId = bookId;
             UnitPrice = unitPrice;
             InStock = false;
         }
-        public void Edit(long bookId, double unitPrice)
+        public void Edit(Guid bookId, double unitPrice)
         {
             BookId = bookId;
             UnitPrice = unitPrice;

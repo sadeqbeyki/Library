@@ -1,38 +1,11 @@
-using LMS.Contracts.Author;
-using LMS.Contracts.Book;
-using LMS.Contracts.BookCategory;
-using LMS.Contracts.Publisher;
-using LMS.Contracts.Translator;
-using LMS.Domain.AuthorAgg;
-using LMS.Domain.BookAgg;
-using LMS.Domain.BookCategoryAgg;
-using LMS.Domain.PublisherAgg;
-using LMS.Domain.TranslatorAgg;
-using LMS.Infrastructure;
-using LMS.Infrastructure.Repositories;
-using LMS.Services;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using BMS.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<BookDbContext>(opt=>opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IBookCategoryRepository, BookCategoryRepository>();
-builder.Services.AddScoped<IBookCategoryService, BookCategoryService>();
-
-builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<IBookService, BookService>();
-
-builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
-builder.Services.AddScoped<IPublisherService, PublisherService>();
-
-builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-builder.Services.AddScoped<IAuthorService, AuthorService>();
-
-builder.Services.AddScoped<ITranslatorRepository, TranslatorRepository>();
-builder.Services.AddScoped<ITranslatorService, TranslatorService>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+BMSConfigureServices.Configure(builder.Services, connectionString);
 
 //builder.Services.AddAutoMapper(typeof(Program));
 
