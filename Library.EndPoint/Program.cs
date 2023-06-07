@@ -1,5 +1,6 @@
 using BMS.Configurations;
 using LI.ApplicationContracts.Auth;
+using LI.ApplicationContracts.UserContracts;
 using LI.ApplicationServices;
 using LI.Domain.RoleAgg;
 using LI.Domain.UserAgg;
@@ -35,6 +36,7 @@ builder.Services.AddIdentity<User, Role>(i =>
 builder.Services.AddScoped<IPasswordValidator<User>, LIPasswordValidator>();
 builder.Services.AddScoped<IUserValidator<User>, LIUserValidator>();
 builder.Services.AddTransient<IAuthHelper, AuthHelper>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<LiIdentityDbContext>(c =>
     c.UseSqlServer(builder.Configuration.GetConnectionString("AAA")));
@@ -54,7 +56,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseAuthentication();    
+app.UseAuthentication();
 
 app.UseRouting();
 
@@ -63,5 +65,15 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "adminPanel",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+});
 
 app.Run();
