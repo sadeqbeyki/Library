@@ -25,7 +25,7 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateUser(UserDto model)
+    public async Task<ActionResult> Create(UserDto model)
     {
         if (ModelState.IsValid)
         {

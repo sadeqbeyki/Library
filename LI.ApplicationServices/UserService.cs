@@ -35,10 +35,7 @@ public class UserService : IUserService
     public async Task<List<UserDto>> GetUsers()
     {
         List<User> users = await _userManager.Users.Take(50).ToListAsync();
-        if (users == null || users.Count == 0)
-        {
-            throw new ArgumentException("Users List Is Empty!");
-        }
+
         var usersMap = _mapper.Map<List<UserDto>>(users);
         return usersMap;
     }
