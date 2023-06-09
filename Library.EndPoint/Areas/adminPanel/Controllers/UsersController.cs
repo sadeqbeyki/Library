@@ -13,7 +13,7 @@ public class UsersController : Controller
         _userService = userService;
     }
 
-    public async Task<ActionResult<List<UserDto>>> Index()
+    public async Task<List<UserDto>> Index()
     {
         return await _userService.GetUsers();
     }
@@ -24,8 +24,12 @@ public class UsersController : Controller
         return await _userService.GetUser(id);
     }
 
+    public IActionResult Create()
+    {
+        return View();
+    }
     [HttpPost]
-    public async Task<ActionResult> Create(UserDto model)
+    public async Task<IActionResult> Create(UserDto model)
     {
         if (ModelState.IsValid)
         {
