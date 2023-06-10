@@ -4,7 +4,6 @@ namespace LI.ApplicationContracts.UserContracts
 {
     public class UserDto
     {
-        public string Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string FirstName { get; set; }
@@ -23,5 +22,9 @@ namespace LI.ApplicationContracts.UserContracts
         [MaxLength(50)]
         public string Password { get; set; }
     }
+    public class UpdateUserDto : UserDto
+    {
+        public string Id { get; set; }
 
+    }
 }

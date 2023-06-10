@@ -13,13 +13,14 @@ public class UsersController : Controller
         _userService = userService;
     }
 
-    public async Task<List<UserDto>> Index()
+    public async Task<ActionResult<List<UpdateUserDto>>> Index()
     {
-        return await _userService.GetUsers();
+        var users = await _userService.GetUsers();
+        return View(users);
     }
 
     [HttpGet]
-    public async Task<ActionResult<UserDto>> GetUser(string id)
+    public async Task<ActionResult<UpdateUserDto>> Details(string id)
     {
         return await _userService.GetUser(id);
     }
@@ -31,16 +32,21 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(UserDto model)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var result = await _userService.CreateUser(model);
-            return View(result);
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                var errorMessage = error.ErrorMessage;
+                var exception = error.Exception;
+            }
         }
-        return View(model);
+        var result = await _userService.CreateUser(model);
+        return RedirectToAction("Index");
+        //return View(model);
     }
 
     [HttpGet]
-    public async Task<ActionResult> UpdateUser(string id)
+    public async Task<ActionResult> Update(string id)
     {
         var user = await _userService.GetUser(id);
         if (user == null)
@@ -51,7 +57,7 @@ public class UsersController : Controller
     }
 
     [HttpPut]
-    public async Task<ActionResult> UpdateUser(UserDto user)
+    public async Task<ActionResult<UpdateUserDto>> Update(UpdateUserDto user)
     {
         if (ModelState.IsValid)
         {

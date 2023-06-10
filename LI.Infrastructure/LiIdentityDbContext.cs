@@ -9,6 +9,7 @@ namespace LI.Infrastructure;
 public class LiIdentityDbContext : IdentityDbContext<User, Role, int>
 {
     public DbSet<BadPassword> BadPasswords { get; set; }
+    public DbSet<User> Users { get; set; }
     public LiIdentityDbContext(DbContextOptions<LiIdentityDbContext> options) : base(options)
     {
     }

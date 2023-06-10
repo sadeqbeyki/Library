@@ -18,25 +18,25 @@ public class UserService : IUserService
         _mapper = mapper;
     }
     #region Get
-    public async Task<UserDto> GetUser(string id)
+    public async Task<UpdateUserDto> GetUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
-        {
-            throw new InvalidOperationException("The desired user does not exist");
-        }
-        var userMapp = _mapper.Map<UserDto>(user);
+        //if (user == null)
+        //{
+        //    throw new InvalidOperationException("The desired user does not exist");
+        //}
+        var userMapp = _mapper.Map<UpdateUserDto>(user);
         return userMapp;
 
     }
     #endregion
 
     #region GetAll
-    public async Task<List<UserDto>> GetUsers()
+    public async Task<List<UpdateUserDto>> GetUsers()
     {
         List<User> users = await _userManager.Users.Take(50).ToListAsync();
 
-        var usersMap = _mapper.Map<List<UserDto>>(users);
+        var usersMap = _mapper.Map<List<UpdateUserDto>>(users);
         return usersMap;
     }
     #endregion
@@ -51,7 +51,7 @@ public class UserService : IUserService
     #endregion
 
     #region Update
-    public async Task<IdentityResult> UpdateUser(UserDto user)
+    public async Task<IdentityResult> UpdateUser(UpdateUserDto user)
     {
         var userMapp = _mapper.Map<User>(user);
         var result = await _userManager.UpdateAsync(userMapp);
