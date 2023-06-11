@@ -1,6 +1,8 @@
 ﻿using LI.ApplicationContracts.UserContracts;
+using Library.EndPoint.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
@@ -22,7 +24,8 @@ public class UsersController : Controller
     [HttpGet]
     public async Task<ActionResult<UpdateUserDto>> Details(string id)
     {
-        return await _userService.GetUser(id);
+        var user = await _userService.GetUser(id);
+        return View(user);
     }
 
     public IActionResult Create()
@@ -45,7 +48,7 @@ public class UsersController : Controller
         //return View(model);
     }
 
-    [HttpGet]
+
     public async Task<ActionResult> Update(string id)
     {
         var user = await _userService.GetUser(id);
@@ -56,24 +59,39 @@ public class UsersController : Controller
         return View(user);
     }
 
-    [HttpPut]
+    [HttpPost]
     public async Task<ActionResult<UpdateUserDto>> Update(UpdateUserDto user)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var result = await _userService.UpdateUser(user);
-            return View(result);
+            return View(user);
         }
+
+        await _userService.Update(user);
         return RedirectToAction("Index");
+        //return View(_mapper.Map<UpdateUserDto>(result));
+
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteUser(int id)
+    public async Task<ActionResult> Delete(string id)
+    {
+        var user = await _userService.GetUser(id);
+        if (id == null || user == null)
+        {
+            return NotFound();
+        }
+
+        return View(user);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> DeleteConfirmed(string id)
     {
         if (ModelState.IsValid)
         {
             await _userService.DeleteUser(id);
-            return Ok();
+            return RedirectToAction(nameof(Index));
         }
         return BadRequest();
     }

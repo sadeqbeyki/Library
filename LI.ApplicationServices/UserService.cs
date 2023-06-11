@@ -21,13 +21,7 @@ public class UserService : IUserService
     public async Task<UpdateUserDto> GetUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
-        //if (user == null)
-        //{
-        //    throw new InvalidOperationException("The desired user does not exist");
-        //}
-        var userMapp = _mapper.Map<UpdateUserDto>(user);
-        return userMapp;
-
+        return _mapper.Map<UpdateUserDto>(user);
     }
     #endregion
 
@@ -35,9 +29,7 @@ public class UserService : IUserService
     public async Task<List<UpdateUserDto>> GetUsers()
     {
         List<User> users = await _userManager.Users.Take(50).ToListAsync();
-
-        var usersMap = _mapper.Map<List<UpdateUserDto>>(users);
-        return usersMap;
+        return _mapper.Map<List<UpdateUserDto>>(users);
     }
     #endregion
 
@@ -45,30 +37,31 @@ public class UserService : IUserService
     public async Task<IdentityResult> CreateUser(UserDto model)
     {
         var userMap = _mapper.Map<User>(model);
-        var result = await _userManager.CreateAsync(userMap, model.Password);
-        return result;
+        return await _userManager.CreateAsync(userMap, model.Password);
     }
     #endregion
 
     #region Update
-    public async Task<IdentityResult> UpdateUser(UpdateUserDto user)
+    public async Task<IdentityResult> Update(UpdateUserDto user)
     {
-        var userMapp = _mapper.Map<User>(user);
-        var result = await _userManager.UpdateAsync(userMapp);
-        return result;
+        //var userMapp = _mapper.Map<User>(user);
+        var result = await _userManager.FindByIdAsync(user.Id);
+        result.FirstName = user.FirstName;
+        result.LastName = user.LastName;
+        result.Email = user.Email;
+        result.UserName = user.UserName;
+
+        return await _userManager.UpdateAsync(result);
+
+
     }
     #endregion
 
     #region Delete
-    public async Task<IdentityResult> DeleteUser(int id)
+    public async Task<IdentityResult> DeleteUser(string id)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
-        if (user == null)
-        {
-            throw new InvalidOperationException("The desired user does not exist");
-        }
-        var result = await _userManager.DeleteAsync(user);
-        return result;
+        var user = await _userManager.FindByIdAsync(id);
+        return await _userManager.DeleteAsync(user);
     }
     #endregion
 }

@@ -5,9 +5,9 @@ namespace LI.ApplicationContracts.UserContracts
     public interface IUserService
     {
         Task<IdentityResult> CreateUser(UserDto model);
-        Task<IdentityResult> DeleteUser(int id);
+        Task<IdentityResult> DeleteUser(string id);
         Task<UpdateUserDto> GetUser(string id);
         Task<List<UpdateUserDto>> GetUsers();
-        Task<IdentityResult> UpdateUser(UpdateUserDto user);
+        Task<IdentityResult> Update(UpdateUserDto user);
     }
 }

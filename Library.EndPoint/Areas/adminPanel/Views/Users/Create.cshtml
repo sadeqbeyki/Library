@@ -13,18 +13,24 @@
             <div class="form-group">
                 <label asp-for="FirstName" class="form-label"></label>
                 <input asp-for="FirstName" class="form-text" />
+                <span asp-validation-for=FirstName></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="form-label"></label>
                 <input asp-for="LastName" class="form-text" />
+                <span asp-validation-for=LastName></span>
             </div>
             <div class="form-group">
                 <label asp-for="BirthDate" class="form-label"></label>
                 <input asp-for="BirthDate" class="form-text" />
+                <span asp-validation-for=BirthDate></span>
+
             </div>
             <div class="form-floating">
                 <label asp-for="UserName" class="form-label"></label>
                 <input asp-for="UserName" class="form-text" />
+                <span asp-validation-for=UserName></span>
+
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="form-label">Password</label>
@@ -39,7 +45,7 @@
             <br />
             <div>
                 <a asp-action="Index" class="btn btn-secondary">Back</a>
-                <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+                <button type="submit" class="btn btn-success">Save</button>
             </div>
 
         </form>

@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LI.ApplicationContracts.UserContracts
+namespace Library.EndPoint.Models
 {
-    public class UserDto
+    public class UpdateUserViewModel
     {
+        public string Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string FirstName { get; set; }
@@ -21,9 +22,5 @@ namespace LI.ApplicationContracts.UserContracts
         [Required]
         [MaxLength(50)]
         public string Password { get; set; }
-    }
-    public class UpdateUserDto : UserDto
-    {
-        public string Id { get; set; }
     }
 }
