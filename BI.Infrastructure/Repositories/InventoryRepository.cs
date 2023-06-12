@@ -2,7 +2,6 @@
 using AppFramework.Domain;
 using BI.ApplicationContracts.Inventory;
 using BI.Domain.InventoryAgg;
-using BI.Infrastructure.Configurations;
 using LI.Infrastructure;
 using LMS.Infrastructure;
 

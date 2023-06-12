@@ -81,7 +81,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.EndPoint", "Library
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BMS.Configurations", "BMS.Configurations\BMS.Configurations.csproj", "{1F71DC68-5DF1-4289-BB0F-B79EA271BAB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LI.Configurations", "LI.Configurations\LI.Configurations.csproj", "{BD44DB20-EBFB-4866-9F95-0DB890182EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LI.Configurations", "LI.Configurations\LI.Configurations.csproj", "{BD44DB20-EBFB-4866-9F95-0DB890182EC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BI.Configuration", "BI.Configuration\BI.Configuration.csproj", "{43604FEE-98F1-4904-B142-9FD564BE2BDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,6 +163,10 @@ Global
 		{BD44DB20-EBFB-4866-9F95-0DB890182EC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD44DB20-EBFB-4866-9F95-0DB890182EC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD44DB20-EBFB-4866-9F95-0DB890182EC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43604FEE-98F1-4904-B142-9FD564BE2BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43604FEE-98F1-4904-B142-9FD564BE2BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43604FEE-98F1-4904-B142-9FD564BE2BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43604FEE-98F1-4904-B142-9FD564BE2BDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,6 +210,7 @@ Global
 		{B07100FF-8C50-42DA-A129-A740A805F4B1} = {1868FB10-3D49-49C4-B2F3-2F6340A6C659}
 		{1F71DC68-5DF1-4289-BB0F-B79EA271BAB8} = {F97C63DF-D3FA-470A-8EAD-4F789209B285}
 		{BD44DB20-EBFB-4866-9F95-0DB890182EC1} = {9D63E05D-88E1-4036-9D1E-B96806D15480}
+		{43604FEE-98F1-4904-B142-9FD564BE2BDB} = {4AC4673E-4A4D-4BFB-859B-D47E3B8C2E7F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA85AEB7-276E-4896-9EA8-5FA32BD9BAB5}

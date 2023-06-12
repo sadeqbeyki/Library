@@ -8,8 +8,8 @@ namespace BI.ApplicationServices
 {
     public class InventoryApplication : IInventoryApplication
     {
-        private readonly IInventoryRepository _inventoryRepository;
         private readonly IAuthHelper _authHelper;
+        private readonly IInventoryRepository _inventoryRepository;
 
         public InventoryApplication(IInventoryRepository inventoryRepository, IAuthHelper authHelper)
         {
@@ -25,14 +25,14 @@ namespace BI.ApplicationServices
 
             var inventory = new Inventory(command.BookId, command.UnitPrice);
             _inventoryRepository.AddAsync(inventory);
-            _inventoryRepository.SaveChanges();
+            //_inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }
 
-        public OperationResult Edit(EditInventory command)
+        public async Task<OperationResult> Edit(EditInventory command)
         {
             var operation = new OperationResult();
-            var inventory = _inventoryRepository.GetBookBy(command.Id);
+            var inventory = await _inventoryRepository.GetByIdAsync(command.Id);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
@@ -54,10 +54,10 @@ namespace BI.ApplicationServices
             return _inventoryRepository.GetOperationLog(operationId);
         }
 
-        public OperationResult Increase(IncreaseInventory command)
+        public async Task<OperationResult> Increase(IncreaseInventory command)
         {
             var operation = new OperationResult();
-            var inventory = _inventoryRepository.GetBookBy(command.InventoryId);
+            var inventory = await _inventoryRepository.GetByIdAsync(command.InventoryId);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
@@ -67,10 +67,10 @@ namespace BI.ApplicationServices
             return operation.Succeeded();
         }
 
-        public OperationResult Reduce(ReduceInventory command)
+        public async Task<OperationResult> Reduce(ReduceInventory command)
         {
             var operation = new OperationResult();
-            var inventory = _inventoryRepository.GetBookBy(command.InventoryId);
+            var inventory =await _inventoryRepository.GetByIdAsync(command.InventoryId);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
