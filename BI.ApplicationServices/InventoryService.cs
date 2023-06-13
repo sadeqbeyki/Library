@@ -2,29 +2,28 @@
 using BI.ApplicationContracts.Inventory;
 using BI.Domain.InventoryAgg;
 using LI.ApplicationContracts.Auth;
-using LI.Infrastructure;
 
 namespace BI.ApplicationServices
 {
-    public class InventoryApplication : IInventoryApplication
+    public class InventoryService : IInventoryService
     {
         private readonly IAuthHelper _authHelper;
         private readonly IInventoryRepository _inventoryRepository;
 
-        public InventoryApplication(IInventoryRepository inventoryRepository, IAuthHelper authHelper)
+        public InventoryService(IInventoryRepository inventoryRepository, IAuthHelper authHelper)
         {
             _inventoryRepository = inventoryRepository;
             _authHelper = authHelper;
         }
 
-        public OperationResult Create(CreateInventory command)
+        public async Task<OperationResult> Create(CreateInventory command)
         {
             var operation = new OperationResult();
             if (_inventoryRepository.Exists(x => x.BookId == command.BookId))
                 return operation.Failed(ApplicationMessages.DuplicatedRecord);
 
             var inventory = new Inventory(command.BookId, command.UnitPrice);
-            _inventoryRepository.AddAsync(inventory);
+            await _inventoryRepository.AddAsync(inventory);
             //_inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }

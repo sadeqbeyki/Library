@@ -22,12 +22,12 @@ namespace BI.Infrastructure.Repositories
 
         public Inventory GetBookBy(Guid bookId)
         {
-            return _inventoryDbContext.Inventories.FirstOrDefault(b => b.BookId == bookId);
+            return _inventoryDbContext.Inventory.FirstOrDefault(b => b.BookId == bookId);
         }
 
         public EditInventory GetDetails(Guid id)
         {
-            return _inventoryDbContext.Inventories.Select(i => new EditInventory
+            return _inventoryDbContext.Inventory.Select(i => new EditInventory
             {
                 Id = i.Id,
                 BookId = i.BookId,
@@ -38,7 +38,7 @@ namespace BI.Infrastructure.Repositories
         public List<InventoryOperationViewModel> GetOperationLog(Guid inventoryId)
         {
             var accounts = _identityDbContext.Users.Select(x => new { x.Id, x.FirstName, x.LastName }).ToList();
-            var inventory = _inventoryDbContext.Inventories.FirstOrDefault(x => x.Id == inventoryId);
+            var inventory = _inventoryDbContext.Inventory.FirstOrDefault(x => x.Id == inventoryId);
             var operations = inventory.Operations.Select(x => new InventoryOperationViewModel
             {
                 Id = x.Id,
@@ -61,7 +61,7 @@ namespace BI.Infrastructure.Repositories
         public List<InventoryViewModel> Search(InventorySearchModel searchModel)
         {
             var products = _bookDbContext.Books.Select(x => new { x.Id, x.Title }).ToList();
-            var query = _inventoryDbContext.Inventories.Select(x => new InventoryViewModel
+            var query = _inventoryDbContext.Inventory.Select(x => new InventoryViewModel
             {
                 Id = x.Id,
                 UnitPrice = x.UnitPrice,

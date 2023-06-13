@@ -1,3 +1,4 @@
+using BI.Configuration;
 using BMS.Configurations;
 using LI.ApplicationContracts.Auth;
 using LI.ApplicationContracts.UserContracts;
@@ -19,6 +20,7 @@ builder.Services.AddControllersWithViews();
 #region Book
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 BMSConfigureServices.Configure(builder.Services, connectionString);
+InventoryConfigureServices.Configure(builder.Services, connectionString);
 #endregion
 
 #region Identity

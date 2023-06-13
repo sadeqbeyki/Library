@@ -2,9 +2,9 @@
 
 namespace BI.ApplicationContracts.Inventory
 {
-    public interface IInventoryApplication
+    public interface IInventoryService
     {
-        OperationResult Create(CreateInventory command);
+        Task<OperationResult> Create(CreateInventory command);
         Task<OperationResult> Edit(EditInventory command);
         Task<OperationResult> Increase(IncreaseInventory command);
         Task<OperationResult> Reduce(ReduceInventory command);

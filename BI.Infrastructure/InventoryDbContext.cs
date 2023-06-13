@@ -6,7 +6,7 @@ namespace BI.Infrastructure
 {
     public class InventoryDbContext : DbContext
     {
-        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
         public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
         {
         }

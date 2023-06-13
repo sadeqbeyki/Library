@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BI.Infrastructure.Configurations
 {
-    internal class InventoryConfig : IEntityTypeConfiguration<Inventory>
+    public class InventoryConfig : IEntityTypeConfiguration<Inventory>
     {
         public void Configure(EntityTypeBuilder<Inventory> builder)
         {

@@ -8,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BI.Configuration;
 
-public class InventoryConfigureServices
+public static class InventoryConfigureServices
 {
     public static void Configure(IServiceCollection services, string connectionString)
     {
-        services.AddTransient<IInventoryApplication, InventoryApplication>();
+        services.AddTransient<IInventoryService, InventoryService>();
         services.AddTransient<IInventoryRepository, InventoryRepository>();
 
 

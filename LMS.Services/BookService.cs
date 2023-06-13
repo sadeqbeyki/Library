@@ -106,5 +106,8 @@ public class BookService : IBookService
         return entity;
     }
 
-
+    public async Task<List<BookViewModel>> GetBooks()
+    {
+        return await _bookRepository.GetBooks();
+    }
 }

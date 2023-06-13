@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BI.Configuration\BI.Configuration.csproj" />
     <ProjectReference Include="..\BMS.Configurations\BMS.Configurations.csproj" />
     <ProjectReference Include="..\LI.Configurations\LI.Configurations.csproj" />
     <ProjectReference Include="..\LI.Infrastructure\LI.Infrastructure.csproj" />
@@ -32,7 +33,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\adminPanel\Data\" />
-    <Folder Include="Areas\adminPanel\Models\" />
   </ItemGroup>
 
 </Project>
