@@ -57,11 +57,18 @@ public class InventoryController : Controller
     public async Task<ActionResult> Create(CreateInventory command)
     {
         var result = await _inventoryService.Create(command);
-        return View(result);
+        return View("Index", result);
     }
-    //public async Task<IActionResult> Index()
-    //{
-    //    List<BookViewModel> books = await _bookService.GetBooks();
-    //    return View(books);
-    //}
+    public async Task<ActionResult> Edit(Guid id)
+    {
+        var inventory = _inventoryService.GetDetails(id);
+        inventory.Books = await _bookService.GetBooks();
+        return View("Edit", inventory);
+    }
+    [HttpPost, HttpPut]
+    public async Task<ActionResult> Edit(EditInventory command)
+    {
+        var result = await _inventoryService.Edit(command);
+        return View("Index", result);
+    }
 }
