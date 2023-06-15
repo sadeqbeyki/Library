@@ -8,7 +8,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class InventoryController : Controller
 {
-    //public SelectList books;
+    public List<SelectListItem> Books { get; set; }
     public List<InventoryViewModel> Inventory;
     public InventorySearchModel SearchModel { get; set; }
 
@@ -22,17 +22,8 @@ public class InventoryController : Controller
         _inventoryService = inventoryService;
     }
 
-    //public async Task<IActionResult> Index(InventorySearchModel searchModel)
-    //{
-    //    Books = new SelectList(await _bookService.GetBooks(), "Id", "Title");
-    //    Inventory = _inventoryService.Search(searchModel);
-
-    //    return View(Inventory);
-    //}
-
     public async Task<IActionResult> Index(InventorySearchModel searchModel)
     {
-        //books = new SelectList(await _bookService.GetBooks(), "Id", "Title");
         Inventory = _inventoryService.Search(searchModel);
 
         var model = new InventoryViewModelWithSearchModel
@@ -59,16 +50,17 @@ public class InventoryController : Controller
         var result = await _inventoryService.Create(command);
         return View("Index", result);
     }
-    public async Task<ActionResult> Edit(Guid id)
+    [HttpGet]
+    public async Task<IActionResult> Update(Guid id)
     {
-        var inventory = _inventoryService.GetDetails(id);
+        EditInventory inventory = _inventoryService.GetDetails(id);
         inventory.Books = await _bookService.GetBooks();
-        return View("Edit", inventory);
+        return View("Update", inventory);
     }
-    [HttpPost, HttpPut]
-    public async Task<ActionResult> Edit(EditInventory command)
+    [HttpPost]
+    public async Task<IActionResult> Update(EditInventory command)
     {
         var result = await _inventoryService.Edit(command);
-        return View("Index", result);
+        return RedirectToAction("Index");
     }
 }

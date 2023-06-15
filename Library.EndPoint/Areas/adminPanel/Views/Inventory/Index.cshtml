@@ -5,8 +5,6 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Inventory</h1>
-
 <p>
     <a asp-controller="Inventory" asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
@@ -15,26 +13,26 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">جستجو در انبار</h3>
+                <h3 class="panel-title">Search in Inventory</h3>
             </div>
             <div class="panel-body">
                 <form asp-controller="Inventory" asp-action="Index" class="form-inline" role="form" method="get">
                     <div class="form-group">
                         <label class="sr-only" asp-for="SearchModel.BookId"></label>
                         <select class="form-control" asp-for="SearchModel.BookId" asp-items="Model.Books">
-                            <option value="0">انتخاب محصول</option>
+                            <option value="0">Select Book</option>
                         </select>
                     </div>
                     <div class="form-group m-r-10">
                         <div class="checkbox checkbox-primary">
                             <input asp-for="SearchModel.InStock" />
                             <label asp-for="SearchModel.InStock">
-                                جستجو در ناموجودها
+                                Search in loaned books
                             </label>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">جستجو</button>
-                    <a class="btn btn-primary waves-effect waves-light m-l-10" asp-action="Index">مشاهده همه</a>
+                    <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">Search</button>
+                    <a class="btn btn-primary waves-effect waves-light m-l-10" asp-action="Index">Show All</a>
                 </form>
 
             </div>
@@ -46,7 +44,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">لیست انبار (@Model.Inventory.Count)</h3>
+                <h3 class="panel-title"> Warehouse list (@Model.Inventory.Count)</h3>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -55,11 +53,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>محصول</th>
-                                    <th>قیمت</th>
-                                    <th>موجودی انبار</th>
-                                    <th>تاریخ ایجاد</th>
-                                    <th>عملیات</th>
+                                    <th>Book Name</th>
+                                    <th>Borrow fee</th>
+                                    <th>Warehouse stock</th>
+                                    <th>Creation Date</th>
+                                    <th>Operstions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,25 +69,26 @@
                                         <td>@item.UnitPrice</td>
                                         <td>@item.CurrentCount</td>
                                         <td>@item.CreationDate</td>
-@*                                        <td>
-                                            <a  class="btn btn-warning waves-effect waves-light m-b-5" 
-                                               href="#showmodal=@Url.Page("Index", "Edit", new { id = item.Id})">
-                                                <i class="fa fa-edit"></i> ویرایش
+                                        <td>
+                                               @*@Html.ActionLink("Update", "Update", new { id = item.Id})*@
+                                            <a class="btn btn-warning waves-effect waves-light m-b-5" asp-controller="Inventory" asp-action="Update" asp-route-id="@item.Id">
+                                             <i class="fa fa-edit"></i> Edit
                                             </a>
-                                            <a  class="btn btn-success waves-effect waves-light m-b-5" 
-                                               href="#showmodal=@Url.Page("Index", "Increase", new { id = item.Id})">
-                                                <i class="fa fa-plus"></i> افزایش موجودی
-                                            </a>
-                                            <a   class="btn btn-danger waves-effect waves-light m-b-5"
-                                           href="#showmodal=@Url.Page("Index", "Reduce", new { id = item.Id})">
-                                                <i class="fa fa-minus"></i> کاهش موجودی
-                                            </a>
-                                            <a   class="btn btn-primary waves-effect waves-light m-b-5"
-                                           href="#showmodal=@Url.Page("Index", "Log", new { id = item.Id})"
-                                                onclick="$('.modal-dialog').css('width','60%')">
-                                                <i class="fa fa-recycle"></i> مشاهده گردش انبار
-                                            </a>
-                                        </td>*@
+                                        </td>@*
+                                    <a  class="btn btn-success waves-effect waves-light m-b-5"
+                                    href="#showmodal=@Url.Page("Index", "Increase", new { id = item.Id})">
+                                    <i class="fa fa-plus"></i> افزایش موجودی
+                                    </a>
+                                    <a   class="btn btn-danger waves-effect waves-light m-b-5"
+                                    href="#showmodal=@Url.Page("Index", "Reduce", new { id = item.Id})">
+                                    <i class="fa fa-minus"></i> کاهش موجودی
+                                    </a>
+                                    <a   class="btn btn-primary waves-effect waves-light m-b-5"
+                                    href="#showmodal=@Url.Page("Index", "Log", new { id = item.Id})"
+                                    onclick="$('.modal-dialog').css('width','60%')">
+                                    <i class="fa fa-recycle"></i> مشاهده گردش انبار
+                                    </a>
+                                    </td>*@
                                     </tr>
                                 }
                             </tbody>
@@ -99,5 +98,5 @@
             </div>
         </div>
     </div>
-</div>  
+</div>
 
