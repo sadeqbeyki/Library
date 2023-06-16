@@ -74,12 +74,13 @@
                                             <a class="btn btn-warning waves-effect waves-light m-b-5" asp-controller="Inventory" asp-action="Update" asp-route-id="@item.Id">
                                              <i class="fa fa-edit"></i> Edit
                                             </a>
-                                        </td>@*
-                                    <a  class="btn btn-success waves-effect waves-light m-b-5"
-                                    href="#showmodal=@Url.Page("Index", "Increase", new { id = item.Id})">
-                                    <i class="fa fa-plus"></i> افزایش موجودی
-                                    </a>
-                                    <a   class="btn btn-danger waves-effect waves-light m-b-5"
+                                               @*@Html.ActionLink("Increase", "Increase", new { id = item.Id})*@
+                                            <a class="btn btn-success waves-effect waves-light m-b-5" asp-controller="Inventory" asp-action="Increase" asp-route-id="@item.Id">
+                                                <i class="fa fa-plus"></i> افزایش موجودی
+                                            </a>
+                                        </td>
+
+                                    @*<a   class="btn btn-danger waves-effect waves-light m-b-5"
                                     href="#showmodal=@Url.Page("Index", "Reduce", new { id = item.Id})">
                                     <i class="fa fa-minus"></i> کاهش موجودی
                                     </a>

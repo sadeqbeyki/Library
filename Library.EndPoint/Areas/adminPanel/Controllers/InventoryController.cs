@@ -8,8 +8,8 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class InventoryController : Controller
 {
-    public List<SelectListItem> Books { get; set; }
     public List<InventoryViewModel> Inventory;
+    public List<SelectListItem> Books { get; set; }
     public InventorySearchModel SearchModel { get; set; }
 
 
@@ -62,5 +62,20 @@ public class InventoryController : Controller
     {
         var result = await _inventoryService.Edit(command);
         return RedirectToAction("Index");
+    }
+    [HttpGet]
+    public IActionResult Increase(Guid id)
+    {
+        var command = new IncreaseInventory()
+        {
+            InventoryId = id
+        };
+        return View("Increase", command);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Increase(IncreaseInventory command)
+    {
+        var result = await _inventoryService.Increase(command);
+        return RedirectToAction("Index", result);
     }
 }

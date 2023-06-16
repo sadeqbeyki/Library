@@ -1,0 +1,40 @@
+﻿@using BI.ApplicationContracts.Inventory;
+@model IncreaseInventory
+@{
+    ViewData["Title"] = "Increase";
+}
+
+<h1 class="bg-info text-white">افزایش موجودی انبار</h1>
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-controller="Inventory" asp-action="Increase" method="post">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Count" class="control-label">مقدار</label>
+                            <input class="form-control" asp-for="Count" />
+                            <span asp-validation-for="Count" class="error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label">توضیحات</label>
+                            <textarea row="3" class="form-control" asp-for="Description"></textarea>
+                            <span asp-validation-for="Description" class="error"></span>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="InventoryId" value="@Model.InventoryId" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect">بستن</button>
+                <button type="submit" class="btn btn-info waves-effect waves-light">افزایش</button>
+            </div>
+        </form>
+
+    </div>
+</div>

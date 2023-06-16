@@ -18,12 +18,6 @@
                                 asp-items='new SelectList(Model.Books, "Id", "Title")'>
                             <option value="">انتخاب محصول</option>
                         </select>
-@*                        <div class="form-group">
-                            <label class="sr-only" asp-for="BookId">نام کتاب</label>
-                            <select class="form-control" asp-for="BookId" asp-items="Model.Books">
-                                <option value="0">انتخاب محصول</option>
-                            </select>
-                        </div>*@
                         <span asp-validation-for="BookId" class="error"></span>
                     </div>
                 </div>
