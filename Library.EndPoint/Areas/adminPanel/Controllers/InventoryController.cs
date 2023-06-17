@@ -78,4 +78,19 @@ public class InventoryController : Controller
         var result = await _inventoryService.Increase(command);
         return RedirectToAction("Index", result);
     }
+    [HttpGet]
+    public ActionResult Decrease(Guid id)
+    {
+        var command = new DecreaseInventory()
+        {
+            InventoryId = id
+        };
+        return View("Decrease", command);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Decrease(DecreaseInventory command)
+    {
+        var result = await _inventoryService.Decrease(command);
+        return RedirectToAction("Index", result);
+    }
 }

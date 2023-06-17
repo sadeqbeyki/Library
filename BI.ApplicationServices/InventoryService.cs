@@ -66,7 +66,7 @@ namespace BI.ApplicationServices
             return operation.Succeeded();
         }
 
-        public async Task<OperationResult> Reduce(ReduceInventory command)
+        public async Task<OperationResult> Decrease(DecreaseInventory command)
         {
             var operation = new OperationResult();
             var inventory =await _inventoryRepository.GetByIdAsync(command.InventoryId);
@@ -74,19 +74,19 @@ namespace BI.ApplicationServices
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
             var operatorId = _authHelper.CurrentAccountId();
-            inventory.Reduce(command.Count, operatorId, command.Description, 0);
+            inventory.Decrease(command.Count, operatorId, command.Description, 0);
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }
 
-        public OperationResult Reduce(List<ReduceInventory> command)
+        public OperationResult Decrease(List<DecreaseInventory> command)
         {
             var operation = new OperationResult();
             var operatorId = _authHelper.CurrentAccountId();
             foreach (var item in command)
             {
                 var inventory = _inventoryRepository.GetBookBy(item.BookId);
-                inventory.Reduce(item.Count, operatorId, item.Description, item.BorrowId);
+                inventory.Decrease(item.Count, operatorId, item.Description, item.BorrowId);
             }
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();

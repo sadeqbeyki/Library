@@ -7,8 +7,8 @@ namespace BI.ApplicationContracts.Inventory
         Task<OperationResult> Create(CreateInventory command);
         Task<OperationResult> Edit(EditInventory command);
         Task<OperationResult> Increase(IncreaseInventory command);
-        Task<OperationResult> Reduce(ReduceInventory command);
-        OperationResult Reduce(List<ReduceInventory> command);
+        Task<OperationResult> Decrease(DecreaseInventory command);
+        OperationResult Decrease(List<DecreaseInventory> command);
         EditInventory GetDetails(Guid id);
         List<InventoryViewModel> Search(InventorySearchModel searchModel);
         List<InventoryOperationViewModel> GetOperationLog(Guid inventoryId);

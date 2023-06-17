@@ -33,7 +33,7 @@ namespace BI.Domain.InventoryAgg
             Operations.Add(operation);
             InStock = currentCount > 0;
         }
-        public void Reduce(long count, long operatorId, string description, long borrowId)
+        public void Decrease(long count, long operatorId, string description, long borrowId)
         {
             var currentCount = CalculateCurrentCount() - count;
             var operation = new InventoryOperation(false, count, operatorId, currentCount, description, borrowId, Id);

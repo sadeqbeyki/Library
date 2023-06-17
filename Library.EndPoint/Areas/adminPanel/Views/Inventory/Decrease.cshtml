@@ -1,14 +1,14 @@
 ﻿@using BI.ApplicationContracts.Inventory;
-@model IncreaseInventory
+@model DecreaseInventory
 @{
-    ViewData["Title"] = "Increase";
+    ViewData["Title"] = "Decrease";
 }
 
-<h1 class="bg-info text-white">Increase</h1>
+<h1 class="bg-info text-white">Decrease</h1>
 <div class="row">
     <div class="col-md-6">
 
-        <form asp-controller="Inventory" asp-action="Increase" method="post">
+        <form asp-controller="Inventory" asp-action="Decrease" method="post">
             <div>
                 <div class="row">
                     <div class="col-md-12">
@@ -23,7 +23,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Description" class="control-label">Description</label>
-                            <textarea row="3" class="form-control" asp-for="Description"></textarea>
+                            <textarea type="text" class="form-control" asp-for="Description"></textarea>
                             <span asp-validation-for="Description" class="error"></span>
                         </div>
                     </div>
@@ -32,9 +32,8 @@
             </div>
             <div>
                 <a class="btn btn-default waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
-                <button type="submit" class="btn btn-info waves-effect waves-light">Increase</button>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Decrease</button>
             </div>
         </form>
-
     </div>
 </div>

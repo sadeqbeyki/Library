@@ -1,6 +1,6 @@
 ﻿namespace BI.ApplicationContracts.Inventory
 {
-    public class ReduceInventory
+    public class DecreaseInventory
     {
         public Guid InventoryId { get; set; }
         public Guid BookId { get; set; }
@@ -8,9 +8,9 @@
         public string Description { get; set; }
         public long BorrowId { get; set; }
 
-        public ReduceInventory() { }
+        public DecreaseInventory() { }
 
-        public ReduceInventory(Guid bookId, long count, string description, long borrowId)
+        public DecreaseInventory(Guid bookId, long count, string description, long borrowId)
         {
             BookId = bookId;
             Count = count;

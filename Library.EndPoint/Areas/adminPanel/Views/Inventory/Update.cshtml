@@ -13,17 +13,17 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="BookId" class="control-label">انتخاب محصول</label>
+                        <label asp-for="BookId" class="control-label">Choose a Book</label>
                         <select class="form-control" asp-for="BookId"
                                 asp-items='new SelectList(Model.Books, "Id", "Title")'>
-                            <option value="">انتخاب محصول</option>
+                            <option value="">Book Name</option>
                         </select>
                         <span asp-validation-for="BookId" class="error"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="UnitPrice" class="control-label">قیمت واحد</label>
+                        <label asp-for="UnitPrice" class="control-label">Borrow fee</label>
                         <input type="text" class="form-control" asp-for="UnitPrice">
                         <span asp-validation-for="UnitPrice" class="error"></span>
                     </div>
@@ -31,9 +31,9 @@
             </div>
             <input type="hidden" asp-for="Id" value="@Model.Id" />
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">بستن</button>
-                <button type="submit" class="btn btn-info waves-effect waves-light">ویرایش</button>
+            <div>
+                <a class="btn btn-default waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
             </div>
         </form>
     </div>
