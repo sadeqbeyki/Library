@@ -11,7 +11,7 @@ namespace AppFramework.Domain
     {
         IQueryable<TEntity> GetAll();
         Task<TEntity> GetByIdAsync(Guid id);
-        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> CreateAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
 
@@ -34,15 +34,20 @@ namespace AppFramework.Domain
         {
             return _dbSet;
         }
+        //public List<TEntity> GetAll()
+        //{
+        //    return _context.Set<TEntity>().ToList();
+        //}
 
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public async Task<TEntity> CreateAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
+            await _dbContext.Set<TEntity>().AddAsync(entity);
+            //await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
         }

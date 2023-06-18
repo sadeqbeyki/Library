@@ -1,0 +1,52 @@
+﻿@using BI.ApplicationContracts.Inventory;
+@model List<InventoryOperationViewModel>
+@{
+    ViewData["Title"] = "OperationLog";
+}
+
+<h1 class="bg-info text-white">Inventory Log</h1>
+<div class="panel-body">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Number</th>
+                        <th>Date</th>
+                        <th>Operations</th>
+                        <th>Current Balance</th>
+                        <th>Operator</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="text-white @(item.Operation ? "bg-success" : "bg-danger")">
+                            <td>@item.Id</td>
+                            <td>@item.Count</td>
+                            <td>@item.OperationDate</td>
+                            <td>
+                                @if (item.Operation)
+                                {
+                                    <span>Increase</span>
+                                }
+                                else
+                                {
+                                    <span>Decrease</span>
+                                }
+                            </td>
+                            <td>@item.CurrentCount</td>
+                            <td>@item.Operator</td>
+                            <td>@item.Descriotion</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <a class="btn btn-default waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
+        </div>
+    </div>
+</div>

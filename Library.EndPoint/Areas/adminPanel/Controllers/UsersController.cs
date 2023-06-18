@@ -1,8 +1,5 @@
 ﻿using LI.ApplicationContracts.UserContracts;
-using Library.EndPoint.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
@@ -45,7 +42,6 @@ public class UsersController : Controller
         }
         var result = await _userService.CreateUser(model);
         return RedirectToAction("Index");
-        //return View(model);
     }
 
 

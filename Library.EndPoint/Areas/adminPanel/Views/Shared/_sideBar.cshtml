@@ -7,11 +7,11 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">Library <sup>I</sup></div>
     </a>
 
     <!-- Divider -->
@@ -19,10 +19,21 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a asp-controller="Books" asp-action="Index" class="nav-link collapsed" data-toggle="collapse"
+        data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Library Management:</h6>
+                <a class="collapse-item" asp-controller="BookCategories" asp-action="Index">Book Categories</a>
+                <a class="collapse-item" asp-controller="Book" asp-action="Index">Books</a>
+                <a class="collapse-item" asp-controller="Author" asp-action="Index">Author</a>
+                <a class="collapse-item" asp-controller="Publisher" asp-action="Index">Publisher</a>
+                <a class="collapse-item" asp-controller="Translator" asp-action="Index">Translator</a>
+            </div>
+        </div>
     </li>
 
     <!-- Divider -->
@@ -38,13 +49,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Components</span>
+            <span>Inventory</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="buttons.html">Buttons</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
+                <h6 class="collapse-header">Inventory Management:</h6>
+                <a class="collapse-item" asp-controller="Inventory" asp-action="Index">Inventory</a>
+                <a class="collapse-item" asp-controller="Inventory" asp-action="Create">Create</a>
             </div>
         </div>
     </li>
@@ -54,16 +65,16 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
            aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-wrench"></i>
-            <span>Utilities</span>
+            <span>User Management</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="utilities-color.html">Colors</a>
-                <a class="collapse-item" href="utilities-border.html">Borders</a>
-                <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>
+                <a class="collapse-item" asp-controller="Users" asp-action="Index">users</a>
+                <a class="collapse-item" asp-controller="Users" asp-action="Create">create user</a>
+                <a class="collapse-item" asp-controller="Roles" asp-action="Index">roles</a>
+                <a class="collapse-item" asp-controller="Roles" asp-action="Create">create role</a>
             </div>
         </div>
     </li>

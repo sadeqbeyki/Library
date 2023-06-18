@@ -1,6 +1,6 @@
 ﻿using LMS.Contracts.Book;
 using LMS.Domain.BookAgg;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Services;
 
@@ -27,7 +27,7 @@ public class BookService : IBookService
             CategoryId = dto.CategoryId,
 
         };
-        var addBook = await _bookRepository.AddAsync(book);
+        var addBook = await _bookRepository.CreateAsync(book);
 
         var result = new BookDto
         {
@@ -95,7 +95,7 @@ public class BookService : IBookService
 
         existingBook.Title = entity.Title;
         existingBook.Description = entity.Description;
-        existingBook.ISBN = entity.ISBN; 
+        existingBook.ISBN = entity.ISBN;
         existingBook.Code = entity.Code;
         existingBook.AuthorId = entity.AuthorId;
         existingBook.PublisherId = entity.PublisherId;
@@ -109,5 +109,12 @@ public class BookService : IBookService
     public async Task<List<BookViewModel>> GetBooks()
     {
         return await _bookRepository.GetBooks();
+        //var books = await _bookRepository.GetAll()
+        //    .Select(b => new BookViewModel
+        //    {
+        //        Title = b.Title,
+        //        Description = b.Description
+        //    }).ToListAsync();
+        //return books;
     }
 }

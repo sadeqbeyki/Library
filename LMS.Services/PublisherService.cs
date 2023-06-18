@@ -20,7 +20,7 @@ namespace LMS.Services
                 Name = dto.Name,
                 Description = dto.Description,
             };
-            var addPublisher = await _publisherRepository.AddAsync(publisher);
+            var addPublisher = await _publisherRepository.CreateAsync(publisher);
 
             var result = new PublisherDto
             {

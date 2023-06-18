@@ -20,7 +20,7 @@ namespace LMS.Services
                 Name = dto.Name,
                 Description = dto.Description,
             };
-            var addTranslator = await _translatorRepository.AddAsync(translator);
+            var addTranslator = await _translatorRepository.CreateAsync(translator);
 
             var result = new TranslatorDto
             {

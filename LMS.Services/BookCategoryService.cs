@@ -1,5 +1,7 @@
-﻿using LMS.Contracts.Book;
-using LMS.Contracts.BookCategory;
+﻿using AppFramework.Application;
+using AutoMapper;
+using LMS.Contracts.Book;
+using LMS.Contracts.BookCategoryContract;
 using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookCategoryAgg;
 
@@ -8,33 +10,30 @@ namespace LMS.Services
 {
     public class BookCategoryService : IBookCategoryService
     {
-        private readonly IBookCategoryRepository  _repository;
+        private readonly IBookCategoryRepository _repository;
+        private readonly IMapper _mapper;
 
-        public BookCategoryService(IBookCategoryRepository repository)
+        public BookCategoryService(IBookCategoryRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<BookCategoryDto> Create(BookCategoryDto dto)
+        public async Task<OperationResult> Create(BookCategoryDto dto)
         {
-            var bookCategory = new BookCategory
-            {
-                Name = dto.Name,
-                Description = dto.Description,
-            };
-            var addBookCategory = await _repository.AddAsync(bookCategory);
+            OperationResult operationResult = new();
+            if (_repository.Exists(x => x.Name == dto.Name))
+                return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-            var result = new BookCategoryDto
-            {
-                Name = addBookCategory.Name,
-                Description = addBookCategory.Description,
-            };
-
-            return result;
+            BookCategory bookCategory = new(dto.Name, dto.Description);
+            var result = await _repository.CreateAsync(bookCategory);
+            return operationResult.Succeeded();
         }
 
         public Task<List<BookCategoryDto>> GetAll()
         {
+            //List<BookCategory> categories = await _repository.GetAll().Take(50).ToListAsync();
+            //return _mapper.Map<List<BookCategoryDto>>(categories);
             var result = _repository.GetAll()
                 .Select(bookCategory => new BookCategoryDto
                 {
@@ -64,17 +63,19 @@ namespace LMS.Services
             await _repository.DeleteAsync(result);
         }
 
-        public async Task<BookCategoryDto> Update(Guid id, BookCategoryDto entity)
+        public async Task<OperationResult> Update(Guid id, BookCategoryDto dto)
         {
-            var existingBookCategory = await _repository.GetByIdAsync(id);
-            if (existingBookCategory == null)
-                return null;
+            OperationResult operationResult = new();
+            var bookCategory = await _repository.GetByIdAsync(id);
+            if (bookCategory == null)
+                return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            existingBookCategory.Name = entity.Name;
-            existingBookCategory.Description = entity.Description;
+            if (_repository.Exists(x => x.Name == dto.Name && x.Id != dto.Id))
+                return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-            await _repository.UpdateAsync(existingBookCategory);
-            return entity;
+            bookCategory.Edit(dto.Name, dto.Description);
+            await _repository.UpdateAsync(bookCategory);
+            return operationResult.Succeeded();
         }
 
         public async Task<List<BookDto>> GetCategoryWithBooks(Guid id)

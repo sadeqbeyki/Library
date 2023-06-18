@@ -1,4 +1,4 @@
-﻿namespace LI.ApplicationContracts.Role;
+﻿namespace LI.ApplicationContracts.RoleContracts;
 
 public class RoleDto
 {

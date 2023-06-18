@@ -20,5 +20,6 @@ public class BookRepository : Repository<Book>, IBookRepository
             Id = x.Id,
             Title = x.Title
         }).ToListAsync();
+       
     }
 }

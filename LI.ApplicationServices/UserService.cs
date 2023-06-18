@@ -9,7 +9,6 @@ namespace LI.ApplicationServices;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-
     private readonly IMapper _mapper;
 
     public UserService(UserManager<User> userManager, IMapper mapper)

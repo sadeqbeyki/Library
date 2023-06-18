@@ -24,7 +24,7 @@ namespace LMS.Services
                 Name = dto.Name,
                 Description = dto.Description,
             };
-            var addAuther = await _authorRepository.AddAsync(auther);
+            var addAuther = await _authorRepository.CreateAsync(auther);
 
             var result = new AuthorDto
             {

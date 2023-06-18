@@ -1,5 +1,5 @@
 using LMS.Contracts.Book;
-using LMS.Contracts.BookCategory;
+using LMS.Contracts.BookCategoryContract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.EndPoint.Controllers
@@ -42,11 +42,11 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<BookCategoryDto> Update(Guid id, [FromBody] BookCategoryDto bookCategory)
+        public async Task<ActionResult> Update(Guid id, [FromBody] BookCategoryDto dto)
         {
-            var updatedBookCategory = await _bookCategoryService.Update(id, bookCategory);
+            var bookCategory = await _bookCategoryService.Update(id, dto);
 
-            return updatedBookCategory;
+            return Ok(bookCategory);
         }
 
         [HttpDelete("{id}")]

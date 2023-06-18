@@ -61,7 +61,7 @@ public class InventoryController : Controller
     public async Task<IActionResult> Update(EditInventory command)
     {
         var result = await _inventoryService.Edit(command);
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", result);
     }
     [HttpGet]
     public IActionResult Increase(Guid id)
@@ -92,5 +92,11 @@ public class InventoryController : Controller
     {
         var result = await _inventoryService.Decrease(command);
         return RedirectToAction("Index", result);
+    }
+    [HttpGet]
+    public IActionResult Log(Guid id)
+    {
+        var log = _inventoryService.GetOperationLog(id);
+        return View("OperationLog", log);
     }
 }

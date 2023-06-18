@@ -1,6 +1,7 @@
 using BI.Configuration;
 using BMS.Configurations;
 using LI.ApplicationContracts.Auth;
+using LI.ApplicationContracts.RoleContracts;
 using LI.ApplicationContracts.UserContracts;
 using LI.ApplicationServices;
 using LI.Domain.RoleAgg;
@@ -40,6 +41,7 @@ builder.Services.AddScoped<IPasswordValidator<User>, LIPasswordValidator>();
 builder.Services.AddScoped<IUserValidator<User>, LIUserValidator>();
 builder.Services.AddTransient<IAuthHelper, AuthHelper>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddDbContext<LiIdentityDbContext>(c =>
     c.UseSqlServer(builder.Configuration.GetConnectionString("AAA")));

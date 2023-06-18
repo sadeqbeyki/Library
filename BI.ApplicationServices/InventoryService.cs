@@ -23,7 +23,7 @@ namespace BI.ApplicationServices
                 return operation.Failed(ApplicationMessages.DuplicatedRecord);
 
             var inventory = new Inventory(command.BookId, command.UnitPrice);
-            await _inventoryRepository.AddAsync(inventory);
+            await _inventoryRepository.CreateAsync(inventory);
             //_inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }
