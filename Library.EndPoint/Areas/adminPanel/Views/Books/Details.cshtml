@@ -1,5 +1,7 @@
-﻿@using LMS.Contracts.Book;
-@model BookViewModel
+﻿
+@*@page*@
+@using LI.ApplicationContracts.UserContracts;
+@model UpdateUserDto
 @{
     ViewData["Title"] = "Details";
 }
@@ -11,28 +13,28 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.FirstName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ISBN)
+            @Html.DisplayNameFor(model => model.LastName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ISBN)
+            @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Code)
+            @Html.DisplayNameFor(model => model.UserName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Code)
+            @Html.DisplayFor(model => model.UserName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
 </div>
