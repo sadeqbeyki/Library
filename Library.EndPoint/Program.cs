@@ -1,5 +1,4 @@
 using BI.Configuration;
-using BMS.Configurations;
 using LI.ApplicationContracts.Auth;
 using LI.ApplicationContracts.RoleContracts;
 using LI.ApplicationContracts.UserContracts;
@@ -8,6 +7,7 @@ using LI.Domain.RoleAgg;
 using LI.Domain.UserAgg;
 using LI.Infrastructure;
 using LI.Infrastructure.Repositories;
+using LMS.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +20,7 @@ builder.Services.AddControllersWithViews();
 
 #region Book
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-BMSConfigureServices.Configure(builder.Services, connectionString);
+LMSConfigureServices.Configure(builder.Services, connectionString);
 InventoryConfigureServices.Configure(builder.Services, connectionString);
 #endregion
 

@@ -1,11 +1,11 @@
-using BMS.Configurations;
+using LMS.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-BMSConfigureServices.Configure(builder.Services, connectionString);
+LMSConfigureServices.Configure(builder.Services, connectionString);
 
 //builder.Services.AddAutoMapper(typeof(Program));
 

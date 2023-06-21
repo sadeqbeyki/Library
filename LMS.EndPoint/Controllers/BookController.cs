@@ -1,5 +1,4 @@
 using LMS.Contracts.Book;
-using LMS.Contracts.BookCategory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.EndPoint.Controllers

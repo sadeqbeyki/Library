@@ -14,9 +14,9 @@ using LMS.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BMS.Configurations;
+namespace LMS.Configurations;
 
-public static class BMSConfigureServices
+public static class LMSConfigureServices
 {
     public static void Configure(IServiceCollection services, string? connectionString)
     {
