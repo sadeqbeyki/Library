@@ -29,6 +29,7 @@
     <ProjectReference Include="..\BMS.Configurations\LMS.Configurations.csproj" />
     <ProjectReference Include="..\LI.Configurations\LI.Configurations.csproj" />
     <ProjectReference Include="..\LI.Infrastructure\LI.Infrastructure.csproj" />
+    <ProjectReference Include="..\LMS.Configurations\LMS.Configurations.csproj" />
   </ItemGroup>
 
   <ItemGroup>

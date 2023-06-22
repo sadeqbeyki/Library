@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BMS.Configurations\LMS.Configurations.csproj" />
+    <ProjectReference Include="..\LMS.Configurations\LMS.Configurations.csproj" />
     <ProjectReference Include="..\LMS.Domain\LMS.Domain.csproj" />
     <ProjectReference Include="..\LMS.Infrastructure\LMS.Infrastructure.csproj" />
     <ProjectReference Include="..\LMS.Services\LMS.Services.csproj" />

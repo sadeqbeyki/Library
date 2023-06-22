@@ -1,6 +1,7 @@
 ﻿using LMS.Domain;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -212,3 +213,19 @@ public class PublisherBookConfig : IEntityTypeConfiguration<PublisherBook>
 }
 
 
+//public class BorrowConfig : IEntityTypeConfiguration<Borrow>
+//{
+//    public void Configure(EntityTypeBuilder<Borrow> builder)
+//    {
+//        builder.HasKey(cs => new { cs.BookId, cs.UserId });
+//        //builder.ToTable("PublisherBooks");
+
+//        builder.HasOne(cs => cs.Book)
+//            .WithMany(c => c.bo)
+//            .HasForeignKey(cs => cs.);
+
+//        builder.HasOne(cs => cs.Book)
+//            .WithMany(s => s.PublisherBooks)
+//            .HasForeignKey(cs => cs.BookId);
+//    }
+//}

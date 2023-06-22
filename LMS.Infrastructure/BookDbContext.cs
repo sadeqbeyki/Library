@@ -3,7 +3,6 @@ using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
 using LMS.Domain.PublisherAgg;
-using LMS.Domain.ReservationAgg;
 using LMS.Domain.TranslatorAgg;
 using LMS.Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +16,7 @@ public class BookDbContext : DbContext
     public DbSet<Translator> Translators{ get; set; }
     public DbSet<Publisher> Publishers{ get; set; }
     public DbSet<BookCategory> BookCategories{ get; set; }
-    public DbSet<Borrow> Reservations{ get; set; }
+    //public DbSet<Borrow> Reservations{ get; set; }
     public DbSet<AuthorBook> AuthorBooks{ get; set; }
     public DbSet<TranslatorBook> TranslatorBooks{ get; set; }
     public DbSet<PublisherBook> PublisherBooks{ get; set; }
