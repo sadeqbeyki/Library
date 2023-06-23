@@ -1,4 +1,5 @@
 ﻿using LMS.Contracts.Book;
+using LMS.Contracts.BookCategoryContract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers
@@ -25,6 +26,21 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
             if (result == null)
                 return NotFound();
             return View(result);
+        }
+        [HttpGet]
+        public ActionResult<BookDto> Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> Create(BookDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _bookService.Create(dto);
+            return RedirectToAction("Index", result);
         }
     }
 }
