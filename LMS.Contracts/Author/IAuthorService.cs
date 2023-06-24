@@ -11,4 +11,6 @@ public interface IAuthorService
     Task<AuthorDto> Update(Guid id, AuthorDto entity);
 
     Task<List<BookDto>> GetAuthorBooks(Guid id);
+    Task<List<AuthorDto>> GetAuthors();
+
 }

@@ -95,5 +95,10 @@ namespace LMS.Services
             }).ToList();
             return result;
         }
+
+        public Task<List<AuthorDto>> GetAuthors()
+        {
+            return _authorRepository.GetAuthors();
+        }
     }
 }

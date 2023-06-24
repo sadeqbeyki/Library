@@ -1,5 +1,5 @@
-﻿@using LMS.Contracts.Book;
-@model BookDto
+﻿@using Library.EndPoint.Areas.adminPanel.Models;
+@model CreateBookViewModel
 @{
     ViewData["Title"] = "Create Book";
 }
@@ -11,6 +11,50 @@
         <form asp-action="Create" method="post">
             <div>
                 <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CategoryId" class="control-label">Choose a Category</label>
+                            <select class="form-control" asp-for="CategoryId"
+                                    asp-items='new SelectList(Model.BookCategories, "Id", "Name")'>
+                                <option value="">Select Category</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="AuthorId" class="control-label">Choose Author</label>
+                            <select class="form-control" asp-for="AuthorId"
+                                    asp-items='new SelectList(Model.Authors, "Id", "Name")'>
+                                <option value="">Select Category</option>
+                            </select>
+                            <span asp-validation-for="AuthorId" class="error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TranslatorId" class="control-label">Choose Translator</label>
+                            <select class="form-control" asp-for="TranslatorId"
+                                    asp-items='new SelectList(Model.Translators, "Id", "Name")'>
+                                <option value="">Select Category</option>
+                            </select>
+                            <span asp-validation-for="TranslatorId" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="PublisherId" class="control-label">Choose Publisher</label>
+                            <select class="form-control" asp-for="PublisherId"
+                                    asp-items='new SelectList(Model.Publishers, "Id", "Name")'>
+                                <option value="">Select Category</option>
+                            </select>
+                            <span asp-validation-for="PublisherId" class="error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Title" class="control-label">Title</label>
@@ -20,14 +64,14 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label asp-for="ISBN" class="control-label">Title</label>
+                            <label asp-for="ISBN" class="control-label">ISBN</label>
                             <input type="text" class="form-control" asp-for="ISBN">
                             <span asp-validation-for="ISBN" class="error"></span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label asp-for="Code" class="control-label">Title</label>
+                            <label asp-for="Code" class="control-label">Code</label>
                             <input type="text" class="form-control" asp-for="Code">
                             <span asp-validation-for="Code" class="error"></span>
                         </div>

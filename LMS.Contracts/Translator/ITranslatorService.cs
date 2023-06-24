@@ -10,5 +10,7 @@ public interface ITranslatorService
     Task DeleteTranslator(Guid id);
     Task<TranslatorDto> UpdateTranslator(Guid id, TranslatorDto entity);
     Task<List<BookDto>> GetTranslatorBooks(Guid id);
+    Task<List<TranslatorDto>> GetTranslators();
+
 
 }

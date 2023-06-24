@@ -1,4 +1,6 @@
 ﻿using AppFramework.Domain;
+using LMS.Contracts.Book;
+using LMS.Contracts.BookCategoryContract;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
 using Microsoft.EntityFrameworkCore;
@@ -17,5 +19,14 @@ public class BookCategoryRepository : Repository<BookCategory>, IBookCategoryRep
     {
         List<Book> books = await _dbContext.Books.Where(b => b.CategoryId == id).ToListAsync();
         return books;
+    }
+    public async Task<List<BookCategoryDto>> GetCategories()
+    {
+        return await _dbContext.BookCategories.Select(x => new BookCategoryDto
+        {
+            Id = x.Id,
+            Name = x.Name
+        }).ToListAsync();
+
     }
 }

@@ -44,6 +44,10 @@ namespace LMS.Services
 
             return Task.FromResult(result);
         }
+        public async Task<List<BookCategoryDto>> GetCategories()
+        {
+            return await _repository.GetCategories();
+        }
 
         public async Task<BookCategoryDto> GetById(Guid id)
         {

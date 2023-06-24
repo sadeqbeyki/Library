@@ -91,5 +91,10 @@ namespace LMS.Services
             }).ToList();
             return result;
         }
+
+        public Task<List<TranslatorDto>> GetTranslators()
+        {
+            return _translatorRepository.GetTranslators();
+        }
     }
 }

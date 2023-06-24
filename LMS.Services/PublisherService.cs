@@ -75,6 +75,9 @@ namespace LMS.Services
             return entity;
         }
 
-
+        public Task<List<PublisherDto>> GetPublishers()
+        {
+            return _publisherRepository.GetPublishers();
+        }
     }
 }

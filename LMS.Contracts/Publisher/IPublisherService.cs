@@ -7,4 +7,6 @@ public interface IPublisherService
     Task<PublisherDto> Create(PublisherDto entity);
     Task Delete(Guid id);
     Task<PublisherDto> Update(Guid id, PublisherDto entity);
+    Task<List<PublisherDto>> GetPublishers();
+
 }

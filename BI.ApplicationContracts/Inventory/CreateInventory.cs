@@ -11,6 +11,6 @@ namespace BI.ApplicationContracts.Inventory
 
         [Range(1, double.MaxValue, ErrorMessage = ValidationMessages.IsRequired)]
         public double UnitPrice { get; set; }
-        public List<BookViewModel> Books { get; set; } =new List<BookViewModel>();
+        public List<BookViewModel> Books { get; set; } = new List<BookViewModel>();
     }
 }

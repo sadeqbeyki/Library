@@ -1,22 +1,31 @@
 ﻿using AppFramework.Domain;
+using LMS.Contracts.Author;
 using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookAgg;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Infrastructure.Repositories
-{
-    public class AuthorRepository : Repository<Author>, IAuthorRepository
-    {
-        private readonly BookDbContext _bookDbContext;
-        public AuthorRepository(BookDbContext dbContext) : base(dbContext)
-        {
-            _bookDbContext = dbContext;
-        }
+namespace LMS.Infrastructure.Repositories;
 
-        public async Task<List<Book>> GetAuthorBooks(Guid id)
+public class AuthorRepository : Repository<Author>, IAuthorRepository
+{
+    private readonly BookDbContext _dbContext;
+    public AuthorRepository(BookDbContext dbContext) : base(dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task<List<Book>> GetAuthorBooks(Guid id)
+    {
+        List<Book> books = await _dbContext.Books.Where(b => b.AuthorId == id).ToListAsync();
+        return  books;
+    }
+
+    public async Task<List<AuthorDto>> GetAuthors()
+    {
+        return await _dbContext.Authors.Select(x => new AuthorDto
         {
-            List<Book> books = await _bookDbContext.Books.Where(b => b.AuthorId == id).ToListAsync();
-            return  books;
-        }
+            Id = x.Id,
+            Name = x.Name
+        }).ToListAsync();
     }
 }

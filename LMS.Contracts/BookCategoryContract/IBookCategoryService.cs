@@ -12,4 +12,6 @@ public interface IBookCategoryService
     Task<OperationResult> Update(Guid id, BookCategoryDto entity);
     Task<List<BookDto>> GetCategoryWithBooks(Guid id);
 
+    Task<List<BookCategoryDto>> GetCategories();
+
 }
