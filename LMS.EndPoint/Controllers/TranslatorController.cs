@@ -18,7 +18,7 @@ namespace LMS.EndPoint.Controllers
         [HttpGet]
         public IActionResult GetAllTranslators()
         {
-            var translators = _translatorService.GetAllTranslators();
+            var translators = _translatorService.GetAll();
             return Ok(translators);
         }
 
@@ -37,7 +37,7 @@ namespace LMS.EndPoint.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var result = await _translatorService.AddTranslator(dto);
+            var result = await _translatorService.Create(dto);
             return Ok(result);
         }
 

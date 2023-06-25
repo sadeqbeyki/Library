@@ -30,7 +30,7 @@ namespace LMS.Services
             return operationResult.Succeeded();
         }
 
-        public Task<List<BookCategoryDto>> GetAll()
+        public async Task<List<BookCategoryDto>> GetAll()
         {
             //List<BookCategory> categories = await _repository.GetAll().Take(50).ToListAsync();
             //return _mapper.Map<List<BookCategoryDto>>(categories);
@@ -42,7 +42,7 @@ namespace LMS.Services
                     Description = bookCategory.Description,
                 }).ToList();
 
-            return Task.FromResult(result);
+            return await Task.FromResult(result);
         }
         public async Task<List<BookCategoryDto>> GetCategories()
         {

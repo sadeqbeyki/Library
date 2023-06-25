@@ -13,7 +13,7 @@ namespace LMS.Services
             _translatorRepository = translatorRepository;
         }
 
-        public async Task<TranslatorDto> AddTranslator(TranslatorDto dto)
+        public async Task<TranslatorDto> Create(TranslatorDto dto)
         {
             var translator = new Translator
             {
@@ -31,7 +31,7 @@ namespace LMS.Services
             return result;
         }
 
-        public Task<List<TranslatorDto>> GetAllTranslators()
+        public Task<List<TranslatorDto>> GetAll()
         {
             var result = _translatorRepository.GetAll()
                 .Select(translator => new TranslatorDto

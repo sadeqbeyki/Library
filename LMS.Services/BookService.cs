@@ -87,9 +87,9 @@ public class BookService : IBookService
         await _bookRepository.DeleteAsync(result);
     }
 
-    public async Task<BookDto> Update(Guid id, BookDto entity)
+    public async Task<BookDto> Update(BookViewModel entity)
     {
-        var existingBook = await _bookRepository.GetByIdAsync(id);
+        var existingBook = await _bookRepository.GetByIdAsync(entity.Id);
         if (existingBook == null)
             return null;
 

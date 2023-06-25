@@ -62,4 +62,24 @@ public class BooksController : Controller
         var result = await _bookService.Create(dto);
         return RedirectToAction("Index", result);
     }
+    [HttpGet]
+    public async Task<ActionResult<BookViewModel>> Update(Guid id)
+    {
+        var model = new UpdateBookViewModel
+        {
+            Book = await _bookService.GetById(id),
+            BookCategories = await _bookCategoryService.GetCategories(),
+            Authors = await _authorService.GetAuthors(),
+            Publishers = await _publisherService.GetPublishers(),
+            Translators = await _translatorService.GetTranslators()
+        };
+
+        return View("Update", model);
+    }
+    [HttpPut, HttpPost]
+    public async Task<ActionResult> Update(UpdateBookViewModel model)
+    {
+        var result = await _bookService.Update(model.Book);
+        return RedirectToAction("Index", result);
+    }
 }

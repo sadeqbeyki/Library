@@ -6,7 +6,7 @@ public interface IBookService
     Task<List<BookViewModel>> GetAll();
     Task<BookDto> Create(BookDto entity);
     Task Delete(Guid id);
-    Task<BookDto> Update(Guid id, BookDto entity);
+    Task<BookDto> Update(BookViewModel entity);
 
     Task<List<BookViewModel>> GetBooks();
 

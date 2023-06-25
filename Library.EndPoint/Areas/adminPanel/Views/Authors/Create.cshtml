@@ -1,0 +1,41 @@
+﻿@using LMS.Contracts.Author;
+@model AuthorDto
+
+@{
+    ViewData["Title"] = "Create Author";
+}
+
+<h1 class="bg-info text-white">@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-action="Create" method="post">
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label">Name</label>
+                            <input type="text" class="form-control" asp-for="Name">
+                            <span asp-validation-for="Name" class="error"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group no-margin">
+                                <label asp-for="Description" class="control-label">Description</label>
+                                <textarea class="form-control autogrow" asp-for="Description"
+                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea>
+                                <span asp-validation-for="Description" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Create</button>
+            </div>
+        </form>
+    </div>
+</div>

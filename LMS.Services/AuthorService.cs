@@ -35,7 +35,7 @@ namespace LMS.Services
             return result;
         }
 
-        public Task<List<AuthorDto>> GetAll()
+        public async Task<List<AuthorDto>> GetAll()
         {
             var result = _authorRepository.GetAll()
                 .Select(author => new AuthorDto
@@ -45,7 +45,7 @@ namespace LMS.Services
                     Description = author.Description,
                 }).ToList();
 
-            return Task.FromResult(result);
+            return await Task.FromResult(result);
         }
 
         public async Task<AuthorDto> GetById(Guid id)
