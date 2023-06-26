@@ -82,4 +82,19 @@ public class BooksController : Controller
         var result = await _bookService.Update(model.Book);
         return RedirectToAction("Index", result);
     }
+    [HttpGet]
+    public async Task<ActionResult<BookViewModel>> Delete(Guid id)
+    {
+        var result = await _bookService.GetById(id);
+        if (result == null)
+            return NotFound();
+        return View(result);
+    }
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> ConfirmDelete(Guid id)
+    {
+        await _bookService.Delete(id);
+        return RedirectToAction("Index");
+    }
 }
