@@ -16,7 +16,7 @@ namespace LMS.Services
         public async Task<List<LoanDto>> GetAllLoans()
         {
             var result = await _loanRepository.GetAll()
-                .Select(l => new LoanDto
+                .Select(l=> new LoanDto
                 {
                     Id = l.Id,
                     BookId = l.BookId,
@@ -37,27 +37,29 @@ namespace LMS.Services
             var loan = await _loanRepository.GetByIdAsync(id);
             LoanDto result = new()
             {
-                Id = loan.Id,
-                BookId = loan.BookId,
+                Id =loan.Id,
+                BookId = loan.BookId,   
                 Description = loan.Description,
                 EmployeeId = loan.EmployeeId,
-                ReturnEmployeeID = loan.ReturnEmployeeID,
-                ReturnDate = loan.ReturnDate,
-                MemberID = loan.MemberID,
-                LoanDate = loan.LoanDate,
-                IdealReturnDate = loan.IdealReturnDate,
+                ReturnEmployeeID=loan.ReturnEmployeeID,
+                ReturnDate=loan.ReturnDate,
+                MemberID=loan.MemberID,
+                LoanDate=loan.LoanDate,
+                IdealReturnDate=loan.IdealReturnDate,
+
+                
             };
             return result;
         }
 
         public async Task<IEnumerable<LoanDto>> GetLoansByMemberId(int memberId)
         {
-            return await _loanRepository.GetByIdAsync(l => l.MemberID == memberId);
+            return  null;
         }
 
         public async Task<IEnumerable<LoanDto>> GetLoansByEmployeeId(string employeeId)
         {
-            return await _loanRepository.FindAsync(l => l.EmployeeId == employeeId);
+            return null ;
         }
 
         public async Task<IEnumerable<LoanDto>> GetOverdueLoans()
@@ -65,27 +67,22 @@ namespace LMS.Services
             // Implement the logic to retrieve overdue loans
             // Example: return await _loanRepository.FindAsync(l => l.ReturnDate == null && l.IdealReturnDate < DateTime.Now);
             // You can customize the condition based on your business logic
+            return null;
         }
 
         public async Task CreateLoan(LoanDto loan)
         {
-            await _loanRepository.AddAsync(loan);
+            ;
         }
 
         public async Task UpdateLoan(LoanDto loan)
         {
-            _loanRepository.Update(loan);
-            await _loanRepository.SaveChangesAsync();
+            ;
         }
 
         public async Task DeleteLoan(int id)
         {
-            var loan = await _loanRepository.GetByIdAsync(id);
-            if (loan != null)
-            {
-                _loanRepository.Remove(loan);
-                await _loanRepository.SaveChangesAsync();
-            }
+            ;
         }
     }
 
