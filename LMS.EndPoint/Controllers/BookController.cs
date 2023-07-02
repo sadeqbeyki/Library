@@ -45,7 +45,7 @@ namespace LMS.EndPoint.Controllers
         {
             var updatedBook = await _bookService.Update(book);
 
-            return updatedBook;
+            return Ok();
         }
 
         [HttpDelete("{id}")]

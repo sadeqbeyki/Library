@@ -2,6 +2,8 @@
 using LI.ApplicationContracts.Auth;
 using LMS.Contracts.Rent;
 using LMS.Domain.OrderAgg;
+using LMS.Domain.RentAgg;
+using LMS.Domain.Services;
 using Microsoft.Extensions.Configuration;
 
 namespace LMS.Services;
@@ -11,40 +13,40 @@ public class RentApplication : IRentApplication
     private readonly IAuthHelper _authHelper;
     private readonly IConfiguration _configuration;
     private readonly IRentRepository _rentRepository;
-    private readonly ILibraryInventoryAcl _libraryInventoryAcl;
 
-    private readonly IShopAccountAcl _shopAccountAcl;
+    private readonly ILibraryInventoryAcl _libraryInventoryAcl;
+    private readonly ILibraryAccountAcl _libraryAccountAcl;
 
     public RentApplication(IAuthHelper authHelper,
         IConfiguration configuration,
-        IOrderRepository rentRepository,
-        IShopInventoryAcl shopInventoryAcl,
-        ISmsService smsService,
-        IShopAccountAcl shopAccountAcl)
+        IRentRepository rentRepository,
+
+        ILibraryInventoryAcl libraryInventoryAcl,
+        ILibraryAccountAcl libraryAccountAcl)
     {
         _authHelper = authHelper;
         _configuration = configuration;
         _rentRepository = rentRepository;
-        _libraryInventoryAcl = shopInventoryAcl;
-        _smsService = smsService;
-        _shopAccountAcl = shopAccountAcl;
+
+        _libraryInventoryAcl = libraryInventoryAcl;
+        _libraryAccountAcl = libraryAccountAcl;
     }
 
-    public long PlaceOrder(Cart cart)
+    public Guid PlaceRent(Cart cart)
     {
         var currentAccountId = _authHelper.CurrentAccountId();
-        var order = new Order(currentAccountId, cart.PaymentMethod, cart.TotalAmount, cart.DiscountAmount,
+        var rent = new Rent(currentAccountId, cart.PaymentMethod, cart.TotalAmount, cart.DiscountAmount,
             cart.PayAmount);
 
         foreach (var cartItem in cart.Items)
         {
-            var orderItem = new OrderItem(cartItem.Id, cartItem.Count, cartItem.UnitPrice, cartItem.DiscountRate);
-            order.AddItem(orderItem);
+            var rentItem = new RentItem(cartItem.Id, cartItem.Count, cartItem.UnitPrice, cartItem.DiscountRate);
+            rent.AddItem(rentItem);
         }
 
-        _rentRepository.Create(order);
-        _rentRepository.SaveChanges();
-        return order.Id;
+        _rentRepository.CreateAsync(rent);
+        //_rentRepository.SaveChanges();
+        return rent.Id;
     }
 
     public double GetAmountBy(long id)
@@ -52,36 +54,36 @@ public class RentApplication : IRentApplication
         return _rentRepository.GetAmountBy(id);
     }
 
-    public void Cancel(long id)
+    public async Task void Cancel(Guid id)
     {
-        var order = _rentRepository.Get(id);
-        order.Cancel();
+        var rent = await _rentRepository.GetByIdAsync(id);
+        rent.Cancel();
         _rentRepository.SaveChanges();
     }
 
-    public string PaymentSucceeded(long orderId, long refId)
+    public string PaymentSucceeded(long rentId, long refId)
     {
-        var order = _rentRepository.Get(orderId);
-        order.PaymentSucceeded(refId);
+        var rent = _rentRepository.GetByIdAsync(rentId);
+        rent.PaymentSucceeded(refId);
         var symbol = _configuration.GetValue<string>("Symbol");
         var issueTrackingNo = CodeGenerator.Generate(symbol);
-        order.SetIssueTrackingNo(issueTrackingNo);
-        if (!_libraryInventoryAcl.ReduceFromInventory(order.Items)) return "";
+        rent.SetIssueTrackingNo(issueTrackingNo);
+        if (!_libraryInventoryAcl.ReduceFromInventory(rent.Items)) return "";
 
         _rentRepository.SaveChanges();
 
-        var (name) = _shopAccountAcl.GetAccountBy(order.AccountId);
+        var (name, mobile) = _libraryAccountAcl.GetAccountBy(rent.AccountId);
 
 
         return issueTrackingNo;
     }
 
-    public List<OrderItemViewModel> GetItems(long orderId)
+    public List<RentItemViewModel> GetItems(long rentId)
     {
-        return _rentRepository.GetItems(orderId);
+        return _rentRepository.GetItems(rentId);
     }
 
-    public List<OrderViewModel> Search(OrderSearchModel searchModel)
+    public List<RentViewModel> Search(RentSearchModel searchModel)
     {
         return _rentRepository.Search(searchModel);
     }
