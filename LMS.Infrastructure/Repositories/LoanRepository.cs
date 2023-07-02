@@ -1,4 +1,5 @@
 ﻿using AppFramework.Domain;
+using LMS.Contracts.Loan;
 using LMS.Domain.LoanAgg;
 
 namespace LMS.Infrastructure.Repositories;
@@ -11,4 +12,8 @@ public class LoanRepository : Repository<Loan>, ILoanRepository
         _dbContext = dbContext;
     }
 
+    public Task<IEnumerable<LoanDto>> GetByIdAsync(Func<object, bool> value)
+    {
+        throw new NotImplementedException();
+    }
 }

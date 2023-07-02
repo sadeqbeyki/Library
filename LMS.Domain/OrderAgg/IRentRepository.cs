@@ -1,10 +1,11 @@
 ﻿using AppFramework.Domain;
+using LMS.Contracts.Rent;
 
 namespace LMS.Domain.OrderAgg;
 
 public interface IRentRepository : IRepository<Rent>
 {
     double GetAmountBy(long id);
-    List<OrderItemViewModel> GetItems(long orderId);
-    List<OrderViewModel> Search(OrderSearchModel searchModel);
+    List<RentItemViewModel> GetItems(long rentId);
+    List<RentViewModel> Search(RentSearchModel searchModel);
 }

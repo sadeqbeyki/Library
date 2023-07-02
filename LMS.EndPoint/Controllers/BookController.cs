@@ -41,9 +41,9 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<BookDto> Update(Guid id, [FromBody] BookDto book)
+        public async Task<BookViewModel> Update(BookViewModel book)
         {
-            var updatedBook = await _bookService.Update(id, book);
+            var updatedBook = await _bookService.Update(book);
 
             return updatedBook;
         }
