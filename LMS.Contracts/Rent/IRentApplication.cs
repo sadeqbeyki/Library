@@ -2,10 +2,10 @@
 
 public interface IRentApplication
 {
-    long PlaceRent(Cart cart);
+    Guid PlaceRent(Cart cart);
     double GetAmountBy(long id);
-    void Cancel(long id);
-    string PaymentSucceeded(long rentId, long refId);
+    Task Cancel(Guid id);
+    Task<string> PaymentSucceeded(Guid rentId, long refId);
     List<RentItemViewModel> GetItems(long rentId);
     List<RentViewModel> Search(RentSearchModel searchModel);
 }

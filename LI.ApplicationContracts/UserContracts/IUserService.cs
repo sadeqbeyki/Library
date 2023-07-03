@@ -9,5 +9,8 @@ namespace LI.ApplicationContracts.UserContracts
         Task<UpdateUserDto> GetUser(string id);
         Task<List<UpdateUserDto>> GetUsers();
         Task<IdentityResult> Update(UpdateUserDto user);
+
+        UpdateUserDto GetAccountBy(string id);
+
     }
 }

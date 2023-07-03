@@ -1,7 +1,7 @@
 ﻿using AppFramework.Domain;
 using LMS.Contracts.Rent;
 
-namespace LMS.Domain.OrderAgg;
+namespace LMS.Domain.RentAgg;
 
 public interface IRentRepository : IRepository<Rent>
 {

@@ -26,14 +26,14 @@ namespace BI.Domain.InventoryAgg
             var minus = Operations.Where(x => !x.Operation).Sum(x => x.Count);
             return plus - minus;
         }
-        public void Increase(long count, long operatorId, string description)
+        public void Increase(long count, string operatorId, string description)
         {
             var currentCount = CalculateCurrentCount() + count;
             var operation = new InventoryOperation(true, count, operatorId, currentCount, description, 0, Id);
             Operations.Add(operation);
             InStock = currentCount > 0;
         }
-        public void Decrease(long count, long operatorId, string description, long borrowId)
+        public void Decrease(long count, string operatorId, string description, long borrowId)
         {
             var currentCount = CalculateCurrentCount() - count;
             var operation = new InventoryOperation(false, count, operatorId, currentCount, description, borrowId, Id);

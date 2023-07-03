@@ -1,6 +1,6 @@
 ﻿using AppFramework.Domain;
 
-namespace LMS.Domain.OrderAgg;
+namespace LMS.Domain.RentAgg;
 
 public class RentItem : BaseEntity
 {

@@ -1,10 +1,10 @@
 ﻿using AppFramework.Domain;
 
-namespace LMS.Domain.OrderAgg
+namespace LMS.Domain.RentAgg
 {
     public class Rent : BaseEntity
     {
-        public long AccountId { get; private set; }
+        public string AccountId { get; private set; }
         public int PaymentMethod { get; private set; }
         public double TotalAmount { get; private set; }
         public double DiscountAmount { get; private set; }
@@ -15,7 +15,7 @@ namespace LMS.Domain.OrderAgg
         public long RefId { get; private set; }
         public List<RentItem> Items { get; private set; }
 
-        public Rent(long accountId, int paymentMethod, double totalAmount, double discountAmount, double payAmount)
+        public Rent(string accountId, int paymentMethod, double totalAmount, double discountAmount, double payAmount)
         {
             AccountId = accountId;
             TotalAmount = totalAmount;

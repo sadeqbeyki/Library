@@ -43,12 +43,12 @@ public class AuthHelper : IAuthHelper
         return JsonConvert.DeserializeObject<List<int>>(permissions);
     }
 
-    public long CurrentAccountId()
+    public string CurrentAccountId()
     {
         return IsAuthenticated()
-            ? long.Parse(_contextAccessor.HttpContext.User.Claims
-            .First(x => x.Type == "AccountId")?.Value)
-            : 0;
+            ? _contextAccessor.HttpContext.User.Claims
+            .First(x => x.Type == "AccountId")?.Value
+            :"";
     }
 
     public string CurrentAccountMobile()

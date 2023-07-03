@@ -1,7 +1,6 @@
 ﻿using AppFramework.Application;
 using LI.ApplicationContracts.Auth;
 using LMS.Contracts.Rent;
-using LMS.Domain.OrderAgg;
 using LMS.Domain.RentAgg;
 using LMS.Domain.Services;
 using Microsoft.Extensions.Configuration;
@@ -54,25 +53,26 @@ public class RentApplication : IRentApplication
         return _rentRepository.GetAmountBy(id);
     }
 
-    public async Task void Cancel(Guid id)
+    public async Task Cancel(Guid id)
     {
         var rent = await _rentRepository.GetByIdAsync(id);
         rent.Cancel();
         _rentRepository.SaveChanges();
     }
 
-    public string PaymentSucceeded(long rentId, long refId)
+    public async Task<string> PaymentSucceeded(Guid rentId, long refId)
     {
-        var rent = _rentRepository.GetByIdAsync(rentId);
+        var rent = await _rentRepository.GetByIdAsync(rentId);
         rent.PaymentSucceeded(refId);
-        var symbol = _configuration.GetValue<string>("Symbol");
-        var issueTrackingNo = CodeGenerator.Generate(symbol);
+        var symbol =  _configuration.GetValue<string>("Symbol");
+        var issueTrackingNo =  CodeGenerator.Generate(symbol);
         rent.SetIssueTrackingNo(issueTrackingNo);
-        if (!_libraryInventoryAcl.ReduceFromInventory(rent.Items)) return "";
+        if (!_libraryInventoryAcl.ReduceFromInventory(rent.Items))
+            throw new Exception("");
 
         _rentRepository.SaveChanges();
 
-        var (name, mobile) = _libraryAccountAcl.GetAccountBy(rent.AccountId);
+        var (name, email) = _libraryAccountAcl.GetAccountBy(rent.AccountId);
 
 
         return issueTrackingNo;

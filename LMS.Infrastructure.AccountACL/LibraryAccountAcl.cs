@@ -12,10 +12,10 @@ namespace LMS.Infrastructure.AccountACL
             _userService = userService;
         }
 
-        public (string name, string mobile) GetAccountBy(string id)
+        public (string name, string email) GetAccountBy(string id)
         {
-            var account = _userService.GetUser(id);
-            return (account.name, account.mobile);
+            var account = _userService.GetAccountBy(id);
+            return (account.FirstName, account.Email);
         }
     }
 }

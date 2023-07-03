@@ -40,13 +40,13 @@ namespace LMS.EndPoint.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public async Task<BookViewModel> Update(BookViewModel book)
-        {
-            var updatedBook = await _bookService.Update(book);
+        //[HttpPut("{id}")]
+        //public async Task<BookViewModel> Update(BookViewModel book)
+        //{
+        //    var updatedBook = await _bookService.Update(book);
 
-            return Ok();
-        }
+        //    return RedirectToAction(GetAll, updatedBook);
+        //}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

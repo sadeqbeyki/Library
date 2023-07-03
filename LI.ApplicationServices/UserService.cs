@@ -22,6 +22,18 @@ public class UserService : IUserService
         var user = await _userManager.FindByIdAsync(id);
         return _mapper.Map<UpdateUserDto>(user);
     }
+
+    public UpdateUserDto GetAccountBy(string id)
+    {
+        var account = _userManager.FindByIdAsync(id);
+        return _mapper.Map<UpdateUserDto>(account);
+
+        //return new UpdateUserDto()
+        //{
+        //    FirstName = account.,
+        //    Email = account.Mobile
+        //};
+    }
     #endregion
 
     #region GetAll

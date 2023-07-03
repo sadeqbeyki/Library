@@ -8,7 +8,7 @@
         string CurrentAccountRole();
         AuthViewModel CurrentAccountInfo();
         List<int> GetPermissions();
-        long CurrentAccountId();
+        string CurrentAccountId();
         string CurrentAccountMobile();
     }
 }

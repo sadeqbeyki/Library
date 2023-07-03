@@ -2,5 +2,5 @@
 
 public interface ILibraryAccountAcl
 {
-    (string name, string mobile) GetAccountBy(string id);
+    (string name, string email) GetAccountBy(string id);
 }

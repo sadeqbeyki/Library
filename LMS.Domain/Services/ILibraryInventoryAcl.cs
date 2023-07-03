@@ -1,5 +1,4 @@
-﻿
-using LMS.Domain.OrderAgg;
+﻿using LMS.Domain.RentAgg;
 
 namespace LMS.Domain.Services;
 

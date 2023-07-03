@@ -1,5 +1,5 @@
 ﻿using BI.ApplicationContracts.Inventory;
-using LMS.Domain.OrderAgg;
+using LMS.Domain.RentAgg;
 
 namespace LMS.Infrastructure.InventoryACL;
 
