@@ -69,7 +69,7 @@ namespace BI.ApplicationServices
         public async Task<OperationResult> Decrease(DecreaseInventory command)
         {
             var operation = new OperationResult();
-            var inventory =await _inventoryRepository.GetByIdAsync(command.InventoryId);
+            var inventory = await _inventoryRepository.GetByIdAsync(command.InventoryId);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 

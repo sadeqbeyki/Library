@@ -1,7 +1,7 @@
 ﻿using LMS.Domain;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
-
+using LMS.Domain.RentAgg;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -212,6 +212,22 @@ public class PublisherBookConfig : IEntityTypeConfiguration<PublisherBook>
     }
 }
 
+public class RentConfig : IEntityTypeConfiguration<Rent>
+{
+    public void Configure(EntityTypeBuilder<Rent> builder)
+    {
+        builder.ToTable("Rents");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.IssueTrackingNo).HasMaxLength(8).IsRequired(false);
+
+        builder.OwnsMany(x => x.Items, navigationBuilder =>
+        {
+            navigationBuilder.ToTable("RentItems");
+            navigationBuilder.HasKey(x => x.Id);
+            navigationBuilder.WithOwner(x => x.Rent).HasForeignKey(x => x.RentId);
+        });
+    }
+}
 
 //public class BorrowConfig : IEntityTypeConfiguration<Borrow>
 //{

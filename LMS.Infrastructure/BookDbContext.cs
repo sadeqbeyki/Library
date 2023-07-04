@@ -3,6 +3,7 @@ using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
 using LMS.Domain.PublisherAgg;
+using LMS.Domain.RentAgg;
 using LMS.Domain.TranslatorAgg;
 using LMS.Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,9 @@ public class BookDbContext : DbContext
     public DbSet<AuthorBook> AuthorBooks{ get; set; }
     public DbSet<TranslatorBook> TranslatorBooks{ get; set; }
     public DbSet<PublisherBook> PublisherBooks{ get; set; }
+
+    public DbSet<Rent> Rents { get; set; }
+
     public BookDbContext(DbContextOptions<BookDbContext> options) : base(options)
     {
     }

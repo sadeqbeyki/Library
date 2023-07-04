@@ -2,11 +2,14 @@
 using LMS.Contracts.Book;
 using LMS.Contracts.BookCategoryContract;
 using LMS.Contracts.Publisher;
+using LMS.Contracts.Rent;
 using LMS.Contracts.Translator;
 using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
 using LMS.Domain.PublisherAgg;
+using LMS.Domain.RentAgg;
+using LMS.Domain.Services;
 using LMS.Domain.TranslatorAgg;
 using LMS.Infrastructure;
 using LMS.Infrastructure.Repositories;
@@ -34,6 +37,15 @@ public static class LMSConfigureServices
 
         services.AddScoped<ITranslatorRepository, TranslatorRepository>();
         services.AddScoped<ITranslatorService, TranslatorService>();
+
+        services.AddTransient<IRentRepository, RentRepository>();
+        services.AddTransient<IRentApplication, RentApplication>();
+
+        services.AddTransient<ICartCalculatorService, CartCalculatorService>();
+
+        services.AddSingleton<ICartService, CartService>();
+        services.AddTransient<ILibraryInventoryAcl, LibraryInventoryAcl>();
+        services.AddTransient<ILibraryAccountAcl, LibraryAccountAcl>();
 
         services.AddDbContext<BookDbContext>(x => x.UseSqlServer(connectionString));
     }
