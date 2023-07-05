@@ -2,6 +2,6 @@
 
 public class RentSearchModel
 {
-    public long AccountId { get; set; }
+    public string AccountId { get; set; }
     public bool IsCanceled { get; set; }
 }

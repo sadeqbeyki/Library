@@ -2,8 +2,8 @@
 
 public class RentItemViewModel
 {
-    public long Id { get; set; }
-    public long BookId { get; set; }
+    public Guid Id { get; set; }
+    public Guid BookId { get; set; }
     public string Book { get; set; }
     public int Count { get; set; }
     public double UnitPrice { get; set; }

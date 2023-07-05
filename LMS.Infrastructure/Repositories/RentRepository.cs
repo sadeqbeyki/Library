@@ -1,57 +1,62 @@
-﻿using LI.Infrastructure;
+﻿using AppFramework.Application;
+using AppFramework.Domain;
+using LI.Infrastructure;
+using LMS.Contracts;
+using LMS.Contracts.Rent;
+using LMS.Domain.RentAgg;
 
 namespace LMS.Infrastructure.Repositories;
 
-public class RentRepository
+public class RentRepository : Repository<Rent>, IRentRepository
 {
     private readonly BookDbContext _bookContext;
     private readonly LiIdentityDbContext _userContext;
 
-    public RentRepository(BookDbContext context, LiIdentityDbContext accountContext) : base(context)
+    public RentRepository(BookDbContext bookContext, LiIdentityDbContext userContext) : base(bookContext)
     {
-        _bookContext = context;
-        _userContext = accountContext;
+        _bookContext = bookContext;
+        _userContext = userContext;
     }
 
-    public double GetAmountBy(string id)
+    public double GetAmountBy(Guid id)
     {
-        var order = _bookContext.Orders
+        var rent = _bookContext.Rents
             .Select(x => new { x.PayAmount, x.Id })
             .FirstOrDefault(x => x.Id == id);
-        if (order != null)
-            return order.PayAmount;
+        if (rent != null)
+            return rent.PayAmount;
         return 0;
     }
 
-    public List<OrderItemViewModel> GetItems(long orderId)
+    public List<RentItemViewModel> GetItems(Guid rentId)
     {
-        var products = _bookContext.Products.Select(x => new { x.Id, x.Name }).ToList();
-        var order = _bookContext.Orders.FirstOrDefault(x => x.Id == orderId);
-        if (order == null)
-            return new List<OrderItemViewModel>();
+        var books = _bookContext.Books.Select(x => new { x.Id, x.Title }).ToList();
+        var rent = _bookContext.Rents.FirstOrDefault(x => x.Id == rentId);
+        if (rent == null)
+            return new List<RentItemViewModel>();
 
-        var items = order.Items.Select(x => new OrderItemViewModel
+        var items = rent.Items.Select(x => new RentItemViewModel
         {
             Id = x.Id,
             Count = x.Count,
             DiscountRate = x.DiscountRate,
-            OrderId = x.OrderId,
-            ProductId = x.ProductId,
+            RentId = x.RentId,
+            BookId = x.BookId,
             UnitPrice = x.UnitPrice
         }).ToList();
 
         foreach (var item in items)
         {
-            item.Product = products.FirstOrDefault(x => x.Id == item.ProductId)?.Name;
+            item.Book = books.FirstOrDefault(x => x.Id == item.BookId)?.Title;
         }
 
         return items;
     }
 
-    public List<OrderViewModel> Search(OrderSearchModel searchModel)
+    public List<RentViewModel> Search(RentSearchModel searchModel)
     {
-        var accounts = _userContext.Accounts.Select(x => new { x.Id, x.FullName }).ToList();
-        var query = _bookContext.Orders.Select(x => new OrderViewModel
+        var accounts = _userContext.Users.Select(x => new { x.Id, x.FirstName }).ToList();
+        var query = _bookContext.Rents.Select(x => new RentViewModel
         {
             Id = x.Id,
             AccountId = x.AccountId,
@@ -68,16 +73,16 @@ public class RentRepository
 
         query = query.Where(x => x.IsCanceled == searchModel.IsCanceled);
 
-        if (searchModel.AccountId > 0) query = query.Where(x => x.AccountId == searchModel.AccountId);
+        if (searchModel.AccountId != null) query = query.Where(x => x.AccountId == searchModel.AccountId);
 
-        var orders = query.OrderByDescending(x => x.Id).ToList();
-        foreach (var order in orders)
+        var rents = query.OrderByDescending(x => x.Id).ToList();
+        foreach (var rent in rents)
         {
-            order.AccountFullName = accounts.FirstOrDefault(x => x.Id == order.AccountId)?.FullName;
-            order.PaymentMethod = PaymentMethod.GetBy(order.PaymentMethodId).Name;
+            rent.AccountFullName = accounts.FirstOrDefault(x => x.Id == rent.AccountId)?.FirstName;
+            rent.PaymentMethod = PaymentMethod.GetBy(rent.PaymentMethodId).Name;
         }
 
-        return orders;
+        return rents;
     }
-}
+
 }

@@ -1,9 +1,10 @@
 ﻿using BI.ApplicationContracts.Inventory;
 using LMS.Domain.RentAgg;
+using LMS.Domain.Services;
 
 namespace LMS.Infrastructure.InventoryACL;
 
-public class LibraryInventoryAcl
+public class LibraryInventoryAcl: ILibraryInventoryAcl
 {
     private readonly IInventoryService _inventoryService;
 

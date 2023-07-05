@@ -2,8 +2,8 @@
 
 public class RentViewModel
 {
-    public long Id { get; set; }
-    public long AccountId { get; set; }
+    public Guid Id { get; set; }
+    public string AccountId { get; set; }
     public string AccountFullName { get; set; }
     public int PaymentMethodId { get; set; }
     public string PaymentMethod { get; set; }

@@ -12,6 +12,8 @@ using LMS.Domain.RentAgg;
 using LMS.Domain.Services;
 using LMS.Domain.TranslatorAgg;
 using LMS.Infrastructure;
+using LMS.Infrastructure.AccountACL;
+using LMS.Infrastructure.InventoryACL;
 using LMS.Infrastructure.Repositories;
 using LMS.Services;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +43,6 @@ public static class LMSConfigureServices
         services.AddTransient<IRentRepository, RentRepository>();
         services.AddTransient<IRentApplication, RentApplication>();
 
-        services.AddTransient<ICartCalculatorService, CartCalculatorService>();
 
         services.AddSingleton<ICartService, CartService>();
         services.AddTransient<ILibraryInventoryAcl, LibraryInventoryAcl>();
