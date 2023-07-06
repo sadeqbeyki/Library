@@ -13,7 +13,7 @@ public class LibraryInventoryAcl: ILibraryInventoryAcl
         _inventoryService = inventoryService;
     }
 
-    public bool ReduceFromInventory(List<RentItem> items)
+    public bool DecreaseFromInventory(List<RentItem> items)
     {
         var command = items.Select(rentItem =>
                 new DecreaseInventory(rentItem.BookId, rentItem.Count, "امانت عضو", rentItem.RentId))

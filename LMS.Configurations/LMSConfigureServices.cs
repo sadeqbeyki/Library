@@ -43,7 +43,6 @@ public static class LMSConfigureServices
         services.AddTransient<IRentRepository, RentRepository>();
         services.AddTransient<IRentApplication, RentApplication>();
 
-
         services.AddSingleton<ICartService, CartService>();
         services.AddTransient<ILibraryInventoryAcl, LibraryInventoryAcl>();
         services.AddTransient<ILibraryAccountAcl, LibraryAccountAcl>();

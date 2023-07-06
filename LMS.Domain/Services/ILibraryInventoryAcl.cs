@@ -4,5 +4,5 @@ namespace LMS.Domain.Services;
 
 public interface ILibraryInventoryAcl
 {
-    bool ReduceFromInventory(List<RentItem> items);
+    bool DecreaseFromInventory(List<RentItem> items);
 }

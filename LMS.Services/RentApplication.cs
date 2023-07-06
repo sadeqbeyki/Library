@@ -48,7 +48,7 @@ public class RentApplication : IRentApplication
         return rent.Id;
     }
 
-    public double GetAmountBy(long id)
+    public double GetAmountBy(Guid id)
     {
         return _rentRepository.GetAmountBy(id);
     }
@@ -67,7 +67,7 @@ public class RentApplication : IRentApplication
         var symbol =  _configuration.GetValue<string>("Symbol");
         var issueTrackingNo =  CodeGenerator.Generate(symbol);
         rent.SetIssueTrackingNo(issueTrackingNo);
-        if (!_libraryInventoryAcl.ReduceFromInventory(rent.Items))
+        if (!_libraryInventoryAcl.DecreaseFromInventory(rent.Items))
             throw new Exception("");
 
         _rentRepository.SaveChanges();
@@ -78,7 +78,7 @@ public class RentApplication : IRentApplication
         return issueTrackingNo;
     }
 
-    public List<RentItemViewModel> GetItems(long rentId)
+    public List<RentItemViewModel> GetItems(Guid rentId)
     {
         return _rentRepository.GetItems(rentId);
     }
