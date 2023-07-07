@@ -2,6 +2,7 @@
 using LMS.Contracts.Rent;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
@@ -19,8 +20,23 @@ public class RentController : Controller
         _rentApplication = rentApplication;
         _userService = userService;
     }
-    public IActionResult Index()
+    [HttpGet]
+    public async Task<IActionResult> Index(RentSearchModel model)
     {
+        Accounts = new SelectList(await _userService.GetUsers(), "Id", "FullName");
+        Rents = _rentApplication.Search(model);
         return View();
+    }
+    [HttpGet]
+    public IActionResult Cancel(Guid id)
+    {
+        _rentApplication.Cancel(id);
+        return RedirectToPage("Index");
+    }
+    [HttpGet]
+    public IActionResult OnGetItems(Guid id)
+    {
+        var items = _rentApplication.GetItems(id);
+        return View("Items", items);
     }
 }
