@@ -5,5 +5,5 @@ namespace LMS.Domain.LoanAgg;
 
 public interface ILoanRepository : IRepository<Loan>
 {
-    Task<IEnumerable<LoanDto>> GetByIdAsync(Func<object, bool> value);
+    Task<IEnumerable<LoanDto>> GetByIdAsync(int id);
 }

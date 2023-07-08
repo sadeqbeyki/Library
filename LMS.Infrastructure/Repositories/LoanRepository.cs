@@ -12,7 +12,7 @@ public class LoanRepository : Repository<Loan>, ILoanRepository
         _dbContext = dbContext;
     }
 
-    public Task<IEnumerable<LoanDto>> GetByIdAsync(Func<object, bool> value)
+    public Task<IEnumerable<LoanDto>> GetByIdAsync(int id)
     {
         throw new NotImplementedException();
     }

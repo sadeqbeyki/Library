@@ -4,7 +4,7 @@ public class LoanDto
 {
         public Guid Id { get; set; }
         public Guid BookId { get; set; }
-        public int MemberID { get; set; }
+        public string MemberID { get; set; }
         public string EmployeeId { get; set; }
         public string LoanDate { get; set; }
         public string IdealReturnDate { get; set; }
