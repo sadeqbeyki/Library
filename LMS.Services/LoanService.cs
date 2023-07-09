@@ -122,12 +122,10 @@ namespace LMS.Services
             return dto;
         }
 
-        public async Task DeleteLoan(int id)
+        public async Task DeleteLoan(Guid id)
         {
             var loan = await _loanRepository.GetByIdAsync(id);
-
             await _loanRepository.DeleteAsync(loan);
-            return dto;
         }
     }
 
