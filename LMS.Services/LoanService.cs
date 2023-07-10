@@ -1,4 +1,5 @@
-﻿using LMS.Contracts.Book;
+﻿using AutoMapper;
+using LMS.Contracts.Book;
 using LMS.Contracts.Loan;
 using LMS.Domain.BookAgg;
 using LMS.Domain.LoanAgg;
@@ -9,10 +10,12 @@ namespace LMS.Services
     public class LoanService : ILoanService
     {
         private readonly ILoanRepository _loanRepository;
+        private readonly IMapper _loanMapper;
 
-        public LoanService(ILoanRepository loanRepository)
+        public LoanService(ILoanRepository loanRepository, IMapper loanMapper)
         {
             _loanRepository = loanRepository;
+            _loanMapper = loanMapper;
         }
 
         public async Task<List<LoanDto>> GetAllLoans()
@@ -74,33 +77,11 @@ namespace LMS.Services
 
         public async Task<LoanDto> CreateLoan(LoanDto dto)
         {
-            var loan = new Loan
-            {
-                BookId = dto.BookId,
-                MemberID = dto.MemberID,
-                EmployeeId = dto.EmployeeId,
-                LoanDate = dto.LoanDate,
-                IdealReturnDate = dto.IdealReturnDate,
-                ReturnEmployeeID = dto.ReturnEmployeeID,
-                ReturnDate = dto.ReturnDate,
-                Description = dto.Description,
+            Loan loan = new(dto.BookId, dto.MemberID, dto.EmployeeId, dto.LoanDate, dto.IdealReturnDate,
+                dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
 
-            };
-            var newLoan = await _loanRepository.CreateAsync(loan);
-
-            var result = new LoanDto
-            {
-                BookId = newLoan.BookId,
-                MemberID = newLoan.MemberID,
-                EmployeeId = newLoan.EmployeeId,
-                LoanDate = newLoan.LoanDate,
-                IdealReturnDate = newLoan.IdealReturnDate,
-                ReturnEmployeeID = newLoan.ReturnEmployeeID,
-                ReturnDate = newLoan.ReturnDate,
-                Description = newLoan.Description,
-            };
-
-            return result;
+            var result = await _loanRepository.CreateAsync(loan);
+            return _loanMapper.Map<LoanDto>(result);
         }
 
         public async Task<LoanDto> UpdateLoan(LoanDto dto)
