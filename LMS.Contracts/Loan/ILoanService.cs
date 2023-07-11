@@ -1,4 +1,6 @@
-﻿namespace LMS.Contracts.Loan;
+﻿using AppFramework.Application;
+
+namespace LMS.Contracts.Loan;
 
 public interface ILoanService
 {
@@ -8,6 +10,6 @@ public interface ILoanService
     Task<IEnumerable<LoanDto>> GetLoansByEmployeeId(string employeeId);
     Task<IEnumerable<LoanDto>> GetOverdueLoans();
     Task<LoanDto> CreateLoan(LoanDto loan);
-    Task<LoanDto> UpdateLoan(LoanDto loan);
+    Task<OperationResult> UpdateLoan(LoanDto loan);
     Task DeleteLoan(Guid id);
 }

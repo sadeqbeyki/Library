@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using AppFramework.Application;
+using AutoMapper;
 using LMS.Contracts.Book;
 using LMS.Contracts.Loan;
 using LMS.Domain.BookAgg;
+using LMS.Domain.BookCategoryAgg;
 using LMS.Domain.LoanAgg;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,56 +12,59 @@ namespace LMS.Services
     public class LoanService : ILoanService
     {
         private readonly ILoanRepository _loanRepository;
-        private readonly IMapper _loanMapper;
+        private readonly IMapper _mapper;
 
-        public LoanService(ILoanRepository loanRepository, IMapper loanMapper)
+        public LoanService(ILoanRepository loanRepository, IMapper mapper)
         {
             _loanRepository = loanRepository;
-            _loanMapper = loanMapper;
+            _mapper = mapper;
         }
 
         public async Task<List<LoanDto>> GetAllLoans()
         {
-            var result = await _loanRepository.GetAll()
-                .Select(l => new LoanDto
-                {
-                    Id = l.Id,
-                    BookId = l.BookId,
-                    Description = l.Description,
-                    EmployeeId = l.EmployeeId,
-                    IdealReturnDate = l.IdealReturnDate,
-                    LoanDate = l.LoanDate,
-                    MemberID = l.MemberID,
-                    ReturnDate = l.ReturnDate,
-                    ReturnEmployeeID = l.ReturnEmployeeID
-                }).ToListAsync();
+            var loans = await _loanRepository.GetAll().ToListAsync();
+            return _mapper.Map<List<LoanDto>>(loans);
 
-            return result;
+            //    .Select(l => new LoanDto
+            //    {
+            //        Id = l.Id,
+            //        BookId = l.BookId,
+            //        Description = l.Description,
+            //        EmployeeId = l.EmployeeId,
+            //        IdealReturnDate = l.IdealReturnDate,
+            //        LoanDate = l.LoanDate,
+            //        MemberID = l.MemberID,
+            //        ReturnDate = l.ReturnDate,
+            //        ReturnEmployeeID = l.ReturnEmployeeID
+            //    }).ToListAsync();
+
+            //return result;
         }
 
         public async Task<LoanDto> GetLoanById(Guid id)
         {
             var loan = await _loanRepository.GetByIdAsync(id);
-            LoanDto result = new()
-            {
-                Id = loan.Id,
-                BookId = loan.BookId,
-                Description = loan.Description,
-                EmployeeId = loan.EmployeeId,
-                ReturnEmployeeID = loan.ReturnEmployeeID,
-                ReturnDate = loan.ReturnDate,
-                MemberID = loan.MemberID,
-                LoanDate = loan.LoanDate,
-                IdealReturnDate = loan.IdealReturnDate,
+            return _mapper.Map<LoanDto>(loan);
+            //LoanDto result = new()
+            //{
+            //    Id = loan.Id,
+            //    BookId = loan.BookId,
+            //    Description = loan.Description,
+            //    EmployeeId = loan.EmployeeId,
+            //    ReturnEmployeeID = loan.ReturnEmployeeID,
+            //    ReturnDate = loan.ReturnDate,
+            //    MemberID = loan.MemberID,
+            //    LoanDate = loan.LoanDate,
+            //    IdealReturnDate = loan.IdealReturnDate,
+            //};
 
-
-            };
-            return result;
+            //return result;
         }
 
-        public async Task<IEnumerable<LoanDto>> GetLoansByMemberId(int memberId)
+        public async Task<IEnumerable<LoanDto>> GetLoansByMemberId(string memberId)
         {
-            return null;
+            List<Loan> loans = await _loanRepository.GetAll().ToListAsync();
+            return loans.Where(l => l.MemberID == memberId).ToList();
         }
 
         public async Task<IEnumerable<LoanDto>> GetLoansByEmployeeId(string employeeId)
@@ -81,26 +86,22 @@ namespace LMS.Services
                 dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
 
             var result = await _loanRepository.CreateAsync(loan);
-            return _loanMapper.Map<LoanDto>(result);
+            return _mapper.Map<LoanDto>(result);
         }
 
-        public async Task<LoanDto> UpdateLoan(LoanDto dto)
+        public async Task<OperationResult> UpdateLoan(LoanDto dto)
         {
-            var existLoan = await _loanRepository.GetByIdAsync(dto.Id);
-            if (existLoan == null)
-                return dto;
-            
-            existLoan.BookId = dto.BookId;  
-            existLoan.MemberID = dto.MemberID;
-            existLoan.EmployeeId = dto.EmployeeId;
-            existLoan.LoanDate= dto.LoanDate;
-            existLoan.IdealReturnDate = dto.IdealReturnDate;
-            existLoan.ReturnEmployeeID = dto.ReturnEmployeeID;
-            existLoan.ReturnDate = dto.ReturnDate;
-            existLoan.Description = dto.Description;    
+            OperationResult operationResult = new();
 
-            await _loanRepository.UpdateAsync(existLoan);
-            return dto;
+            var loan = await _loanRepository.GetByIdAsync(dto.Id);
+            if (loan == null)
+                return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
+            loan.Edit(dto.BookId, dto.MemberID, dto.EmployeeId, dto.LoanDate, dto.IdealReturnDate,
+                dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
+
+            await _loanRepository.UpdateAsync(loan);
+            return operationResult.Succeeded();
         }
 
         public async Task DeleteLoan(Guid id)
