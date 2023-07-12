@@ -1,4 +1,5 @@
-﻿using AppFramework.Domain;
+﻿using AppFramework.Application;
+using AppFramework.Domain;
 
 namespace LMS.Domain.LoanAgg;
 
@@ -8,7 +9,7 @@ public class Loan : BaseEntity
     public string MemberID { get; set; }
     public string EmployeeId { get; set; }
     public string LoanDate { get; set; }
-    public string IdealReturnDate { get; set; }
+    public DateTime IdealReturnDate { get; set; }
     public string ReturnEmployeeID { get; set; }
     public string ReturnDate { get; set; }
     public string Description { get; set; }
@@ -19,7 +20,7 @@ public class Loan : BaseEntity
         MemberID = memberID;
         EmployeeId = employeeId;
         LoanDate = loanDate;
-        IdealReturnDate = idealReturnDate;
+        IdealReturnDate = idealReturnDate.ToGeorgianDateTime();
         ReturnEmployeeID = returnEmployeeID;
         ReturnDate = returnDate;
         Description = description;
@@ -30,7 +31,7 @@ public class Loan : BaseEntity
         MemberID = memberID;
         EmployeeId = employeeId;
         LoanDate = loanDate;
-        IdealReturnDate = idealReturnDate;
+        IdealReturnDate = idealReturnDate.ToGeorgianDateTime();
         ReturnEmployeeID = returnEmployeeID;
         ReturnDate = returnDate;
         Description = description;

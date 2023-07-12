@@ -4,8 +4,10 @@ using LMS.Contracts.Book;
 using LMS.Contracts.Loan;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
+using LMS.Domain.EmployeeAgg;
 using LMS.Domain.LoanAgg;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace LMS.Services
 {
@@ -64,20 +66,22 @@ namespace LMS.Services
         public async Task<IEnumerable<LoanDto>> GetLoansByMemberId(string memberId)
         {
             List<Loan> loans = await _loanRepository.GetAll().ToListAsync();
-            return loans.Where(l => l.MemberID == memberId).ToList();
+            var result = loans.Where(l => l.MemberID == memberId).ToList();
+            return _mapper.Map<List<LoanDto>>(result);
         }
 
         public async Task<IEnumerable<LoanDto>> GetLoansByEmployeeId(string employeeId)
         {
-            return null;
+            List<Loan> loans = await _loanRepository.GetAll().ToListAsync();
+            var result = loans.Where(l => l.EmployeeId == employeeId).ToList();
+            return _mapper.Map<List<LoanDto>>(result);
         }
 
         public async Task<IEnumerable<LoanDto>> GetOverdueLoans()
         {
-            // Implement the logic to retrieve overdue loans
-            // Example: return await _loanRepository.FindAsync(l => l.ReturnDate == null && l.IdealReturnDate < DateTime.Now);
-            // You can customize the condition based on your business logic
-            return null;
+            List<Loan> loans = await _loanRepository.GetAll().ToListAsync();
+            var result = loans.Where(l => l.ReturnDate == null && l.IdealReturnDate < DateTime.Now);
+            return _mapper.Map<List<LoanDto>>(result);
         }
 
         public async Task<LoanDto> CreateLoan(LoanDto dto)
