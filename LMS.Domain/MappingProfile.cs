@@ -11,7 +11,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<BookCategoryDto, BookCategory>().ReverseMap();
-        CreateMap<LoanDto, Loan>().ReverseMap();
+        CreateMap<LendDto, Lend>().ReverseMap();
         //CreateMap<UpdateUserDto, User>().ReverseMap();
         //CreateMap<RoleDto, Role>().ReverseMap();
     }

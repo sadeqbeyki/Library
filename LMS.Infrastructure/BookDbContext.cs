@@ -26,7 +26,7 @@ public class BookDbContext : DbContext
 
     //public DbSet<Borrow> Reservations{ get; set; }
     public DbSet<Rent> Rents { get; set; }
-    public DbSet<Loan>  Loans { get; set; }
+    public DbSet<Lend>  Loans { get; set; }
     public DbSet<Member> Members { get; set; }
     public DbSet<Employee> Employees { get; set; }
 

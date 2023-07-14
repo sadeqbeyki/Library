@@ -5,16 +5,16 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class LoansController : Controller
 {
-    private readonly ILoanService _loanService;
+    private readonly ILendService _loanService;
 
-    public LoansController(ILoanService loanService)
+    public LoansController(ILendService loanService)
     {
         _loanService = loanService;
     }
    
-    public async Task<ActionResult<List<LoanDto>>> Index()
+    public async Task<ActionResult<List<LendDto>>> Index()
     {
-        List<LoanDto> loans = await _loanService.GetAllLoans();
+        List<LendDto> loans = await _loanService.GetAllLends();
         return View("Index", loans);
     }
 }

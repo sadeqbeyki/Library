@@ -33,10 +33,25 @@ namespace BI.Domain.InventoryAgg
             Operations.Add(operation);
             InStock = currentCount > 0;
         }
-        public void Decrease(long count, string operatorId, string description, long borrowId)
+        public void Decrease(long count, string operatorId, string description, long lendId)
         {
             var currentCount = CalculateCurrentCount() - count;
-            var operation = new InventoryOperation(false, count, operatorId, currentCount, description, borrowId, Id);
+            var operation = new InventoryOperation(false, count, operatorId, currentCount, description, lendId, Id);
+            Operations.Add(operation);
+            InStock = currentCount > 0;
+        }
+
+        public void Lend(long count, string operatorId, string description, long lendId)
+        {
+            var currentCount = CalculateCurrentCount() - count;
+            var operation = new InventoryOperation(false, count, operatorId, currentCount, description, lendId, Id);
+            Operations.Add(operation);
+            InStock = currentCount > 0;
+        }
+        public void Return(long count, string operatorId, string description)
+        {
+            var currentCount = CalculateCurrentCount() + count;
+            var operation = new InventoryOperation(true, count, operatorId, currentCount, description, 0, Id);
             Operations.Add(operation);
             InStock = currentCount > 0;
         }

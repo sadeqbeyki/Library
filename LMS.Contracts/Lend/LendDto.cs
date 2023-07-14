@@ -1,6 +1,6 @@
 ﻿namespace LMS.Contracts.Loan;
 
-public class LoanDto
+public class LendDto
 {
         public Guid Id { get; set; }
         public Guid BookId { get; set; }

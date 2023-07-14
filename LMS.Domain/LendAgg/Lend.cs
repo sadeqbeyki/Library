@@ -1,9 +1,9 @@
 ﻿using AppFramework.Application;
 using AppFramework.Domain;
 
-namespace LMS.Domain.LoanAgg;
+namespace LMS.Domain.LendAgg;
 
-public class Loan : BaseEntity
+public class Lend : BaseEntity
 {
     public Guid BookId { get; set; }
     public string MemberID { get; set; }
@@ -14,7 +14,7 @@ public class Loan : BaseEntity
     public string ReturnDate { get; set; }
     public string Description { get; set; }
 
-    public Loan(Guid bookId, string memberID, string employeeId, string loanDate, string idealReturnDate, string returnEmployeeID, string returnDate, string description)
+    public Lend(Guid bookId, string memberID, string employeeId, string loanDate, string idealReturnDate, string returnEmployeeID, string returnDate, string description)
     {
         BookId = bookId;
         MemberID = memberID;

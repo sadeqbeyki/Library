@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LI.Infrastructure;
 
-public class LiIdentityDbContext : IdentityDbContext<User, Role, int>
+public class LiIdentityDbContext : IdentityDbContext<User, Role, string>
 {
     public DbSet<BadPassword> BadPasswords { get; set; }
     public DbSet<User> Users { get; set; }

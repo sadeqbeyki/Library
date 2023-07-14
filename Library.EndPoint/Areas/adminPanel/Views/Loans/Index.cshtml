@@ -1,5 +1,5 @@
 ﻿@using LMS.Contracts.Loan;
-@model List<LoanDto>
+@model List<LendDto>
 
 @{
     ViewData["Title"] = "Loan Management";
@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-sm-12">
         <p class="pull-left">
-            <a class="btn btn-primary btn-lg" asp-action="Create">Create Book</a>
+            <a class="btn btn-primary btn-lg" asp-action="Create">Create Loan</a>
         </p>
     </div>
 </div>
@@ -26,11 +26,14 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Title</th>
-                                    <th>ISBN</th>
-                                    <th>Code</th>
+                                    <th>BookID</th>
+                                    <th>Member ID</th>
+                                    <th>Employee ID</th>
+                                    <th>Loan Date</th>
+                                    <th>Ideal Return Date</th>
+                                    <th>Return Employee ID</th>
+                                    <th>Return Date</th>
                                     <th>Description</th>
-                                    <th>Operations</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,9 +42,13 @@
                                     <tr>
                                         <td>@item.Id</td>
 
-                                        <td>@item.Title</td>
-                                        <td>@item.ISBN</td>
-                                        <td>@item.Code</td>
+                                        <td>@item.BookId</td>
+                                        <td>@item.MemberID</td>
+                                        <td>@item.EmployeeId</td>
+                                        <td>@item.LoanDate</td>
+                                        <td>@item.IdealReturnDate</td>
+                                        <td>@item.ReturnEmployeeID</td>
+                                        <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
                                             <a class="btn btn-success pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">

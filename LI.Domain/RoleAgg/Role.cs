@@ -2,6 +2,6 @@
 
 namespace LI.Domain.RoleAgg;
 
-public class Role: IdentityRole<int>
+public class Role: IdentityRole<string>
 {
 }

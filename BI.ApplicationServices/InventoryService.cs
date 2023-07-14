@@ -86,7 +86,7 @@ namespace BI.ApplicationServices
             foreach (var item in command)
             {
                 var inventory = _inventoryRepository.GetBookBy(item.BookId);
-                inventory.Decrease(item.Count, operatorId, item.Description, item.BorrowId);
+                inventory.Decrease(item.Count, operatorId, item.Description, item.LendId);
             }
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();

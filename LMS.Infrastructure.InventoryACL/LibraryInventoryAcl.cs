@@ -1,4 +1,5 @@
 ﻿using BI.ApplicationContracts.Inventory;
+using LMS.Domain.LendAgg;
 using LMS.Domain.RentAgg;
 using LMS.Domain.Services;
 
@@ -20,5 +21,10 @@ public class LibraryInventoryAcl: ILibraryInventoryAcl
             .ToList();
 
         return _inventoryService.Decrease(command).IsSucceeded;
+    }
+
+    public bool LendFromInventory(LendItem item)
+    {
+        throw new NotImplementedException();
     }
 }
