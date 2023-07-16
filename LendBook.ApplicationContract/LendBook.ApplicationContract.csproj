@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BI.ApplicationContracts\BI.ApplicationContracts.csproj" />
-    <ProjectReference Include="..\LendBook.Domain\LendBook.Domain.csproj" />
+    <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
   </ItemGroup>
 
 </Project>

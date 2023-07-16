@@ -10,7 +10,7 @@
         public string OperationDate { get; set; }
         public long CurrentCount { get; set; }
         public string Descriotion { get; set; }
-        public long BorrowId { get; set; }
+        public long LendId { get; set; }
         public Guid InventoryId { get; set; }
     }
 }

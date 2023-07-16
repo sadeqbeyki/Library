@@ -1,8 +1,7 @@
-﻿using LI.ApplicationContracts.UserContracts;
-using LMS.Contracts.Rent;
+﻿using LendBook.ApplicationContract.Rent;
+using LI.ApplicationContracts.UserContracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]

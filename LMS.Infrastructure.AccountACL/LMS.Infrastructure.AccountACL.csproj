@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LI.ApplicationContracts\LI.ApplicationContracts.csproj" />
-    <ProjectReference Include="..\LMS.Domain\LMS.Domain.csproj" />
+    <ProjectReference Include="..\LendBook.Domain\LendBook.Domain.csproj" />
   </ItemGroup>
 
 </Project>

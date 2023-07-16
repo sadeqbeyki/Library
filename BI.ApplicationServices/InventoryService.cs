@@ -79,6 +79,7 @@ namespace BI.ApplicationServices
             return operation.Succeeded();
         }
 
+
         public OperationResult Decrease(List<DecreaseInventory> command)
         {
             var operation = new OperationResult();

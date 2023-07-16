@@ -48,7 +48,7 @@ namespace BI.Infrastructure.Repositories
                 Operation = x.Operation,
                 OperationDate = x.OperationDate.ToFarsi(),
                 OperatorId = x.OperatorId,
-                BorrowId = x.LendId
+                LendId = x.LendId
             }).OrderByDescending(x => x.Id).ToList();
 
             foreach (var operation in operations)

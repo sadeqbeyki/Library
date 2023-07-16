@@ -1,20 +1,20 @@
-﻿using LMS.Contracts.Loan;
+﻿using LendBook.ApplicationContract.Lend;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class LoansController : Controller
 {
-    private readonly ILendService _loanService;
+    private readonly ILendService _lendService;
 
-    public LoansController(ILendService loanService)
+    public LoansController(ILendService lendService)
     {
-        _loanService = loanService;
+        _lendService = lendService;
     }
    
     public async Task<ActionResult<List<LendDto>>> Index()
     {
-        List<LendDto> loans = await _loanService.GetAllLends();
-        return View("Index", loans);
+        List<LendDto> lends = await _lendService.GetAllLends();
+        return View("Index", lends);
     }
 }

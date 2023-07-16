@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BI.ApplicationContracts\BI.ApplicationContracts.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LendBook.Domain\LendBook.Domain.csproj" />
+    <ProjectReference Include="..\LI.Infrastructure\LI.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
