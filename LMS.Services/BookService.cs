@@ -1,6 +1,6 @@
-﻿using LMS.Contracts.Book;
+﻿using AppFramework.Application;
+using LMS.Contracts.Book;
 using LMS.Domain.BookAgg;
-using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Services;
 
@@ -13,35 +13,16 @@ public class BookService : IBookService
         _bookRepository = bookRepository;
     }
 
-    public async Task<BookDto> Create(BookDto dto)
+    public async Task<OperationResult> Create(BookDto dto)
     {
-        var book = new Book
-        {
-            Title = dto.Title,
-            ISBN = dto.ISBN,
-            Code = dto.Code,
-            Description = dto.Description,
-            AuthorId = dto.AuthorId,
-            PublisherId = dto.PublisherId,
-            TranslatorId = dto.TranslatorId,
-            CategoryId = dto.CategoryId,
+        OperationResult operationResult = new();
+        if (_bookRepository.Exists(x => x.Title == dto.Title))
+            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        };
-        var addBook = await _bookRepository.CreateAsync(book);
+        Book book = new(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId, dto.AuthorId, dto.PublisherId, dto.TranslatorId);
+        var result = await _bookRepository.CreateAsync(book);
 
-        var result = new BookDto
-        {
-            Title = addBook.Title,
-            ISBN = addBook.ISBN,
-            Code = addBook.Code,
-            Description = addBook.Description,
-            AuthorId = addBook.AuthorId,
-            PublisherId = addBook.PublisherId,
-            TranslatorId = addBook.TranslatorId,
-            CategoryId = addBook.CategoryId,
-        };
-
-        return result;
+        return operationResult.Succeeded();
     }
 
     public Task<List<BookViewModel>> GetAll()
@@ -87,34 +68,24 @@ public class BookService : IBookService
         await _bookRepository.DeleteAsync(result);
     }
 
-    public async Task<BookDto> Update(BookViewModel entity)
+    public async Task<OperationResult> Update(BookViewModel dto)
     {
-        var existingBook = await _bookRepository.GetByIdAsync(entity.Id);
-        if (existingBook == null)
-            return null;
+        OperationResult operationResult = new();
+        var book = await _bookRepository.GetByIdAsync(dto.Id);
+        if(book == null)
+            return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        existingBook.Title = entity.Title;
-        existingBook.Description = entity.Description;
-        existingBook.ISBN = entity.ISBN;
-        existingBook.Code = entity.Code;
-        existingBook.AuthorId = entity.AuthorId;
-        existingBook.PublisherId = entity.PublisherId;
-        existingBook.TranslatorId = entity.TranslatorId;
-        existingBook.CategoryId = entity.CategoryId;
+        if (_bookRepository.Exists(x => x.Title == dto.Title && x.Id != dto.Id))
+            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        await _bookRepository.UpdateAsync(existingBook);
-        return entity;
+        book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId, dto.AuthorId, dto.PublisherId, dto.TranslatorId);
+        
+        await _bookRepository.UpdateAsync(book);
+        return operationResult.Succeeded();
     }
 
     public async Task<List<BookViewModel>> GetBooks()
     {
         return await _bookRepository.GetBooks();
-        //var books = await _bookRepository.GetAll()
-        //    .Select(b => new BookViewModel
-        //    {
-        //        Title = b.Title,
-        //        Description = b.Description
-        //    }).ToListAsync();
-        //return books;
     }
 }

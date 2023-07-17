@@ -4,6 +4,7 @@ using LendBook.ApplicationContract;
 using LendBook.ApplicationContract.Rent;
 using LendBook.Domain.RentAgg;
 using LI.Infrastructure;
+using LMS.Infrastructure;
 
 namespace LendBook.Infrastructure.Repositories;
 
@@ -11,6 +12,7 @@ public class RentRepository : Repository<Rent>, IRentRepository
 {
     private readonly LendDbContext _lendContext;
     private readonly LiIdentityDbContext _userContext;
+    private readonly BookDbContext _bookDbContext;
 
     public RentRepository(LendDbContext lendContext, LiIdentityDbContext userContext) : base(lendContext)
     {
@@ -30,7 +32,7 @@ public class RentRepository : Repository<Rent>, IRentRepository
 
     public List<RentItemViewModel> GetItems(Guid rentId)
     {
-        var books = _lendContext.Books.Select(x => new { x.Id, x.Title }).ToList();
+        var books = _bookDbContext.Books.Select(x => new { x.Id, x.Title }).ToList();
         var rent = _lendContext.Rents.FirstOrDefault(x => x.Id == rentId);
         if (rent == null)
             return new List<RentItemViewModel>();

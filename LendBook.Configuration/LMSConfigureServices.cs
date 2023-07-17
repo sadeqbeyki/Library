@@ -8,6 +8,11 @@ using LendBook.Infrastructure;
 using LendBook.Infrastructure.AccountACL;
 using LendBook.Infrastructure.InventoryACL;
 using LendBook.Infrastructure.Repositories;
+using LMS.Contracts.Lend;
+using LMS.Domain.LendAgg;
+using LMS.Domain.Services;
+using LMS.Infrastructure.Repositories;
+using LMS.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

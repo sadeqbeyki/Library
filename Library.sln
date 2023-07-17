@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppFramework", "AppFramewor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BE4607F6-F9FB-464F-8146-6C1087C5A58F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BookManagementService", "BookManagementService", "{70DEBD62-1CA7-4C86-BFCF-0A7FB072CB58}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BookManagement", "BookManagement", "{70DEBD62-1CA7-4C86-BFCF-0A7FB072CB58}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{88BE7990-FDFE-43E2-BF67-71C3ABD7E57D}"
 EndProject
@@ -83,15 +83,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{40D324
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{1E683361-32BE-4DDC-93CD-F9268F56305E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LendBook.Domain", "LendBook.Domain\LendBook.Domain.csproj", "{B39315EA-55E8-4F65-9BDB-0D2363FE05FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LendBook.Domain", "LendBook.Domain\LendBook.Domain.csproj", "{B39315EA-55E8-4F65-9BDB-0D2363FE05FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LendBook.ApplicationContract", "LendBook.ApplicationContract\LendBook.ApplicationContract.csproj", "{6CE69B7E-35D8-4D48-9D51-F7623C9EE0C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LendBook.ApplicationContract", "LendBook.ApplicationContract\LendBook.ApplicationContract.csproj", "{6CE69B7E-35D8-4D48-9D51-F7623C9EE0C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LendBook.ApplicationService", "LendBook.ApplicationService\LendBook.ApplicationService.csproj", "{9AD46E41-EE31-4B9D-B4B5-29AEFF4F044C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LendBook.ApplicationService", "LendBook.ApplicationService\LendBook.ApplicationService.csproj", "{9AD46E41-EE31-4B9D-B4B5-29AEFF4F044C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LendBook.Configuration", "LendBook.Configuration\LendBook.Configuration.csproj", "{2105BF8D-7CC2-4310-A046-1C6E69B545C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LendBook.Configuration", "LendBook.Configuration\LendBook.Configuration.csproj", "{2105BF8D-7CC2-4310-A046-1C6E69B545C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LendBook.Infrastructure", "LendBook.Infrastructure\LendBook.Infrastructure.csproj", "{63FB64B8-D5F2-49C6-A2F3-40975092BB4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LendBook.Infrastructure", "LendBook.Infrastructure\LendBook.Infrastructure.csproj", "{63FB64B8-D5F2-49C6-A2F3-40975092BB4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -134,7 +134,7 @@ public class LendService : ILendService
             return operation.Failed(ApplicationMessages.RecordNotFound);
 
         var operatorId = _authHelper.CurrentAccountId();
-        lend.BookLoan(command.Count, operatorId, command.Description, 0);
+        lend.BookLoan(command.Count, operatorId, command.Description);
         _lendRepository.SaveChanges();
         return operation.Succeeded();
     }

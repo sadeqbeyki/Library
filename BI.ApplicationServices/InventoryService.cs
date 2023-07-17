@@ -86,7 +86,7 @@ namespace BI.ApplicationServices
             var operatorId = _authHelper.CurrentAccountId();
             foreach (var item in command)
             {
-                var inventory = _inventoryRepository.GetBookBy(item.BookId);
+                var inventory = _inventoryRepository.GetBy(item.BookId);
                 inventory.Decrease(item.Count, operatorId, item.Description, item.LendId);
             }
             _inventoryRepository.SaveChanges();

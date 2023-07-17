@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LendBook.Domain\LendBook.Domain.csproj" />
     <ProjectReference Include="..\LI.Infrastructure\LI.Infrastructure.csproj" />
+    <ProjectReference Include="..\LMS.Infrastructure\LMS.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

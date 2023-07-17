@@ -20,7 +20,7 @@ namespace BI.Infrastructure.Repositories
             _identityDbContext = identityDbContext;
         }
 
-        public Inventory GetBookBy(Guid bookId)
+        public Inventory GetBy(Guid bookId)
         {
             return _inventoryDbContext.Inventory.FirstOrDefault(b => b.BookId == bookId);
         }

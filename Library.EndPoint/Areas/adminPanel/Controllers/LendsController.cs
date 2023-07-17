@@ -1,13 +1,14 @@
 ﻿using LendBook.ApplicationContract.Lend;
+using LMS.Contracts.Lend;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
-public class LoansController : Controller
+public class LendsController : Controller
 {
     private readonly ILendService _lendService;
 
-    public LoansController(ILendService lendService)
+    public LendsController(ILendService lendService)
     {
         _lendService = lendService;
     }

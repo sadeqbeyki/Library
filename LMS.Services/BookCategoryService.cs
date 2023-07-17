@@ -2,7 +2,6 @@
 using AutoMapper;
 using LMS.Contracts.Book;
 using LMS.Contracts.BookCategoryContract;
-using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookCategoryAgg;
 
 
@@ -26,7 +25,7 @@ namespace LMS.Services
                 return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
             BookCategory bookCategory = new(dto.Name, dto.Description);
-            var result = await _repository.CreateAsync(bookCategory);
+            await _repository.CreateAsync(bookCategory);
             return operationResult.Succeeded();
         }
 

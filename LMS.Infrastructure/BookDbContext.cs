@@ -2,6 +2,7 @@
 using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
+using LMS.Domain.LendAgg;
 using LMS.Domain.PublisherAgg;
 using LMS.Domain.TranslatorAgg;
 using LMS.Infrastructure.Configurations;
@@ -19,6 +20,8 @@ public class BookDbContext : DbContext
     public DbSet<AuthorBook> AuthorBooks{ get; set; }
     public DbSet<TranslatorBook> TranslatorBooks{ get; set; }
     public DbSet<PublisherBook> PublisherBooks{ get; set; }
+
+    public DbSet<Lend> Lends { get; set; }
 
     public BookDbContext(DbContextOptions<BookDbContext> options) : base(options)
     {
