@@ -15,7 +15,6 @@ public class Lend : BaseEntity
     public string ReturnDate { get; set; }
     public string Description { get; set; }
     public List<LendItem> Items { get; private set; }
-    //public bool IsBorrowed { get; private set; }
 
 
     public Lend(Guid bookId, string memberID, string employeeId, string lendDate, string idealReturnDate, string returnEmployeeID, string returnDate, string description)
@@ -44,25 +43,4 @@ public class Lend : BaseEntity
     {
         Items.Add(item);
     }
-    //public long CalculateCurrentCount()
-    //{
-    //    var plus = Operations.Where(x => x.Operation).Sum(x => x.Count);
-    //    var minus = Operations.Where(x => !x.Operation).Sum(x => x.Count);
-    //    return plus - minus;
-    //}
-
-    //public void BookLoan(long count, string operatorId, string description)
-    //{
-    //    var currentCount = CalculateCurrentCount() - count;
-    //    var operation = new LendOperation(false, count, operatorId, currentCount, description, Id);
-    //    Operations.Add(operation);
-    //    IsBorrowed = currentCount > 0;
-    //}
-    //public void Return(long count, string operatorId, string description)
-    //{
-    //    var currentCount = CalculateCurrentCount() + count;
-    //    var operation = new LendOperation(true, count, operatorId, currentCount, description, Id);
-    //    Operations.Add(operation);
-    //    IsBorrowed = currentCount > 0;
-    //}
 }

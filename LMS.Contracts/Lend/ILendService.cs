@@ -9,12 +9,11 @@ public interface ILendService
     Task<IEnumerable<LendDto>> GetLendsByMemberId(string memberId);
     Task<IEnumerable<LendDto>> GetLendsByEmployeeId(string employeeId);
     Task<IEnumerable<LendDto>> GetOverdueLends();
-    Task<LendDto> Create(LendDto lend);
     Task<OperationResult> Update(LendDto lend);
     Task Delete(Guid id);
 
-    long PlaceOrder(Cart cart);
-    string PaymentSucceeded(long orderId, long refId);
-    List<LendItemDto> GetItems(long orderId);
+    Task<Guid> Lending(LendDto dto);
+    Task<OperationResult> LendingRegistration(Guid lendId);
+    List<LendItemDto> GetItems(Guid lendId);
     List<LendDto> Search(LendSearchModel searchModel);
 }

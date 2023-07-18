@@ -1,7 +1,7 @@
 ﻿using LendBook.Domain.Services;
 using LI.ApplicationContracts.UserContracts;
 
-namespace LendBook.Infrastructure.AccountACL;
+namespace LMS.Infrastructure.AccountACL;
 
 public class LibraryAccountAcl : ILibraryAccountAcl
 {

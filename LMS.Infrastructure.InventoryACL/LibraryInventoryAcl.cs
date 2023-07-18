@@ -1,9 +1,8 @@
 ﻿using BI.ApplicationContracts.Inventory;
-using LendBook.Domain.LendAgg;
-using LendBook.Domain.RentAgg;
-using LendBook.Domain.Services;
+using LMS.Domain.LendAgg;
+using LMS.Domain.Services;
 
-namespace LendBook.Infrastructure.InventoryACL;
+namespace LMS.Infrastructure.InventoryACL;
 
 public class LibraryInventoryAcl : ILibraryInventoryAcl
 {
@@ -14,22 +13,13 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
         _inventoryService = inventoryService;
     }
 
-    public bool DecreaseFromInventory(List<RentItem> items)
-    {
-        var command = items.Select(rentItem =>
-                new DecreaseInventory(rentItem.BookId, rentItem.Count, "امانت عضو", rentItem.RentId))
-            .ToList();
-
-        return _inventoryService.Decrease(command).IsSucceeded;
-    }
-
     public bool LendFromInventory(List<LendItem> items)
     {
         var command = items.Select(l =>
             new DecreaseInventory(
                             l.BookId,
-                            l.Count,
-                            "Member Lend",
+                            1,
+                            "Borrow...",
                             l.LendId
                     )).ToList();
 

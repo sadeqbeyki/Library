@@ -3,8 +3,8 @@ using AutoMapper;
 using LI.ApplicationContracts.Auth;
 using LMS.Contracts.Lend;
 using LMS.Domain.LendAgg;
+using LMS.Domain.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace LMS.Services;
 
@@ -13,12 +13,15 @@ public class LendService : ILendService
     private readonly ILendRepository _lendRepository;
     private readonly IMapper _mapper;
     private readonly IAuthHelper _authHelper;
+    private readonly ILibraryInventoryAcl _inventoryAcl;
 
-    public LendService(ILendRepository lendRepository, IMapper mapper, IAuthHelper authHelper)
+
+    public LendService(ILendRepository lendRepository, IMapper mapper, IAuthHelper authHelper, ILibraryInventoryAcl inventoryAcl)
     {
         _lendRepository = lendRepository;
         _mapper = mapper;
         _authHelper = authHelper;
+        _inventoryAcl = inventoryAcl;
     }
 
     public async Task<List<LendDto>> GetAllLends()
@@ -54,13 +57,20 @@ public class LendService : ILendService
         return _mapper.Map<List<LendDto>>(result);
     }
 
-    public async Task<LendDto> Create(LendDto dto)
+    public async Task<Guid> Lending(LendDto dto)
     {
-        Lend loan = new(dto.BookId, dto.MemberID, dto.EmployeeId, dto.LendDate, dto.IdealReturnDate,
+        var currentEmployeeId = _authHelper.CurrentAccountId();
+        Lend lend = new(dto.BookId, dto.MemberID, currentEmployeeId, dto.LendDate, dto.IdealReturnDate,
             dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
 
-        var result = await _lendRepository.CreateAsync(loan);
-        return _mapper.Map<LendDto>(result);
+        foreach (var lendItem in lend.Items)
+        {
+            LendItem lendItems = new(lendItem.Id, lendItem.Count);
+            lend.AddItem(lendItems);
+        }
+
+        await _lendRepository.CreateAsync(lend);
+        return lend.Id;
     }
 
     public async Task<OperationResult> Update(LendDto dto)
@@ -84,40 +94,16 @@ public class LendService : ILendService
         await _lendRepository.DeleteAsync(loan);
     }
 
-
-    public long PlaceOrder(Cart dto)
+    public async Task<OperationResult> LendingRegistration(Guid lendId)
     {
-        var currentAccountId = _authHelper.CurrentAccountId();
-        //Lend lend = new(dto.BookId, dto.MemberID, dto.EmployeeId, dto.LendDate,
-        //    dto.IdealReturnDate.ToFarsi(), dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
-        Lend cart = new();
-        foreach (var lendItem in dto.Items)
-        {
-            LendItem lendItems = new(lendItem.Id, lendItem.Count);
-            cart.Add(lendItems);
-        }
+        OperationResult operationResult = new();
+        Lend lend = await _lendRepository.GetByIdAsync(lendId);
+        if(lend == null)
+            return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        _lendRepository.Create(lend);
+        _inventoryAcl.LendFromInventory(lend.Items);
         _lendRepository.SaveChanges();
-        return lend.Id;
-    }
-
-    public string PaymentSucceeded(long orderId, long refId)
-    {
-        var order = _orderRepository.Get(orderId);
-        order.PaymentSucceeded(refId);
-        var symbol = _configuration.GetValue<string>("Symbol");
-        var issueTrackingNo = CodeGenerator.Generate(symbol);
-        order.SetIssueTrackingNo(issueTrackingNo);
-        if (!_shopInventoryAcl.ReduceFromInventory(order.Items)) return "";
-
-        _orderRepository.SaveChanges();
-
-        var (name, mobile) = _shopAccountAcl.GetAccountBy(order.AccountId);
-
-        _smsService.Send(mobile,
-            $"{name} گرامی سفارش شما با شماره پیگیری {issueTrackingNo} با موفقیت پرداخت شد و ارسال خواهد شد.");
-        return issueTrackingNo;
+        return operationResult.Succeeded();
     }
 
     public List<LendItemDto> GetItems(Guid lendId)
