@@ -1,5 +1,4 @@
-﻿using LendBook.ApplicationContract.Lend;
-using LMS.Contracts.Lend;
+﻿using LMS.Contracts.Lend;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;

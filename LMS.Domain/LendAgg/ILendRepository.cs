@@ -1,11 +1,12 @@
-﻿using AppFramework.Domain;
+﻿using AppFramework.Application;
+using AppFramework.Domain;
 using LMS.Contracts.Lend;
 
 namespace LMS.Domain.LendAgg;
 
 public interface ILendRepository : IRepository<Lend>
 {
-    Lend GetBookBy(Guid bookId);
+    //Lend GetBookBy(Guid bookId);
     List<LendItemDto> GetItems(Guid lendId);
     List<LendDto> Search(LendSearchModel searchModel);
 }

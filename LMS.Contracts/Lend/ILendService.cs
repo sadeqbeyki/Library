@@ -12,7 +12,8 @@ public interface ILendService
     Task<OperationResult> Update(LendDto lend);
     Task Delete(Guid id);
 
-    Task<Guid> Lending(LendDto dto);
+    //Task<OperationResult> Create(LendDto dto);
+    Task<OperationResult> Lending(LendDto dto);
     Task<OperationResult> LendingRegistration(Guid lendId);
     List<LendItemDto> GetItems(Guid lendId);
     List<LendDto> Search(LendSearchModel searchModel);

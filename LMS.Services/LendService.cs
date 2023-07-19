@@ -24,10 +24,72 @@ public class LendService : ILendService
         _inventoryAcl = inventoryAcl;
     }
 
+    #region Create
+    //public async Task<OperationResult> Create(LendDto dto)
+    //{
+    //    OperationResult operationResult = new();
+    //    var currentEmployeeId = _authHelper.CurrentAccountId();
+    //    Lend lend = new()
+    //    {
+    //        Id = dto.Id,
+    //        MemberID = dto.MemberID,
+    //        EmployeeId = dto.EmployeeId,
+    //        LendDate = dto.LendDate,
+    //        IdealReturnDate = dto.IdealReturnDate,
+    //        ReturnDate = dto.ReturnDate,
+    //        Description = dto.Description,
+    //        Items = new List<LendItem>(dto.Items.Select(i => new LendItem
+    //        {
+    //            BookId = i.BookId,
+    //            Count = i.Count,
+    //            LendId = i.LendId
+    //        }).ToList())
+    //    };
+
+    //    await _lendRepository.CreateAsync(lend);
+    //    return operationResult.Succeeded();
+    //}
+    public async Task<OperationResult> Lending(LendDto dto)
+    {
+        OperationResult result = new();
+        var currentEmployeeId = _authHelper.CurrentAccountId();
+        Lend lend = new(dto.MemberID, currentEmployeeId, dto.LendDate, dto.IdealReturnDate,
+            dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
+
+        foreach (var lendItem in lend.Items)
+        {
+            LendItem lendItems = new(lendItem.BookId, lendItem.Count);
+            lend.AddItem(lendItems);
+        }
+
+        await _lendRepository.CreateAsync(lend);
+        return result.Succeeded();
+    }
+
+    public async Task<OperationResult> LendingRegistration(Guid lendId)
+    {
+        OperationResult operationResult = new();
+        Lend lend = await _lendRepository.GetByIdAsync(lendId);
+        if (lend == null)
+            return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
+        _inventoryAcl.LendFromInventory(lend.Items);
+        _lendRepository.SaveChanges();
+        return operationResult.Succeeded();
+    }
+    #endregion
+
+    #region Read
+
+
     public async Task<List<LendDto>> GetAllLends()
     {
         var loans = await _lendRepository.GetAll().ToListAsync();
         return _mapper.Map<List<LendDto>>(loans);
+    }
+    public List<LendItemDto> GetItems(Guid lendId)
+    {
+        return _lendRepository.GetItems(lendId);
     }
 
     public async Task<LendDto> GetLendById(Guid id)
@@ -57,22 +119,9 @@ public class LendService : ILendService
         return _mapper.Map<List<LendDto>>(result);
     }
 
-    public async Task<Guid> Lending(LendDto dto)
-    {
-        var currentEmployeeId = _authHelper.CurrentAccountId();
-        Lend lend = new(dto.BookId, dto.MemberID, currentEmployeeId, dto.LendDate, dto.IdealReturnDate,
-            dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
+    #endregion
 
-        foreach (var lendItem in lend.Items)
-        {
-            LendItem lendItems = new(lendItem.Id, lendItem.Count);
-            lend.AddItem(lendItems);
-        }
-
-        await _lendRepository.CreateAsync(lend);
-        return lend.Id;
-    }
-
+    #region Update
     public async Task<OperationResult> Update(LendDto dto)
     {
         OperationResult operationResult = new();
@@ -81,38 +130,27 @@ public class LendService : ILendService
         if (loan == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        loan.Edit(dto.BookId, dto.MemberID, dto.EmployeeId, dto.LendDate, dto.IdealReturnDate,
+        loan.Edit(dto.MemberID, dto.EmployeeId, dto.LendDate, dto.IdealReturnDate,
             dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
 
         await _lendRepository.UpdateAsync(loan);
         return operationResult.Succeeded();
     }
+    #endregion
 
+    #region Delete
     public async Task Delete(Guid id)
     {
-        var loan = await _lendRepository.GetByIdAsync(id);
-        await _lendRepository.DeleteAsync(loan);
+        var lend = await _lendRepository.GetByIdAsync(id);
+        await _lendRepository.DeleteAsync(lend);
     }
+    #endregion
 
-    public async Task<OperationResult> LendingRegistration(Guid lendId)
-    {
-        OperationResult operationResult = new();
-        Lend lend = await _lendRepository.GetByIdAsync(lendId);
-        if(lend == null)
-            return operationResult.Failed(ApplicationMessages.RecordNotFound);
-
-        _inventoryAcl.LendFromInventory(lend.Items);
-        _lendRepository.SaveChanges();
-        return operationResult.Succeeded();
-    }
-
-    public List<LendItemDto> GetItems(Guid lendId)
-    {
-        return _lendRepository.GetItems(lendId);
-    }
-
+    #region Search
     public List<LendDto> Search(LendSearchModel searchModel)
     {
         return _lendRepository.Search(searchModel);
     }
+    #endregion
+
 }

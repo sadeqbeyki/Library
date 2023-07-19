@@ -3,7 +3,6 @@ using AppFramework.Domain;
 using LI.Infrastructure;
 using LMS.Contracts.Lend;
 using LMS.Domain.LendAgg;
-using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories;
 
@@ -17,10 +16,12 @@ public class LendRepository : Repository<Lend>, ILendRepository
         _liIdentityDbContext = liIdentityDbContext;
     }
 
-    public Lend GetBookBy(Guid bookId)
-    {
-        return _bookDbContext.Lends.FirstOrDefault(b => b.BookId == bookId);
-    }
+
+
+    //public LendItem GetBookBy(Guid bookId)
+    //{
+    //    return _bookDbContext.Lends.FirstOrDefault(b => b.BookId == bookId);
+    //}
 
     public List<LendItemDto> GetItems(Guid lendId)
     {

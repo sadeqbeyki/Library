@@ -1,5 +1,5 @@
-﻿using LendBook.Domain.Services;
-using LI.ApplicationContracts.UserContracts;
+﻿using LI.ApplicationContracts.UserContracts;
+using LMS.Domain.Services;
 
 namespace LMS.Infrastructure.AccountACL;
 

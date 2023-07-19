@@ -1,5 +1,4 @@
-﻿@    using LendBook.ApplicationContract.Lend;
-    using LMS.Contracts.Lend;
+﻿@using LMS.Contracts.Lend;
 @model List<LendDto>
 
 @{
@@ -27,10 +26,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>BookID</th>
                                     <th>Member ID</th>
                                     <th>Employee ID</th>
-                                    <th>Loan Date</th>
+                                    <th>Lend Date</th>
                                     <th>Ideal Return Date</th>
                                     <th>Return Employee ID</th>
                                     <th>Return Date</th>
@@ -43,15 +41,17 @@
                                     <tr>
                                         <td>@item.Id</td>
 
-                                        <td>@item.BookId</td>
                                         <td>@item.MemberID</td>
                                         <td>@item.EmployeeId</td>
-                                        <td>@item.LoanDate</td>
+                                        <td>@item.LendDate</td>
                                         <td>@item.IdealReturnDate</td>
                                         <td>@item.ReturnEmployeeID</td>
                                         <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
+                                            <a class="btn btn-check pull-right m-rl-5" asp-action="Submit" asp-route-id="@item.Id">
+                                                <i class="fa fa-edit"></i>Submit
+                                            </a>
                                             <a class="btn btn-success pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">
                                                 <i class="fa fa-edit"></i>Update
                                             </a>

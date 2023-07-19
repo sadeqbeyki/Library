@@ -22,6 +22,7 @@ public class BookDbContext : DbContext
     public DbSet<PublisherBook> PublisherBooks{ get; set; }
 
     public DbSet<Lend> Lends { get; set; }
+    public DbSet<Borrow> Borrows { get; set; }
 
     public BookDbContext(DbContextOptions<BookDbContext> options) : base(options)
     {
