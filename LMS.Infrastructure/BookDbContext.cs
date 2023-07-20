@@ -2,6 +2,7 @@
 using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
+using LMS.Domain.Borrow;
 using LMS.Domain.LendAgg;
 using LMS.Domain.PublisherAgg;
 using LMS.Domain.TranslatorAgg;

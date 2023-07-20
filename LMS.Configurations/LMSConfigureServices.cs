@@ -1,12 +1,14 @@
 ﻿using LMS.Contracts.Author;
 using LMS.Contracts.Book;
 using LMS.Contracts.BookCategoryContract;
+using LMS.Contracts.Borrow;
 using LMS.Contracts.Lend;
 using LMS.Contracts.Publisher;
 using LMS.Contracts.Translator;
 using LMS.Domain.AuthorAgg;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
+using LMS.Domain.Borrow;
 using LMS.Domain.LendAgg;
 using LMS.Domain.PublisherAgg;
 using LMS.Domain.TranslatorAgg;
@@ -39,6 +41,9 @@ public static class LMSConfigureServices
 
         services.AddScoped<ILendRepository, LendRepository>();
         services.AddScoped<ILendService, LendService>();
+        
+        services.AddScoped<IBorrowRepository, BorrowRepository>();
+        services.AddScoped<IBorrowService, BorrowService>();
 
         services.AddDbContext<BookDbContext>(x => x.UseSqlServer(connectionString));
     }

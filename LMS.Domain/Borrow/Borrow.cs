@@ -1,7 +1,7 @@
 ﻿using AppFramework.Domain;
 using AppFramework.Application;
 
-namespace LMS.Domain.LendAgg;
+namespace LMS.Domain.Borrow;
 
 public class Borrow : BaseEntity
 {
@@ -15,7 +15,7 @@ public class Borrow : BaseEntity
     public string Description { get; set; }
 
 
-    public Borrow(Guid bookId,string memberID, string employeeId, string lendDate, string idealReturnDate, string returnEmployeeID, string returnDate, string description)
+    public Borrow(Guid bookId, string memberID, string employeeId, string lendDate, string idealReturnDate, string returnEmployeeID, string returnDate, string description)
     {
         BookId = bookId;
         MemberID = memberID;
@@ -26,7 +26,7 @@ public class Borrow : BaseEntity
         ReturnDate = returnDate;
         Description = description;
     }
-    public void Edit(Guid bookId,string memberID, string employeeId, string lendDate, string idealReturnDate, string returnEmployeeID, string returnDate, string description)
+    public void Edit(Guid bookId, string memberID, string employeeId, string lendDate, string idealReturnDate, string returnEmployeeID, string returnDate, string description)
     {
         BookId = bookId;
         MemberID = memberID;

@@ -6,7 +6,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 public class LendsController : Controller
 {
     private readonly ILendService _lendService;
-
+    
     public LendsController(ILendService lendService)
     {
         _lendService = lendService;

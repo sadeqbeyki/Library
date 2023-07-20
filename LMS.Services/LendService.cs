@@ -1,7 +1,9 @@
 ﻿using AppFramework.Application;
 using AutoMapper;
 using LI.ApplicationContracts.Auth;
+using LMS.Contracts.Borrow;
 using LMS.Contracts.Lend;
+using LMS.Domain.Borrow;
 using LMS.Domain.LendAgg;
 using LMS.Domain.Services;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +78,19 @@ public class LendService : ILendService
         _inventoryAcl.LendFromInventory(lend.Items);
         _lendRepository.SaveChanges();
         return operationResult.Succeeded();
+    }
+    #endregion
+
+    #region Add
+    public async Task<OperationResult> AddBorrow(BorrowDto dto)
+    {
+        OperationResult result = new();
+        var currentEmployeeId = _authHelper.CurrentAccountId();
+        Borrow borrow = new(dto.BookId,dto.MemberID, currentEmployeeId, dto.LendDate, dto.IdealReturnDate,
+            dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
+
+        await _lendRepository.CreateAsync(borrow);
+        return result.Succeeded();
     }
     #endregion
 

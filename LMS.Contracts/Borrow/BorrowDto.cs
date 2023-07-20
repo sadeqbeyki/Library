@@ -1,4 +1,4 @@
-﻿namespace LMS.Contracts.Lend;
+﻿namespace LMS.Contracts.Borrow;
 
 public class BorrowDto
 {
