@@ -81,19 +81,6 @@ public class LendService : ILendService
     }
     #endregion
 
-    #region Add
-    public async Task<OperationResult> AddBorrow(BorrowDto dto)
-    {
-        OperationResult result = new();
-        var currentEmployeeId = _authHelper.CurrentAccountId();
-        Borrow borrow = new(dto.BookId,dto.MemberID, currentEmployeeId, dto.LendDate, dto.IdealReturnDate,
-            dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
-
-        await _lendRepository.CreateAsync(borrow);
-        return result.Succeeded();
-    }
-    #endregion
-
     #region Read
 
 

@@ -13,6 +13,6 @@ public interface IBorrowService
     Task<OperationResult> Update(BorrowDto dto);
     Task Delete(Guid borrowId);
 
-    Task<OperationResult> Lending(BorrowDto dto);
-    Task<OperationResult> LendingRegistration(Guid borrowId);
+    Task<OperationResult> Borrowing(BorrowDto dto);
+    Task<OperationResult> BorrowingRegistration(Guid borrowId);
 }
