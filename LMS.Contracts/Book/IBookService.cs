@@ -4,10 +4,10 @@ namespace LMS.Contracts.Book;
 
 public interface IBookService
 {
-    Task<BookViewModel> GetById(Guid id);
+    Task<BookViewModel> GetById(int id);
     Task<List<BookViewModel>> GetAll();
     Task<OperationResult> Create(BookDto dto);
-    Task Delete(Guid id);
+    Task Delete(int id);
     Task<OperationResult> Update(BookViewModel dto);
 
     Task<List<BookViewModel>> GetBooks();

@@ -48,7 +48,7 @@ namespace LMS.Services
             return await _repository.GetCategories();
         }
 
-        public async Task<BookCategoryDto> GetById(Guid id)
+        public async Task<BookCategoryDto> GetById(int id)
         {
             var result = await _repository.GetByIdAsync(id);
             BookCategoryDto dto = new()
@@ -60,13 +60,13 @@ namespace LMS.Services
             return dto;
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(int id)
         {
             var result = await _repository.GetByIdAsync(id);
             await _repository.DeleteAsync(result);
         }
 
-        public async Task<OperationResult> Update(Guid id, BookCategoryDto dto)
+        public async Task<OperationResult> Update(int id, BookCategoryDto dto)
         {
             OperationResult operationResult = new();
             var bookCategory = await _repository.GetByIdAsync(id);
@@ -81,7 +81,7 @@ namespace LMS.Services
             return operationResult.Succeeded();
         }
 
-        public async Task<List<BookDto>> GetCategoryWithBooks(Guid id)
+        public async Task<List<BookDto>> GetCategoryWithBooks(int id)
         {
             var books = await _repository.GetCategoryWithBooks(id);
             var result = books.Select(b => new BookDto

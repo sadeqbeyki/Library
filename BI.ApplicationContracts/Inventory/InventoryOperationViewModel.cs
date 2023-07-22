@@ -11,6 +11,6 @@
         public long CurrentCount { get; set; }
         public string Descriotion { get; set; }
         public long LendId { get; set; }
-        public Guid InventoryId { get; set; }
+        public int InventoryId { get; set; }
     }
 }

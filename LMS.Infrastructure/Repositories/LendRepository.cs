@@ -6,7 +6,7 @@ using LMS.Domain.LendAgg;
 
 namespace LMS.Infrastructure.Repositories;
 
-public class LendRepository : Repository<Lend>, ILendRepository
+public class LendRepository : Repository<Lend, int>, ILendRepository
 {
     private readonly BookDbContext _bookDbContext;
     private readonly LiIdentityDbContext _liIdentityDbContext;
@@ -18,12 +18,12 @@ public class LendRepository : Repository<Lend>, ILendRepository
 
 
 
-    //public LendItem GetBookBy(Guid bookId)
+    //public LendItem GetBookBy(int bookId)
     //{
     //    return _bookDbContext.Lends.FirstOrDefault(b => b.BookId == bookId);
     //}
 
-    public List<LendItemDto> GetItems(Guid lendId)
+    public List<LendItemDto> GetItems(int lendId)
     {
         var books = _bookDbContext.Books.Select(x => new { x.Id, x.Title }).ToList();
         var lend = _bookDbContext.Lends.FirstOrDefault(x => x.Id == lendId);

@@ -7,10 +7,10 @@ namespace Library.EndPoint.Areas.adminPanel.Models;
 
 public class CreateBookViewModel
 {
-    public Guid PublisherId { get; set; }
-    public Guid AuthorId { get; set; }
-    public Guid TranslatorId { get; set; }
-    public Guid CategoryId { get; set; }
+    public int PublisherId { get; set; }
+    public int AuthorId { get; set; }
+    public int TranslatorId { get; set; }
+    public int CategoryId { get; set; }
 
     public string Title { get; set; }
     public string ISBN { get; set; }

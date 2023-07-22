@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories;
 
-public class AuthorRepository : Repository<Author>, IAuthorRepository
+public class AuthorRepository : Repository<Author, int>, IAuthorRepository
 {
     private readonly BookDbContext _dbContext;
     public AuthorRepository(BookDbContext dbContext) : base(dbContext)
@@ -14,7 +14,7 @@ public class AuthorRepository : Repository<Author>, IAuthorRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Book>> GetAuthorBooks(Guid id)
+    public async Task<List<Book>> GetAuthorBooks(int id)
     {
         List<Book> books = await _dbContext.Books.Where(b => b.AuthorId == id).ToListAsync();
         return  books;

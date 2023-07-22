@@ -1,4 +1,5 @@
 ﻿using BI.ApplicationContracts.Inventory;
+using LMS.Domain.BorrowAgg;
 using LMS.Domain.LendAgg;
 using LMS.Domain.Services;
 
@@ -11,6 +12,13 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
     public LibraryInventoryAcl(IInventoryService inventoryService)
     {
         _inventoryService = inventoryService;
+    }
+
+    public bool BorrowFromInventory(Borrow item)
+    {
+        var command = new DecreaseInventory(item.BookId, 1, "Borrow...", item.Id);
+
+        return _inventoryService.Borrowing(command).IsSucceeded;
     }
 
     public bool LendFromInventory(List<LendItem> items)

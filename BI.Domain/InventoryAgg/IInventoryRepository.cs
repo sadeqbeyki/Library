@@ -3,10 +3,10 @@ using BI.ApplicationContracts.Inventory;
 
 namespace BI.Domain.InventoryAgg;
 
-public interface IInventoryRepository : IRepository<Inventory>
+public interface IInventoryRepository : IRepository<Inventory, int>
 {
-    EditInventory GetDetails(Guid id);
-    Inventory GetBy(Guid bookId);
+    EditInventory GetDetails(int id);
+    Inventory GetBy(int bookId);
     List<InventoryViewModel> Search(InventorySearchModel searchModel);
-    List<InventoryOperationViewModel> GetOperationLog(Guid inventoryId);
+    List<InventoryOperationViewModel> GetOperationLog(int inventoryId);
 }

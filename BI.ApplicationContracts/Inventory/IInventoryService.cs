@@ -9,8 +9,10 @@ namespace BI.ApplicationContracts.Inventory
         Task<OperationResult> Increase(IncreaseInventory command);
         Task<OperationResult> Decrease(DecreaseInventory command);
         OperationResult Decrease(List<DecreaseInventory> command);
-        EditInventory GetDetails(Guid id);
+        EditInventory GetDetails(int id);
         List<InventoryViewModel> Search(InventorySearchModel searchModel);
-        List<InventoryOperationViewModel> GetOperationLog(Guid inventoryId);
+        List<InventoryOperationViewModel> GetOperationLog(int inventoryId);
+
+        OperationResult Borrowing(DecreaseInventory command);
     }
 }

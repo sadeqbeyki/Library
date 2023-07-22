@@ -44,7 +44,7 @@ namespace LMS.Services
             return Task.FromResult(result);
         }
 
-        public async Task<PublisherDto> GetById(Guid id)
+        public async Task<PublisherDto> GetById(int id)
         {
             var result = await _publisherRepository.GetByIdAsync(id);
             PublisherDto dto = new()
@@ -56,13 +56,13 @@ namespace LMS.Services
             return dto;
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(int id)
         {
             var result = await _publisherRepository.GetByIdAsync(id);
             await _publisherRepository.DeleteAsync(result);
         }
 
-        public async Task<PublisherDto> Update(Guid id, PublisherDto entity)
+        public async Task<PublisherDto> Update(int id, PublisherDto entity)
         {
             var existingPublisher = await _publisherRepository.GetByIdAsync(id);
             if (existingPublisher == null)

@@ -48,7 +48,7 @@ namespace LMS.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<AuthorDto> GetById(Guid id)
+        public async Task<AuthorDto> GetById(int id)
         {
             var result = await _authorRepository.GetByIdAsync(id);
             AuthorDto dto = new()
@@ -60,13 +60,13 @@ namespace LMS.Services
             return dto;
         }
 
-        public async Task Delete(Guid id)
+        public async Task Delete(int id)
         {
             var result = await _authorRepository.GetByIdAsync(id);
             await _authorRepository.DeleteAsync(result);
         }
 
-        public async Task<AuthorDto> Update(Guid id, AuthorDto entity)
+        public async Task<AuthorDto> Update(int id, AuthorDto entity)
         {
             var existingAuthor = await _authorRepository.GetByIdAsync(id);
             if (existingAuthor == null)
@@ -79,7 +79,7 @@ namespace LMS.Services
             return entity;
         }
 
-        public async Task<List<BookDto>> GetAuthorBooks(Guid id)
+        public async Task<List<BookDto>> GetAuthorBooks(int id)
         {
             var books = await _authorRepository.GetAuthorBooks(id);
             var result = books.Select(b => new BookDto

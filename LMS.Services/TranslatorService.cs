@@ -44,7 +44,7 @@ namespace LMS.Services
             return Task.FromResult(result);
         }
 
-        public async Task<TranslatorDto> GetTranslator(Guid id)
+        public async Task<TranslatorDto> GetTranslator(int id)
         {
             var result = await _translatorRepository.GetByIdAsync(id);
             TranslatorDto dto = new()
@@ -56,17 +56,17 @@ namespace LMS.Services
             return dto;
         }
 
-        public async Task DeleteTranslator(Guid id)
+        public async Task DeleteTranslator(int id)
         {
             var result = await _translatorRepository.GetByIdAsync(id);
             await _translatorRepository.DeleteAsync(result);
         }
 
-        public async Task<TranslatorDto> UpdateTranslator(Guid id, TranslatorDto entity)
+        public async Task<TranslatorDto> UpdateTranslator(int id, TranslatorDto entity)
         {
             var existingTranslator = await _translatorRepository.GetByIdAsync(id);
             if (existingTranslator == null)
-                throw new  KeyNotFoundException("i couldn't find a translator with this id!");
+                throw new KeyNotFoundException("i couldn't find a translator with this id!");
 
             existingTranslator.Name = entity.Name;
             existingTranslator.Description = entity.Description;
@@ -75,7 +75,7 @@ namespace LMS.Services
             return entity;
         }
 
-        public async Task<List<BookDto>> GetTranslatorBooks(Guid id)
+        public async Task<List<BookDto>> GetTranslatorBooks(int id)
         {
             var books = await _translatorRepository.GetTranslatorBooks(id);
             var result = books.Select(b => new BookDto

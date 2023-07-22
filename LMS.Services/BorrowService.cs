@@ -2,8 +2,9 @@
 using AutoMapper;
 using LI.ApplicationContracts.Auth;
 using LMS.Contracts.Borrow;
-using LMS.Domain.Borrow;
+using LMS.Domain.BorrowAgg;
 using LMS.Domain.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Services;
 
@@ -21,14 +22,15 @@ public class BorrowService : IBorrowService
         _inventoryAcl = inventoryAcl;
     }
 
-    public Task Delete(Guid borrowId)
+    public Task Delete(int borrowId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<BorrowDto>> GetAll()
+    public async Task<List<BorrowDto>> GetAll()
     {
-        throw new NotImplementedException();
+        var loans = await _borrowRepository.GetAll().ToListAsync();
+        return _mapper.Map<List<BorrowDto>>(loans);
     }
 
     public Task<IEnumerable<BorrowDto>> GetBorrowsByEmployeeId(string employeeId)
@@ -41,9 +43,10 @@ public class BorrowService : IBorrowService
         throw new NotImplementedException();
     }
 
-    public Task<BorrowDto> GetLendById(Guid id)
+    public async Task<BorrowDto> GetBorrowById(int id)
     {
-        throw new NotImplementedException();
+        Borrow loan = await _borrowRepository.GetByIdAsync(id);
+        return _mapper.Map<BorrowDto>(loan);
     }
 
     public Task<IEnumerable<BorrowDto>> GetOverdueBorrows()
@@ -56,16 +59,23 @@ public class BorrowService : IBorrowService
         OperationResult operationResult = new();
         var currentEmployeeId = _authHelper.CurrentAccountId();
 
-        Borrow borrow = new(dto.BookId, dto.MemberID, dto.EmployeeId, dto.LendDate, dto.IdealReturnDate,
+        Borrow borrow = new(dto.BookId, dto.MemberID, dto.EmployeeId, dto.IdealReturnDate,
             dto.ReturnEmployeeID, dto.ReturnDate, dto.Description);
 
         var result = await _borrowRepository.CreateAsync(borrow);
         return operationResult.Succeeded();
     }
 
-    public Task<OperationResult> BorrowingRegistration(Guid borrowId)
+    public async Task<OperationResult> BorrowingRegistration(int borrowId)
     {
-        throw new NotImplementedException();
+        OperationResult operationResult = new();
+        Borrow borrow = await _borrowRepository.GetByIdAsync(borrowId);
+        if (borrow == null)
+            return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
+        _inventoryAcl.BorrowFromInventory(borrow);
+        _borrowRepository.SaveChanges();
+        return operationResult.Succeeded();
     }
     #endregion
     public Task<OperationResult> Update(BorrowDto dto)

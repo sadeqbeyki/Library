@@ -19,7 +19,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
             return View(result);
         }
         [HttpGet]
-        public async Task<ActionResult<BookCategoryDto>> Details(Guid id)
+        public async Task<ActionResult<BookCategoryDto>> Details(int id)
         {
             var result = await _bookCategoryService.GetById(id);
             if (result == null)
@@ -42,7 +42,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
             return RedirectToAction("Index", result);
         }
         [HttpGet]
-        public async Task<ActionResult<BookCategoryDto>> Update(Guid id)
+        public async Task<ActionResult<BookCategoryDto>> Update(int id)
         {
             var category = await _bookCategoryService.GetById(id);
             if (category != null)
@@ -52,7 +52,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
             return View(category);
         }
         [HttpPost]
-        public async Task<ActionResult> Update(Guid id, BookCategoryDto dto)
+        public async Task<ActionResult> Update(int id, BookCategoryDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -62,10 +62,10 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
             return RedirectToAction("Index", result);
         }
         [HttpGet]
-        public async Task<ActionResult<BookCategoryDto>> Delete(Guid id)
+        public async Task<ActionResult<BookCategoryDto>> Delete(int id)
         {
             var category = await _bookCategoryService.GetById(id);
-            if (id == Guid.Empty || category == null)
+            if (id == 0 || category == null)
             {
                 return NoContent();
             }
@@ -73,7 +73,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ConfirmDelete(Guid id)
+        public async Task<ActionResult> ConfirmDelete(int id)
         {
             await _bookCategoryService.Delete(id);
             return RedirectToAction("Index");

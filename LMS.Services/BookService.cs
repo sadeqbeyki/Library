@@ -44,7 +44,7 @@ public class BookService : IBookService
         return Task.FromResult(result);
     }
 
-    public async Task<BookViewModel> GetById(Guid id)
+    public async Task<BookViewModel> GetById(int id)
     {
         var result = await _bookRepository.GetByIdAsync(id);
         BookViewModel dto = new()
@@ -62,7 +62,7 @@ public class BookService : IBookService
         return dto;
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(int id)
     {
         var result = await _bookRepository.GetByIdAsync(id);
         await _bookRepository.DeleteAsync(result);

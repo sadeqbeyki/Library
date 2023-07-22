@@ -51,7 +51,7 @@ public class InventoryController : Controller
         return View("Index", result);
     }
     [HttpGet]
-    public async Task<IActionResult> Update(Guid id)
+    public async Task<IActionResult> Update(int id)
     {
         EditInventory inventory = _inventoryService.GetDetails(id);
         inventory.Books = await _bookService.GetBooks();
@@ -64,7 +64,7 @@ public class InventoryController : Controller
         return RedirectToAction("Index", result);
     }
     [HttpGet]
-    public IActionResult Increase(Guid id)
+    public IActionResult Increase(int id)
     {
         var command = new IncreaseInventory()
         {
@@ -79,7 +79,7 @@ public class InventoryController : Controller
         return RedirectToAction("Index", result);
     }
     [HttpGet]
-    public ActionResult Decrease(Guid id)
+    public ActionResult Decrease(int id)
     {
         var command = new DecreaseInventory()
         {
@@ -94,7 +94,7 @@ public class InventoryController : Controller
         return RedirectToAction("Index", result);
     }
     [HttpGet]
-    public IActionResult Log(Guid id)
+    public IActionResult Log(int id)
     {
         var log = _inventoryService.GetOperationLog(id);
         return View("OperationLog", log);

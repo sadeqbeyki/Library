@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="BorrowAgg\**" />
     <Compile Remove="BorrowerAgg\**" />
-    <EmbeddedResource Remove="BorrowAgg\**" />
     <EmbeddedResource Remove="BorrowerAgg\**" />
-    <None Remove="BorrowAgg\**" />
     <None Remove="BorrowerAgg\**" />
   </ItemGroup>
 

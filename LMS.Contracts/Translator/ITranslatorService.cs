@@ -4,12 +4,12 @@ namespace LMS.Contracts.Translator;
 
 public interface ITranslatorService
 {
-    Task<TranslatorDto> GetTranslator(Guid id);
+    Task<TranslatorDto> GetTranslator(int id);
     Task<List<TranslatorDto>> GetAll();
     Task<TranslatorDto> Create(TranslatorDto entity);
-    Task DeleteTranslator(Guid id);
-    Task<TranslatorDto> UpdateTranslator(Guid id, TranslatorDto entity);
-    Task<List<BookDto>> GetTranslatorBooks(Guid id);
+    Task DeleteTranslator(int id);
+    Task<TranslatorDto> UpdateTranslator(int id, TranslatorDto entity);
+    Task<List<BookDto>> GetTranslatorBooks(int id);
     Task<List<TranslatorDto>> GetTranslators();
 
 

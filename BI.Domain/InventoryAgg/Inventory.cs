@@ -4,18 +4,18 @@ namespace BI.Domain.InventoryAgg;
 
 public class Inventory : BaseEntity
 {
-    public Guid BookId { get; private set; }
+    public int BookId { get; private set; }
     public double UnitPrice { get; private set; }
     public bool InStock { get; private set; }
     public List<InventoryOperation> Operations { get; private set; }
 
-    public Inventory(Guid bookId, double unitPrice)
+    public Inventory(int bookId, double unitPrice)
     {
         BookId = bookId;
         UnitPrice = unitPrice;
         InStock = false;
     }
-    public void Edit(Guid bookId, double unitPrice)
+    public void Edit(int bookId, double unitPrice)
     {
         BookId = bookId;
         UnitPrice = unitPrice;
@@ -33,7 +33,7 @@ public class Inventory : BaseEntity
         Operations.Add(operation);
         InStock = currentCount > 0;
     }
-    public void Decrease(long count, string operatorId, string description, long lendId)
+    public void Decrease(long count, string operatorId, string description, int lendId)
     {
         var currentCount = CalculateCurrentCount() - count;
         var operation = new InventoryOperation(false, count, operatorId, currentCount, description, lendId, Id);

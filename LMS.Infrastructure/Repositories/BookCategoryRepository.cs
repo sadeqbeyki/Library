@@ -1,5 +1,4 @@
 ﻿using AppFramework.Domain;
-using LMS.Contracts.Book;
 using LMS.Contracts.BookCategoryContract;
 using LMS.Domain.BookAgg;
 using LMS.Domain.BookCategoryAgg;
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories;
 
-public class BookCategoryRepository : Repository<BookCategory>, IBookCategoryRepository
+public class BookCategoryRepository : Repository<BookCategory, int>, IBookCategoryRepository
 {
     private readonly BookDbContext _dbContext;
 
@@ -15,7 +14,7 @@ public class BookCategoryRepository : Repository<BookCategory>, IBookCategoryRep
     {
         _dbContext = dbContext;
     }
-    public async Task<List<Book>> GetCategoryWithBooks(Guid id)
+    public async Task<List<Book>> GetCategoryWithBooks(int id)
     {
         List<Book> books = await _dbContext.Books.Where(b => b.CategoryId == id).ToListAsync();
         return books;

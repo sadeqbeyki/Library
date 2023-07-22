@@ -10,12 +10,12 @@ public class InventoryOperation
     public long CurrentCount { get; private set; }
     public string Descriotion { get; set; }
     public long LendId { get; private set; }
-    public Guid InventoryId { get; private set; }
+    public int InventoryId { get; private set; }
     public Inventory Inventory { get; private set; }
     protected InventoryOperation() { }
 
     public InventoryOperation(bool operation, long count, string operationId,
-        long currentCount, string descriotion, long lendId, Guid inventoryId)
+        long currentCount, string descriotion, long lendId, int inventoryId)
     {
         Operation = operation;
         Count = count;

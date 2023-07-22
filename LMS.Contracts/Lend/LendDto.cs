@@ -2,7 +2,7 @@
 
 public class LendDto
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string MemberID { get; set; }
     public string EmployeeId { get; set; }
     public string LendDate { get; set; }

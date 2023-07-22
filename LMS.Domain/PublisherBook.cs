@@ -5,9 +5,9 @@ namespace LMS.Domain;
 
 public class PublisherBook
 {
-    public Guid PublisherId { get; set; }
+    public int PublisherId { get; set; }
     public Publisher Publisher { get; set; }
 
-    public Guid BookId { get; set; }
+    public int BookId { get; set; }
     public Book Book { get; set; }
 }

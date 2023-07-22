@@ -23,7 +23,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             var bookCategory = await _bookCategoryService.GetById(id);
             if (bookCategory == null)
@@ -42,7 +42,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] BookCategoryDto dto)
+        public async Task<ActionResult> Update(int id, [FromBody] BookCategoryDto dto)
         {
             var bookCategory = await _bookCategoryService.Update(id, dto);
 
@@ -50,14 +50,14 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             await _bookCategoryService.Delete(id);
             return NoContent();
         }
 
         [HttpGet("CategoryBooks/{id}")]
-        public async Task<ActionResult<List<BookDto>>> GetCategoryWithBooks(Guid id)
+        public async Task<ActionResult<List<BookDto>>> GetCategoryWithBooks(int id)
         {
             var books = await _bookCategoryService.GetCategoryWithBooks(id);
             if (books == null)

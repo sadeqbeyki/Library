@@ -1,21 +1,20 @@
-﻿namespace BI.ApplicationContracts.Inventory
+﻿namespace BI.ApplicationContracts.Inventory;
+
+public class DecreaseInventory
 {
-    public class DecreaseInventory
+    public int InventoryId { get; set; }
+    public int BookId { get; set; }
+    public long Count { get; set; }
+    public string Description { get; set; }
+    public int LendId { get; set; }
+
+    public DecreaseInventory() { }
+
+    public DecreaseInventory(int bookId, long count, string description, int lendId)
     {
-        public Guid InventoryId { get; set; }
-        public Guid BookId { get; set; }
-        public long Count { get; set; }
-        public string Description { get; set; }
-        public long LendId { get; set; }
-
-        public DecreaseInventory() { }
-
-        public DecreaseInventory(Guid bookId, long count, string description, long lendId)
-        {
-            BookId = bookId;
-            Count = count;
-            Description = description;
-            LendId = lendId;
-        }
+        BookId = bookId;
+        Count = count;
+        Description = description;
+        LendId = lendId;
     }
 }

@@ -5,12 +5,12 @@ namespace LMS.Contracts.BookCategoryContract;
 
 public interface IBookCategoryService
 {
-    Task<BookCategoryDto> GetById(Guid id);
+    Task<BookCategoryDto> GetById(int id);
     Task<List<BookCategoryDto>> GetAll();
     Task<OperationResult> Create(BookCategoryDto entity);
-    Task Delete(Guid id);
-    Task<OperationResult> Update(Guid id, BookCategoryDto entity);
-    Task<List<BookDto>> GetCategoryWithBooks(Guid id);
+    Task Delete(int id);
+    Task<OperationResult> Update(int id, BookCategoryDto entity);
+    Task<List<BookDto>> GetCategoryWithBooks(int id);
 
     Task<List<BookCategoryDto>> GetCategories();
 

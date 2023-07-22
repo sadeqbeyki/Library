@@ -1,9 +1,7 @@
 ﻿using AppFramework.Application;
 using AutoMapper;
 using LI.ApplicationContracts.Auth;
-using LMS.Contracts.Borrow;
 using LMS.Contracts.Lend;
-using LMS.Domain.Borrow;
 using LMS.Domain.LendAgg;
 using LMS.Domain.Services;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +66,7 @@ public class LendService : ILendService
         return result.Succeeded();
     }
 
-    public async Task<OperationResult> LendingRegistration(Guid lendId)
+    public async Task<OperationResult> LendingRegistration(int lendId)
     {
         OperationResult operationResult = new();
         Lend lend = await _lendRepository.GetByIdAsync(lendId);
@@ -89,12 +87,12 @@ public class LendService : ILendService
         var loans = await _lendRepository.GetAll().ToListAsync();
         return _mapper.Map<List<LendDto>>(loans);
     }
-    public List<LendItemDto> GetItems(Guid lendId)
+    public List<LendItemDto> GetItems(int lendId)
     {
         return _lendRepository.GetItems(lendId);
     }
 
-    public async Task<LendDto> GetLendById(Guid id)
+    public async Task<LendDto> GetLendById(int id)
     {
         var loan = await _lendRepository.GetByIdAsync(id);
         return _mapper.Map<LendDto>(loan);
@@ -141,7 +139,7 @@ public class LendService : ILendService
     #endregion
 
     #region Delete
-    public async Task Delete(Guid id)
+    public async Task Delete(int id)
     {
         var lend = await _lendRepository.GetByIdAsync(id);
         await _lendRepository.DeleteAsync(lend);

@@ -43,12 +43,12 @@ namespace BI.ApplicationServices
             return operation.Succeeded();
         }
 
-        public EditInventory GetDetails(Guid id)
+        public EditInventory GetDetails(int id)
         {
             return _inventoryRepository.GetDetails(id);
         }
 
-        public List<InventoryOperationViewModel> GetOperationLog(Guid operationId)
+        public List<InventoryOperationViewModel> GetOperationLog(int operationId)
         {
             return _inventoryRepository.GetOperationLog(operationId);
         }
@@ -74,7 +74,8 @@ namespace BI.ApplicationServices
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
             var operatorId = _authHelper.CurrentAccountId();
-            inventory.Decrease(command.Count, operatorId, command.Description, 0);
+            inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
+
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }
@@ -92,10 +93,21 @@ namespace BI.ApplicationServices
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }
-
         public List<InventoryViewModel> Search(InventorySearchModel searchModel)
         {
             return _inventoryRepository.Search(searchModel);
+        }
+
+        public OperationResult Borrowing(DecreaseInventory command)
+        {
+            var operation = new OperationResult();
+            var operatorId = _authHelper.CurrentAccountId();
+
+            var inventory = _inventoryRepository.GetBy(command.BookId);
+            inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
+
+            _inventoryRepository.SaveChanges();
+            return operation.Succeeded();
         }
     }
 }

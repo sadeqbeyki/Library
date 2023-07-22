@@ -23,7 +23,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             var publisher = await _publisherService.GetById(id);
             if (publisher == null)
@@ -42,7 +42,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<PublisherDto> Update(Guid id, [FromBody] PublisherDto publisher)
+        public async Task<PublisherDto> Update(int id, [FromBody] PublisherDto publisher)
         {
             var updatedPublisher = await _publisherService.Update(id, publisher);
 
@@ -50,7 +50,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             await _publisherService.Delete(id);
             return NoContent();

@@ -1,13 +1,12 @@
 ﻿using AppFramework.Domain;
 using LMS.Contracts.Author;
-using LMS.Contracts.BookCategoryContract;
 using LMS.Domain.BookAgg;
 
 namespace LMS.Domain.AuthorAgg
 {
-    public interface IAuthorRepository : IRepository<Author>
+    public interface IAuthorRepository : IRepository<Author, int>
     {
-        Task<List<Book>> GetAuthorBooks(Guid id);
+        Task<List<Book>> GetAuthorBooks(int id);
         Task<List<AuthorDto>> GetAuthors();
 
 

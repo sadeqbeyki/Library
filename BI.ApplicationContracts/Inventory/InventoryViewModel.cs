@@ -2,9 +2,9 @@
 {
     public class InventoryViewModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Book { get; set; }
-        public Guid BookId { get; set; }
+        public int BookId { get; set; }
         public double UnitPrice { get; set; }
         public bool InStock { get; set; }
         public long CurrentCount { get; set; }

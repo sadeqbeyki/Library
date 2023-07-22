@@ -5,14 +5,14 @@ namespace LMS.Contracts.Borrow;
 public interface IBorrowService
 {
     Task<List<BorrowDto>> GetAll();
-    Task<BorrowDto> GetLendById(Guid id);
+    Task<BorrowDto> GetBorrowById(int id);
     Task<IEnumerable<BorrowDto>> GetBorrowsByMemberId(string memberId);
     Task<IEnumerable<BorrowDto>> GetBorrowsByEmployeeId(string employeeId);
     Task<IEnumerable<BorrowDto>> GetOverdueBorrows();
 
     Task<OperationResult> Update(BorrowDto dto);
-    Task Delete(Guid borrowId);
+    Task Delete(int borrowId);
 
     Task<OperationResult> Borrowing(BorrowDto dto);
-    Task<OperationResult> BorrowingRegistration(Guid borrowId);
+    Task<OperationResult> BorrowingRegistration(int borrowId);
 }

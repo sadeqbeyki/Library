@@ -23,7 +23,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTranslatorById(Guid id)
+        public async Task<IActionResult> GetTranslatorById(int id)
         {
             var translator = await _translatorService.GetTranslator(id);
             if (translator == null)
@@ -42,7 +42,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<TranslatorDto> UpdateTranslator(Guid id, [FromBody] TranslatorDto translator)
+        public async Task<TranslatorDto> UpdateTranslator(int id, [FromBody] TranslatorDto translator)
         {
             //if (!ModelState.IsValid)
             //    return BadRequest(ModelState);
@@ -52,13 +52,13 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTranslator(Guid id)
+        public async Task<IActionResult> DeleteTranslator(int id)
         {
             await _translatorService.DeleteTranslator(id);
             return NoContent();
         }
         [HttpGet("TranslatorBooks/{id}")]
-        public async Task<ActionResult<List<BookDto>>> GetTranslatorBooks(Guid id)
+        public async Task<ActionResult<List<BookDto>>> GetTranslatorBooks(int id)
         {
             var books = await _translatorService.GetTranslatorBooks(id);
             if (books == null)

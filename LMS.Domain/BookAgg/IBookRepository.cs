@@ -5,7 +5,7 @@ using LMS.Contracts.Book;
 
 namespace LMS.Domain.BookAgg;
 
-public interface IBookRepository : IRepository<Book>
+public interface IBookRepository : IRepository<Book, int>
 {
     Task<List<BookViewModel>> GetBooks();
     //EditInventory GetDetails(long id);

@@ -33,7 +33,7 @@ public class BooksController : Controller
         return View(result);
     }
     [HttpGet]
-    public async Task<ActionResult<BookViewModel>> Details(Guid id)
+    public async Task<ActionResult<BookViewModel>> Details(int id)
     {
         var result = await _bookService.GetById(id);
         if (result == null)
@@ -63,7 +63,7 @@ public class BooksController : Controller
         return RedirectToAction("Index", result);
     }
     [HttpGet]
-    public async Task<ActionResult<BookViewModel>> Update(Guid id)
+    public async Task<ActionResult<BookViewModel>> Update(int id)
     {
         var model = new UpdateBookViewModel
         {
@@ -83,7 +83,7 @@ public class BooksController : Controller
         return RedirectToAction("Index", result);
     }
     [HttpGet]
-    public async Task<ActionResult<BookViewModel>> Delete(Guid id)
+    public async Task<ActionResult<BookViewModel>> Delete(int id)
     {
         var result = await _bookService.GetById(id);
         if (result == null)
@@ -92,7 +92,7 @@ public class BooksController : Controller
     }
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> ConfirmDelete(Guid id)
+    public async Task<ActionResult> ConfirmDelete(int id)
     {
         await _bookService.Delete(id);
         return RedirectToAction("Index");

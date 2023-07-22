@@ -4,9 +4,9 @@ using LMS.Contracts.Lend;
 
 namespace LMS.Domain.LendAgg;
 
-public interface ILendRepository : IRepository<Lend>
+public interface ILendRepository : IRepository<Lend, int>
 {
-    //Lend GetBookBy(Guid bookId);
-    List<LendItemDto> GetItems(Guid lendId);
+    //Lend GetBookBy(int bookId);
+    List<LendItemDto> GetItems(int lendId);
     List<LendDto> Search(LendSearchModel searchModel);
 }

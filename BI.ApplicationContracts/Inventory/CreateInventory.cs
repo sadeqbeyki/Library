@@ -7,7 +7,7 @@ namespace BI.ApplicationContracts.Inventory
     public class CreateInventory
     {
         [Range(1, 100000, ErrorMessage = ValidationMessages.IsRequired)]
-        public Guid BookId { get; set; }
+        public int BookId { get; set; }
 
         [Range(1, double.MaxValue, ErrorMessage = ValidationMessages.IsRequired)]
         public double UnitPrice { get; set; }

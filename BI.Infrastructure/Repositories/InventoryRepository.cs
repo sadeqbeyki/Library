@@ -7,7 +7,7 @@ using LMS.Infrastructure;
 
 namespace BI.Infrastructure.Repositories
 {
-    public class InventoryRepository : Repository<Inventory>, IInventoryRepository
+    public class InventoryRepository : Repository<Inventory, int>, IInventoryRepository
     {
         private readonly InventoryDbContext _inventoryDbContext;
         private readonly BookDbContext _bookDbContext;
@@ -20,12 +20,12 @@ namespace BI.Infrastructure.Repositories
             _identityDbContext = identityDbContext;
         }
 
-        public Inventory GetBy(Guid bookId)
+        public Inventory GetBy(int bookId)
         {
             return _inventoryDbContext.Inventory.FirstOrDefault(b => b.BookId == bookId);
         }
 
-        public EditInventory GetDetails(Guid id)
+        public EditInventory GetDetails(int id)
         {
             return _inventoryDbContext.Inventory.Select(i => new EditInventory
             {
@@ -35,7 +35,7 @@ namespace BI.Infrastructure.Repositories
             }).FirstOrDefault(i => i.Id == id);
         }
 
-        public List<InventoryOperationViewModel> GetOperationLog(Guid inventoryId)
+        public List<InventoryOperationViewModel> GetOperationLog(int inventoryId)
         {
             var accounts = _identityDbContext.Users.Select(x => new { x.Id, x.FirstName, x.LastName }).ToList();
             var inventory = _inventoryDbContext.Inventory.FirstOrDefault(x => x.Id == inventoryId);
@@ -70,7 +70,7 @@ namespace BI.Infrastructure.Repositories
                 CurrentCount = x.CalculateCurrentCount(),
                 CreationDate = x.CreationDate.ToFarsi()
             });
-            if (searchModel.BookId > Guid.Empty)
+            if (searchModel.BookId == 0)
                 query = query.Where(x => x.BookId == searchModel.BookId);
 
             if (searchModel.InStock)

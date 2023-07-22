@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Infrastructure.Repositories;
 
-public class PublisherRepository : Repository<Publisher>, IPublisherRepository
+public class PublisherRepository : Repository<Publisher, int>, IPublisherRepository
 {
     private readonly BookDbContext _dbContext;
     public PublisherRepository(BookDbContext bookDbContext) : base(bookDbContext)

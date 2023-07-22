@@ -2,7 +2,7 @@
 {
     public class InventorySearchModel
     {
-        public Guid BookId { get; set; }
+        public int BookId { get; set; }
         public bool InStock { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             var book = await _bookService.GetById(id);
             if (book == null)
@@ -49,7 +49,7 @@ namespace LMS.EndPoint.Controllers
         //}
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             await _bookService.Delete(id);
             return NoContent();

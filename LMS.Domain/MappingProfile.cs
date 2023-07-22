@@ -2,6 +2,7 @@
 using LMS.Contracts.BookCategoryContract;
 using LMS.Contracts.Borrow;
 using LMS.Domain.BookCategoryAgg;
+using LMS.Domain.BorrowAgg;
 
 namespace LMS.Domain;
 
