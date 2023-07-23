@@ -1,4 +1,4 @@
-﻿@using LMS.Contracts.Lend;
+﻿@using LibBook.DomainContracts.Lend;
 @model List<LendDto>
 
 @{
@@ -41,11 +41,11 @@
                                     <tr>
                                         <td>@item.Id</td>
 
-                                        <td>@item.MemberID</td>
+                                        <td>@item.MemberId</td>
                                         <td>@item.EmployeeId</td>
                                         <td>@item.LendDate</td>
                                         <td>@item.IdealReturnDate</td>
-                                        <td>@item.ReturnEmployeeID</td>
+                                        <td>@item.ReturnEmployeeId</td>
                                         <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>

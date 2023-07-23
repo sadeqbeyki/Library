@@ -1,8 +1,8 @@
-﻿using LMS.Contracts.Author;
-using LMS.Contracts.Book;
-using LMS.Contracts.BookCategoryContract;
-using LMS.Contracts.Publisher;
-using LMS.Contracts.Translator;
+﻿using LibBook.DomainContracts.Author;
+using LibBook.DomainContracts.Book;
+using LibBook.DomainContracts.BookCategory;
+using LibBook.DomainContracts.Publisher;
+using LibBook.DomainContracts.Translator;
 
 namespace Library.EndPoint.Areas.adminPanel.Models;
 

@@ -1,5 +1,4 @@
-﻿using LMS.Contracts.Author;
-using LMS.Contracts.Translator;
+﻿using LibBook.DomainContracts.Translator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;

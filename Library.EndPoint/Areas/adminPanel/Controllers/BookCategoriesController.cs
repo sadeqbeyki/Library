@@ -1,4 +1,4 @@
-﻿using LMS.Contracts.BookCategoryContract;
+﻿using LibBook.DomainContracts.BookCategory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers

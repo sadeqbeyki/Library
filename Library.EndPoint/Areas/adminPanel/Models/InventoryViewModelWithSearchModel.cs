@@ -1,4 +1,4 @@
-﻿using BI.ApplicationContracts.Inventory;
+﻿using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library.EndPoint.Areas.adminPanel.Models;

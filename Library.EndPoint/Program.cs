@@ -1,13 +1,13 @@
-using BI.Configuration;
-using LI.ApplicationContracts.Auth;
-using LI.ApplicationContracts.RoleContracts;
-using LI.ApplicationContracts.UserContracts;
-using LI.ApplicationServices;
-using LI.Domain.RoleAgg;
-using LI.Domain.UserAgg;
-using LI.Infrastructure;
-using LI.Infrastructure.Repositories;
-using LMS.Configurations;
+using LibBook.Configurations;
+using LibIdentity.ApplicationServices;
+using LibIdentity.Domain.RoleAgg;
+using LibIdentity.Domain.UserAgg;
+using LibIdentity.DomainContracts.Auth;
+using LibIdentity.DomainContracts.RoleContracts;
+using LibIdentity.DomainContracts.UserContracts;
+using LibIdentity.Infrastructure;
+using LibIdentity.Infrastructure.Repositories;
+using LibInventory.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +35,7 @@ builder.Services.AddIdentity<User, Role>(i =>
     i.Password.RequireUppercase = false;
     i.Password.RequiredUniqueChars = 1;
     i.Password.RequireLowercase = false;
-}).AddEntityFrameworkStores<LiIdentityDbContext>();
+}).AddEntityFrameworkStores<IdentityDbContext>();
 
 builder.Services.AddScoped<IPasswordValidator<User>, LIPasswordValidator>();
 builder.Services.AddScoped<IUserValidator<User>, LIUserValidator>();
@@ -43,7 +43,7 @@ builder.Services.AddTransient<IAuthHelper, AuthHelper>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
-builder.Services.AddDbContext<LiIdentityDbContext>(c =>
+builder.Services.AddDbContext<IdentityDbContext>(c =>
     c.UseSqlServer(builder.Configuration.GetConnectionString("AAA")));
 #endregion
 

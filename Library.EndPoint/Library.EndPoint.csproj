@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\adminPanel\Data\**" />
+    <Content Remove="Areas\adminPanel\Data\**" />
+    <EmbeddedResource Remove="Areas\adminPanel\Data\**" />
+    <None Remove="Areas\adminPanel\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
@@ -25,14 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BI.Configuration\BI.Configuration.csproj" />
-    <ProjectReference Include="..\LI.Configurations\LI.Configurations.csproj" />
-    <ProjectReference Include="..\LI.Infrastructure\LI.Infrastructure.csproj" />
-    <ProjectReference Include="..\LMS.Configurations\LMS.Configurations.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\adminPanel\Data\" />
+    <ProjectReference Include="..\LibBook.Configurations\LibBook.Configurations.csproj" />
+    <ProjectReference Include="..\LibBook.DomainContracts\LibBook.DomainContracts.csproj" />
+    <ProjectReference Include="..\LibId.ApplicationServices\LibIdentity.ApplicationServices.csproj" />
+    <ProjectReference Include="..\LibId.DomainContracts\LibIdentity.DomainContracts.csproj" />
+    <ProjectReference Include="..\LibInv.Configuration\LibInventory.Configuration.csproj" />
+    <ProjectReference Include="..\LibInv.DomainContracts\LibInventory.DomainContracts.csproj" />
   </ItemGroup>
 
 </Project>

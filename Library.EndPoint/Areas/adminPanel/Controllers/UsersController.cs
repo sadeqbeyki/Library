@@ -1,4 +1,4 @@
-﻿using LI.ApplicationContracts.UserContracts;
+﻿using LibIdentity.DomainContracts.UserContracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;

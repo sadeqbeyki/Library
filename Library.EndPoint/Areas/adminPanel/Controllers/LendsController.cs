@@ -1,4 +1,4 @@
-﻿using LMS.Contracts.Lend;
+﻿using LibBook.DomainContracts.Lend;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;

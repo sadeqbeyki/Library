@@ -1,6 +1,4 @@
-﻿using AppFramework.Application;
-using BI.ApplicationContracts.Inventory;
-using LMS.Contracts.Book;
+﻿using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library.EndPoint.Areas.adminPanel.Models;
