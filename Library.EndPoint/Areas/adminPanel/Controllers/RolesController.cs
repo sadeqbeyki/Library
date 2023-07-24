@@ -17,7 +17,7 @@ public class RolesController : Controller
         var roles = await _roleService.GetRoles();
         return View(roles);
     }
-    public async Task<ActionResult<RoleDto>> Details(string id)
+    public async Task<ActionResult<RoleDto>> Details(int id)
     {
         var role = await _roleService.GetRole(id);
         return View(role);
@@ -53,7 +53,7 @@ public class RolesController : Controller
     #region Update
     public async Task<ActionResult> Update(int id)
     {
-        var role = await _roleService.GetRole(id.ToString());
+        var role = await _roleService.GetRole(id);
         if (role != null)
         {
             return View(role);
@@ -63,7 +63,7 @@ public class RolesController : Controller
     [HttpPost]
     public async Task<ActionResult<RoleDto>> Update(int id, RoleDto model)
     {
-        var role = await _roleService.GetRole(id.ToString());
+        var role = await _roleService.GetRole(id);
         if (role != null)
         {
             var result = await _roleService.UpdateRole(model);
@@ -87,7 +87,7 @@ public class RolesController : Controller
     #region Delete
     public async Task<ActionResult> Delete(RoleDto dto)
     {
-        var role = await _roleService.GetRole(dto.Id.ToString());
+        var role = await _roleService.GetRole(dto.Id);
         if (role != null)
         {
             var result = await _roleService.DeleteRole(role);

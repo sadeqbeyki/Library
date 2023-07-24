@@ -1,4 +1,5 @@
 ﻿using AppFramework.Application;
+using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
 using LibBook.DomainContracts.Book;
 
@@ -25,10 +26,10 @@ public class BookService : IBookService
         return operationResult.Succeeded();
     }
 
-    public Task<List<BookViewModel>> GetAll()
+    public Task<List<BookModel>> GetAll()
     {
         var result = _bookRepository.GetAll()
-            .Select(book => new BookViewModel
+            .Select(book => new BookModel
             {
                 Id = book.Id,
                 Title = book.Title,
@@ -39,6 +40,10 @@ public class BookService : IBookService
                 PublisherId = book.PublisherId,
                 TranslatorId = book.TranslatorId,
                 CategoryId = book.CategoryId,
+                Authors = book.BookAuthors.Select(ab=>ab.Author.Name).ToList(),
+                Publishers = book.BookPublishers.Select(ab=>ab.Publisher.Name).ToList(),
+                Translators = book.BookTranslators.Select(ab=>ab.Translator.Name).ToList(),
+                Category = book.Category.Name, 
             }).ToList();
 
         return Task.FromResult(result);

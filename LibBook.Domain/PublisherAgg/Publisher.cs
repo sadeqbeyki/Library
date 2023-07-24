@@ -7,7 +7,7 @@ namespace LibBook.Domain.PublisherAgg
         public string Name { get; set; }
         public string Description { get; set; }
         //public List<Book> Books { get; set; }
-        public List<PublisherBook> PublisherBooks { get; set; }
+        public List<BookPublisher> PublisherBooks { get; set; }
 
     }
 }

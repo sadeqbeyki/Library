@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LibBook.Infrastructure.Configurations;
 
-public class PublisherBookConfig : IEntityTypeConfiguration<PublisherBook>
+public class PublisherBookConfig : IEntityTypeConfiguration<BookPublisher>
 {
-    public void Configure(EntityTypeBuilder<PublisherBook> builder)
+    public void Configure(EntityTypeBuilder<BookPublisher> builder)
     {
-        builder.HasKey(cs => new { cs.PublisherId, cs.BookId });
+        builder.HasKey(cs => new { cs.PublisherId, cs.PublisherBookId });
         //builder.ToTable("PublisherBooks");
 
         builder.HasOne(cs => cs.Publisher)
@@ -16,7 +16,7 @@ public class PublisherBookConfig : IEntityTypeConfiguration<PublisherBook>
             .HasForeignKey(cs => cs.PublisherId);
 
         builder.HasOne(cs => cs.Book)
-            .WithMany(s => s.PublisherBooks)
-            .HasForeignKey(cs => cs.BookId);
+            .WithMany(s => s.BookPublishers)
+            .HasForeignKey(cs => cs.PublisherBookId);
     }
 }

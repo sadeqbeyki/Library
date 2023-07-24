@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibIdentity.Infrastructure;
 
-public class IdentityDbContext : IdentityDbContext<User, Role, string>
+public class IdentityDbContext : IdentityDbContext<User, Role, int>
 {
     public DbSet<BadPassword> BadPasswords { get; set; }
     public DbSet<User> Users { get; set; }

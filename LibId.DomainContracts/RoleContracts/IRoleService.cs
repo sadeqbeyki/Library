@@ -6,7 +6,7 @@ namespace LibIdentity.DomainContracts.RoleContracts
     {
         Task<IdentityResult> CreateRole(RoleDto model);
         Task<IdentityResult> DeleteRole(RoleDto dto);
-        Task<RoleDto> GetRole(string id);
+        Task<RoleDto> GetRole(int id);
         Task<List<RoleDto>> GetRoles();
         Task<IdentityResult> UpdateRole(RoleDto user);
     }

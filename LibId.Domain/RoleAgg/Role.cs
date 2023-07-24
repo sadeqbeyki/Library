@@ -2,6 +2,6 @@
 
 namespace LibIdentity.Domain.RoleAgg;
 
-public class Role : IdentityRole<string>
+public class Role : IdentityRole<int>
 {
 }

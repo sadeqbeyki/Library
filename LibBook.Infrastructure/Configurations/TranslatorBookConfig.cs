@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LibBook.Infrastructure.Configurations;
 
-public class TranslatorBookConfig : IEntityTypeConfiguration<TranslatorBook>
+public class TranslatorBookConfig : IEntityTypeConfiguration<BookTranslator>
 {
-    public void Configure(EntityTypeBuilder<TranslatorBook> builder)
+    public void Configure(EntityTypeBuilder<BookTranslator> builder)
     {
-        builder.HasKey(cs => new { cs.TranslatorId, cs.BookId });
+        builder.HasKey(cs => new { cs.TranslatorId, cs.TranslatorBookId });
         //builder.ToTable("TranslatorBooks");
 
         builder.HasOne(cs => cs.Translator)
@@ -16,7 +16,7 @@ public class TranslatorBookConfig : IEntityTypeConfiguration<TranslatorBook>
             .HasForeignKey(cs => cs.TranslatorId);
 
         builder.HasOne(cs => cs.Book)
-            .WithMany(s => s.TranslatorBooks)
-            .HasForeignKey(cs => cs.BookId);
+            .WithMany(s => s.BookTranslators)
+            .HasForeignKey(cs => cs.TranslatorBookId);
     }
 }

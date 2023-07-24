@@ -19,7 +19,7 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<UpdateUserDto>> Details(string id)
+    public async Task<ActionResult<UpdateUserDto>> Details(int id)
     {
         var user = await _userService.GetUser(id);
         return View(user);
@@ -44,8 +44,7 @@ public class UsersController : Controller
         return RedirectToAction("Index");
     }
 
-
-    public async Task<ActionResult> Update(string id)
+    public async Task<ActionResult> Update(int id)
     {
         var user = await _userService.GetUser(id);
         if (user == null)
@@ -69,10 +68,10 @@ public class UsersController : Controller
 
     }
 
-    public async Task<ActionResult> Delete(string id)
+    public async Task<ActionResult> Delete(int id)
     {
         var user = await _userService.GetUser(id);
-        if (id == null || user == null)
+        if (id == 0 || user == null)
         {
             return NotFound();
         }
@@ -82,7 +81,7 @@ public class UsersController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> DeleteConfirmed(string id)
+    public async Task<ActionResult> DeleteConfirmed(int id)
     {
         if (ModelState.IsValid)
         {

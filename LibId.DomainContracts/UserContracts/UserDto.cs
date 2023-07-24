@@ -24,6 +24,6 @@ namespace LibIdentity.DomainContracts.UserContracts
     }
     public class UpdateUserDto : UserDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 }

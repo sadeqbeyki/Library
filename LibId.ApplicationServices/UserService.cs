@@ -17,15 +17,15 @@ public class UserService : IUserService
         _mapper = mapper;
     }
     #region Get
-    public async Task<UpdateUserDto> GetUser(string id)
+    public async Task<UpdateUserDto> GetUser(int id)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(id.ToString());
         return _mapper.Map<UpdateUserDto>(user);
     }
 
-    public UpdateUserDto GetAccountBy(string id)
+    public UpdateUserDto GetAccountBy(int id)
     {
-        var account = _userManager.FindByIdAsync(id);
+        var account = _userManager.FindByIdAsync(id.ToString());
         return _mapper.Map<UpdateUserDto>(account);
 
         //return new UpdateUserDto()
@@ -56,7 +56,8 @@ public class UserService : IUserService
     public async Task<IdentityResult> Update(UpdateUserDto user)
     {
         //var userMapp = _mapper.Map<User>(user);
-        var result = await _userManager.FindByIdAsync(user.Id);
+        var result = await _userManager.FindByIdAsync(user.Id.ToString());
+
         result.FirstName = user.FirstName;
         result.LastName = user.LastName;
         result.Email = user.Email;
@@ -69,9 +70,9 @@ public class UserService : IUserService
     #endregion
 
     #region Delete
-    public async Task<IdentityResult> DeleteUser(string id)
+    public async Task<IdentityResult> DeleteUser(int id)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(id.ToString());
         return await _userManager.DeleteAsync(user);
     }
     #endregion

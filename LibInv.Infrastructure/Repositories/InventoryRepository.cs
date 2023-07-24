@@ -4,7 +4,6 @@ using LibBook.Infrastructure;
 using LibIdentity.Infrastructure;
 using LibInventory.Domain.InventoryAgg;
 using LibInventory.DomainContracts.Inventory;
-using LibInventory.Infrastructure;
 
 namespace LibInventory.Infrastructure.Repositories
 {
@@ -54,7 +53,7 @@ namespace LibInventory.Infrastructure.Repositories
 
             foreach (var operation in operations)
             {
-                operation.Operator = accounts.FirstOrDefault(x => x.Id == operation.OperatorId)?.LastName;
+                operation.Operator = accounts.FirstOrDefault(x => x.Id.ToString() == operation.OperatorId)?.LastName;
             }
             return operations;
         }

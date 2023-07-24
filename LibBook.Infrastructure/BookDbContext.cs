@@ -18,9 +18,9 @@ public class BookDbContext : DbContext
     public DbSet<Translator> Translators { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<BookCategory> BookCategories { get; set; }
-    public DbSet<AuthorBook> AuthorBooks { get; set; }
-    public DbSet<TranslatorBook> TranslatorBooks { get; set; }
-    public DbSet<PublisherBook> PublisherBooks { get; set; }
+    public DbSet<BookAuthor> AuthorBooks { get; set; }
+    public DbSet<BookTranslator> TranslatorBooks { get; set; }
+    public DbSet<BookPublisher> PublisherBooks { get; set; }
 
     public DbSet<Lend> Lends { get; set; }
     public DbSet<Borrow> Borrows { get; set; }

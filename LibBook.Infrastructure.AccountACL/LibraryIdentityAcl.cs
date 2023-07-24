@@ -12,7 +12,7 @@ public class LibraryIdentityAcl : ILibraryIdentityAcl
         _userService = userService;
     }
 
-    public (string name, string email) GetAccountBy(string id)
+    public (string name, string email) GetAccountBy(int id)
     {
         var account = _userService.GetAccountBy(id);
         return (account.FirstName, account.Email);

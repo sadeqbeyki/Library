@@ -63,7 +63,7 @@ public class LendRepository : Repository<Lend, int>, ILendRepository
         var lends = query.OrderByDescending(x => x.Id).ToList();
         foreach (var lend in lends)
         {
-            lend.MemberId = accounts.FirstOrDefault(x => x.Id == lend.MemberId)?.LastName;
+            lend.MemberId = accounts.FirstOrDefault(x => x.Id.ToString() == lend.MemberId)?.LastName;
             //lend.PaymentMethod = PaymentMethod.GetBy(lend.PaymentMethodId).Name;
         }
 

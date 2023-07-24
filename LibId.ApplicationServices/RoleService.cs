@@ -18,9 +18,9 @@ public class RoleService : IRoleService
         _mapper = mapper;
     }
     #region Get
-    public async Task<RoleDto> GetRole(string id)
+    public async Task<RoleDto> GetRole(int id)
     {
-        var role = await _roleManager.FindByIdAsync(id);
+        var role = await _roleManager.FindByIdAsync(id.ToString());
         return _mapper.Map<RoleDto>(role);
     }
     #endregion

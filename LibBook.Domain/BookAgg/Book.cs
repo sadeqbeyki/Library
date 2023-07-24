@@ -14,13 +14,16 @@ public class Book : BaseEntity
     public BookCategory Category { get; private set; }
 
     public int AuthorId { get; set; }
-    public List<AuthorBook> AuthorBooks { get; set; }
+    //public BookAuthor AuthorBook { get; set; }
+    public List<BookAuthor> BookAuthors { get; set; }
 
     public int PublisherId { get; set; }
-    public List<PublisherBook> PublisherBooks { get; set; }
+    //public BookPublisher PublisherBook { get; set; }
+    public List<BookPublisher> BookPublishers { get; set; }
 
     public int TranslatorId { get; set; }
-    public List<TranslatorBook> TranslatorBooks { get; set; }
+    //public BookTranslator TranslatorBook { get; set; }
+    public List<BookTranslator> BookTranslators { get; set; }
 
     public Book(string title, string iSBN, string code, string description,
         int categoryId, int authorId, int publisherId, int translatorId)
