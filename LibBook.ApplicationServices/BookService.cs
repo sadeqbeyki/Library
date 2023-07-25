@@ -26,10 +26,10 @@ public class BookService : IBookService
         return operationResult.Succeeded();
     }
 
-    public Task<List<BookModel>> GetAll()
+    public Task<List<BookViewModel>> GetAll()
     {
         var result = _bookRepository.GetAll()
-            .Select(book => new BookModel
+            .Select(book => new BookViewModel
             {
                 Id = book.Id,
                 Title = book.Title,
@@ -40,10 +40,10 @@ public class BookService : IBookService
                 PublisherId = book.PublisherId,
                 TranslatorId = book.TranslatorId,
                 CategoryId = book.CategoryId,
-                Authors = book.BookAuthors.Select(ab=>ab.Author.Name).ToList(),
-                Publishers = book.BookPublishers.Select(ab=>ab.Publisher.Name).ToList(),
-                Translators = book.BookTranslators.Select(ab=>ab.Translator.Name).ToList(),
-                Category = book.Category.Name, 
+                Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
+                Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
+                Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
+                Category = book.Category.Name,
             }).ToList();
 
         return Task.FromResult(result);

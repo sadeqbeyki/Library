@@ -29,11 +29,6 @@ public class BookDbContext : DbContext
     {
     }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    base.OnConfiguring(optionsBuilder);
-    //}
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var assembly = typeof(BookConfig).Assembly;

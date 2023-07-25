@@ -3,11 +3,11 @@
 public class BookDto
 {
     public int PublisherId { get; set; }
-    public string Publisher { get; set; }
+    public List<string> Publishers { get; set; }
     public int AuthorId { get; set; }
-    public string Author { get; set; }
+    public List<string> Authors { get; set; }
     public int TranslatorId { get; set; }
-    public string Translator { get; set; }
+    public List<string> Translators { get; set; }
     public int CategoryId { get; set; }
     public string Category { get; set; }
 
