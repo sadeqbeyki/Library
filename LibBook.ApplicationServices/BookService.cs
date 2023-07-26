@@ -2,6 +2,7 @@
 using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
 using LibBook.DomainContracts.Book;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibBook.ApplicationServices;
 
@@ -26,71 +27,101 @@ public class BookService : IBookService
         return operationResult.Succeeded();
     }
 
-    public Task<List<BookViewModel>> GetAll()
-    {
-        var result = _bookRepository.GetAll()
-            .Select(book => new BookViewModel
-            {
-                Id = book.Id,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                Code = book.Code,
-                Description = book.Description,
-                AuthorId = book.AuthorId,
-                PublisherId = book.PublisherId,
-                TranslatorId = book.TranslatorId,
-                CategoryId = book.CategoryId,
-                Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
-                Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
-                Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
-                Category = book.Category.Name,
-            }).ToList();
+    //public Task<List<BookViewModel>> GetAll()
+    //{
+    //    var result = _bookRepository.GetAll()
+    //        .Select(book => new BookViewModel
+    //        {
+    //            Id = book.Id,
+    //            Title = book.Title,
+    //            ISBN = book.ISBN,
+    //            Code = book.Code,
+    //            Description = book.Description,
+    //            AuthorId = book.AuthorId,
+    //            PublisherId = book.PublisherId,
+    //            TranslatorId = book.TranslatorId,
+    //            CategoryId = book.CategoryId,
+    //            Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
+    //            Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
+    //            Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
+    //            Category = book.Category.Name,
+    //        }).ToList();
 
-        return Task.FromResult(result);
+    //    return Task.FromResult(result);
+    //}
+
+    public async Task<List<BookViewModel>> GetAllBooks()
+    {
+        var result = await _bookRepository.GetAll()
+            .Include(book => book.Category)
+            .Include(book => book.BookAuthors)
+            .ThenInclude(ab => ab.Author)
+            .Include(ap => ap.BookPublishers)
+            .ThenInclude(ap => ap.Publisher)
+            .Include(at => at.BookTranslators)
+            .ThenInclude(at => at.Translator)
+                    .Select(book => new BookViewModel
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        ISBN = book.ISBN,
+                        Code = book.Code,
+                        Description = book.Description,
+                        AuthorId = book.AuthorId,
+                        PublisherId = book.PublisherId,
+                        TranslatorId = book.TranslatorId,
+                        CategoryId = book.CategoryId,
+                        Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
+                        Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
+                        Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
+                        Category = book.Category.Name,
+                    }).ToListAsync();
+        return result;
     }
 
-    public async Task<BookViewModel> GetById(int id)
+
+public async Task<BookViewModel> GetById(int id)
+{
+    var result = await _bookRepository.GetByIdAsync(id);
+    BookViewModel dto = new()
     {
-        var result = await _bookRepository.GetByIdAsync(id);
-        BookViewModel dto = new()
-        {
-            Id = id,
-            Title = result.Title,
-            ISBN = result.ISBN,
-            Code = result.Code,
-            Description = result.Description,
-            AuthorId = result.AuthorId,
-            PublisherId = result.PublisherId,
-            TranslatorId = result.TranslatorId,
-            CategoryId = result.CategoryId,
-        };
-        return dto;
-    }
+        Id = id,
+        Title = result.Title,
+        ISBN = result.ISBN,
+        Code = result.Code,
+        Description = result.Description,
+        AuthorId = result.AuthorId,
+        PublisherId = result.PublisherId,
+        TranslatorId = result.TranslatorId,
+        CategoryId = result.CategoryId,
+    };
+    return dto;
+}
 
-    public async Task Delete(int id)
-    {
-        var result = await _bookRepository.GetByIdAsync(id);
-        await _bookRepository.DeleteAsync(result);
-    }
+public async Task Delete(int id)
+{
+    var result = await _bookRepository.GetByIdAsync(id);
+    await _bookRepository.DeleteAsync(result);
+}
 
-    public async Task<OperationResult> Update(BookViewModel dto)
-    {
-        OperationResult operationResult = new();
-        var book = await _bookRepository.GetByIdAsync(dto.Id);
-        if (book == null)
-            return operationResult.Failed(ApplicationMessages.RecordNotFound);
+public async Task<OperationResult> Update(BookViewModel dto)
+{
+    OperationResult operationResult = new();
+    var book = await _bookRepository.GetByIdAsync(dto.Id);
+    if (book == null)
+        return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        if (_bookRepository.Exists(x => x.Title == dto.Title && x.Id != dto.Id))
-            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
+    if (_bookRepository.Exists(x => x.Title == dto.Title && x.Id != dto.Id))
+        return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId, dto.AuthorId, dto.PublisherId, dto.TranslatorId);
+    book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId, dto.AuthorId, dto.PublisherId, dto.TranslatorId);
 
-        await _bookRepository.UpdateAsync(book);
-        return operationResult.Succeeded();
-    }
+    await _bookRepository.UpdateAsync(book);
+    return operationResult.Succeeded();
+}
 
-    public async Task<List<BookViewModel>> GetBooks()
-    {
-        return await _bookRepository.GetBooks();
-    }
+public async Task<List<BookViewModel>> GetBooks()
+{
+    return await _bookRepository.GetBooks();
+}
 }
