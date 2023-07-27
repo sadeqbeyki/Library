@@ -29,7 +29,7 @@ public class BooksController : Controller
     [HttpGet]
     public async Task<ActionResult<List<BookViewModel>>> Index()
     {
-        var result = await _bookService.GetAll();
+        var result = await _bookService.GetAllBooks();
         return View(result);
     }
     [HttpGet]

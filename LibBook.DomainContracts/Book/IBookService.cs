@@ -5,7 +5,7 @@ namespace LibBook.DomainContracts.Book;
 public interface IBookService
 {
     Task<BookViewModel> GetById(int id);
-    Task<List<BookViewModel>> GetAll();
+    //Task<List<BookViewModel>> GetAll();
     Task<List<BookViewModel>> GetAllBooks();
     Task<OperationResult> Create(BookDto dto);
     Task Delete(int id);
