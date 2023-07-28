@@ -9,7 +9,7 @@ public class InventoryOperationViewModel
     public string Operator { get; set; }
     public string OperationDate { get; set; }
     public long CurrentCount { get; set; }
-    public string Descriotion { get; set; }
+    public string Description { get; set; }
     public long LendId { get; set; }
     public int InventoryId { get; set; }
 }

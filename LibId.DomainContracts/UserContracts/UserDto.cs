@@ -22,7 +22,7 @@ namespace LibIdentity.DomainContracts.UserContracts
         [MaxLength(50)]
         public string Password { get; set; }
     }
-    public class UpdateUserDto : UserDto
+    public class UserViewModel : UserDto
     {
         public int Id { get; set; }
     }

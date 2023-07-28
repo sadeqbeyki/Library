@@ -55,10 +55,10 @@ public class BooksController : Controller
     [HttpPost]
     public async Task<ActionResult> Create(BookDto dto)
     {
-        if (!ModelState.IsValid)
-        {
-            return View();
-        }
+        //if (!ModelState.IsValid)
+        //{
+        //    return View();
+        //}
         var result = await _bookService.Create(dto);
         return RedirectToAction("Index", result);
     }

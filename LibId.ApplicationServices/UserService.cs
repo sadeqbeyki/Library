@@ -17,16 +17,16 @@ public class UserService : IUserService
         _mapper = mapper;
     }
     #region Get
-    public async Task<UpdateUserDto> GetUser(int id)
+    public async Task<UserViewModel> GetUser(int id)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
-        return _mapper.Map<UpdateUserDto>(user);
+        return _mapper.Map<UserViewModel>(user);
     }
 
-    public UpdateUserDto GetAccountBy(int id)
+    public UserViewModel GetAccountBy(int id)
     {
         var account = _userManager.FindByIdAsync(id.ToString());
-        return _mapper.Map<UpdateUserDto>(account);
+        return _mapper.Map<UserViewModel>(account);
 
         //return new UpdateUserDto()
         //{
@@ -37,10 +37,10 @@ public class UserService : IUserService
     #endregion
 
     #region GetAll
-    public async Task<List<UpdateUserDto>> GetUsers()
+    public async Task<List<UserViewModel>> GetUsers()
     {
         List<User> users = await _userManager.Users.Take(50).ToListAsync();
-        return _mapper.Map<List<UpdateUserDto>>(users);
+        return _mapper.Map<List<UserViewModel>>(users);
     }
     #endregion
 
@@ -53,7 +53,7 @@ public class UserService : IUserService
     #endregion
 
     #region Update
-    public async Task<IdentityResult> Update(UpdateUserDto user)
+    public async Task<IdentityResult> Update(UserViewModel user)
     {
         //var userMapp = _mapper.Map<User>(user);
         var result = await _userManager.FindByIdAsync(user.Id.ToString());

@@ -1,4 +1,6 @@
-﻿namespace LibBook.DomainContracts.Book;
+﻿using LibBook.DomainContracts.Author;
+
+namespace LibBook.DomainContracts.Book;
 
 public class BookDto
 {

@@ -17,7 +17,7 @@ public class CreateBookViewModel
     public string Code { get; set; }
     public string Description { get; set; }
 
-    public List<BookCategoryDto> BookCategories { get; set; } = new List<BookCategoryDto>();
+    public List<BookCategoryDto> BookCategories { get; set; }
     public List<AuthorDto> Authors { get; set; } = new List<AuthorDto>();
     public List<PublisherDto> Publishers { get; set; } = new List<PublisherDto>();
     public List<TranslatorDto> Translators { get; set; } = new List<TranslatorDto>();

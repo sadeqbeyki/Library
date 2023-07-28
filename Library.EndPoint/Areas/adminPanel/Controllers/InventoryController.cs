@@ -48,7 +48,8 @@ public class InventoryController : Controller
     public async Task<ActionResult> Create(CreateInventory command)
     {
         var result = await _inventoryService.Create(command);
-        return View("Index", result);
+        return RedirectToAction("Index", result);
+        //return View("Index", result);
     }
     [HttpGet]
     public async Task<IActionResult> Update(int id)

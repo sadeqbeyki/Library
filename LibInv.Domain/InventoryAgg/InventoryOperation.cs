@@ -8,20 +8,20 @@ public class InventoryOperation
     public string OperatorId { get; private set; }
     public DateTime OperationDate { get; private set; }
     public long CurrentCount { get; private set; }
-    public string Descriotion { get; set; }
+    public string Description { get; set; }
     public long LendId { get; private set; }
     public int InventoryId { get; private set; }
     public Inventory Inventory { get; private set; }
     protected InventoryOperation() { }
 
     public InventoryOperation(bool operation, long count, string operationId,
-        long currentCount, string descriotion, long lendId, int inventoryId)
+        long currentCount, string description, long lendId, int inventoryId)
     {
         Operation = operation;
         Count = count;
         OperatorId = operationId;
         CurrentCount = currentCount;
-        Descriotion = descriotion;
+        Description = description;
         LendId = lendId;
         InventoryId = inventoryId;
         OperationDate = DateTime.Now;

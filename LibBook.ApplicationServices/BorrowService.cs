@@ -2,6 +2,7 @@
 using AutoMapper;
 using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
+using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.Borrow;
 using LibIdentity.DomainContracts.Auth;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,24 @@ public class BorrowService : IBorrowService
         return _mapper.Map<List<BorrowDto>>(borrows);
     }
 
+    public async Task<List<BorrowDto>> GetAllBorrows()
+    {
+        var result = await _borrowRepository.GetAll()
+                    .Select(borrow => new BorrowDto
+                    {
+                        Id = borrow.Id,
+                        BookId = borrow.Id,
+                        MemberId = borrow.MemberID,
+                        EmployeeId = borrow.EmployeeId,
+                        BorrowDate = borrow.CreationDate,
+                        IdealReturnDate = borrow.IdealReturnDate,
+                        ReturnEmployeeId = borrow.ReturnEmployeeID,
+                        ReturnDate = borrow.ReturnDate,
+                        Description = borrow.Description,
+                    }).ToListAsync();
+        return result;
+    }
+
     public async Task<IEnumerable<BorrowDto>> GetBorrowsByEmployeeId(string employeeId)
     {
         List<Borrow> borrows = await _borrowRepository.GetAll().ToListAsync();
@@ -72,7 +91,20 @@ public class BorrowService : IBorrowService
     public async Task<BorrowDto> GetBorrowById(int id)
     {
         Borrow borrow = await _borrowRepository.GetByIdAsync(id);
-        return _mapper.Map<BorrowDto>(borrow);
+        BorrowDto dto = new()
+        {
+            Id = borrow.Id,
+            BookId = borrow.BookId,
+            MemberId = borrow.MemberID,
+            EmployeeId = borrow.EmployeeId,
+            BorrowDate = borrow.CreationDate,
+            IdealReturnDate = borrow.IdealReturnDate,
+            ReturnDate = borrow.ReturnDate,
+            ReturnEmployeeId = borrow.ReturnEmployeeID,
+            Description = borrow.Description,
+        };
+        return dto;
+        //return _mapper.Map<BorrowDto>(borrow);
     }
 
     public async Task<IEnumerable<BorrowDto>> GetOverdueBorrows()

@@ -6,11 +6,11 @@ namespace LibIdentity.DomainContracts.UserContracts
     {
         Task<IdentityResult> CreateUser(UserDto model);
         Task<IdentityResult> DeleteUser(int id);
-        Task<UpdateUserDto> GetUser(int id);
-        Task<List<UpdateUserDto>> GetUsers();
-        Task<IdentityResult> Update(UpdateUserDto user);
+        Task<UserViewModel> GetUser(int id);
+        Task<List<UserViewModel>> GetUsers();
+        Task<IdentityResult> Update(UserViewModel user);
 
-        UpdateUserDto GetAccountBy(int id);
+        UserViewModel GetAccountBy(int id);
 
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace LibBook.DomainContracts.Borrow;
+﻿using LibBook.DomainContracts.Book;
+using LibIdentity.DomainContracts.UserContracts;
 
-public class BorrowDto
+namespace Library.EndPoint.Areas.adminPanel.Models;
+
+public class CreateBorrowViewModel
 {
-    public int Id { get; set; }
     public int BookId { get; set; }
     public string MemberId { get; set; }
     public string EmployeeId { get; set; }
@@ -11,4 +13,6 @@ public class BorrowDto
     public string ReturnEmployeeId { get; set; }
     public DateTime? ReturnDate { get; set; }
     public string Description { get; set; }
+    public List<UserViewModel> Members { get; set; }
+    public List<BookViewModel> Books { get; set; }
 }

@@ -15,7 +15,7 @@ namespace LibInventory.Infrastructure.Configurations
             {
                 modelBuilder.HasKey(x => x.Id);
                 modelBuilder.ToTable("InventoryOperations");
-                modelBuilder.Property(x => x.Descriotion).HasMaxLength(1000);
+                modelBuilder.Property(x => x.Description).HasMaxLength(1000);
                 modelBuilder.WithOwner(x => x.Inventory).HasForeignKey(x => x.InventoryId);
             });
         }

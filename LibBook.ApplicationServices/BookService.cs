@@ -80,25 +80,50 @@ public class BookService : IBookService
     }
 
 
-public async Task<BookViewModel> GetById(int id)
-{
-    var result = await _bookRepository.GetByIdAsync(id);
-    BookViewModel dto = new()
+    public async Task<BookViewModel> GetById(int id)
     {
-        Id = id,
-        Title = result.Title,
-        ISBN = result.ISBN,
-        Code = result.Code,
-        Description = result.Description,
-        AuthorId = result.AuthorId,
-        PublisherId = result.PublisherId,
-        TranslatorId = result.TranslatorId,
-        CategoryId = result.CategoryId,
-    };
-    return dto;
-}
+        var result = await _bookRepository.GetByIdAsync(id);
+        BookViewModel dto = new()
+        {
+            Id = id,
+            Title = result.Title,
+            ISBN = result.ISBN,
+            Code = result.Code,
+            Description = result.Description,
+            AuthorId = result.AuthorId,
+            PublisherId = result.PublisherId,
+            TranslatorId = result.TranslatorId,
+            CategoryId = result.CategoryId,
+        };
+        return dto;
+    }
 
-public async Task Delete(int id)
+    //public async Task<BookViewModel> GetBookById(int id)
+    //{
+    //    var result = await _bookRepository.GetByIdAsync(id)
+    //        .Include(book => book.Category)
+    //        .Include(book => book.BookAuthors)
+    //        .ThenInclude(ab => ab.Author)
+    //        .Include(ap => ap.BookPublishers)
+    //        .ThenInclude(ap => ap.Publisher)
+    //        .Include(at => at.BookTranslators)
+    //        .ThenInclude(at => at.Translator);
+    //    BookViewModel dto = new()
+    //    {
+    //        Id = id,
+    //        Title = result.Title,
+    //        ISBN = result.ISBN,
+    //        Code = result.Code,
+    //        Description = result.Description,
+    //        AuthorId = result.AuthorId,
+    //        PublisherId = result.PublisherId,
+    //        TranslatorId = result.TranslatorId,
+    //        CategoryId = result.CategoryId,
+    //    };
+    //    return dto;
+    //}
+
+    public async Task Delete(int id)
 {
     var result = await _bookRepository.GetByIdAsync(id);
     await _bookRepository.DeleteAsync(result);

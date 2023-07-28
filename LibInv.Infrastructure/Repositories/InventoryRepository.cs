@@ -44,7 +44,7 @@ namespace LibInventory.Infrastructure.Repositories
                 Id = x.Id,
                 Count = x.Count,
                 CurrentCount = x.CurrentCount,
-                Descriotion = x.Descriotion,
+                Description = x.Description,
                 Operation = x.Operation,
                 OperationDate = x.OperationDate.ToFarsi(),
                 OperatorId = x.OperatorId,

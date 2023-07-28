@@ -1,14 +1,14 @@
-﻿@using LibBook.DomainContracts.Lend;
-@model List<LendDto>
+﻿@using LibBook.DomainContracts.Borrow;
+@model List<BorrowDto>
 
 @{
-    ViewData["Title"] = "Loan Management";
+    ViewData["Title"] = "Borrow Management";
 }
 
 <div class="row">
     <div class="col-sm-12">
         <p class="pull-left">
-            <a class="btn btn-primary btn-lg" asp-action="Create">Create Loan</a>
+            <a class="btn btn-primary btn-lg" asp-action="Borrowing">Borrowing</a>
         </p>
     </div>
 </div>
@@ -26,9 +26,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+
+                                    <th>Book ID</th>
                                     <th>Member ID</th>
                                     <th>Employee ID</th>
-                                    <th>Lend Date</th>
+                                    <th>Borrow Date</th>
                                     <th>Ideal Return Date</th>
                                     <th>Return Employee ID</th>
                                     <th>Return Date</th>
@@ -41,17 +43,20 @@
                                     <tr>
                                         <td>@item.Id</td>
 
+                                        <td>@item.BookId</td>
                                         <td>@item.MemberId</td>
                                         <td>@item.EmployeeId</td>
-                                        <td>@item.LendDate</td>
+                                        <td>@item.BorrowDate</td>
                                         <td>@item.IdealReturnDate</td>
                                         <td>@item.ReturnEmployeeId</td>
                                         <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
-                                            <a class="btn btn-check pull-right m-rl-5" asp-action="Submit" asp-route-id="@item.Id">
-                                                <i class="fa fa-edit"></i>Submit
-                                            </a>
+@*                                            <a class="btn btn-warning pull-right m-rl-5" asp-action="BorrowingRegistration" asp-route-id="@item.Id">
+                                                <i class="fa fa-edit"></i>BorrowingRegistration
+                                            </a>*@
+
+
                                             <a class="btn btn-success pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">
                                                 <i class="fa fa-edit"></i>Update
                                             </a>

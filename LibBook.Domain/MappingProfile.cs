@@ -11,7 +11,12 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<BookCategoryDto, BookCategory>().ReverseMap();
-        CreateMap<BorrowDto, Borrow>().ReverseMap();
+
+        CreateMap<BorrowDto, Borrow>()
+            .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.BorrowDate));
+        CreateMap<Borrow, BorrowDto>()
+            .ForMember(dest => dest.BorrowDate, opt => opt.MapFrom(src => src.CreationDate));
+
         //CreateMap<UpdateUserDto, User>().ReverseMap();
         //CreateMap<RoleDto, Role>().ReverseMap();
     }

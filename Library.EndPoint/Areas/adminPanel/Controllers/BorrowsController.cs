@@ -1,0 +1,66 @@
+﻿using Humanizer;
+using LibBook.DomainContracts.Book;
+using LibBook.DomainContracts.Borrow;
+using LibIdentity.DomainContracts.UserContracts;
+using Library.EndPoint.Areas.adminPanel.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Library.EndPoint.Areas.adminPanel.Controllers;
+[Area("adminPanel")]
+public class BorrowsController : Controller
+{
+    private readonly IBorrowService _borrowService;
+    private readonly IBookService _bookService;
+    private readonly IUserService _userService;
+
+
+    public BorrowsController(IBorrowService borrowService, IBookService bookService, IUserService userService)
+    {
+        _borrowService = borrowService;
+        _bookService = bookService;
+        _userService = userService;
+    }
+
+    public async Task<ActionResult<List<BorrowDto>>> Index()
+    {
+        List<BorrowDto> borrows = await _borrowService.GetAllBorrows();
+        return View("Index", borrows);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<BorrowDto>> Borrowing()
+    {
+        var command = new CreateBorrowViewModel
+        {
+            Members = await _userService.GetUsers(),
+            Books = await _bookService.GetAllBooks(),
+        };
+        return View("Borrowing", command);
+    }
+    [HttpPost]
+    public async Task<ActionResult> Borrowing(BorrowDto dto)
+    {
+        var result = await _borrowService.Borrowing(dto);
+        if (result == null)
+        {
+            return View("Error");
+        }
+        return RedirectToAction("Index", result);
+    }
+    [HttpGet]
+    public async Task<ActionResult<BorrowDto>> Details(int id)
+    {
+        var result = await _borrowService.GetBorrowById(id);
+        if (result == null)
+            return NotFound();
+        return View(result);
+    }
+    [HttpPost, ActionName("Details")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> BorrowingRegistration(int id)
+    {
+        await _borrowService.BorrowingRegistration(id);
+        return RedirectToAction("Index");
+    }
+
+}

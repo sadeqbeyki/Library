@@ -12,14 +12,14 @@ public class UsersController : Controller
         _userService = userService;
     }
 
-    public async Task<ActionResult<List<UpdateUserDto>>> Index()
+    public async Task<ActionResult<List<UserViewModel>>> Index()
     {
         var users = await _userService.GetUsers();
         return View(users);
     }
 
     [HttpGet]
-    public async Task<ActionResult<UpdateUserDto>> Details(int id)
+    public async Task<ActionResult<UserViewModel>> Details(int id)
     {
         var user = await _userService.GetUser(id);
         return View(user);
@@ -55,7 +55,7 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult<UpdateUserDto>> Update(UpdateUserDto user)
+    public async Task<ActionResult<UserViewModel>> Update(UserViewModel user)
     {
         if (!ModelState.IsValid)
         {

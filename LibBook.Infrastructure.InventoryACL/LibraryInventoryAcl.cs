@@ -16,7 +16,7 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
 
     public bool BorrowFromInventory(Borrow item)
     {
-        var command = new DecreaseInventory(item.BookId, 1, "Borrow...", item.Id);
+        var command = new DecreaseInventory(item.BookId, 1, "Borrowed...", item.Id);
 
         return _inventoryService.Borrowing(command).IsSucceeded;
     }
@@ -27,7 +27,7 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
             new DecreaseInventory(
                             l.BookId,
                             1,
-                            "Borrow...",
+                            "Borrowed...",
                             l.LendId
                     )).ToList();
 

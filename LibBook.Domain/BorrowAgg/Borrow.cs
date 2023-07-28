@@ -1,5 +1,4 @@
 ﻿using AppFramework.Domain;
-using LibBook.Domain.BookAgg;
 
 namespace LibBook.Domain.BorrowAgg;
 
