@@ -1,4 +1,5 @@
 ﻿using LibBook.DomainContracts.Book;
+using LibBook.DomainContracts.Borrow;
 using LibIdentity.DomainContracts.UserContracts;
 
 namespace Library.EndPoint.Areas.adminPanel.Models;
@@ -16,3 +17,11 @@ public class CreateBorrowViewModel
     public List<UserViewModel> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }
+
+public class UpdateBorrowViewModel
+{
+    public BorrowDto Borrow { get; set; }
+    public List<UserViewModel> Members { get; set; }
+    public List<BookViewModel> Books { get; set; }
+}
+

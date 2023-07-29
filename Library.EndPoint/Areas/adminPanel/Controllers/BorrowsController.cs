@@ -63,4 +63,23 @@ public class BorrowsController : Controller
         return RedirectToAction("Index");
     }
 
+    [HttpGet]
+    public async Task<ActionResult<BorrowDto>> Update(int id)
+    {
+        var model = new UpdateBorrowViewModel
+        {
+            Borrow = await _borrowService.GetBorrowById(id),
+            Members = await _userService.GetUsers(),
+            Books = await _bookService.GetAllBooks(),
+        };
+
+        return View("Update", model);
+    }
+    [HttpPut, HttpPost]
+    public async Task<ActionResult> Update(UpdateBorrowViewModel model)
+    {
+        var result = await _borrowService.Update(model.Borrow);
+        return RedirectToAction("Index", result);
+    }
+
 }
