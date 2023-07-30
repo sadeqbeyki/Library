@@ -1,0 +1,91 @@
+﻿@using Library.EndPoint.Areas.adminPanel.Models;
+@model UpdateBorrowViewModel
+@{
+    ViewData["Title"] = "Update Book";
+}
+
+<h1 class="bg-info text-white">@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-action="Update" method="post">
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Borrow.MemberId" class="control-label">Choose a Member</label>
+                            <select class="form-control" asp-for="Borrow.MemberId"
+                                    asp-items='new SelectList(Model.Members, "Id", "UserName")'>
+                                <option value="">Choose a Member</option>
+                            </select>
+                            <span asp-validation-for="Borrow.MemberId" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Borrow.BookId" class="control-label">Choose a Book</label>
+                            <select class="form-control" asp-for="Borrow.BookId"
+                                    asp-items='new SelectList(Model.Books, "Id", "Title")'>
+                                <option value="">Choose a Book</option>
+                            </select>
+                            <span asp-validation-for="Borrow.BookId" class="error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Borrow.EmployeeId" class="control-label">EmployeeId</label>
+                            <input type="text" class="form-control" asp-for="Borrow.EmployeeId">
+                            <span asp-validation-for="Borrow.EmployeeId" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Borrow.BorrowDate" class="control-label">BorrowDate</label>
+                            <input type="text" class="form-control" asp-for="Borrow.BorrowDate">
+                            <span asp-validation-for="Borrow.BorrowDate" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Borrow.IdealReturnDate" class="control-label">IdealReturnDate</label>
+                            <input type="text" class="form-control" asp-for="Borrow.IdealReturnDate">
+                            <span asp-validation-for="Borrow.IdealReturnDate" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Borrow.ReturnEmployeeId" class="control-label">ReturnEmployeeId</label>
+                                <input type="text" class="form-control" asp-for="Borrow.ReturnEmployeeId">
+                                <span asp-validation-for="Borrow.ReturnEmployeeId" class="error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Borrow.ReturnDate" class="control-label">ReturnDate</label>
+                                <input type="text" class="form-control" asp-for="Borrow.ReturnDate">
+                                <span asp-validation-for="Borrow.ReturnDate" class="error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Borrow.Description" class="control-label">Description</label>
+                                <textarea class="form-control autogrow" asp-for="Borrow.Description"
+                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea>
+                                <span asp-validation-for="Borrow.Description" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="Borrow.Id" value="@Model.Borrow.Id" />
+
+            </div>
+            <div>
+                <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
