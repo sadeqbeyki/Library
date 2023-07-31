@@ -14,5 +14,6 @@ namespace LibInventory.DomainContracts.Inventory
         List<InventoryOperationViewModel> GetOperationLog(int inventoryId);
 
         OperationResult Borrowing(DecreaseInventory command);
+        OperationResult Returning(ReturnBook command);
     }
 }

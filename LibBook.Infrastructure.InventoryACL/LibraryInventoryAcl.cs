@@ -14,11 +14,16 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
         _inventoryService = inventoryService;
     }
 
-    public bool BorrowFromInventory(Borrow item)
+    public bool BorrowFromInventory(Borrow borrow)
     {
-        var command = new DecreaseInventory(item.BookId, 1, "Borrowed...", item.Id);
+        var item = new DecreaseInventory(borrow.BookId, 1, "Borrowed...", borrow.Id);
 
-        return _inventoryService.Borrowing(command).IsSucceeded;
+        return _inventoryService.Borrowing(item).IsSucceeded;
+    }
+    public bool ReturnToInventory(Borrow borrow)
+    {
+        var item = new ReturnBook(borrow.BookId, 1, "Returned...", borrow.Id);
+        return _inventoryService.Returning(item).IsSucceeded;
     }
 
     public bool LendFromInventory(List<LendItem> items)
@@ -27,10 +32,12 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
             new DecreaseInventory(
                             l.BookId,
                             1,
-                            "Borrowed...",
+                            "In Lend...",
                             l.LendId
                     )).ToList();
 
         return _inventoryService.Decrease(command).IsSucceeded;
     }
+
+
 }

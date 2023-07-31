@@ -2,7 +2,6 @@
 using AutoMapper;
 using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
-using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.Borrow;
 using LibIdentity.DomainContracts.Auth;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +28,7 @@ public class BorrowService : IBorrowService
         OperationResult operationResult = new();
         var currentEmployeeId = _authHelper.CurrentAccountId();
 
-        Borrow borrow = new(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate,
+        Borrow borrow = new(dto.BookId, dto.MemberId, currentEmployeeId, dto.IdealReturnDate,
             dto.ReturnEmployeeId, dto.ReturnDate, dto.Description);
 
         var result = await _borrowRepository.CreateAsync(borrow);
@@ -88,9 +87,9 @@ public class BorrowService : IBorrowService
         return _mapper.Map<List<BorrowDto>>(result);
     }
 
-    public async Task<BorrowDto> GetBorrowById(int id)
+    public async Task<BorrowDto> GetBorrowById(int borrowId)
     {
-        Borrow borrow = await _borrowRepository.GetByIdAsync(id);
+        Borrow borrow = await _borrowRepository.GetByIdAsync(borrowId);
         BorrowDto dto = new()
         {
             Id = borrow.Id,
@@ -128,6 +127,17 @@ public class BorrowService : IBorrowService
             dto.ReturnEmployeeId, dto.ReturnDate, dto.Description);
 
         await _borrowRepository.UpdateAsync(borrow);
+        return operationResult.Succeeded();
+    }
+
+    public async Task<OperationResult> ReturnBorrow(int borrowId)
+    {
+        OperationResult operationResult = new();
+        Borrow borrow = await _borrowRepository.GetByIdAsync(borrowId);
+        if (borrow == null)
+            operationResult.Failed(ApplicationMessages.RecordNotFound);
+        _inventoryAcl.ReturnToInventory(borrow);
+        _borrowRepository.SaveChanges();
         return operationResult.Succeeded();
     }
     #endregion

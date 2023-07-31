@@ -6,5 +6,6 @@ namespace LibBook.Domain.Services;
 public interface ILibraryInventoryAcl
 {
     bool LendFromInventory(List<LendItem> item);
-    bool BorrowFromInventory(Borrow item);
+    bool BorrowFromInventory(Borrow borrow);
+    bool ReturnToInventory(Borrow borrow);
 }

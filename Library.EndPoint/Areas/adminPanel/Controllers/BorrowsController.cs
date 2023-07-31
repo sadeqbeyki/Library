@@ -26,7 +26,7 @@ public class BorrowsController : Controller
         List<BorrowDto> borrows = await _borrowService.GetAllBorrows();
         return View("Index", borrows);
     }
-
+    #region Create
     [HttpGet]
     public async Task<ActionResult<BorrowDto>> Borrowing()
     {
@@ -47,6 +47,15 @@ public class BorrowsController : Controller
         }
         return RedirectToAction("Index", result);
     }
+
+    public async Task<ActionResult> BorrowingRegistration(int id)
+    {
+        await _borrowService.BorrowingRegistration(id);
+        return RedirectToAction("Index");
+    }
+    #endregion
+
+    #region Read
     [HttpGet]
     public async Task<ActionResult<BorrowDto>> Details(int id)
     {
@@ -57,12 +66,14 @@ public class BorrowsController : Controller
     }
     [HttpPost, ActionName("Details")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> BorrowingRegistration(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        await _borrowService.BorrowingRegistration(id);
+        await _borrowService.Delete(id);
         return RedirectToAction("Index");
     }
+    #endregion
 
+    #region Update
     [HttpGet]
     public async Task<ActionResult<BorrowDto>> Update(int id)
     {
@@ -80,6 +91,14 @@ public class BorrowsController : Controller
     {
         var result = await _borrowService.Update(model.Borrow);
         return RedirectToAction("Index", result);
+    }
+    #endregion
+
+    [HttpGet]
+    public async Task<ActionResult> ReturnBorrow(int id)
+    {
+        await _borrowService.ReturnBorrow(id);
+        return RedirectToAction("Index");
     }
 
 }

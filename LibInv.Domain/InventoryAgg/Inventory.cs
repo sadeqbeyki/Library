@@ -1,4 +1,5 @@
 ﻿using AppFramework.Domain;
+using LibBook.Domain.LendAgg;
 
 namespace LibInventory.Domain.InventoryAgg;
 
@@ -37,6 +38,14 @@ public class Inventory : BaseEntity
     {
         var currentCount = CalculateCurrentCount() - count;
         var operation = new InventoryOperation(false, count, operatorId, currentCount, description, lendId, Id);
+        Operations.Add(operation);
+        InStock = currentCount > 0;
+    }
+
+    public void Return(long count, string operatorId, string description, long lendId)
+    {
+        var currentCount = CalculateCurrentCount() + count;
+        var operation = new InventoryOperation(true, count, operatorId, currentCount, description, lendId, Id);
         Operations.Add(operation);
         InStock = currentCount > 0;
     }

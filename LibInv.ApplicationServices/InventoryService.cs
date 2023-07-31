@@ -80,7 +80,6 @@ namespace LibInventory.ApplicationServices
             return operation.Succeeded();
         }
 
-
         public OperationResult Decrease(List<DecreaseInventory> command)
         {
             var operation = new OperationResult();
@@ -93,6 +92,7 @@ namespace LibInventory.ApplicationServices
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }
+
         public List<InventoryViewModel> Search(InventorySearchModel searchModel)
         {
             return _inventoryRepository.Search(searchModel);
@@ -108,6 +108,20 @@ namespace LibInventory.ApplicationServices
 
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
+        }
+
+        public OperationResult Returning(ReturnBook command)
+        {
+            OperationResult operationResult = new();
+            var employee = _authHelper.CurrentAccountId();
+
+            var inventory = _inventoryRepository.GetBy(command.BookId);
+            if (inventory == null)
+                return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
+            inventory.Return(command.Count, employee, command.Description, command.LendId);
+            _inventoryRepository.SaveChanges();
+            return operationResult.Succeeded();
         }
     }
 }
