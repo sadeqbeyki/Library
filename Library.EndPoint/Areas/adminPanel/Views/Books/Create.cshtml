@@ -58,21 +58,21 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Title" class="control-label">Title</label>
-                            <input type="text" class="form-control" asp-for="Title">
+                            <input type="text" class="form-control" asp-for="Title" required>
                             <span asp-validation-for="Title" class="error"></span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="ISBN" class="control-label">ISBN</label>
-                            <input type="text" class="form-control" asp-for="ISBN">
+                            <input type="text" class="form-control" asp-for="ISBN" required>
                             <span asp-validation-for="ISBN" class="error"></span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Code" class="control-label">Code</label>
-                            <input type="text" class="form-control" asp-for="Code">
+                            <input type="text" class="form-control" asp-for="Code" required>
                             <span asp-validation-for="Code" class="error"></span>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             <div class="form-group no-margin">
                                 <label asp-for="Description" class="control-label">Description</label>
                                 <textarea class="form-control autogrow" asp-for="Description"
-                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea>
+                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;" required></textarea>
                                 <span asp-validation-for="Description" class="error"></span>
                             </div>
                         </div>

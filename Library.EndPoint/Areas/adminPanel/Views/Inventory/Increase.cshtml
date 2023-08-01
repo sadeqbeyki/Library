@@ -14,7 +14,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Count" class="control-label">Number</label>
-                            <input class="form-control" asp-for="Count" />
+                            <input class="form-control" asp-for="Count" required/>
                             <span asp-validation-for="Count" class="error"></span>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Description" class="control-label">Description</label>
-                            <textarea row="3" class="form-control" asp-for="Description"></textarea>
+                            <textarea row="3" class="form-control" asp-for="Description" required></textarea>
                             <span asp-validation-for="Description" class="error"></span>
                         </div>
                     </div>

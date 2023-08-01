@@ -15,7 +15,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Name" class="control-label">Name</label>
-                            <input type="text" class="form-control" asp-for="Name">
+                            <input type="text" class="form-control" asp-for="Name" required>
                             <span asp-validation-for="Name" class="error"></span>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                             <div class="form-group">
                                 <label asp-for="Description" class="control-label">Description</label>
                                 <textarea class="form-control autogrow" asp-for="Description"
-                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"></textarea>
+                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;" required></textarea>
                                 <span asp-validation-for="Description" class="error"></span>
                             </div>
                         </div>
