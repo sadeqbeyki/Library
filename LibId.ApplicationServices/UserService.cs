@@ -47,9 +47,21 @@ public class UserService : IUserService
     #region Create
     public async Task<IdentityResult> CreateUser(UserDto model)
     {
+        var existingUser = await _userManager.FindByEmailAsync(model.Email);
+        if (existingUser != null)
+        {
+            var error = new IdentityError
+            {
+                Code = "Duplicate Email",
+                Description = "این ایمیل قبلاً ثبت شده است."
+            };
+            return IdentityResult.Failed(error);
+        }
         var userMap = _mapper.Map<User>(model);
         return await _userManager.CreateAsync(userMap, model.Password);
     }
+
+
     #endregion
 
     #region Update

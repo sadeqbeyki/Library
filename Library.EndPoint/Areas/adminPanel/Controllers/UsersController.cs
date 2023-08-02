@@ -1,4 +1,5 @@
 ﻿using LibIdentity.DomainContracts.UserContracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
@@ -41,8 +42,18 @@ public class UsersController : Controller
             }
         }
         var result = await _userService.CreateUser(model);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model); 
+        }
         return RedirectToAction("Index");
     }
+
+    
 
     public async Task<ActionResult> Update(int id)
     {
