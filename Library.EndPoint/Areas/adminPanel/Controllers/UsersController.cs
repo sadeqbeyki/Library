@@ -1,5 +1,4 @@
 ﻿using LibIdentity.DomainContracts.UserContracts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
@@ -75,8 +74,6 @@ public class UsersController : Controller
 
         await _userService.Update(user);
         return RedirectToAction("Index");
-        //return View(_mapper.Map<UpdateUserDto>(result));
-
     }
 
     public async Task<ActionResult> Delete(int id)

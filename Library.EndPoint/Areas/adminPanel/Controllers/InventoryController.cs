@@ -3,8 +3,10 @@ using LibBook.DomainContracts.Book;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using LibInventory.DomainContracts.Inventory;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
+[Authorize]
 [Area("adminPanel")]
 public class InventoryController : Controller
 {
