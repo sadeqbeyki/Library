@@ -18,6 +18,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSession();
 #region Book
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 LMSConfigureServices.Configure(builder.Services, connectionString);
@@ -64,6 +65,8 @@ app.UseStaticFiles();
 app.UseAuthentication();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

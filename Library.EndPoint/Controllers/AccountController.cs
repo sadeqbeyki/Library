@@ -3,6 +3,7 @@ using LibIdentity.DomainContracts.UserContracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AppFramework.Application;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Library.EndPoint.Controllers;
 public class AccountController : Controller
@@ -19,6 +20,13 @@ public class AccountController : Controller
 
     public IActionResult Index()
     {
+        //var lastVisitedUrl = HttpContext.Session.GetString("LastVisitedUrl");
+        //HttpContext.Session.Remove("LastVisitedUrl");
+
+        //if (!string.IsNullOrEmpty(lastVisitedUrl))
+        //{
+        //    return Redirect(lastVisitedUrl);
+        //}
         return View();
     }
     public IActionResult Register(string returnUrl)
@@ -52,13 +60,16 @@ public class AccountController : Controller
                 }
             }
         }
-        return RedirectToAction("Index", model);
+        return Redirect(model?.ReturnUrl ?? "/");
+        //return RedirectToAction("Index", model);
+
     }
     public IActionResult Login(string returnUrl)
     {
         return View(new LoginDto { ReturnUrl = returnUrl });
     }
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginDto model)
     {
@@ -66,18 +77,22 @@ public class AccountController : Controller
         {
             User user = await _userManager.FindByNameAsync(model.Name);
             user ??= await _userManager.FindByEmailAsync(model.Name);
+
             if (user != null)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, false)).Succeeded)
                 {
+                    HttpContext.Session.SetString("LastVisitedUrl", model.ReturnUrl);
                     return Redirect(model?.ReturnUrl ?? "/");
                 }
             }
+            ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
         }
-        ModelState.AddModelError(" ", "Invalid name or password");
         return View(model);
     }
+
+
     public async Task<RedirectResult> Logout(string returnUrl = "/")
     {
         await _signInManager.SignOutAsync();
