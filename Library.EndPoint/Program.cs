@@ -8,6 +8,7 @@ using LibIdentity.DomainContracts.UserContracts;
 using LibIdentity.Infrastructure;
 using LibIdentity.Infrastructure.Repositories;
 using LibInventory.Configuration;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+
 #region Book
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 LMSConfigureServices.Configure(builder.Services, connectionString);
@@ -28,14 +31,15 @@ InventoryConfigureServices.Configure(builder.Services, connectionString);
 #region Identity
 builder.Services.AddIdentity<User, Role>(i =>
 {
+    i.SignIn.RequireConfirmedAccount = false;
     i.User.RequireUniqueEmail = true;
     //c.User.AllowedUserNameCharacters = "qwertyuiopasdfghjklzxcvbnmPOIUYTREWQLKJHGFDSAMNBVCXZ";
     i.Password.RequireDigit = false;
-    i.Password.RequiredLength = 6;
     i.Password.RequireNonAlphanumeric = false;
+    i.Password.RequireLowercase = false;
     i.Password.RequireUppercase = false;
     i.Password.RequiredUniqueChars = 1;
-    i.Password.RequireLowercase = false;
+    i.Password.RequiredLength = 6;
 }).AddEntityFrameworkStores<IdentityDbContext>();
 
 builder.Services.AddScoped<IPasswordValidator<User>, LIPasswordValidator>();
@@ -43,6 +47,8 @@ builder.Services.AddScoped<IUserValidator<User>, LIUserValidator>();
 builder.Services.AddTransient<IAuthHelper, AuthHelper>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+//builder.Services.AddScoped<IUserManager, UserManager>();
+//builder.Services.AddScoped<ISignInManager, SignInManager>();
 
 builder.Services.AddDbContext<IdentityDbContext>(c =>
     c.UseSqlServer(builder.Configuration.GetConnectionString("AAA")));
@@ -60,6 +66,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseAuthentication();
@@ -69,10 +76,6 @@ app.UseRouting();
 app.UseSession();
 
 app.UseAuthorization();
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
 

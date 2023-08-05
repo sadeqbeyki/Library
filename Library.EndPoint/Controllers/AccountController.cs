@@ -4,29 +4,34 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AppFramework.Application;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Library.EndPoint.Controllers;
+
 public class AccountController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly ILogger<LoginDto> _logger;
 
     public AccountController(UserManager<User> userManager,
-        SignInManager<User> signInManager)
+        SignInManager<User> signInManager,
+        ILogger<LoginDto> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _logger = logger;
     }
 
     public IActionResult Index()
     {
-        //var lastVisitedUrl = HttpContext.Session.GetString("LastVisitedUrl");
-        //HttpContext.Session.Remove("LastVisitedUrl");
+        var lastVisitedUrl = HttpContext.Session.GetString("LastVisitedUrl");
+        HttpContext.Session.Remove("LastVisitedUrl");
 
-        //if (!string.IsNullOrEmpty(lastVisitedUrl))
-        //{
-        //    return Redirect(lastVisitedUrl);
-        //}
+        if (!string.IsNullOrEmpty(lastVisitedUrl))
+        {
+            return Redirect(lastVisitedUrl);
+        }
         return View();
     }
     public IActionResult Register(string returnUrl)
@@ -64,15 +69,28 @@ public class AccountController : Controller
         //return RedirectToAction("Index", model);
 
     }
-    public IActionResult Login(string returnUrl)
+    public IActionResult Login(string returnUrl, string errorMessage)
     {
+        //return View(new LoginDto { ReturnUrl = returnUrl });
+
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            ModelState.AddModelError(string.Empty, errorMessage);
+        }
+
+        returnUrl ??= Url.Content("~/");
+
+        // Clear the existing external cookie to ensure a clean login process
         return View(new LoginDto { ReturnUrl = returnUrl });
     }
+
+
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginDto model)
     {
+        //var returnUrl = model.ReturnUrl ??= Url.Content("~/");
         if (ModelState.IsValid)
         {
             User user = await _userManager.FindByNameAsync(model.Name);
@@ -80,14 +98,19 @@ public class AccountController : Controller
 
             if (user != null)
             {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, false)).Succeeded)
+                //await _signInManager.SignInAsync(user, isPersistent: false);
+                var result = _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.IsCompletedSuccessfully)
                 {
+                    _logger.LogInformation("login log");
                     HttpContext.Session.SetString("LastVisitedUrl", model.ReturnUrl);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return Redirect(model?.ReturnUrl ?? "/");
                 }
+
+                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                return View(model);
             }
-            ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
         }
         return View(model);
     }
