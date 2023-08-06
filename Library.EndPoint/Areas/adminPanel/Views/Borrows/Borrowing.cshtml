@@ -36,14 +36,14 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="EmployeeId" class="control-label">EmployeeId</label>
-                            <input type="text" class="form-control" asp-for="EmployeeId" required>
+                            <input type="text" class="form-control" asp-for="EmployeeId" readonly>
                             <span asp-validation-for="EmployeeId" class="error"></span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="BorrowDate" class="control-label">BorrowDate</label>
-                            <input type="text" class="form-control" asp-for="BorrowDate" required>
+                            <input type="text" class="form-control" asp-for="BorrowDate" readonly>
                             <span asp-validation-for="BorrowDate" class="error"></span>
                         </div>
                     </div>
@@ -58,14 +58,14 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label asp-for="ReturnEmployeeId" class="control-label">ReturnEmployeeId</label>
-                                <input type="text" class="form-control" asp-for="ReturnEmployeeId">
+                                <input type="text" class="form-control" asp-for="ReturnEmployeeId" disabled>
                                 <span asp-validation-for="ReturnEmployeeId" class="error"></span>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label asp-for="ReturnDate" class="control-label">ReturnDate</label>
-                                <input type="text" class="form-control" asp-for="ReturnDate">
+                                <input type="text" class="form-control" asp-for="ReturnDate" disabled>
                                 <span asp-validation-for="ReturnDate" class="error"></span>
                             </div>
                         </div>

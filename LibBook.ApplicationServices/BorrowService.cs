@@ -4,7 +4,9 @@ using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
 using LibBook.DomainContracts.Borrow;
 using LibIdentity.DomainContracts.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace LibBook.ApplicationServices;
 
@@ -14,21 +16,23 @@ public class BorrowService : IBorrowService
     private readonly IMapper _mapper;
     private readonly IAuthHelper _authHelper;
     private readonly ILibraryInventoryAcl _inventoryAcl;
-    public BorrowService(IBorrowRepository borrowRepository, IMapper mapper, IAuthHelper authHelper, ILibraryInventoryAcl inventoryAcl)
+    private readonly IHttpContextAccessor _contextAccessor;
+    public BorrowService(IBorrowRepository borrowRepository, IMapper mapper, IAuthHelper authHelper, ILibraryInventoryAcl inventoryAcl, IHttpContextAccessor contextAccessor)
     {
         _borrowRepository = borrowRepository;
         _mapper = mapper;
         _authHelper = authHelper;
         _inventoryAcl = inventoryAcl;
+        _contextAccessor = contextAccessor;
     }
 
     #region Create
     public async Task<OperationResult> Borrowing(BorrowDto dto)
     {
         OperationResult operationResult = new();
-        var currentEmployeeId = _authHelper.CurrentAccountId();
+        var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        Borrow borrow = new(dto.BookId, dto.MemberId, currentEmployeeId, dto.IdealReturnDate,
+        Borrow borrow = new(dto.BookId, dto.MemberId, operatorId, dto.IdealReturnDate,
             dto.ReturnEmployeeId, dto.ReturnDate, dto.Description);
 
         var result = await _borrowRepository.CreateAsync(borrow);
@@ -123,8 +127,9 @@ public class BorrowService : IBorrowService
         if (borrow == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
+        var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         borrow.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate,
-            dto.ReturnEmployeeId, dto.ReturnDate, dto.Description);
+            dto.ReturnEmployeeId = operatorId, dto.ReturnDate = DateTime.Now, dto.Description);
 
         await _borrowRepository.UpdateAsync(borrow);
         return operationResult.Succeeded();
