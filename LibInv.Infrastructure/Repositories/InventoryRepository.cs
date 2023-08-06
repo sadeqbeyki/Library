@@ -70,7 +70,7 @@ namespace LibInventory.Infrastructure.Repositories
                 CurrentCount = x.CalculateCurrentCount(),
                 CreationDate = x.CreationDate.ToFarsi()
             });
-            if (searchModel.BookId == 0)
+            if (searchModel.BookId > 0)
                 query = query.Where(x => x.BookId == searchModel.BookId);
 
             if (searchModel.InStock)

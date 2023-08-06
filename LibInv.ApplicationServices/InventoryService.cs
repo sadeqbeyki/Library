@@ -1,7 +1,10 @@
 ﻿using AppFramework.Application;
+using LibIdentity.Domain.UserAgg;
 using LibIdentity.DomainContracts.Auth;
 using LibInventory.Domain.InventoryAgg;
 using LibInventory.DomainContracts.Inventory;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace LibInventory.ApplicationServices
 {
@@ -9,11 +12,13 @@ namespace LibInventory.ApplicationServices
     {
         private readonly IAuthHelper _authHelper;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public InventoryService(IInventoryRepository inventoryRepository, IAuthHelper authHelper)
+        public InventoryService(IInventoryRepository inventoryRepository, IAuthHelper authHelper, IHttpContextAccessor contextAccessor)
         {
             _inventoryRepository = inventoryRepository;
             _authHelper = authHelper;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<OperationResult> Create(CreateInventory command)
@@ -55,15 +60,16 @@ namespace LibInventory.ApplicationServices
 
         public async Task<OperationResult> Increase(IncreaseInventory command)
         {
-            var operation = new OperationResult();
+            var operationResult = new OperationResult();
             var inventory = await _inventoryRepository.GetByIdAsync(command.InventoryId);
             if (inventory == null)
-                return operation.Failed(ApplicationMessages.RecordNotFound);
+                return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            var operatorId = _authHelper.CurrentAccountId();
+            //string operatorId = _authHelper.CurrentAccountId();
+            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             inventory.Increase(command.Count, operatorId, command.Description);
             _inventoryRepository.SaveChanges();
-            return operation.Succeeded();
+            return operationResult.Succeeded();
         }
 
         public async Task<OperationResult> Decrease(DecreaseInventory command)
@@ -73,7 +79,7 @@ namespace LibInventory.ApplicationServices
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
-            var operatorId = _authHelper.CurrentAccountId();
+            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
 
             _inventoryRepository.SaveChanges();
@@ -83,7 +89,7 @@ namespace LibInventory.ApplicationServices
         public OperationResult Decrease(List<DecreaseInventory> command)
         {
             var operation = new OperationResult();
-            var operatorId = _authHelper.CurrentAccountId();
+            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             foreach (var item in command)
             {
                 var inventory = _inventoryRepository.GetBy(item.BookId);
@@ -101,7 +107,7 @@ namespace LibInventory.ApplicationServices
         public OperationResult Borrowing(DecreaseInventory command)
         {
             var operation = new OperationResult();
-            var operatorId = _authHelper.CurrentAccountId();
+            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var inventory = _inventoryRepository.GetBy(command.BookId);
             inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
@@ -113,13 +119,13 @@ namespace LibInventory.ApplicationServices
         public OperationResult Returning(ReturnBook command)
         {
             OperationResult operationResult = new();
-            var employee = _authHelper.CurrentAccountId();
+            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var inventory = _inventoryRepository.GetBy(command.BookId);
             if (inventory == null)
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            inventory.Return(command.Count, employee, command.Description, command.LendId);
+            inventory.Return(command.Count, operatorId, command.Description, command.LendId);
             _inventoryRepository.SaveChanges();
             return operationResult.Succeeded();
         }

@@ -18,7 +18,6 @@ public class AuthHelper : IAuthHelper
 
     public AuthViewModel CurrentAccountInfo()
     {
-
         var result = new AuthViewModel();
         if (!IsAuthenticated())
             return result;
