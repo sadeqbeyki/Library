@@ -2,7 +2,6 @@
 using LibIdentity.DomainContracts.UserContracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using AppFramework.Application;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using AutoMapper;
@@ -51,11 +50,7 @@ public class AccountController : Controller
             var existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {
-                var error = new IdentityError
-                {
-                    Code = "Duplicate Email",
-                    Description = "این ایمیل قبلاً ثبت شده است."
-                };
+                ModelState.AddModelError("Email", "این ایمیل قبلا ثبت شده است");
                 return View(model);
             }
 
@@ -63,6 +58,7 @@ public class AccountController : Controller
             var result = _userManager.CreateAsync(userMap, model.Password).Result;
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(userMap, "member");
                 return RedirectToAction("Login", result);
             }
             else
@@ -74,8 +70,6 @@ public class AccountController : Controller
             }
         }
         return Redirect(model?.ReturnUrl ?? "/");
-        //return RedirectToAction("Index", model);
-
     }
     public IActionResult Login(string returnUrl)
     {

@@ -6,7 +6,7 @@ using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
-[Authorize(Roles ="admin, content manager")]
+[Authorize(Roles ="admin, manager")]
 [Area("adminPanel")]
 public class InventoryController : Controller
 {

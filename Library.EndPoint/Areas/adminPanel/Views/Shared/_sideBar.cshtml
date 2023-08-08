@@ -17,7 +17,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    @if (User.IsInRole("admin") || User.IsInRole("content manager"))
+    @if (User.IsInRole("admin") || User.IsInRole("manager"))
     {
         <li class="nav-item">
             <a asp-controller="Books" asp-action="Index" class="nav-link collapsed" data-toggle="collapse"

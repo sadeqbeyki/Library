@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
-[Authorize(Roles = "admin, content manager")]
+[Authorize(Roles = "admin, manager")]
 public class BorrowsController : Controller
 {
     private readonly IBorrowService _borrowService;

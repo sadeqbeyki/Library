@@ -18,9 +18,16 @@ public class UserDto
     [Required]
     [MaxLength(100)]
     public string Email { get; set; }
+
     [Required]
     [MaxLength(50)]
+    [DataType(DataType.Password)]
     public string Password { get; set; }
+
+    [Compare("Password", ErrorMessage = "Passwords do not match.")]
+    [DataType(DataType.Password)]
+    public string ConfirmPassword { get; set; }
+
     public string ReturnUrl { get; set; } = "/";
 
 }

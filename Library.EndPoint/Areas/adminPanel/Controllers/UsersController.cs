@@ -66,7 +66,6 @@ public class UsersController : Controller
             }
             return View(model);
         }
-
         return RedirectToAction("Index");
     }
 

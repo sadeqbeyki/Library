@@ -58,7 +58,9 @@ public class UserService : IUserService
             return IdentityResult.Failed(error);
         }
         var userMap = _mapper.Map<User>(model);
-        return await _userManager.CreateAsync(userMap, model.Password);
+        var result =  await _userManager.CreateAsync(userMap, model.Password);
+        await _userManager.AddToRoleAsync(userMap, "member");
+        return result;
     }
 
 
