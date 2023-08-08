@@ -24,4 +24,3 @@ public class UpdateBorrowViewModel
     public List<UserViewModel> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }
-

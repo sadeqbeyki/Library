@@ -1,7 +1,4 @@
-﻿using AppFramework.Application;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LibIdentity.DomainContracts.UserContracts;
 
@@ -25,6 +22,7 @@ public class UserDto
     [MaxLength(50)]
     public string Password { get; set; }
     public string ReturnUrl { get; set; } = "/";
+
 }
 public class UserViewModel : UserDto
 {

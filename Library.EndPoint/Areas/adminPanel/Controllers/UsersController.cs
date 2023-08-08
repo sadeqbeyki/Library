@@ -1,15 +1,31 @@
-﻿using LibIdentity.DomainContracts.UserContracts;
+﻿using LibIdentity.Domain.RoleAgg;
+using LibIdentity.Domain.UserAgg;
+using LibIdentity.DomainContracts.RoleContracts;
+using LibIdentity.DomainContracts.UserContracts;
+using Library.EndPoint.Areas.adminPanel.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
+[Authorize(Roles = "admin")]
+
 public class UsersController : Controller
 {
     private readonly IUserService _userService;
+    private readonly IRoleService _roleService;
 
-    public UsersController(IUserService userService)
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<Role> _roleManager;
+
+    public UsersController(IUserService userService, IRoleService roleService,
+        RoleManager<Role> roleManager, UserManager<User> userManager)
     {
         _userService = userService;
+        _roleService = roleService;
+        _roleManager = roleManager;
+        _userManager = userManager;
     }
 
     public async Task<ActionResult<List<UserViewModel>>> Index()
@@ -41,18 +57,20 @@ public class UsersController : Controller
             }
         }
         var result = await _userService.CreateUser(model);
+
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-            return View(model); 
+            return View(model);
         }
+
         return RedirectToAction("Index");
     }
 
-    
+
 
     public async Task<ActionResult> Update(int id)
     {
@@ -97,5 +115,31 @@ public class UsersController : Controller
             return RedirectToAction(nameof(Index));
         }
         return BadRequest();
+    }
+
+    public async Task<IActionResult> AddUserToRole()
+    {
+        var command = new UserRoleViewModel
+        {
+            Users = await _userService.GetUsers(),
+            Roles = await _roleService.GetRoles(),
+        };
+        return View("AddUserToRole", command);
+    }
+    [HttpPost]
+    public async Task<IActionResult> AddUserToRole(UserRoleViewModel model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+        var role = await _roleManager.FindByIdAsync(model.RoleId.ToString());
+        if (user == null || role == null) 
+        {
+            return BadRequest();
+        }
+        var result = await _userManager.AddToRoleAsync(user, role.ToString());
+        if (result.Succeeded)
+        {
+            return RedirectToAction("Index");
+        }
+        return View(model);
     }
 }

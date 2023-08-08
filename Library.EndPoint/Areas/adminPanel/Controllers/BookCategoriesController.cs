@@ -1,9 +1,12 @@
-﻿using LibBook.DomainContracts.BookCategory;
+﻿using AppFramework.Infrastructure;
+using LibBook.DomainContracts.BookCategory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers
 {
     [Area("adminPanel")]
+    [Authorize(Roles = "admin, content manager")]
     public class BookCategoriesController : Controller
     {
         private readonly IBookCategoryService _bookCategoryService;

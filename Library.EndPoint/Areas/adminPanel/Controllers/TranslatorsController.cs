@@ -1,9 +1,12 @@
-﻿using LibBook.DomainContracts.Translator;
+﻿using AppFramework.Infrastructure;
+using LibBook.DomainContracts.Translator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
+[Authorize(Roles = "admin, content manager")]
 public class TranslatorsController : Controller
 {
     private readonly ITranslatorService _translatorService;

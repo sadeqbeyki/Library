@@ -8,7 +8,6 @@ using LibIdentity.DomainContracts.UserContracts;
 using LibIdentity.Infrastructure;
 using LibIdentity.Infrastructure.Repositories;
 using LibInventory.Configuration;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +31,8 @@ InventoryConfigureServices.Configure(builder.Services, connectionString);
 builder.Services.AddIdentity<User, Role>(i =>
 {
     i.SignIn.RequireConfirmedAccount = false;
+    i.SignIn.RequireConfirmedEmail = false;
+    i.SignIn.RequireConfirmedPhoneNumber = false;
     i.User.RequireUniqueEmail = true;
     //c.User.AllowedUserNameCharacters = "qwertyuiopasdfghjklzxcvbnmPOIUYTREWQLKJHGFDSAMNBVCXZ";
     i.Password.RequireDigit = false;
@@ -40,7 +41,8 @@ builder.Services.AddIdentity<User, Role>(i =>
     i.Password.RequireUppercase = false;
     i.Password.RequiredUniqueChars = 1;
     i.Password.RequiredLength = 6;
-}).AddEntityFrameworkStores<IdentityDbContext>();
+})
+    .AddEntityFrameworkStores<IdentityDbContext>();
 
 builder.Services.AddScoped<IPasswordValidator<User>, LIPasswordValidator>();
 builder.Services.AddScoped<IUserValidator<User>, LIUserValidator>();

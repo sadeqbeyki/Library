@@ -1,8 +1,11 @@
-﻿using LibBook.DomainContracts.Author;
+﻿using AppFramework.Infrastructure;
+using LibBook.DomainContracts.Author;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
+[Authorize(Roles = "admin, content manager")]
 public class AuthorsController : Controller
 {
     private readonly IAuthorService _authorService;

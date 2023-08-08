@@ -1,14 +1,17 @@
-﻿using LibBook.DomainContracts.Author;
+﻿using AppFramework.Infrastructure;
+using LibBook.DomainContracts.Author;
 using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.BookCategory;
 using LibBook.DomainContracts.Publisher;
 using LibBook.DomainContracts.Translator;
 using Library.EndPoint.Areas.adminPanel.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
+[Authorize(Roles = "admin, content manager")]
 public class BooksController : Controller
 {
     private readonly IBookService _bookService;

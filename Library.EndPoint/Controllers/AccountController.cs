@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using AppFramework.Application;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using AutoMapper;
 
 namespace Library.EndPoint.Controllers;
 
@@ -13,14 +14,17 @@ public class AccountController : Controller
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly ILogger<LoginDto> _logger;
+    private readonly IMapper _mapper;
 
     public AccountController(UserManager<User> userManager,
         SignInManager<User> signInManager,
-        ILogger<LoginDto> logger)
+        ILogger<LoginDto> logger,
+        IMapper mapper)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public IActionResult Index()
@@ -40,19 +44,23 @@ public class AccountController : Controller
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Register(UserDto model)
+    public async Task<IActionResult> Register(UserDto model)
     {
         if (ModelState.IsValid)
         {
-            User user = new()
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
             {
-                UserName = model.UserName,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                BirthDate = model.BirthDate.ToGeorgianDateTime(),
-            };
-            var result = _userManager.CreateAsync(user, model.Password).Result;
+                var error = new IdentityError
+                {
+                    Code = "Duplicate Email",
+                    Description = "این ایمیل قبلاً ثبت شده است."
+                };
+                return View(model);
+            }
+
+            var userMap = _mapper.Map<User>(model);
+            var result = _userManager.CreateAsync(userMap, model.Password).Result;
             if (result.Succeeded)
             {
                 return RedirectToAction("Login", result);
@@ -69,18 +77,10 @@ public class AccountController : Controller
         //return RedirectToAction("Index", model);
 
     }
-    public IActionResult Login(string returnUrl, string errorMessage)
+    public IActionResult Login(string returnUrl)
     {
-        //return View(new LoginDto { ReturnUrl = returnUrl });
+        //returnUrl ??= Url.Content("~/");
 
-        if (!string.IsNullOrEmpty(errorMessage))
-        {
-            ModelState.AddModelError(string.Empty, errorMessage);
-        }
-
-        returnUrl ??= Url.Content("~/");
-
-        // Clear the existing external cookie to ensure a clean login process
         return View(new LoginDto { ReturnUrl = returnUrl });
     }
 
@@ -90,7 +90,6 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginDto model)
     {
-        //var returnUrl = model.ReturnUrl ??= Url.Content("~/");
         if (ModelState.IsValid)
         {
             User user = await _userManager.FindByNameAsync(model.Name);
@@ -98,18 +97,15 @@ public class AccountController : Controller
 
             if (user != null)
             {
-                //await _signInManager.SignInAsync(user, isPersistent: false);
-                var result = _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.IsCompletedSuccessfully)
+                var result =await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
                 {
                     _logger.LogInformation("login log");
                     HttpContext.Session.SetString("LastVisitedUrl", model.ReturnUrl);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return Redirect(model?.ReturnUrl ?? "/");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-                return View(model);
             }
         }
         return View(model);
@@ -125,4 +121,5 @@ public class AccountController : Controller
     {
         return View();
     }
+
 }

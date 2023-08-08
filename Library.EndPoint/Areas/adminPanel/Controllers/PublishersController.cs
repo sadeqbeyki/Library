@@ -1,8 +1,11 @@
-﻿using LibBook.DomainContracts.Publisher;
+﻿using AppFramework.Infrastructure;
+using LibBook.DomainContracts.Publisher;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
+[Authorize(Roles = "admin, content manager")]
 public class PublishersController : Controller
 {
     private readonly IPublisherService _publisherService;

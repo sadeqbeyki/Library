@@ -17,11 +17,11 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    @if (SignInManager.IsSignedIn(User))
+    @if (User.IsInRole("admin") || User.IsInRole("content manager"))
     {
         <li class="nav-item">
             <a asp-controller="Books" asp-action="Index" class="nav-link collapsed" data-toggle="collapse"
-               data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
@@ -38,7 +38,7 @@
                     </a>
                     <a class="collapse-item" asp-controller="Translators" asp-action="Index">
                         <i class="bi bi-file-earmark-font"></i>Translator
-                        </a>
+                    </a>
                 </div>
             </div>
         </li>
@@ -54,7 +54,7 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
-               aria-expanded="true" aria-controls="collapseThree">
+            aria-expanded="true" aria-controls="collapseThree">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>Inventory</span>
             </a>
@@ -75,42 +75,48 @@
             </a>
         </li>
 
-@*        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Charts</span>
-            </a>
-        </li>*@
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
+        @*        <!-- Nav Item - Charts -->
+    <li class="nav-item">
+    <a class="nav-link" href="charts.html">
+    <i class="fas fa-fw fa-chart-area"></i>
+    <span>Charts</span>
+    </a>
+    </li>*@
+    }
+        @if (User.IsInRole("admin"))
+        {
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
 
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-               aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>Members</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Utilities:</h6>
-                    <a class="collapse-item" asp-controller="Users" asp-action="Index">Users</a>
-                    <a class="collapse-item" asp-controller="Users" asp-action="Create">Create User</a>
-                    <a class="collapse-item" asp-controller="Roles" asp-action="Index">Roles</a>
-                    <a class="collapse-item" asp-controller="Roles" asp-action="Create">Create Role</a>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                   aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Members</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Utilities:</h6>
+                        <a class="collapse-item" asp-controller="Users" asp-action="Index">Users</a>
+
+                        <a class="collapse-item" asp-controller="Users" asp-action="Create">Create User</a>
+                        <a class="collapse-item" asp-controller="Roles" asp-action="Index">Roles</a>
+                        <a class="collapse-item" asp-controller="Roles" asp-action="Create">Create Role</a>
+                        <a class="collapse-item" asp-controller="Users" asp-action="AddUserToRole">Assign Role To User</a>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+        }
+
 
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
 
-    }
-    else
+    @if (!SignInManager.IsSignedIn(User))
     {
         <!-- Heading -->
         <div class="sidebar-heading">

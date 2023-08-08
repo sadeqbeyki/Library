@@ -1,12 +1,15 @@
-﻿using Humanizer;
+﻿using AppFramework.Infrastructure;
+using Humanizer;
 using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.Borrow;
 using LibIdentity.DomainContracts.UserContracts;
 using Library.EndPoint.Areas.adminPanel.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
+[Authorize(Roles = "admin, content manager")]
 public class BorrowsController : Controller
 {
     private readonly IBorrowService _borrowService;
