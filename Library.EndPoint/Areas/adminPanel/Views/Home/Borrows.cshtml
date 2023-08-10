@@ -2,22 +2,14 @@
 @model List<BorrowDto>
 
 @{
-    ViewData["Title"] = "Borrow Management";
+    ViewData["Title"] = "Home Page";
 }
-
-<div class="row">
-    <div class="col-sm-12">
-        <p class="pull-left">
-            <a class="btn btn-primary btn-lg" asp-action="Borrowing">Borrowing</a>
-        </p>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title pull-right">@ViewData["Title"] - List of borrows</h3>
+                <h3 class="panel-title pull-right">@ViewData["Title"] - What i borrowed ! </h3>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -53,20 +45,7 @@
                                         <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
-                                            <a class="btn btn-primary" asp-action="BorrowingRegistration" asp-route-id="@item.Id">
-                                                <i class="fa fa-send"></i>Submit
-                                            </a>
 
-                                            <a class="btn btn-success" asp-action="ReturnBorrow" asp-route-id="@item.Id">
-                                                <i class="fa fa-redo"></i>Return
-                                            </a>
-
-                                            <a class="btn btn-warning pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">
-                                                <i class="fa fa-edit"></i>Update
-                                            </a>
-                                            <a class="btn btn-danger pull-right m-rl-5" asp-action="Delete" asp-route-id="@item.Id">
-                                                <i class="fa fa-remove"></i>Delete
-                                            </a>
                                             <a class="btn btn-info pull-right m-rl-5" asp-action="Details" asp-route-id="@item.Id">
                                                 <i class="fa fa-info"></i>Details
                                             </a>

@@ -1,8 +1,11 @@
 ﻿@using LibIdentity.Domain.UserAgg;
 @using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
-
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
     <!-- Sidebar Toggle (Topbar) -->
@@ -10,7 +13,7 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    
+
     <partial name="_search" />
 
     <!-- Topbar Navbar -->
@@ -166,46 +169,46 @@
         </li>
 
         <div class="topbar-divider d-none d-sm-block">
-
         </div>
 
         <!-- Nav Item - User Information -->
         @if (SignInManager.IsSignedIn(User))
         {
-        <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">Hello @User.Identity.Name! </span>
-                    <figcaption class="blockquote-footer">
-                        Roles: <cite title="Source Title">(@string.Join(", ", await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User))))</cite>
-                    </figcaption>
-                <img class="img-profile rounded-circle"
-                     src="img/undraw_profile.svg">
-            </a>
+                    <cite title="Source Title">(@string.Join(", ", await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User))))</cite>
+                    <img class="img-profile rounded-circle" src="~/APTheme/img/undraw_profile.svg">
+                </a>
 
 
-            <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                 aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activity Log
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                </a>
-            </div>
-        </li>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                     aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="redirectToBorrowsPage('@userId')">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Borrows
+                    </a>
+                    <a class="dropdown-item" asp-area="adminPanel" asp-controller="Home" asp-action="Details">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Details
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Settings
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Activity Log
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Logout
+                    </a>
+                </div>
+            </li>
         }
         else
         {
@@ -219,3 +222,9 @@
     </ul>
 
 </nav>
+
+<script>
+    function redirectToBorrowsPage(userId) {
+        window.location.href = '/adminPanel/Home/Borrows?memberId=' + userId;
+    }
+</script>

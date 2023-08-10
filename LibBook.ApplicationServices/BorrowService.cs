@@ -84,11 +84,12 @@ public class BorrowService : IBorrowService
         return _mapper.Map<List<BorrowDto>>(result);
     }
 
-    public async Task<IEnumerable<BorrowDto>> GetBorrowsByMemberId(string memberId)
+    public async Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId)
     {
-        List<Borrow> borrows = await _borrowRepository.GetAll().ToListAsync();
-        var result = borrows.Where(l => l.MemberID == memberId).ToList();
-        return _mapper.Map<List<BorrowDto>>(result);
+        //List<Borrow> borrows = await _borrowRepository.GetAll().ToListAsync();
+        //var result = borrows.Where(l => l.MemberID == memberId).ToList();
+        //return _mapper.Map<List<BorrowDto>>(result);
+        return await _borrowRepository.GetBorrowsByMemberId(memberId);
     }
 
     public async Task<BorrowDto> GetBorrowById(int borrowId)
@@ -153,6 +154,7 @@ public class BorrowService : IBorrowService
         var borrow = await _borrowRepository.GetByIdAsync(borrowId);
         await _borrowRepository.DeleteAsync(borrow);
     }
+
     #endregion
 
 }
