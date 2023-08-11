@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibBook.Infrastructure.Repositories;
 
-public class BorrowRepository : Repository<Borrow, int>, IBorrowRepository
+public partial class BorrowRepository : Repository<Borrow, int>, IBorrowRepository
 {
     private readonly BookDbContext _bookDbContext;
     private readonly IMapper _mapper;
@@ -18,11 +18,13 @@ public class BorrowRepository : Repository<Borrow, int>, IBorrowRepository
 
     public async Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId)
     {
-        var borrows =  await _bookDbContext.Borrows.Where(x => x.MemberID == memberId).ToListAsync();
+        //var borrows = await _bookDbContext.Borrows.Where(x => x.MemberID == memberId).ToListAsync();
+        //return _mapper.Map<List<BorrowDto>>(borrows);
+        var borrows = await _bookDbContext.Borrows.Where(x => x.MemberID == memberId).ToListAsync();
         List<BorrowDto> result = borrows.Select(b => new BorrowDto
         {
             Id = b.Id,
-            BookId=b.BookId,
+            BookId = b.BookId,
             MemberId = b.MemberID,
             EmployeeId = b.EmployeeId,
             BorrowDate = b.CreationDate,
@@ -33,4 +35,5 @@ public class BorrowRepository : Repository<Borrow, int>, IBorrowRepository
         }).ToList();
         return result;
     }
+
 }
