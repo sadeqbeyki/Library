@@ -3,7 +3,6 @@ using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
 using LibBook.Domain.BookCategoryAgg;
 using LibBook.Domain.BorrowAgg;
-using LibBook.Domain.LendAgg;
 using LibBook.Domain.PublisherAgg;
 using LibBook.Domain.TranslatorAgg;
 using LibBook.Infrastructure.Configurations;
@@ -22,7 +21,7 @@ public class BookDbContext : DbContext
     public DbSet<BookTranslator> TranslatorBooks { get; set; }
     public DbSet<BookPublisher> PublisherBooks { get; set; }
 
-    public DbSet<Lend> Lends { get; set; }
+    //public DbSet<Lend> Lends { get; set; }
     public DbSet<Borrow> Borrows { get; set; }
 
     public BookDbContext(DbContextOptions<BookDbContext> options) : base(options)

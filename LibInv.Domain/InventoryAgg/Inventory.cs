@@ -1,5 +1,4 @@
 ﻿using AppFramework.Domain;
-using LibBook.Domain.LendAgg;
 
 namespace LibInventory.Domain.InventoryAgg;
 

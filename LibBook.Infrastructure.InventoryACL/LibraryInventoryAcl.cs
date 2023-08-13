@@ -1,5 +1,4 @@
 ﻿using LibBook.Domain.BorrowAgg;
-using LibBook.Domain.LendAgg;
 using LibBook.Domain.Services;
 using LibInventory.DomainContracts.Inventory;
 
@@ -26,18 +25,18 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
         return _inventoryService.Returning(item).IsSucceeded;
     }
 
-    public bool LendFromInventory(List<LendItem> items)
-    {
-        var command = items.Select(l =>
-            new DecreaseInventory(
-                            l.BookId,
-                            1,
-                            "In Lend...",
-                            l.LendId
-                    )).ToList();
+    //public bool LendFromInventory(List<LendItem> items)
+    //{
+    //    var command = items.Select(l =>
+    //        new DecreaseInventory(
+    //                        l.BookId,
+    //                        1,
+    //                        "In Lend...",
+    //                        l.LendId
+    //                )).ToList();
 
-        return _inventoryService.Decrease(command).IsSucceeded;
-    }
+    //    return _inventoryService.Decrease(command).IsSucceeded;
+    //}
 
 
 }

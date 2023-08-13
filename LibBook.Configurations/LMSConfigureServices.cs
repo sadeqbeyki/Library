@@ -3,7 +3,6 @@ using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
 using LibBook.Domain.BookCategoryAgg;
 using LibBook.Domain.BorrowAgg;
-using LibBook.Domain.LendAgg;
 using LibBook.Domain.PublisherAgg;
 using LibBook.Domain.Services;
 using LibBook.Domain.TranslatorAgg;
@@ -11,7 +10,6 @@ using LibBook.DomainContracts.Author;
 using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.BookCategory;
 using LibBook.DomainContracts.Borrow;
-using LibBook.DomainContracts.Lend;
 using LibBook.DomainContracts.Publisher;
 using LibBook.DomainContracts.Translator;
 using LibBook.Infrastructure;
@@ -41,9 +39,6 @@ public static class LMSConfigureServices
 
         services.AddScoped<ITranslatorRepository, TranslatorRepository>();
         services.AddScoped<ITranslatorService, TranslatorService>();
-
-        services.AddScoped<ILendRepository, LendRepository>();
-        services.AddScoped<ILendService, LendService>();
 
         services.AddScoped<IBorrowRepository, BorrowRepository>();
         services.AddScoped<IBorrowService, BorrowService>();
