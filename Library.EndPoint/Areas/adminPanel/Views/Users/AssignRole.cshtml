@@ -1,0 +1,98 @@
+﻿@using LibIdentity.Domain.RoleAgg;
+@using Library.EndPoint.Areas.adminPanel.Models;
+@using Microsoft.AspNetCore.Identity;
+@model UserRoleViewModel
+@inject RoleManager<Role> _roleManager
+@{
+    ViewData["Title"] = "Assign Role To User";
+}
+
+<div class="row">
+
+    <div class="col-md-6">
+        <h1 class="bg-info text-white">@ViewData["Title"]</h1>
+        <form asp-action="AssignRole" method="post">
+            <div>
+                <div class="text-danger">@ViewBag.RoleExistError</div>
+                <div class="text-success">@ViewBag.RoleAssigned</div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="UserId" class="control-label">Choose a Member</label>
+                            <select class="form-control" asp-for="UserId"
+                                    asp-items='new SelectList(Model.Users, "Id", "UserName")'>
+                                <option value="">Choose a Member</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="RoleId" class="control-label">Choose a Role</label>
+                            <select class="form-control" asp-for="RoleId"
+                                    asp-items='new SelectList(Model.Roles, "Id", "Name")'>
+                                <option value="">Choose a Role</option>
+                            </select>
+                            <span asp-validation-for="RoleId" class="error"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Assign</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h1 class="bg-info text-white">User Roles List</h1>
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Roles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            @if (!user.RoleName.Contains("member") || user.RoleName.Count > 1)
+                            {
+                                <tr>
+                                    <td>@user.UserName</td>
+                                    <td>
+                                        @if (user.RoleName.Count > 0)
+                                        {
+                                            <ul>
+                                                @foreach (var roleName in user.RoleName)
+                                                {
+                                                    var role = await _roleManager.FindByNameAsync(roleName);
+                                                    if (role != null)
+                                                    {
+                                                        <li class="d-flex align-items-center">
+                                                            <span class="badge badge-info mr-2">@roleName</span>
+                                                            <form asp-controller="Users" asp-action="RemoveUserFromRole"
+                                                                  asp-route-userId="@user.Id" asp-route-roleId="@role.Id">
+                                                                <button type="submit" class="btn btn-outline-danger badge badge-danger">x</button>
+                                                            </form>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <span>No roles assigned</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

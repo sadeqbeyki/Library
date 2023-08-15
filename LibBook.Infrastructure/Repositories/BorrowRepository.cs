@@ -1,5 +1,6 @@
 ﻿using AppFramework.Domain;
 using AutoMapper;
+using AutoMapper.Execution;
 using LibBook.Domain.BorrowAgg;
 using LibBook.DomainContracts.Borrow;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,26 @@ public partial class BorrowRepository : Repository<Borrow, int>, IBorrowReposito
         _mapper = mapper;
     }
 
+    public async Task<List<BorrowDto>> GetBorrowsByEmployeeId(string EmployeeId)
+    {
+        var borrows = await _bookDbContext.Borrows.Where(x => x.EmployeeId == EmployeeId).ToListAsync();
+        List<BorrowDto> result = borrows.Select(b => new BorrowDto
+        {
+            Id = b.Id,
+            BookId = b.BookId,
+            MemberId = b.MemberID,
+            EmployeeId = b.EmployeeId,
+            BorrowDate = b.CreationDate,
+            IdealReturnDate = b.IdealReturnDate,
+            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnDate = b.ReturnDate,
+            Description = b.Description
+        }).ToList();
+        return result;
+    }
+
     public async Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId)
     {
-        //var borrows = await _bookDbContext.Borrows.Where(x => x.MemberID == memberId).ToListAsync();
-        //return _mapper.Map<List<BorrowDto>>(borrows);
         var borrows = await _bookDbContext.Borrows.Where(x => x.MemberID == memberId).ToListAsync();
         List<BorrowDto> result = borrows.Select(b => new BorrowDto
         {
@@ -36,4 +53,23 @@ public partial class BorrowRepository : Repository<Borrow, int>, IBorrowReposito
         return result;
     }
 
+    public async Task<List<BorrowDto>> GetOverdueBorrows()
+    {
+        var borrows = await _bookDbContext.Borrows
+            .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();
+
+        List<BorrowDto> result = borrows.Select(b => new BorrowDto
+        {
+            Id = b.Id,
+            BookId = b.BookId,
+            MemberId = b.MemberID,
+            EmployeeId = b.EmployeeId,
+            BorrowDate = b.CreationDate,
+            IdealReturnDate = b.IdealReturnDate,
+            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnDate = b.ReturnDate,
+            Description = b.Description
+        }).ToList();
+        return result;
+    }
 }

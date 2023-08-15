@@ -186,14 +186,17 @@
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                      aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="javascript:void(0);" onclick="redirectToBorrowsPage('@userId')">
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="GoToMemberBorrowsPage('@userId')">
                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Borrows
+                        Member Borrows
                     </a>
-                    <a class="dropdown-item" asp-area="adminPanel" asp-controller="Home" asp-action="Details">
-                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Details
-                    </a>
+                    @if (User.IsInRole("admin") || User.IsInRole("manager"))
+                    {
+                        <a class="dropdown-item" asp-area="adminPanel" asp-controller="Home" asp-action="EmployeeBorrows">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Employee Borrows
+                        </a>
+                    }
                     <a class="dropdown-item" href="#">
                         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                         Settings
@@ -224,7 +227,7 @@
 </nav>
 
 <script>
-    function redirectToBorrowsPage(userId) {
-        window.location.href = '/adminPanel/Home/Borrows?memberId=' + userId;
+    function GoToMemberBorrowsPage(userId) {
+        window.location.href = '/adminPanel/Home/MemberBorrows?memberId=' + userId;
     }
 </script>

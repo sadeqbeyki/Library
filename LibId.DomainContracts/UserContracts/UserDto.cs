@@ -31,7 +31,3 @@ public class UserDto
     public string ReturnUrl { get; set; } = "/";
 
 }
-public class UserViewModel : UserDto
-{
-    public int Id { get; set; }
-}

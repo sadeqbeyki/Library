@@ -42,6 +42,23 @@ public class UserService : IUserService
         List<User> users = await _userManager.Users.Take(50).ToListAsync();
         return _mapper.Map<List<UserViewModel>>(users);
     }
+
+    public async Task<List<UserWithRolesViewModel>> GetAllUsers()
+    {
+        List<User> users = await _userManager.Users.Take(50).ToListAsync();
+
+        var userViewModels = new List<UserWithRolesViewModel>();
+
+        foreach (var user in users)
+        {
+            var userViewModel = _mapper.Map<UserWithRolesViewModel>(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            userViewModel.RoleName = roles.ToList();
+            userViewModels.Add(userViewModel);
+        }
+
+        return userViewModels;
+    }
     #endregion
 
     #region Create

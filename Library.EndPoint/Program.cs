@@ -31,9 +31,11 @@ InventoryConfigureServices.Configure(builder.Services, connectionString);
 builder.Services.AddIdentity<User, Role>(i =>
 {
     i.SignIn.RequireConfirmedAccount = false;
-    i.SignIn.RequireConfirmedEmail = false;
+    i.SignIn.RequireConfirmedEmail = true;
     i.SignIn.RequireConfirmedPhoneNumber = false;
+
     i.User.RequireUniqueEmail = true;
+
     //c.User.AllowedUserNameCharacters = "qwertyuiopasdfghjklzxcvbnmPOIUYTREWQLKJHGFDSAMNBVCXZ";
     i.Password.RequireDigit = false;
     i.Password.RequireNonAlphanumeric = false;

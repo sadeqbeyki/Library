@@ -28,9 +28,9 @@ public class UsersController : Controller
         _userManager = userManager;
     }
 
-    public async Task<ActionResult<List<UserViewModel>>> Index()
+    public async Task<ActionResult<List<UserWithRolesViewModel>>> Index()
     {
-        var users = await _userService.GetUsers();
+        var users = await _userService.GetAllUsers();
         return View(users);
     }
 
@@ -116,29 +116,61 @@ public class UsersController : Controller
         return BadRequest();
     }
 
-    public async Task<IActionResult> AddUserToRole()
+    public async Task<IActionResult> AssignRole()
     {
         var command = new UserRoleViewModel
         {
-            Users = await _userService.GetUsers(),
+            Users = await _userService.GetAllUsers(),
             Roles = await _roleService.GetRoles(),
         };
-        return View("AddUserToRole", command);
+        return View("AssignRole", command);
     }
     [HttpPost]
-    public async Task<IActionResult> AddUserToRole(UserRoleViewModel model)
+    public async Task<IActionResult> AssignRole(UserRoleViewModel model)
     {
         var user = await _userManager.FindByIdAsync(model.UserId.ToString());
         var role = await _roleManager.FindByIdAsync(model.RoleId.ToString());
-        if (user == null || role == null) 
+        if (user == null || role == null)
         {
             return BadRequest();
         }
-        var result = await _userManager.AddToRoleAsync(user, role.ToString());
+
+        if (await _userManager.IsInRoleAsync(user, role.Name))
+        {
+            ViewBag.RoleExistError = "User is already in the selected role.";
+            //return RedirectToAction("AssignRole");
+        }
+        else
+        {
+            var result = await _userManager.AddToRoleAsync(user, role.ToString());
+            if (result.Succeeded)
+            {
+                ViewBag.RoleAssigned = "Role assigned to User";
+                return RedirectToAction("AssignRole");
+            }
+        }
+        return RedirectToAction("AssignRole");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RemoveUserFromRole(int userId, string roleId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        var role = await _roleManager.FindByIdAsync(roleId);
+
+        if (user == null || role == null)
+        {
+            return BadRequest();
+        }
+
+        var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+
         if (result.Succeeded)
         {
-            return RedirectToAction("Index");
+            return RedirectToAction("AssignRole");
         }
-        return View(model);
+
+        return RedirectToAction("AssignRole");
     }
+
 }

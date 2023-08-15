@@ -12,5 +12,8 @@ namespace LibIdentity.DomainContracts.UserContracts
 
         UserViewModel GetAccountBy(int id);
 
+        Task<List<UserWithRolesViewModel>> GetAllUsers();
+
+
     }
 }

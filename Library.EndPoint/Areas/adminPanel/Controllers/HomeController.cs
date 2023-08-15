@@ -22,7 +22,7 @@ public class HomeController : Controller
         return View();
     }
     [HttpGet]
-    public async Task<IActionResult> Details()
+    public async Task<IActionResult> EmployeeBorrows()
     {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
@@ -30,15 +30,15 @@ public class HomeController : Controller
             return RedirectToAction("Login", "Account","adminPanel");
         }
 
-        var result = await _borrowService.GetBorrowsByMemberId(user.Id.ToString());
-        return View("Details", result);
+        var result = await _borrowService.GetBorrowsByEmployeeId(user.Id.ToString());
+        return View("EmployeeBorrows", result);
     }
     [HttpGet]
 
-    public async Task<IActionResult> Borrows(string memberId)
+    public async Task<IActionResult> MemberBorrows(string memberId)
     {
         var result = await _borrowService.GetBorrowsByMemberId(memberId);
-        return View("Borrows", result);
+        return View("MemberBorrows", result);
     }
     public IActionResult Profile()
     {

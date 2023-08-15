@@ -1,8 +1,18 @@
-﻿@{
+﻿@using LibIdentity.Domain.UserAgg;
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="container text-center mt-5">
+    <h1 class="display-4">Welcome to the Library System</h1>
+    <p class="lead">Explore and manage your library resources.</p>
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <a href="~/Account/Login" class="btn btn-primary">Login</a>
+    }
 </div>

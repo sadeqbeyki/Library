@@ -8,8 +8,8 @@ public interface IBorrowService
     Task<List<BorrowDto>> GetAllBorrows();
     Task<BorrowDto> GetBorrowById(int borrowId);
     Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId);
-    Task<IEnumerable<BorrowDto>> GetBorrowsByEmployeeId(string employeeId);
-    Task<IEnumerable<BorrowDto>> GetOverdueBorrows();
+    Task<List<BorrowDto>> GetBorrowsByEmployeeId(string EmployeeId);
+    Task<List<BorrowDto>> GetOverdueBorrows();
 
     Task Delete(int borrowId);
 

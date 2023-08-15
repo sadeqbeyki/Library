@@ -1,14 +1,14 @@
 ﻿@using Library.EndPoint.Areas.adminPanel.Models;
 @model UserRoleViewModel
 @{
-    ViewData["Title"] = "Assign Role To User";
+    ViewData["Title"] = "Remove User From Role";
 }
 
 <h1 class="bg-info text-white">@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-6">
 
-        <form asp-action="AddUserToRole" method="post">
+        <form asp-action="RemoveUserFromRole" method="post">
             <div>
                 <div class="row">
                     <div class="col-md-6">
@@ -26,7 +26,7 @@
                             <label asp-for="RoleId" class="control-label">Choose a Role</label>
                             <select class="form-control" asp-for="RoleId"
                                     asp-items='new SelectList(Model.Roles, "Id", "Name")'>
-                                <option value="">Choose a Book</option>
+                                <option value="">Choose a Role</option>
                             </select>
                             <span asp-validation-for="RoleId" class="error"></span>
                         </div>
@@ -35,7 +35,7 @@
             </div>
             <div>
                 <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
-                <button type="submit" class="btn btn-info waves-effect waves-light">Assign</button>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Remove</button>
             </div>
         </form>
     </div>

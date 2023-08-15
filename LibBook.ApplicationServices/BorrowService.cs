@@ -77,18 +77,13 @@ public class BorrowService : IBorrowService
         return result;
     }
 
-    public async Task<IEnumerable<BorrowDto>> GetBorrowsByEmployeeId(string employeeId)
+    public async Task<List<BorrowDto>> GetBorrowsByEmployeeId(string employeeId)
     {
-        List<Borrow> borrows = await _borrowRepository.GetAll().ToListAsync();
-        var result = borrows.Where(l => l.EmployeeId == employeeId).ToList();
-        return _mapper.Map<List<BorrowDto>>(result);
+        return await _borrowRepository.GetBorrowsByEmployeeId(employeeId);
     }
 
     public async Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId)
     {
-        //List<Borrow> borrows = await _borrowRepository.GetAll().ToListAsync();
-        //var result = borrows.Where(l => l.MemberID == memberId).ToList();
-        //return _mapper.Map<List<BorrowDto>>(result);
         return await _borrowRepository.GetBorrowsByMemberId(memberId);
     }
 
@@ -108,14 +103,11 @@ public class BorrowService : IBorrowService
             Description = borrow.Description,
         };
         return dto;
-        //return _mapper.Map<BorrowDto>(borrow);
     }
 
-    public async Task<IEnumerable<BorrowDto>> GetOverdueBorrows()
+    public async Task<List<BorrowDto>> GetOverdueBorrows()
     {
-        List<Borrow> borrows = await _borrowRepository.GetAll().ToListAsync();
-        var result = borrows.Where(l => l.ReturnDate == null && l.IdealReturnDate < DateTime.Now);
-        return _mapper.Map<List<BorrowDto>>(result);
+        return await _borrowRepository.GetOverdueBorrows();
     }
     #endregion
 
