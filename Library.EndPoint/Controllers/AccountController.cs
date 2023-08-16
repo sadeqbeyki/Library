@@ -3,8 +3,8 @@ using LibIdentity.DomainContracts.UserContracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using AutoMapper;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Library.EndPoint.Controllers;
 
@@ -28,13 +28,6 @@ public class AccountController : Controller
 
     public IActionResult Index()
     {
-        var lastVisitedUrl = HttpContext.Session.GetString("LastVisitedUrl");
-        HttpContext.Session.Remove("LastVisitedUrl");
-
-        if (!string.IsNullOrEmpty(lastVisitedUrl))
-        {
-            return Redirect(lastVisitedUrl);
-        }
         return View();
     }
     public IActionResult Register(string returnUrl)
@@ -45,39 +38,59 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(UserDto model)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var existingUser = await _userManager.FindByEmailAsync(model.Email);
-            if (existingUser != null)
-            {
-                ModelState.AddModelError("Email", "این ایمیل قبلا ثبت شده است");
-                return View(model);
-            }
+            return Redirect(model?.ReturnUrl ?? "/");
 
-            var userMap = _mapper.Map<User>(model);
-            var result = _userManager.CreateAsync(userMap, model.Password).Result;
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(userMap, "member");
-                return RedirectToAction("Login", result);
-            }
-            else
-            {
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError(item.Code, item.Description);
-                }
-            }
         }
-        return Redirect(model?.ReturnUrl ?? "/");
+
+        var email = await _userManager.FindByEmailAsync(model.Email);
+        if (email != null)
+        {
+            ModelState.AddModelError("Email", "این ایمیل قبلا ثبت شده است");
+            return View(model);
+        }
+
+        var user = _mapper.Map<User>(model);
+        var result = _userManager.CreateAsync(user, model.Password).Result;
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+            return View(model);
+        }
+
+        //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+        //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+        //await _emailSender.SendEmailAsync(message);
+
+        await _userManager.AddToRoleAsync(user, "member");
+
+        return RedirectToAction("Login", result);
+        //return RedirectToAction(nameof(SuccessRegistration));
+
+    }
+    [HttpGet]
+    public async Task<IActionResult> ConfirmEmail(string token, string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return View("Error");
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        return View(result.Succeeded ? nameof(ConfirmEmail) : "Error");
+    }
+    [HttpGet]
+    public IActionResult SuccessRegistration()
+    {
+        return View();
     }
     public IActionResult Login(string returnUrl)
     {
-        //returnUrl ??= Url.Content("~/");
-
         return View(new LoginDto { ReturnUrl = returnUrl });
     }
-
 
     [HttpPost]
     [AllowAnonymous]
@@ -91,15 +104,14 @@ public class AccountController : Controller
 
             if (user != null)
             {
-                var result =await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("login log");
-                    HttpContext.Session.SetString("LastVisitedUrl", model.ReturnUrl);
                     return Redirect(model?.ReturnUrl ?? "/");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                return View();
             }
         }
         return View(model);
