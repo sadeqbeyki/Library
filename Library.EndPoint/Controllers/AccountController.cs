@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Library.EndPoint.Controllers;
 
@@ -14,6 +13,7 @@ public class AccountController : Controller
     private readonly SignInManager<User> _signInManager;
     private readonly ILogger<LoginDto> _logger;
     private readonly IMapper _mapper;
+    //private readonly EmailSender _emailSender;
 
     public AccountController(UserManager<User> userManager,
         SignInManager<User> signInManager,
@@ -30,6 +30,8 @@ public class AccountController : Controller
     {
         return View();
     }
+
+   
     public IActionResult Register(string returnUrl)
     {
         return View(new UserDto { ReturnUrl = returnUrl });
@@ -62,10 +64,6 @@ public class AccountController : Controller
             return View(model);
         }
 
-        //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
-        //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
-        //await _emailSender.SendEmailAsync(message);
 
         await _userManager.AddToRoleAsync(user, "member");
 
@@ -127,5 +125,7 @@ public class AccountController : Controller
     {
         return View();
     }
+
+
 
 }

@@ -8,8 +8,11 @@ using LibIdentity.DomainContracts.UserContracts;
 using LibIdentity.Infrastructure;
 using LibIdentity.Infrastructure.Repositories;
 using LibInventory.Configuration;
+using Library.EndPoint.Areas.Identity.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,11 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
+
+#region Email
+
+#endregion
+
 
 #region Book
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
