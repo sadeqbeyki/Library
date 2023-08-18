@@ -42,8 +42,7 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form asp-controller="Account" asp-action="Login" asp-route-returnUrl="HttpContext.Request.Path"
-                                          method="post" class="user">
+                                    <form asp-controller="Account" asp-action="Login" method="post" class="user">
                                         <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
                                         <div class="text-danger" asp-validation-summary="All"></div>
                                         <div class="form-group">

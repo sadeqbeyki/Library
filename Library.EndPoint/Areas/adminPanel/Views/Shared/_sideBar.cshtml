@@ -134,7 +134,7 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Login Screens:</h6>
-                    <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="Login" asp-route-returnUrl="HttpContext.Request.Path">Login</a>
+                    <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="Login" asp-route-returnUrl=@Context.Request.Path>Login</a>
                     <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="Register">Register</a>
                     <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="ForgotPassword">Forgot Password</a>
                     <div class="collapse-divider"></div>

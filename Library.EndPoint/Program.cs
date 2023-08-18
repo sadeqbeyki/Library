@@ -1,3 +1,4 @@
+using AppFramework.Application.Email;
 using LibBook.Configurations;
 using LibIdentity.ApplicationServices;
 using LibIdentity.Domain.RoleAgg;
@@ -8,11 +9,8 @@ using LibIdentity.DomainContracts.UserContracts;
 using LibIdentity.Infrastructure;
 using LibIdentity.Infrastructure.Repositories;
 using LibInventory.Configuration;
-using Library.EndPoint.Areas.Identity.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +23,7 @@ builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
 #region Email
-
+builder.Services.AddTransient<IEmailService, EmailService>();
 #endregion
 
 
@@ -51,16 +49,18 @@ builder.Services.AddIdentity<User, Role>(i =>
     i.Password.RequireUppercase = false;
     i.Password.RequiredUniqueChars = 1;
     i.Password.RequiredLength = 6;
-})
-    .AddEntityFrameworkStores<IdentityDbContext>();
+}).AddEntityFrameworkStores<IdentityDbContext>();
+
+builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddScoped<IPasswordValidator<User>, LIPasswordValidator>();
 builder.Services.AddScoped<IUserValidator<User>, LIUserValidator>();
 builder.Services.AddTransient<IAuthHelper, AuthHelper>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-//builder.Services.AddScoped<IUserManager, UserManager>();
-//builder.Services.AddScoped<ISignInManager, SignInManager>();
+
 
 builder.Services.AddDbContext<IdentityDbContext>(c =>
     c.UseSqlServer(builder.Configuration.GetConnectionString("AAA")));

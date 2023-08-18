@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using AppFramework.Application.Email;
 
 namespace Library.EndPoint.Controllers;
 
@@ -13,17 +14,19 @@ public class AccountController : Controller
     private readonly SignInManager<User> _signInManager;
     private readonly ILogger<LoginDto> _logger;
     private readonly IMapper _mapper;
-    //private readonly EmailSender _emailSender;
+    private readonly IEmailService _email;
 
     public AccountController(UserManager<User> userManager,
         SignInManager<User> signInManager,
         ILogger<LoginDto> logger,
-        IMapper mapper)
+        IMapper mapper,
+        IEmailService email)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
         _mapper = mapper;
+        _email = email;
     }
 
     public IActionResult Index()
@@ -31,7 +34,7 @@ public class AccountController : Controller
         return View();
     }
 
-   
+
     public IActionResult Register(string returnUrl)
     {
         return View(new UserDto { ReturnUrl = returnUrl });
@@ -64,12 +67,27 @@ public class AccountController : Controller
             return View(model);
         }
 
+        //confirmation email 
 
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+
+        EmailModel message = new()
+        {
+            FromName = "Library Manager",
+            FromAddress = "info@library.com",
+            ToName = user.UserName,
+            ToAddress = user.Email,
+            Subject = "Confirm Your Registration",
+            Content = "Please click the following link to confirm your registration: <a href=\"" + confirmationLink + "\">Confirm</a>"
+        };
+        _email.Send(message);
+
+        //add to default role
         await _userManager.AddToRoleAsync(user, "member");
 
-        return RedirectToAction("Login", result);
-        //return RedirectToAction(nameof(SuccessRegistration));
-
+        //return RedirectToAction("Login", result);
+        return RedirectToAction(nameof(SuccessRegistration));
     }
     [HttpGet]
     public async Task<IActionResult> ConfirmEmail(string token, string email)
@@ -77,6 +95,7 @@ public class AccountController : Controller
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
             return View("Error");
+
         var result = await _userManager.ConfirmEmailAsync(user, token);
         return View(result.Succeeded ? nameof(ConfirmEmail) : "Error");
     }
@@ -85,16 +104,24 @@ public class AccountController : Controller
     {
         return View();
     }
+
+
+    public IActionResult Error()
+    {
+        return View();
+    }
+
+    [HttpGet]
     public IActionResult Login(string returnUrl)
     {
         return View(new LoginDto { ReturnUrl = returnUrl });
     }
-
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginDto model)
     {
+        model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
         if (ModelState.IsValid)
         {
             User user = await _userManager.FindByNameAsync(model.Name);

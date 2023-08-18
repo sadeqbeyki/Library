@@ -1,0 +1,18 @@
+﻿@using LibIdentity.Domain.UserAgg;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> SignInManager
+@{
+    ViewData["Title"] = "Confirm Email";
+}
+
+<h1>Welcome to library I</h1>
+
+<div>
+    <p>
+        Thank you for confirming your email.
+    </p>
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="btn btn-primary">Login</a>
+    }
+</div>

@@ -10,32 +10,44 @@
     <div class="col-md-6">
         <form asp-controller="Users" asp-action="Create" asp-area="adminPanel" id="profile-form" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="form-label"></label>
-                <input asp-for="FirstName" class="form-text" required maxlength="50" />
-                <span asp-validation-for=FirstName></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" class="form-text" required maxlength="50" />
+                        <span asp-validation-for=FirstName></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" class="form-text" required maxlength="50" />
+                        <span asp-validation-for=LastName></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="form-label"></label>
-                <input asp-for="LastName" class="form-text" required maxlength="50" />
-                <span asp-validation-for=LastName></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="BirthDate" class="form-label"></label>
                 <input asp-for="BirthDate" class="form-text" class="form-control" maxlength="50" />
                 <span asp-validation-for=BirthDate></span>
-
             </div>
-            <div class="form-floating">
-                <label asp-for="UserName" class="form-label"></label>
-                <input asp-for="UserName" class="form-text" required maxlength="50" />
-                <span asp-validation-for=UserName></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <label asp-for="UserName" class="form-label"></label>
+                        <input asp-for="UserName" class="form-text" required maxlength="50" />
+                        <span asp-validation-for=UserName></span>
 
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="form-label">Password</label>
-                <input type="text" asp-for="Password" class="form-text" maxlength="500" required>
-                <span asp-validation-for=Password></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input type="text" asp-for="Password" class="form-text" maxlength="500" required>
+                        <span asp-validation-for=Password></span>
+                    </div>
+                </div>
             </div>
             <div class="form-floating">
                 <label asp-for="Email" class="form-label"></label>
