@@ -1,4 +1,4 @@
-﻿namespace Library.EndPoint.Models;
+﻿amespace Library.EndPoint.Models;
 
 public class EmailViewModel
 {

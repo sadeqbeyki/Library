@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿sing System.ComponentModel.DataAnnotations;
 
 namespace Library.EndPoint.Models
 {

@@ -50,4 +50,8 @@
     <ProjectReference Include="..\LibInv.DomainContracts\LibInventory.DomainContracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Models\" />
+  </ItemGroup>
+
 </Project>
