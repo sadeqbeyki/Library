@@ -10,15 +10,15 @@ namespace Library.EndPoint.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly ILogger<LoginDto> _logger;
+    private readonly UserManager<UserIdentity> _userManager;
+    private readonly SignInManager<UserIdentity> _signInManager;
+    private readonly ILogger<LoginViewModel> _logger;
     private readonly IMapper _mapper;
     private readonly IEmailService _email;
 
-    public AccountController(UserManager<User> userManager,
-        SignInManager<User> signInManager,
-        ILogger<LoginDto> logger,
+    public AccountController(UserManager<UserIdentity> userManager,
+        SignInManager<UserIdentity> signInManager,
+        ILogger<LoginViewModel> logger,
         IMapper mapper,
         IEmailService email)
     {
@@ -37,11 +37,11 @@ public class AccountController : Controller
 
     public IActionResult Register(string returnUrl)
     {
-        return View(new UserDto { ReturnUrl = returnUrl });
+        return View(new CreateUserViewModel { ReturnUrl = returnUrl });
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(UserDto model)
+    public async Task<IActionResult> Register(CreateUserViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -55,8 +55,8 @@ public class AccountController : Controller
             ModelState.AddModelError("Email", "این ایمیل قبلا ثبت شده است");
             return View(model);
         }
-
-        var user = _mapper.Map<User>(model);
+        //string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+        var user = _mapper.Map<UserIdentity>(model);
         var result = _userManager.CreateAsync(user, model.Password).Result;
         if (!result.Succeeded)
         {
@@ -114,19 +114,22 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Login(string returnUrl)
     {
-        return View(new LoginDto { ReturnUrl = returnUrl });
+        return View(new LoginViewModel { ReturnUrl = returnUrl });
     }
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginDto model)
+    public async Task<IActionResult> Login(LoginViewModel model)
     {
         model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
         if (ModelState.IsValid)
         {
-            User user = await _userManager.FindByNameAsync(model.Name);
-            user ??= await _userManager.FindByEmailAsync(model.Name);
+            UserIdentity user = await _userManager.FindByNameAsync(model.Name) ?? await _userManager.FindByEmailAsync(model.Name);
 
+            //if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+            //{
+            //    return BadRequest("wrong password!");
+            //}
             if (user != null)
             {
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);

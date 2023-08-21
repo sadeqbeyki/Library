@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity;
 namespace LibIdentity.Infrastructure.Repositories
 {
     //Interface Phone Book Password Validator
-    public class ILIPasswordValidator : IPasswordValidator<User>
+    public class ILIPasswordValidator : IPasswordValidator<UserIdentity>
     {
-        public Task<IdentityResult> ValidateAsync(UserManager<User> manager, User user, string password)
+        public Task<IdentityResult> ValidateAsync(UserManager<UserIdentity> manager, UserIdentity user, string password)
         {
             List<IdentityError> errors = new();
             if (user.UserName == password || user.UserName.Contains(password))

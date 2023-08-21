@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace LibIdentity.Infrastructure.Repositories
 {
-    public class LIUserValidator : IUserValidator<User>
+    public class LIUserValidator : IUserValidator<UserIdentity>
     {
-        public Task<IdentityResult> ValidateAsync(UserManager<User> manager, User user)
+        public Task<IdentityResult> ValidateAsync(UserManager<UserIdentity> manager, UserIdentity user)
         {
             List<IdentityError> errors = new();
 

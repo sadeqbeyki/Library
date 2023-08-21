@@ -10,9 +10,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<UserDto, User>().ReverseMap();
-        CreateMap<UserViewModel, User>().ReverseMap();
-        CreateMap<UserWithRolesViewModel, User>().ReverseMap();
-        CreateMap<RoleDto, Role>().ReverseMap();
+        CreateMap<CreateUserViewModel, UserIdentity>().ReverseMap();
+        CreateMap<UpdateUserViewModel, UserIdentity>().ReverseMap();
+        CreateMap<UserRolesViewModel, UserIdentity>().ReverseMap();
+        CreateMap<RoleDto, RoleIdentity>().ReverseMap();
     }
 }

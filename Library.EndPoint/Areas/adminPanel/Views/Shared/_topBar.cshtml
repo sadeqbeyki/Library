@@ -1,8 +1,8 @@
 ﻿@using LibIdentity.Domain.UserAgg;
 @using Microsoft.AspNetCore.Identity;
 @using System.Security.Claims;
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+@inject SignInManager<UserIdentity> SignInManager
+@inject UserManager<UserIdentity> UserManager
 @{
     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }

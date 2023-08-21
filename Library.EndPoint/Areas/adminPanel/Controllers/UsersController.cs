@@ -16,11 +16,11 @@ public class UsersController : Controller
     private readonly IUserService _userService;
     private readonly IRoleService _roleService;
 
-    private readonly UserManager<User> _userManager;
-    private readonly RoleManager<Role> _roleManager;
+    private readonly UserManager<UserIdentity> _userManager;
+    private readonly RoleManager<RoleIdentity> _roleManager;
 
     public UsersController(IUserService userService, IRoleService roleService,
-        RoleManager<Role> roleManager, UserManager<User> userManager)
+        RoleManager<RoleIdentity> roleManager, UserManager<UserIdentity> userManager)
     {
         _userService = userService;
         _roleService = roleService;
@@ -28,14 +28,14 @@ public class UsersController : Controller
         _userManager = userManager;
     }
 
-    public async Task<ActionResult<List<UserWithRolesViewModel>>> Index()
+    public async Task<ActionResult<List<UserRolesViewModel>>> Index()
     {
         var users = await _userService.GetAllUsers();
         return View(users);
     }
 
     [HttpGet]
-    public async Task<ActionResult<UserViewModel>> Details(int id)
+    public async Task<ActionResult<UpdateUserViewModel>> Details(int id)
     {
         var user = await _userService.GetUser(id);
         return View(user);
@@ -46,7 +46,7 @@ public class UsersController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Create(UserDto model)
+    public async Task<IActionResult> Create(CreateUserViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -82,7 +82,7 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult<UserViewModel>> Update(UserViewModel user)
+    public async Task<ActionResult<UpdateUserViewModel>> Update(UpdateUserViewModel user)
     {
         if (!ModelState.IsValid)
         {

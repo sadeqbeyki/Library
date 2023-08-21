@@ -5,7 +5,7 @@ namespace Library.EndPoint.Areas.adminPanel.Models;
 
 public class UserRoleViewModel
 {
-    public List<UserWithRolesViewModel> Users { get; set; }
+    public List<UserRolesViewModel> Users { get; set; }
     public List<RoleDto> Roles { get; set; }
 
     public int UserId { get; set; }

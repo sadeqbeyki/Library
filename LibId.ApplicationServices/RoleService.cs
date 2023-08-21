@@ -8,11 +8,11 @@ namespace LibIdentity.ApplicationServices;
 
 public class RoleService : IRoleService
 {
-    private readonly RoleManager<Role> _roleManager;
+    private readonly RoleManager<RoleIdentity> _roleManager;
 
     private readonly IMapper _mapper;
 
-    public RoleService(RoleManager<Role> roleManager, IMapper mapper)
+    public RoleService(RoleManager<RoleIdentity> roleManager, IMapper mapper)
     {
         _roleManager = roleManager;
         _mapper = mapper;
@@ -28,7 +28,7 @@ public class RoleService : IRoleService
     #region GetAll
     public async Task<List<RoleDto>> GetRoles()
     {
-        List<Role> roles = await _roleManager.Roles.Take(50).ToListAsync();
+        List<RoleIdentity> roles = await _roleManager.Roles.Take(50).ToListAsync();
         return _mapper.Map<List<RoleDto>>(roles);
     }
     #endregion
@@ -36,7 +36,7 @@ public class RoleService : IRoleService
     #region Create
     public async Task<IdentityResult> CreateRole(RoleDto model)
     {
-        var roleMap = _mapper.Map<Role>(model);
+        var roleMap = _mapper.Map<RoleIdentity>(model);
         return await _roleManager.CreateAsync(roleMap);
     }
     #endregion
@@ -55,7 +55,7 @@ public class RoleService : IRoleService
     public async Task<IdentityResult> DeleteRole(RoleDto dto)
     {
         var role = await _roleManager.FindByIdAsync(dto.Id.ToString());
-        var roleMap = _mapper.Map<Role>(role);
+        var roleMap = _mapper.Map<RoleIdentity>(role);
         return await _roleManager.DeleteAsync(roleMap);
     }
     #endregion

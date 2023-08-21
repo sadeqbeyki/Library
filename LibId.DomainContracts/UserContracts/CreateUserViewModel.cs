@@ -2,7 +2,7 @@
 
 namespace LibIdentity.DomainContracts.UserContracts;
 
-public class UserDto
+public class CreateUserViewModel
 {
     [Required]
     [MaxLength(50)]
@@ -15,16 +15,17 @@ public class UserDto
     [Required]
     [MaxLength(50)]
     public string UserName { get; set; }
-    [Required]
+    //[Required(ErrorMessage = "Email is required")]
+    [EmailAddress]
     [MaxLength(100)]
     public string Email { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Password is required")]
     [MaxLength(50)]
     [DataType(DataType.Password)]
     public string Password { get; set; }
 
-    [Compare("Password", ErrorMessage = "Passwords do not match.")]
+    [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; }
 

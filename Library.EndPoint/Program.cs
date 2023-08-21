@@ -34,7 +34,7 @@ InventoryConfigureServices.Configure(builder.Services, connectionString);
 #endregion
 
 #region Identity
-builder.Services.AddIdentity<User, Role>(i =>
+builder.Services.AddIdentity<UserIdentity, RoleIdentity>(i =>
 {
     i.SignIn.RequireConfirmedAccount = false;
     i.SignIn.RequireConfirmedEmail = true;
@@ -51,12 +51,12 @@ builder.Services.AddIdentity<User, Role>(i =>
     i.Password.RequiredLength = 6;
 }).AddEntityFrameworkStores<IdentityDbContext>();
 
-builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentityCore<UserIdentity>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<IdentityDbContext>()
-                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+                .AddTokenProvider<DataProtectorTokenProvider<UserIdentity>>(TokenOptions.DefaultProvider);
 
-builder.Services.AddScoped<IPasswordValidator<User>, LIPasswordValidator>();
-builder.Services.AddScoped<IUserValidator<User>, LIUserValidator>();
+builder.Services.AddScoped<IPasswordValidator<UserIdentity>, LIPasswordValidator>();
+builder.Services.AddScoped<IUserValidator<UserIdentity>, LIUserValidator>();
 builder.Services.AddTransient<IAuthHelper, AuthHelper>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();

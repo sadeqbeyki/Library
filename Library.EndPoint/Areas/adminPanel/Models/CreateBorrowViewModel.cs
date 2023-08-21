@@ -14,13 +14,13 @@ public class CreateBorrowViewModel
     public string ReturnEmployeeId { get; set; }
     public DateTime? ReturnDate { get; set; }
     public string Description { get; set; }
-    public List<UserViewModel> Members { get; set; }
+    public List<UpdateUserViewModel> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }
 
 public class UpdateBorrowViewModel
 {
     public BorrowDto Borrow { get; set; }
-    public List<UserViewModel> Members { get; set; }
+    public List<UpdateUserViewModel> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }

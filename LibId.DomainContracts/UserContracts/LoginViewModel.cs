@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace LibIdentity.DomainContracts.UserContracts;
 
-public class LoginDto
+public class LoginViewModel
 {
     [Required]
     [Display(Name = "User Name / Email ")]

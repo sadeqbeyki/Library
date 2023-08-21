@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 namespace LibIdentity.Infrastructure.Repositories
 {
     //Interface Phone Book Password Validator
-    public class LIPasswordValidator : PasswordValidator<User>
+    public class LIPasswordValidator : PasswordValidator<UserIdentity>
     {
         private readonly IdentityDbContext _userDbContext;
 
@@ -12,7 +12,7 @@ namespace LibIdentity.Infrastructure.Repositories
         {
             _userDbContext = userDbContext;
         }
-        public override Task<IdentityResult> ValidateAsync(UserManager<User> manager, User user, string password)
+        public override Task<IdentityResult> ValidateAsync(UserManager<UserIdentity> manager, UserIdentity user, string password)
         {
             var parentResult = base.ValidateAsync(manager, user, password).Result;
             List<IdentityError> errors = new();
