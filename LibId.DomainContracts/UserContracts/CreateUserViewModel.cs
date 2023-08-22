@@ -15,7 +15,7 @@ public class CreateUserViewModel
     [Required]
     [MaxLength(50)]
     public string UserName { get; set; }
-    //[Required(ErrorMessage = "Email is required")]
+    [Required(ErrorMessage = "Email is required")]
     [EmailAddress]
     [MaxLength(100)]
     public string Email { get; set; }

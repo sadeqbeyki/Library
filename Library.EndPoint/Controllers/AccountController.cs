@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using AppFramework.Application.Email;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Library.EndPoint.Controllers;
 
@@ -15,18 +19,21 @@ public class AccountController : Controller
     private readonly ILogger<LoginViewModel> _logger;
     private readonly IMapper _mapper;
     private readonly IEmailService _email;
+    private readonly IConfiguration _configuration;
 
     public AccountController(UserManager<UserIdentity> userManager,
         SignInManager<UserIdentity> signInManager,
         ILogger<LoginViewModel> logger,
         IMapper mapper,
-        IEmailService email)
+        IEmailService email,
+        IConfiguration configuration)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
         _mapper = mapper;
         _email = email;
+        _configuration = configuration;
     }
 
     public IActionResult Index()
@@ -55,6 +62,7 @@ public class AccountController : Controller
             ModelState.AddModelError("Email", "این ایمیل قبلا ثبت شده است");
             return View(model);
         }
+
         //string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
         var user = _mapper.Map<UserIdentity>(model);
         var result = _userManager.CreateAsync(user, model.Password).Result;
@@ -130,6 +138,8 @@ public class AccountController : Controller
             //{
             //    return BadRequest("wrong password!");
             //}
+            //string token = CreateToken(user);
+            //return View(token);
             if (user != null)
             {
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -142,6 +152,8 @@ public class AccountController : Controller
                 return View();
             }
         }
+
+
         return View(model);
     }
 
@@ -156,6 +168,25 @@ public class AccountController : Controller
         return View();
     }
 
+    private string CreateToken(UserIdentity user)
+    {
+        List<Claim> claims = new() { new Claim(ClaimTypes.Name, user.UserName) };
 
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            _configuration.GetSection("AppSettings:Token").Value!));
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+        var token = new JwtSecurityToken
+            (
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds
+            );
+
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return jwt;
+    }
 
 }
