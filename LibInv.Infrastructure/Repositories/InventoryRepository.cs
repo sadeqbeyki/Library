@@ -37,7 +37,7 @@ namespace LibInventory.Infrastructure.Repositories
 
         public List<InventoryOperationViewModel> GetOperationLog(int inventoryId)
         {
-            var accounts = _identityDbContext.Users.Select(x => new { x.Id, x.FirstName, x.LastName }).ToList();
+            var accounts = _identityDbContext.Users.Select(x => new { x.Id, FullName = x.FirstName +' '+ x.LastName }).ToList();
             var inventory = _inventoryDbContext.Inventory.FirstOrDefault(x => x.Id == inventoryId);
             var operations = inventory.Operations.Select(x => new InventoryOperationViewModel
             {
@@ -53,7 +53,7 @@ namespace LibInventory.Infrastructure.Repositories
 
             foreach (var operation in operations)
             {
-                operation.Operator = accounts.FirstOrDefault(x => x.Id.ToString() == operation.OperatorId)?.LastName;
+                operation.Operator = accounts.FirstOrDefault(x => x.Id.ToString() == operation.OperatorId)?.FullName;
             }
             return operations;
         }
