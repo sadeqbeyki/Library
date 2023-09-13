@@ -1,4 +1,5 @@
-﻿using LibBook.DomainContracts.Borrow;
+﻿using AutoMapper.Execution;
+using LibBook.DomainContracts.Borrow;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,29 @@ public class BorrowRepositoryDapper
         _bookDbContext = bookDbContext;
     }
 
+    public async Task<List<BorrowDto>> GetBorrowsByEmployeeId(string employeeId)
+    {
+        var parameters = new[] {
+                new SqlParameter("@EmployeeId", employeeId)
+            };
+        var borrows = await _bookDbContext.Borrows
+            .FromSqlRaw("EXEC GetBorrowsByEmployeeId @EmployeeId", parameters)
+            .ToListAsync();
+        List<BorrowDto> result = borrows.Select(b => new BorrowDto
+        {
+            Id = b.Id,
+            BookId = b.BookId,
+            MemberId = b.MemberID,
+            EmployeeId = b.EmployeeId,
+            BorrowDate = b.CreationDate,
+            IdealReturnDate = b.IdealReturnDate,
+            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnDate = b.ReturnDate,
+            Description = b.Description
+        }).ToList();
+
+        return result;
+    }
     public async Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId)
     {
         var parameters = new[] {

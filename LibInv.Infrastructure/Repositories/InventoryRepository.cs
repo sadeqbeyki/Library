@@ -25,12 +25,6 @@ namespace LibInventory.Infrastructure.Repositories
             return _inventoryDbContext.Inventory.FirstOrDefault(b => b.BookId == bookId);
         }
 
-        //public Inventory GetCount(int inventoryId)
-        //{
-        //    var inventory =  _inventoryDbContext.Inventory.Find(inventoryId);
-        //    return inventory;
-        //}
-
         public EditInventory GetDetails(int id)
         {
             return _inventoryDbContext.Inventory.Select(i => new EditInventory

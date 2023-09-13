@@ -17,9 +17,9 @@ public partial class BorrowRepository : Repository<Borrow, int>, IBorrowReposito
         _mapper = mapper;
     }
 
-    public async Task<List<BorrowDto>> GetBorrowsByEmployeeId(string EmployeeId)
+    public async Task<List<BorrowDto>> GetBorrowsByEmployeeId(string employeeId)
     {
-        var borrows = await _bookDbContext.Borrows.Where(x => x.EmployeeId == EmployeeId).ToListAsync();
+        var borrows = await _bookDbContext.Borrows.Where(x => x.EmployeeId == employeeId).ToListAsync();
         List<BorrowDto> result = borrows.Select(b => new BorrowDto
         {
             Id = b.Id,
