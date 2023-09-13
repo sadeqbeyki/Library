@@ -9,4 +9,5 @@ public interface IInventoryRepository : IRepository<Inventory, int>
     Inventory GetBy(int bookId);
     List<InventoryViewModel> Search(InventorySearchModel searchModel);
     List<InventoryOperationViewModel> GetOperationLog(int inventoryId);
+    //Inventory GetCount(int inventoryId);
 }

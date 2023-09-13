@@ -33,12 +33,26 @@ public class Inventory : BaseEntity
         Operations.Add(operation);
         InStock = currentCount > 0;
     }
+    //public void Decrease(long count, string operatorId, string description, int lendId)
+    //{
+    //    var currentCount = CalculateCurrentCount() - count;
+    //    var operation = new InventoryOperation(false, count, operatorId, currentCount, description, lendId, Id);
+    //    Operations.Add(operation);
+    //    InStock = currentCount > 0;
+    //}
+
     public void Decrease(long count, string operatorId, string description, int lendId)
     {
-        var currentCount = CalculateCurrentCount() - count;
-        var operation = new InventoryOperation(false, count, operatorId, currentCount, description, lendId, Id);
+        var currentCount = CalculateCurrentCount();
+
+        if (currentCount < count)
+        {
+            throw new InvalidOperationException("Count to decrease is greater than the current inventory count.");
+        }
+
+        var operation = new InventoryOperation(false, count, operatorId, currentCount - count, description, lendId, Id);
         Operations.Add(operation);
-        InStock = currentCount > 0;
+        InStock = (currentCount - count) > 0;
     }
 
     public void Return(long count, string operatorId, string description, long lendId)

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibInventory.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialInventory : Migration
+    public partial class inventoryInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,7 +38,7 @@ namespace LibInventory.Infrastructure.Migrations
                     OperatorId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OperationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CurrentCount = table.Column<long>(type: "bigint", nullable: false),
-                    Descriotion = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     LendId = table.Column<long>(type: "bigint", nullable: false),
                     InventoryId = table.Column<int>(type: "int", nullable: false)
                 },

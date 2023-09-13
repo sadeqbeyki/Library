@@ -25,6 +25,12 @@ namespace LibInventory.Infrastructure.Repositories
             return _inventoryDbContext.Inventory.FirstOrDefault(b => b.BookId == bookId);
         }
 
+        //public Inventory GetCount(int inventoryId)
+        //{
+        //    var inventory =  _inventoryDbContext.Inventory.Find(inventoryId);
+        //    return inventory;
+        //}
+
         public EditInventory GetDetails(int id)
         {
             return _inventoryDbContext.Inventory.Select(i => new EditInventory
@@ -37,7 +43,7 @@ namespace LibInventory.Infrastructure.Repositories
 
         public List<InventoryOperationViewModel> GetOperationLog(int inventoryId)
         {
-            var accounts = _identityDbContext.Users.Select(x => new { x.Id, FullName = x.FirstName +' '+ x.LastName }).ToList();
+            var accounts = _identityDbContext.Users.Select(x => new { x.Id, FullName = x.FirstName + ' ' + x.LastName }).ToList();
             var inventory = _inventoryDbContext.Inventory.FirstOrDefault(x => x.Id == inventoryId);
             var operations = inventory.Operations.Select(x => new InventoryOperationViewModel
             {

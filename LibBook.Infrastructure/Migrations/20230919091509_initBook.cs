@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibBook.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialBook : Migration
+    public partial class initBook : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,25 +62,6 @@ namespace LibBook.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lends",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MemberId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmployeeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdealReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReturnEmployeeId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Lends", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Publishers",
                 columns: table => new
                 {
@@ -133,28 +114,6 @@ namespace LibBook.Infrastructure.Migrations
                         name: "FK_Books_BookCategories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "BookCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LendItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false),
-                    LendId = table.Column<int>(type: "int", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LendItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_LendItems_Lends_LendId",
-                        column: x => x.LendId,
-                        principalTable: "Lends",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -242,11 +201,6 @@ namespace LibBook.Infrastructure.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LendItems_LendId",
-                table: "LendItems",
-                column: "LendId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PublisherBooks_PublisherBookId",
                 table: "PublisherBooks",
                 column: "PublisherBookId");
@@ -267,9 +221,6 @@ namespace LibBook.Infrastructure.Migrations
                 name: "Borrows");
 
             migrationBuilder.DropTable(
-                name: "LendItems");
-
-            migrationBuilder.DropTable(
                 name: "PublisherBooks");
 
             migrationBuilder.DropTable(
@@ -277,9 +228,6 @@ namespace LibBook.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Authors");
-
-            migrationBuilder.DropTable(
-                name: "Lends");
 
             migrationBuilder.DropTable(
                 name: "Publishers");

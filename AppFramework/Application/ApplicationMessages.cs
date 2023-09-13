@@ -6,5 +6,6 @@
         public const string RecordNotFound = "رکورد با اطلاعات فوق موجود نیست";
         public const string PasswordNotMatch = "گذرواژه ها با هم مطابقت ندارند";
         public const string WrongUserPass = "نام کاربری یا گذرواژه اشتباه است";
+        public const string MoreThanStock = "مقدار درخواستی از موجودی انبار بیشتر است";
     }
 }

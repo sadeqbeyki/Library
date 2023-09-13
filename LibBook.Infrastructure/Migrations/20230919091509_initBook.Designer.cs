@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibBook.Infrastructure.Migrations
 {
     [DbContext(typeof(BookDbContext))]
-    [Migration("20230727200321_initialBook")]
-    partial class initialBook
+    [Migration("20230919091509_initBook")]
+    partial class initBook
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -207,42 +207,6 @@ namespace LibBook.Infrastructure.Migrations
                     b.ToTable("Borrows", (string)null);
                 });
 
-            modelBuilder.Entity("LibBook.Domain.LendAgg.Lend", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("IdealReturnDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReturnEmployeeId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Lends", (string)null);
-                });
-
             modelBuilder.Entity("LibBook.Domain.PublisherAgg.Publisher", b =>
                 {
                     b.Property<int>("Id")
@@ -357,43 +321,6 @@ namespace LibBook.Infrastructure.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Translator");
-                });
-
-            modelBuilder.Entity("LibBook.Domain.LendAgg.Lend", b =>
-                {
-                    b.OwnsMany("LibBook.Domain.LendAgg.LendItem", "Items", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<int>("BookId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Count")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime>("CreationDate")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<int>("LendId")
-                                .HasColumnType("int");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("LendId");
-
-                            b1.ToTable("LendItems", (string)null);
-
-                            b1.WithOwner("Lend")
-                                .HasForeignKey("LendId");
-
-                            b1.Navigation("Lend");
-                        });
-
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("LibBook.Domain.AuthorAgg.Author", b =>

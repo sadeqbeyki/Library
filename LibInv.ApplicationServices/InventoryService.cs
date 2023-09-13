@@ -75,15 +75,24 @@ namespace LibInventory.ApplicationServices
         public async Task<OperationResult> Decrease(DecreaseInventory command)
         {
             var operation = new OperationResult();
+
             var inventory = await _inventoryRepository.GetByIdAsync(command.InventoryId);
             if (inventory == null)
                 return operation.Failed(ApplicationMessages.RecordNotFound);
 
-            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try
+            {
+                var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
 
             _inventoryRepository.SaveChanges();
             return operation.Succeeded();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // در صورتی که تعداد کاهش بیشتر از موجودی باشد، این قسمت اجرا می‌شود.
+                return operation.Failed(ex.Message);
+            }
         }
 
         public OperationResult Decrease(List<DecreaseInventory> command)
