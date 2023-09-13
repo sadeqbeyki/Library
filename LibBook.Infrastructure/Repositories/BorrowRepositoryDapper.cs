@@ -2,12 +2,14 @@
 using LibBook.DomainContracts.Borrow;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Security;
 
 namespace LibBook.Infrastructure.Repositories;
 
 public class BorrowRepositoryDapper
 {
     private readonly BookDbContext _bookDbContext;
+
 
     public BorrowRepositoryDapper(BookDbContext bookDbContext)
     {
@@ -62,6 +64,29 @@ public class BorrowRepositoryDapper
 
         return result;
     }
+
+    public async Task<List<BorrowDto>> GetOverdueBorrows()
+    {
+        var borrows = await _bookDbContext.Borrows.FromSqlRaw("EXEC GetOverdueBorrows").ToListAsync();
+
+        //var result = await _bookDbContext.Database.SqlQuery<BorrowDto>("EXEC GetOverdueBorrows").ToListAsync();
+
+        List<BorrowDto> result = borrows.Select(b => new BorrowDto
+        {
+            Id = b.Id,
+            BookId = b.BookId,
+            MemberId = b.MemberID,
+            EmployeeId = b.EmployeeId,
+            BorrowDate = b.CreationDate,
+            IdealReturnDate = b.IdealReturnDate,
+            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnDate = b.ReturnDate,
+            Description = b.Description
+        }).ToList();
+
+        return result;
+    }
+
 }
 
 
