@@ -8,8 +8,8 @@ public class AuthorBookConfig : IEntityTypeConfiguration<BookAuthor>
 {
     public void Configure(EntityTypeBuilder<BookAuthor> builder)
     {
+        builder.ToTable("BookAuthors");
         builder.HasKey(cs => new { cs.AuthorId, cs.AuthorBookId });
-        //builder.ToTable("AuthorBooks");
 
         builder.HasOne(cs => cs.Author)
             .WithMany(c => c.AuthorBooks)

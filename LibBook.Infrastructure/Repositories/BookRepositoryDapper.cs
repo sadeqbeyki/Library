@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibBook.Infrastructure.Repositories;
 
-public class BookRepository : Repository<Book, int>, IBookRepository
+public class BookRepositoryDapper : Repository<Book, int>, IBookRepository
 {
     private readonly BookDbContext _bookDbContext;
-    public BookRepository(BookDbContext dbContext, BookDbContext bookDbContext) : base(dbContext)
+    public BookRepositoryDapper(BookDbContext dbContext, BookDbContext bookDbContext) : base(dbContext)
     {
         _bookDbContext = bookDbContext;
     }

@@ -10,4 +10,6 @@ public interface IBookRepository : IRepository<Book, int>
     //Inventory GetBy(long productId);
     //List<InventoryViewModel> Search(InventorySearchModel searchModel);
     //List<InventoryOperationViewModel> GetOperationLog(long inventoryId);
+
+    //Task<BookViewModel> GetBookById(int id);
 }
