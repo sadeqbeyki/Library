@@ -9,6 +9,8 @@ namespace LibBook.Domain.AuthorAgg
         Task<List<Book>> GetAuthorBooks(int id);
         Task<List<AuthorDto>> GetAuthors();
 
+        Task<Author> GetByName(string name);
+
 
     }
 }

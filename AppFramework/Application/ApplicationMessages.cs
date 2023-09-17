@@ -7,5 +7,6 @@
         public const string PasswordNotMatch = "گذرواژه ها با هم مطابقت ندارند";
         public const string WrongUserPass = "نام کاربری یا گذرواژه اشتباه است";
         public const string MoreThanStock = "مقدار درخواستی از موجودی انبار بیشتر است";
+        public const string ProblemFound = "عملیات ایجاد با مشکل مواجه شد";
     }
 }

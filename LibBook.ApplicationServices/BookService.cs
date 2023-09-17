@@ -1,4 +1,5 @@
 ﻿using AppFramework.Application;
+using LibBook.Domain;
 using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
 using LibBook.DomainContracts.Book;
@@ -9,12 +10,13 @@ namespace LibBook.ApplicationServices;
 public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
+    private readonly IAuthorRepository _authorRepository;
 
     public BookService(IBookRepository bookRepository)
     {
         _bookRepository = bookRepository;
     }
-
+    #region Create
     public async Task<OperationResult> Create(BookDto dto)
     {
         OperationResult operationResult = new();
@@ -27,6 +29,11 @@ public class BookService : IBookService
         return operationResult.Succeeded();
     }
 
+    
+
+    #endregion
+
+    #region Read
     //public Task<List<BookViewModel>> GetAll()
     //{
     //    var result = _bookRepository.GetAll()
@@ -49,6 +56,11 @@ public class BookService : IBookService
 
     //    return Task.FromResult(result);
     //}
+
+    public async Task<List<BookViewModel>> GetBooks()
+    {
+        return await _bookRepository.GetBooks();
+    }
 
     public async Task<List<BookViewModel>> GetAllBooks()
     {
@@ -79,7 +91,6 @@ public class BookService : IBookService
         return result;
     }
 
-
     public async Task<BookViewModel> GetById(int id)
     {
         var result = await _bookRepository.GetByIdAsync(id);
@@ -97,15 +108,9 @@ public class BookService : IBookService
         };
         return dto;
     }
+    #endregion
 
-
-
-    public async Task Delete(int id)
-    {
-        var result = await _bookRepository.GetByIdAsync(id);
-        await _bookRepository.DeleteAsync(result);
-    }
-
+    #region Update
     public async Task<OperationResult> Update(BookViewModel dto)
     {
         OperationResult operationResult = new();
@@ -121,9 +126,14 @@ public class BookService : IBookService
         await _bookRepository.UpdateAsync(book);
         return operationResult.Succeeded();
     }
+    #endregion
 
-    public async Task<List<BookViewModel>> GetBooks()
+    #region Delete
+    public async Task Delete(int id)
     {
-        return await _bookRepository.GetBooks();
+        var result = await _bookRepository.GetByIdAsync(id);
+        await _bookRepository.DeleteAsync(result);
     }
+    #endregion
+
 }

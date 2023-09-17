@@ -28,4 +28,9 @@ public class AuthorRepository : Repository<Author, int>, IAuthorRepository
             Name = x.Name
         }).ToListAsync();
     }
+
+    public async Task<Author> GetByName(string name)
+    {
+        return await _dbContext.Authors.FirstOrDefaultAsync(x => x.Name == name);
+    }
 }
