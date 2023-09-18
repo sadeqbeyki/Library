@@ -29,7 +29,53 @@ public class BookService : IBookService
         return operationResult.Succeeded();
     }
 
-    
+    public async Task<OperationResult> CreateBook(BookDto bookDto)
+    {
+        OperationResult operationResult = new();
+
+        // is repeated ?
+        if (_bookRepository.Exists(x => x.Title == bookDto.Title))
+        {
+            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
+        }
+
+        // 2. ایجاد نمونه کتاب با استفاده از اطلاعات از کلاس BookDto
+        Book book = new(
+            title: bookDto.Title,
+            iSBN: bookDto.ISBN,
+            code: bookDto.Code,
+            description: bookDto.Description,
+            categoryId: bookDto.CategoryId,
+            authorId: bookDto.AuthorId,
+            publisherId: bookDto.PublisherId,
+            translatorId: bookDto.TranslatorId
+        );
+
+        // 3. افزودن نویسندگان به کتاب (اگر لیست نویسندگان موجود باشد)
+        if (bookDto.Authors != null && bookDto.Authors.Any())
+        {
+            foreach (var authorName in bookDto.Authors)
+            {
+                var author = await _authorRepository.GetByName(authorName);
+                if (author != null)
+                {
+                    book.BookAuthors.Add(new BookAuthor { Author = author });
+                }
+                // اگر نویسنده با نام داده شده در دیتابیس پیدا نشود، می‌توانید بر اساس نیاز اقدامات دیگری انجام دهید.
+                // در اینجا فرض شده است که نام نویسنده وجود دارد.
+            }
+        }
+
+        // 4. ذخیره کتاب در دیتابیس
+        var result = await _bookRepository.CreateAsync(book);
+
+        if (result == null)
+        {
+            return operationResult.Failed(ApplicationMessages.ProblemFound);
+        }
+
+        return operationResult.Succeeded();
+    }
 
     #endregion
 
