@@ -29,6 +29,7 @@ public class BooksController : Controller
         _publisherService = publisherService;
         _translatorService = translatorService;
     }
+    #region Get
     [HttpGet]
     public async Task<ActionResult<List<BookViewModel>>> Index()
     {
@@ -43,6 +44,8 @@ public class BooksController : Controller
             return NotFound();
         return View(result);
     }
+    #endregion
+    #region Create
     [HttpGet]
     public async Task<ActionResult<BookDto>> Create()
     {
@@ -65,6 +68,38 @@ public class BooksController : Controller
         var result = await _bookService.Create(dto);
         return RedirectToAction("Index", result);
     }
+
+
+    public IActionResult CreateBook()
+    {
+        var model = new BookCreateViewModel(); // جایگزین BookCreateViewModel با مدل ویو شما
+        // اینجا ممکن است شما اطلاعات مورد نیاز برای ویو خود را از دیتابیس یا سایر منابع دریافت کنید و به مدل ویو منتقل کنید.
+        return View(model);
+    }
+    [HttpPost]
+    public IActionResult CreateBook(BookDto model)
+    {
+        if (ModelState.IsValid)
+        {
+            // اجرای متد CreateBook از سرویس شما با استفاده از مدل ویو و ذخیره کتاب
+            var result = _bookService.CreateBook(model);
+            if (result.IsCompleted)
+            {
+                // در صورت موفقیت، می‌توانید به صفحه مورد نظر انتقال دهید.
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "خطا در ایجاد کتاب.");
+            }
+        }
+
+        // اگر مدل نامعتبر بود یا عملیات ایجاد ناموفق بود، ویو فرم را دوباره نشان دهید.
+        return View(model);
+    }
+    #endregion
+
+    #region Update
     [HttpGet]
     public async Task<ActionResult<BookViewModel>> Update(int id)
     {
@@ -85,6 +120,9 @@ public class BooksController : Controller
         var result = await _bookService.Update(model.Book);
         return RedirectToAction("Index", result);
     }
+    #endregion
+
+    #region Delete
     [HttpGet]
     public async Task<ActionResult<BookViewModel>> Delete(int id)
     {
@@ -100,4 +138,7 @@ public class BooksController : Controller
         await _bookService.Delete(id);
         return RedirectToAction("Index");
     }
+    #endregion
+
+
 }

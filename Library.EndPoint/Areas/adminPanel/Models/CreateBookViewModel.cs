@@ -23,3 +23,4 @@ public class CreateBookViewModel
     public List<TranslatorDto> Translators { get; set; } = new List<TranslatorDto>();
 
 }
+
