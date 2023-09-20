@@ -1,0 +1,75 @@
+﻿@model LibBook.DomainContracts.Book.BookCreateViewModel
+
+@{
+    ViewData["Title"] = "Create ++";
+}
+
+<h1 class="bg-info text-white">@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-6">
+
+
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="Title">عنوان کتاب:</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ISBN">شابک:</label>
+                <input asp-for="ISBN" class="form-control" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Code">کد:</label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">توضیحات:</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryId">دسته بندی:</label>
+                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>نویسندگان:</label>
+                @for (var i = 0; i < Model.Authors.Count; i++)
+                {
+                    <input type="text" name="Authors[@i]" value="@Model.Authors[i]" class="form-control" />
+                }
+                <span asp-validation-for="Authors" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>انتشارات:</label>
+                @for (var i = 0; i < Model.Publishers.Count; i++)
+                {
+                    <input type="text" name="Publishers[@i]" value="@Model.Publishers[i]" class="form-control" />
+                }
+                <span asp-validation-for="Publishers" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>مترجمان:</label>
+                @for (var i = 0; i < Model.Translators.Count; i++)
+                {
+                    <input type="text" name="Translators[@i]" value="@Model.Translators[i]" class="form-control" />
+                }
+                <span asp-validation-for="Translators" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">ذخیره</button>
+        </form>
+
+        <a asp-action="Index">بازگشت به لیست کتب</a>
+    </div>
+</div>
