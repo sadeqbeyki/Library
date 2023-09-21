@@ -6,27 +6,19 @@ public class BookCreateViewModel
 {
     [Required(ErrorMessage = "فیلد عنوان کتاب اجباری است.")]
     public string Title { get; set; }
-
     [Required(ErrorMessage = "فیلد شابک اجباری است.")]
     public string ISBN { get; set; }
-
     [Required(ErrorMessage = "فیلد کد اجباری است.")]
     public string Code { get; set; }
-
     public string Description { get; set; }
 
     [Required(ErrorMessage = "فیلد دسته بندی اجباری است.")]
-
     public int CategoryId { get; set; }
-    public string Category { get; set; }
+    //public string Category { get; set; }
 
-    // لیست نویسندگان
+    public List<string> Categories { get; set; }
     public List<string> Authors { get; set; }
-
-    // لیست انتشارات
     public List<string> Publishers { get; set; }
-
-    // لیست مترجمان
     public List<string> Translators { get; set; }
 
     // سایر فیلدها (اگر وجود دارد) را نیز به مدل ویو اضافه کنید

@@ -70,10 +70,18 @@ public class BooksController : Controller
     }
 
 
-    public IActionResult CreateBook()
+    public async Task<ActionResult<BookDto>> CreateBook()
     {
-        var model = new BookCreateViewModel(); // جایگزین BookCreateViewModel با مدل ویو شما
+        //var model = new BookCreateViewModel();
         // اینجا ممکن است شما اطلاعات مورد نیاز برای ویو خود را از دیتابیس یا سایر منابع دریافت کنید و به مدل ویو منتقل کنید.
+        var model = new BookCreateViewModel
+        {
+            Categories = (await _bookCategoryService.GetCategories()).Select(category => category.Name).ToList(),
+            Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
+            Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
+            Translators = (await _translatorService.GetTranslators()).Select(translator => translator.Name).ToList()
+        };
+
         return View(model);
     }
     [HttpPost]

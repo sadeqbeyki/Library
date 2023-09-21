@@ -1,4 +1,5 @@
-﻿@model LibBook.DomainContracts.Book.BookCreateViewModel
+﻿@* @model Library.EndPoint.Areas.adminPanel.Models.CreateBookViewModel *@
+@model LibBook.DomainContracts.Book.BookCreateViewModel
 
 @{
     ViewData["Title"] = "Create ++";
@@ -11,65 +12,152 @@
 
         <form asp-action="Create" method="post">
             <div class="form-group">
-                <label asp-for="Title">عنوان کتاب:</label>
+                <label asp-for="Title">Book Title:</label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="ISBN">شابک:</label>
+                <label asp-for="ISBN">ISBN:</label>
                 <input asp-for="ISBN" class="form-control" />
                 <span asp-validation-for="ISBN" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Code">کد:</label>
+                <label asp-for="Code">Code:</label>
                 <input asp-for="Code" class="form-control" />
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Description">توضیحات:</label>
+                <label asp-for="Description">Description:</label>
                 <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="CategoryId">دسته بندی:</label>
-                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="CategoryId">Choose a Category:</label>
+                        <select class="form-control" asp-for="CategoryId"
+                                asp-items='new SelectList(Model.Categories,"Name")'>
+                            <option value="">Select Category</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
-                <label>نویسندگان:</label>
-                @for (var i = 0; i < Model.Authors.Count; i++)
-                {
-                    <input type="text" name="Authors[@i]" value="@Model.Authors[i]" class="form-control" />
-                }
-                <span asp-validation-for="Authors" class="text-danger"></span>
+                <label type="text" class="control-label">Authors:</label>
+                <select class="form-control" id="authorInput" asp-items='new SelectList(Model.Authors,"Name")'>
+                    <option value="">Select Author</option>
+                </select>
+                <button type="button" id="addAuthorButton" class="btn btn-primary">Add</button>
+                <ul id="selectedAuthorsList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicateAuthorError" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label>انتشارات:</label>
-                @for (var i = 0; i < Model.Publishers.Count; i++)
-                {
-                    <input type="text" name="Publishers[@i]" value="@Model.Publishers[i]" class="form-control" />
-                }
-                <span asp-validation-for="Publishers" class="text-danger"></span>
+                <label type="text" class="control-label">Publishers:</label>
+                <select class="form-control" id="publisherInput" asp-items='new SelectList(Model.Publishers,"Name")'>
+                    <option value="">Select Publisher</option>
+                </select>
+                <button type="button" id="addPublisherButton" class="btn btn-primary">Add</button>
+                <ul id="selectedPublishersList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicatePublisherError" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label>مترجمان:</label>
-                @for (var i = 0; i < Model.Translators.Count; i++)
-                {
-                    <input type="text" name="Translators[@i]" value="@Model.Translators[i]" class="form-control" />
-                }
-                <span asp-validation-for="Translators" class="text-danger"></span>
+                <label type="text" class="control-label">Translators:</label>
+                <select class="form-control" id="translatorInput" asp-items='new SelectList(Model.Translators,"Name")'>
+                    <option value="">Select Translator</option>
+                </select>
+                <button type="button" id="addTranslatorButton" class="btn btn-primary">Add</button>
+                <ul id="selectedTranslatorsList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicateTranslatorError" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary">ذخیره</button>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-secondary" asp-action="Index">Back To Book List</a>
         </form>
-
-        <a asp-action="Index">بازگشت به لیست کتب</a>
     </div>
 </div>
+
+
+
+<script>
+    // save selected list
+    var selectedAuthors = [];
+    var selectedTranslators = [];
+    var selectedPublishers = [];
+
+    function initializeSelectionLists() {
+        selectedAuthors = [];
+        selectedTranslators = [];
+        selectedPublishers = [];
+    }
+
+    // Is Repeated ??
+    function isDuplicate(itemName, selectedItemList) {
+        return selectedItemList.includes(itemName);
+    } 
+
+    // add to selectedItemList
+    function addToSelectedList(inputId, listId, errorId, selectedItemList) {
+        var input = document.getElementById(inputId);
+        var inputValue = input.value.trim();
+
+        if (inputValue !== "") {
+            if (!isDuplicate(inputValue, selectedItemList)) {
+                var selectedList = document.getElementById(listId);
+                var listItem = document.createElement("li");
+                listItem.className = "list-group-item";
+                listItem.textContent = inputValue;
+
+                // Add deleted button to items
+                var removeButton = document.createElement("button");
+                removeButton.className = "btn btn-danger btn-sm float-left";
+                removeButton.textContent = "Delete";
+                removeButton.onclick = function () {
+                    selectedItemList = selectedItemList.filter(function (item) {
+                        return item !== inputValue;
+                    });
+                    selectedList.removeChild(listItem);
+                };
+                listItem.appendChild(removeButton);
+
+                selectedItemList.push(inputValue); // add item to selectedItemList
+                selectedList.appendChild(listItem);
+                input.value = ""; // clear input
+                document.getElementById(errorId).textContent = ""; // clear warn
+            } else {
+                document.getElementById(errorId).textContent = "Is Repeated.";
+            }
+        }
+    }
+
+    // add selected author
+        document.getElementById("addAuthorButton").addEventListener("click", function () {
+        addToSelectedList("authorInput", "selectedAuthorsList", "duplicateAuthorError", selectedAuthors);
+    });
+    // add selected Translator
+    document.getElementById("addTranslatorButton").addEventListener("click", function () {
+        addToSelectedList("translatorInput", "selectedTranslatorsList", "duplicateTranslatorError", selectedTranslators);
+    });
+
+    // add selected Publisher 
+    document.getElementById("addPublisherButton").addEventListener("click", function () {
+        addToSelectedList("publisherInput", "selectedPublishersList", "duplicatePublisherError", selectedPublishers);
+    });
+
+</script>
+
+
