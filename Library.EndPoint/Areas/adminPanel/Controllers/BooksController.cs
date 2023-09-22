@@ -1,4 +1,5 @@
 ﻿using AppFramework.Infrastructure;
+using LibBook.Domain.AuthorAgg;
 using LibBook.DomainContracts.Author;
 using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.BookCategory;
@@ -70,13 +71,12 @@ public class BooksController : Controller
     }
 
 
-    public async Task<ActionResult<BookDto>> CreateBook()
+    public async Task<ActionResult<CreateBookDto>> CreateBook()
     {
-        //var model = new BookCreateViewModel();
-        // اینجا ممکن است شما اطلاعات مورد نیاز برای ویو خود را از دیتابیس یا سایر منابع دریافت کنید و به مدل ویو منتقل کنید.
         var model = new BookCreateViewModel
         {
-            Categories = (await _bookCategoryService.GetCategories()).Select(category => category.Name).ToList(),
+            //Categories = (await _bookCategoryService.GetCategories()).Select(category => category.Name).ToList(),
+            BookCategories = await _bookCategoryService.GetCategories(),
             Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
             Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
             Translators = (await _translatorService.GetTranslators()).Select(translator => translator.Name).ToList()
@@ -85,15 +85,26 @@ public class BooksController : Controller
         return View(model);
     }
     [HttpPost]
-    public IActionResult CreateBook(BookDto model)
+    public async Task<ActionResult> CreateBook(CreateBookDto model)
     {
+        // بازیابی مقادیر ارسالی از Request.Form
+        var selectedAuthors = Request.Form["SelectedAuthors"].ToString();
+        var selectedPublishers = Request.Form["SelectedPublishers"].ToString();
+        var selectedTranslators = Request.Form["SelectedTranslators"].ToString();
+
+        // اکنون شما می‌توانید از این مقادیر در ادامه اکشن استفاده کنید.
+
+        // تبدیل مقادیر رشته‌ای به لیست
+        //model.CategoryId = CategoryId;
+        model.Authors = selectedAuthors.Split(',').ToList();
+        model.Publishers = selectedPublishers.Split(',').ToList();
+        model.Translators = selectedTranslators.Split(',').ToList();
+
         if (ModelState.IsValid)
         {
-            // اجرای متد CreateBook از سرویس شما با استفاده از مدل ویو و ذخیره کتاب
-            var result = _bookService.CreateBook(model);
-            if (result.IsCompleted)
+            var result = await _bookService.CreateBook(model);
+            if (result.IsSucceeded)
             {
-                // در صورت موفقیت، می‌توانید به صفحه مورد نظر انتقال دهید.
                 return RedirectToAction("Index");
             }
             else
@@ -101,8 +112,6 @@ public class BooksController : Controller
                 ModelState.AddModelError(string.Empty, "خطا در ایجاد کتاب.");
             }
         }
-
-        // اگر مدل نامعتبر بود یا عملیات ایجاد ناموفق بود، ویو فرم را دوباره نشان دهید.
         return View(model);
     }
     #endregion

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LibBook.DomainContracts.BookCategory;
+using System.ComponentModel.DataAnnotations;
 
-namespace LibBook.DomainContracts.Book;
+namespace Library.EndPoint.Areas.adminPanel.Models;
 
 public class BookCreateViewModel
 {
@@ -16,7 +17,8 @@ public class BookCreateViewModel
     public int CategoryId { get; set; }
     //public string Category { get; set; }
 
-    public List<string> Categories { get; set; }
+    public List<BookCategoryDto> BookCategories { get; set; }
+    //public List<string> Categories { get; set; }
     public List<string> Authors { get; set; }
     public List<string> Publishers { get; set; }
     public List<string> Translators { get; set; }

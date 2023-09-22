@@ -29,7 +29,7 @@ public class BookService : IBookService
         return operationResult.Succeeded();
     }
 
-    public async Task<OperationResult> CreateBook(BookDto bookDto)
+    public async Task<OperationResult> CreateBook(CreateBookDto bookDto)
     {
         OperationResult operationResult = new();
 
@@ -46,10 +46,11 @@ public class BookService : IBookService
             code: bookDto.Code,
             description: bookDto.Description,
             categoryId: bookDto.CategoryId,
-            authorId: bookDto.AuthorId,
-            publisherId: bookDto.PublisherId,
-            translatorId: bookDto.TranslatorId
-        );
+            category:bookDto.Category
+            //authors: bookDto.Authors,
+            //publishers: bookDto.Publishers,
+            //translators: bookDto.Translators
+       );
 
         // 3. افزودن نویسندگان به کتاب (اگر لیست نویسندگان موجود باشد)
         if (bookDto.Authors != null && bookDto.Authors.Any())

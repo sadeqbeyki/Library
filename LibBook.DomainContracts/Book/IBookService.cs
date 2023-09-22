@@ -9,7 +9,7 @@ public interface IBookService
     Task<List<BookViewModel>> GetBooks();
     Task<List<BookViewModel>> GetAllBooks();
     Task<OperationResult> Create(BookDto dto);
-    Task<OperationResult> CreateBook(BookDto bookDto);
+    Task<OperationResult> CreateBook(CreateBookDto bookDto);
 
     Task Delete(int id);
     Task<OperationResult> Update(BookViewModel dto);
