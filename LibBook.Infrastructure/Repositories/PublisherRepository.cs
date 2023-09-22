@@ -13,6 +13,11 @@ public class PublisherRepository : Repository<Publisher, int>, IPublisherReposit
         _dbContext = bookDbContext;
     }
 
+    public async Task<Publisher> GetByName(string name)
+    {
+        return await _dbContext.Publishers.FirstOrDefaultAsync(x => x.Name == name);
+    }
+
     public async Task<List<PublisherDto>> GetPublishers()
     {
 

@@ -13,6 +13,7 @@ namespace LibBook.Infrastructure.Repositories
         {
             _dbContext = dbContext;
         }
+
         public async Task<List<Book>> GetTranslatorBooks(int id)
         {
             List<Book> books = await _dbContext.Books.Where(b => b.TranslatorId == id).ToListAsync();
@@ -26,6 +27,11 @@ namespace LibBook.Infrastructure.Repositories
                 Id = x.Id,
                 Name = x.Name
             }).ToListAsync();
+        }
+
+        public async Task<Translator> GetByName(string name)
+        {
+            return await _dbContext.Translators.FirstOrDefaultAsync(x => x.Name == name);
         }
     }
 }
