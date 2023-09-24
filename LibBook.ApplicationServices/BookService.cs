@@ -17,42 +17,25 @@ public class BookService : IBookService
         _bookRepository = bookRepository;
     }
     #region Create
-    public async Task<OperationResult> Create(BookDto dto)
-    {
-        OperationResult operationResult = new();
-        if (_bookRepository.Exists(x => x.Title == dto.Title))
-            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
-
-        Book book = new(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId, dto.AuthorId, dto.PublisherId, dto.TranslatorId);
-        var result = await _bookRepository.CreateAsync(book);
-
-        return operationResult.Succeeded();
-    }
-
-    public async Task<OperationResult> CreateBook(CreateBookDto bookDto)
+    public async Task<OperationResult> Create(CreateBookDto bookDto)
     {
         OperationResult operationResult = new();
 
-        // is repeated ?
+        // chk duplicate
         if (_bookRepository.Exists(x => x.Title == bookDto.Title))
         {
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
         }
 
-        // 2. ایجاد نمونه کتاب با استفاده از اطلاعات از کلاس BookDto
+        // 2. add new book
         Book book = new(
             title: bookDto.Title,
             iSBN: bookDto.ISBN,
             code: bookDto.Code,
             description: bookDto.Description,
-            categoryId: bookDto.CategoryId,
-            category:bookDto.Category
-            //authors: bookDto.Authors,
-            //publishers: bookDto.Publishers,
-            //translators: bookDto.Translators
-       );
+            categoryId: bookDto.CategoryId);
 
-        // 3. افزودن نویسندگان به کتاب (اگر لیست نویسندگان موجود باشد)
+        // 3. add authors
         if (bookDto.Authors != null && bookDto.Authors.Any())
         {
             foreach (var authorName in bookDto.Authors)
@@ -62,12 +45,11 @@ public class BookService : IBookService
                 {
                     book.BookAuthors.Add(new BookAuthor { Author = author });
                 }
-                // اگر نویسنده با نام داده شده در دیتابیس پیدا نشود، می‌توانید بر اساس نیاز اقدامات دیگری انجام دهید.
-                // در اینجا فرض شده است که نام نویسنده وجود دارد.
+                //else
             }
         }
 
-        // 4. ذخیره کتاب در دیتابیس
+        // 4. save in db
         var result = await _bookRepository.CreateAsync(book);
 
         if (result == null)
@@ -168,7 +150,7 @@ public class BookService : IBookService
         if (_bookRepository.Exists(x => x.Title == dto.Title && x.Id != dto.Id))
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId, dto.AuthorId, dto.PublisherId, dto.TranslatorId);
+        book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId);
 
         await _bookRepository.UpdateAsync(book);
         return operationResult.Succeeded();

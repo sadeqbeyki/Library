@@ -1,97 +1,113 @@
 ﻿@using Library.EndPoint.Areas.adminPanel.Models;
-@model CreateBookViewModel
+@model BookCreateViewModel
+
 @{
-    ViewData["Title"] = "Create Book";
+    ViewData["Title"] = "Create ++";
 }
 
 <h1 class="bg-info text-white">@ViewData["Title"]</h1>
+
+
 <div class="row">
     <div class="col-md-6">
+        <form asp-action="CreateBook" method="post">
 
-        <form asp-action="Create" method="post">
-            <div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="CategoryId" class="control-label">Choose a Category</label>
-                            <select class="form-control" asp-for="CategoryId"
-                                    asp-items='new SelectList(Model.BookCategories, "Id", "Name")'>
-                                <option value="">Select Category</option>
-                            </select>
-                            <span asp-validation-for="CategoryId" class="error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="AuthorId" class="control-label">Choose Author</label>
-                            <select class="form-control" asp-for="AuthorId"
-                                    asp-items='new SelectList(Model.Authors, "Id", "Name")'>
-                                <option value="">Select Category</option>
-                            </select>
-                            <span asp-validation-for="AuthorId" class="error"></span>
-                        </div>
-                    </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Title">Book Title:</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="TranslatorId" class="control-label">Choose Translator</label>
-                            <select class="form-control" asp-for="TranslatorId"
-                                    asp-items='new SelectList(Model.Translators, "Id", "Name")'>
-                                <option value="">Select Category</option>
-                            </select>
-                            <span asp-validation-for="TranslatorId" class="error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="PublisherId" class="control-label">Choose Publisher</label>
-                            <select class="form-control" asp-for="PublisherId"
-                                    asp-items='new SelectList(Model.Publishers, "Id", "Name")'>
-                                <option value="">Select Category</option>
-                            </select>
-                            <span asp-validation-for="PublisherId" class="error"></span>
-                        </div>
-                    </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ISBN">ISBN:</label>
+                    <input asp-for="ISBN" class="form-control" />
+                    <span asp-validation-for="ISBN" class="text-danger"></span>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="Title" class="control-label">Title</label>
-                            <input type="text" class="form-control" asp-for="Title" required>
-                            <span asp-validation-for="Title" class="error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="ISBN" class="control-label">ISBN</label>
-                            <input type="text" class="form-control" asp-for="ISBN" required>
-                            <span asp-validation-for="ISBN" class="error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="Code" class="control-label">Code</label>
-                            <input type="text" class="form-control" asp-for="Code" required>
-                            <span asp-validation-for="Code" class="error"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group no-margin">
-                                <label asp-for="Description" class="control-label">Description</label>
-                                <textarea class="form-control autogrow" asp-for="Description"
-                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;" required></textarea>
-                                <span asp-validation-for="Description" class="error"></span>
-                            </div>
-                        </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Code">Code:</label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Description">Description:</label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            <div>
-                <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
-                <button type="submit" class="btn btn-info waves-effect waves-light">Create</button>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="control-label">Choose a Category</label>
+                        <select class="form-control" asp-for="CategoryId"
+                                asp-items='new SelectList(Model.BookCategories, "Id", "Name")'>
+                            <option value="">Select Category</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="CategoryId" class="error"></span>
+                    </div>
+                </div>
             </div>
+
+            <div class="form-group">
+                <label type="text" class="control-label">Authors:</label>
+                <select class="form-control" id="authorInput" asp-items='new SelectList(Model.Authors,"Name")'>
+                    <option value="">Select Author</option>
+                </select>
+                <button type="button" id="addAuthorButton" class="btn btn-primary">Add</button>
+                <ul id="selectedAuthorsList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicateAuthorError" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label type="text" class="control-label">Publishers:</label>
+                <select class="form-control" id="publisherInput" asp-items='new SelectList(Model.Publishers,"Name")'>
+                    <option value="">Select Publisher</option>
+                </select>
+                <button type="button" id="addPublisherButton" class="btn btn-primary">Add</button>
+                <ul id="selectedPublishersList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicatePublisherError" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label type="text" class="control-label">Translators:</label>
+                <select class="form-control" id="translatorInput" asp-items='new SelectList(Model.Translators,"Name")'>
+                    <option value="">Select Translator</option>
+                </select>
+                <button type="button" id="addTranslatorButton" class="btn btn-primary">Add</button>
+                <ul id="selectedTranslatorsList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicateTranslatorError" class="text-danger"></span>
+            </div>
+
+            @* <input type="hidden" name="CategoryId" value="@Model.CategoryId" /> *@
+
+            <input type="hidden" name="SelectedAuthors" id="SelectedAuthors" />
+            <input type="hidden" name="SelectedPublishers" id="SelectedPublishers" />
+            <input type="hidden" name="SelectedTranslators" id="SelectedTranslators" />
+
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-secondary" asp-action="Index">Back To Book List</a>
         </form>
     </div>
 </div>
+
+
+<script src="~/APTheme/js/CreateBook.js"></script>
+
+
+

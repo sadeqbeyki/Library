@@ -8,6 +8,7 @@ using LibBook.DomainContracts.Translator;
 using Library.EndPoint.Areas.adminPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
@@ -46,36 +47,12 @@ public class BooksController : Controller
         return View(result);
     }
     #endregion
+
     #region Create
-    [HttpGet]
-    public async Task<ActionResult<BookDto>> Create()
-    {
-        var command = new CreateBookViewModel
-        {
-            BookCategories = await _bookCategoryService.GetCategories(),
-            Authors = await _authorService.GetAuthors(),
-            Publishers = await _publisherService.GetPublishers(),
-            Translators = await _translatorService.GetTranslators()
-        };
-        return View("Create", command);
-    }
-    [HttpPost]
-    public async Task<ActionResult> Create(BookDto dto)
-    {
-        //if (!ModelState.IsValid)
-        //{
-        //    return View();
-        //}
-        var result = await _bookService.Create(dto);
-        return RedirectToAction("Index", result);
-    }
-
-
-    public async Task<ActionResult<CreateBookDto>> CreateBook()
+    public async Task<ActionResult<CreateBookDto>> Create()
     {
         var model = new BookCreateViewModel
         {
-            //Categories = (await _bookCategoryService.GetCategories()).Select(category => category.Name).ToList(),
             BookCategories = await _bookCategoryService.GetCategories(),
             Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
             Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
@@ -85,7 +62,7 @@ public class BooksController : Controller
         return View(model);
     }
     [HttpPost]
-    public async Task<ActionResult> CreateBook(CreateBookDto model)
+    public async Task<ActionResult> Create(CreateBookDto model)
     {
         // بازیابی مقادیر ارسالی از Request.Form
         var selectedAuthors = Request.Form["SelectedAuthors"].ToString();
@@ -102,10 +79,10 @@ public class BooksController : Controller
 
         if (ModelState.IsValid)
         {
-            var result = await _bookService.CreateBook(model);
+            var result = await _bookService.Create(model);
             if (result.IsSucceeded)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", result);
             }
             else
             {
