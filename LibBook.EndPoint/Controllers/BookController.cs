@@ -32,7 +32,7 @@ namespace LMS.EndPoint.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] BookDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateBookViewModel dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

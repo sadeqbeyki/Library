@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="CreateBook" method="post">
+        <form asp-action="Create" method="post">
 
             <div class="col-md-12">
                 <div class="form-group">
@@ -63,7 +63,7 @@
                     <option value="">Select Author</option>
                 </select>
                 <button type="button" id="addAuthorButton" class="btn btn-primary">Add</button>
-                <ul id="selectedAuthorsList" class="list-group">
+                <ul id="selectedAuthorsList" class="list-group" name="SelectedAuthors">
                     <!-- selected list... -->
                 </ul>
                 <span id="duplicateAuthorError" class="text-danger"></span>

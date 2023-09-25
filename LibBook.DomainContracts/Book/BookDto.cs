@@ -22,7 +22,7 @@ public class BookDto
 
 }
 
-public class CreateBookDto
+public class CreateBookViewModel
 {
     public string Title { get; set; }
     public string ISBN { get; set; }

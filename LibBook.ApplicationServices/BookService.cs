@@ -2,6 +2,8 @@
 using LibBook.Domain;
 using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
+using LibBook.Domain.PublisherAgg;
+using LibBook.Domain.TranslatorAgg;
 using LibBook.DomainContracts.Book;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,13 +13,19 @@ public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
     private readonly IAuthorRepository _authorRepository;
+    private readonly ITranslatorRepository _translatorRepository;
+    private readonly IPublisherRepository _publisherRepository;
 
-    public BookService(IBookRepository bookRepository)
+    public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository,
+        ITranslatorRepository translatorRepository, IPublisherRepository publisherRepository)
     {
         _bookRepository = bookRepository;
+        _authorRepository = authorRepository;
+        _translatorRepository = translatorRepository;
+        _publisherRepository = publisherRepository;
     }
     #region Create
-    public async Task<OperationResult> Create(CreateBookDto bookDto)
+    public async Task<OperationResult> Create(CreateBookViewModel bookDto)
     {
         OperationResult operationResult = new();
 
@@ -35,7 +43,7 @@ public class BookService : IBookService
             description: bookDto.Description,
             categoryId: bookDto.CategoryId);
 
-        // 3. add authors
+        // 3. add Authors
         if (bookDto.Authors != null && bookDto.Authors.Any())
         {
             foreach (var authorName in bookDto.Authors)
@@ -48,8 +56,35 @@ public class BookService : IBookService
                 //else
             }
         }
+        // 4. add Translators
+        if (bookDto.Translators != null && bookDto.Translators.Any())
+        {
+            foreach (var translatorName in bookDto.Translators)
+            {
+                var translator = await _translatorRepository.GetByName(translatorName);
+                if (translator != null)
+                {
+                    book.BookTranslators.Add(new BookTranslator { Translator = translator });
+                }
+                //else
+            }
+        }
 
-        // 4. save in db
+        // 5. add Translators
+        if (bookDto.Publishers != null && bookDto.Publishers.Any())
+        {
+            foreach (var publisherName in bookDto.Publishers)
+            {
+                var publisher = await _publisherRepository.GetByName(publisherName);
+                if (publisher != null)
+                {
+                    book.BookPublishers.Add(new BookPublisher { Publisher = publisher });
+                }
+                //else
+            }
+        }
+
+        // 6. save in db
         var result = await _bookRepository.CreateAsync(book);
 
         if (result == null)

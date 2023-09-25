@@ -20,8 +20,6 @@ public class BookDbContext : DbContext
     public DbSet<BookAuthor> AuthorBooks { get; set; }
     public DbSet<BookTranslator> TranslatorBooks { get; set; }
     public DbSet<BookPublisher> PublisherBooks { get; set; }
-
-    //public DbSet<Lend> Lends { get; set; }
     public DbSet<Borrow> Borrows { get; set; }
 
     public BookDbContext(DbContextOptions<BookDbContext> options) : base(options)

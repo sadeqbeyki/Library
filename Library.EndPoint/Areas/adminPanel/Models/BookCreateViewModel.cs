@@ -22,8 +22,4 @@ public class BookCreateViewModel
     public List<string> Authors { get; set; }
     public List<string> Publishers { get; set; }
     public List<string> Translators { get; set; }
-
-    // سایر فیلدها (اگر وجود دارد) را نیز به مدل ویو اضافه کنید
-
-    // در نهایت، می‌توانید فیلدهای مرتبط با کتب را به عنوان پیشنیازها یا فیلدهای مورد نیاز برای ایجاد کتاب اضافه کنید.
 }

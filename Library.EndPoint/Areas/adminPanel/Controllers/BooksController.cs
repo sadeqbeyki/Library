@@ -49,7 +49,7 @@ public class BooksController : Controller
     #endregion
 
     #region Create
-    public async Task<ActionResult<CreateBookDto>> Create()
+    public async Task<ActionResult<CreateBookViewModel>> Create()
     {
         var model = new BookCreateViewModel
         {
@@ -62,10 +62,11 @@ public class BooksController : Controller
         return View(model);
     }
     [HttpPost]
-    public async Task<ActionResult> Create(CreateBookDto model)
+    public async Task<ActionResult> Create(CreateBookViewModel model)
     {
+        var bookCategory = await _bookCategoryService.GetById(model.CategoryId);
         // بازیابی مقادیر ارسالی از Request.Form
-        var selectedAuthors = Request.Form["SelectedAuthors"].ToString();
+        var selectedAuthors = Request.Form["selectedAuthors"].ToString();
         var selectedPublishers = Request.Form["SelectedPublishers"].ToString();
         var selectedTranslators = Request.Form["SelectedTranslators"].ToString();
 
@@ -73,6 +74,7 @@ public class BooksController : Controller
 
         // تبدیل مقادیر رشته‌ای به لیست
         //model.CategoryId = CategoryId;
+        model.Category = bookCategory.Name;
         model.Authors = selectedAuthors.Split(',').ToList();
         model.Publishers = selectedPublishers.Split(',').ToList();
         model.Translators = selectedTranslators.Split(',').ToList();
@@ -89,7 +91,8 @@ public class BooksController : Controller
                 ModelState.AddModelError(string.Empty, "خطا در ایجاد کتاب.");
             }
         }
-        return View(model);
+        //return View(model);
+        return RedirectToAction("Create");
     }
     #endregion
 
