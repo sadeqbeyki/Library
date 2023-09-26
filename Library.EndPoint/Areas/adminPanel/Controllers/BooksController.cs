@@ -67,8 +67,8 @@ public class BooksController : Controller
         var bookCategory = await _bookCategoryService.GetById(model.CategoryId);
         // بازیابی مقادیر ارسالی از Request.Form
         var selectedAuthors = Request.Form["selectedAuthors"].ToString();
-        var selectedPublishers = Request.Form["SelectedPublishers"].ToString();
-        var selectedTranslators = Request.Form["SelectedTranslators"].ToString();
+        var selectedPublishers = Request.Form["selectedPublishers"].ToString();
+        var selectedTranslators = Request.Form["selectedTranslators"].ToString();
 
         // اکنون شما می‌توانید از این مقادیر در ادامه اکشن استفاده کنید.
 
@@ -77,7 +77,11 @@ public class BooksController : Controller
         model.Category = bookCategory.Name;
         model.Authors = selectedAuthors.Split(',').ToList();
         model.Publishers = selectedPublishers.Split(',').ToList();
+
         model.Translators = selectedTranslators.Split(',').ToList();
+        //
+        ModelState.Clear();
+        TryValidateModel(model);
 
         if (ModelState.IsValid)
         {

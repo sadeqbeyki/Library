@@ -1,12 +1,12 @@
 ﻿// save selected list
 var selectedAuthors = [];
-var selectedTranslators = [];
 var selectedPublishers = [];
+var selectedTranslators = [];
 
 function initializeSelectionLists() {
     selectedAuthors = [];
-    selectedTranslators = [];
     selectedPublishers = [];
+    selectedTranslators = [];
 }
 
 // Is Repeated ??
@@ -86,35 +86,33 @@ function addToSelectedList(inputId, listId, errorId, selectedItemList) {
                     return item !== inputValue;
                 });
                 selectedList.removeChild(listItem);
-                updateHiddenFields(); // اینجا مقادیر فیلدهای مخفی را به‌روز کنید
+                updateHiddenFields(); 
             };
             listItem.appendChild(removeButton);
 
-            // اضافه کردن مورد به لیست انتخابی
             selectedItemList.push(inputValue);
             selectedList.appendChild(listItem);
-            input.value = ""; // پاک کردن مقدار ورودی
-            document.getElementById(errorId).textContent = ""; // پاک کردن هشدار
-            updateHiddenFields(); // اینجا مقادیر فیلدهای مخفی را به‌روز کنید
+            input.value = ""; 
+            document.getElementById(errorId).textContent = ""; 
+            updateHiddenFields(); 
         } else {
-            document.getElementById(errorId).textContent = "تکراری است.";
+            document.getElementById(errorId).textContent = "duplicate";
         }
     }
 }
 
-// تابع برای به‌روز کردن مقادیر فیلدهای مخفی
 function updateHiddenFields() {
-    var selectedAuthors = selectedAuthors.join(",");
-    var selectedPublishers = selectedPublishers.join(",");
-    var selectedTranslators = selectedTranslators.join(",");
+    var SelectedAuthors = selectedAuthors.join(",");
+    var SelectedPublishers = selectedPublishers.join(",");
+    var SelectedTranslators = selectedTranslators.join(",");
 
-    console.log("SelectedAuthors: " + selectedAuthors);
-    console.log("SelectedPublishers: " + selectedPublishers);
-    console.log("SelectedTranslators: " + selectedTranslators);
+    console.log("SelectedAuthors: " + SelectedAuthors);
+    console.log("SelectedPublishers: " + SelectedPublishers);
+    console.log("SelectedTranslators: " + SelectedTranslators);
 
-    document.getElementById("SelectedAuthors").value = selectedAuthors;
-    document.getElementById("SelectedPublishers").value = selectedPublishers;
-    document.getElementById("SelectedTranslators").value = selectedTranslators;
+    document.getElementById("SelectedAuthors").value = SelectedAuthors;
+    document.getElementById("SelectedPublishers").value = SelectedPublishers;
+    document.getElementById("SelectedTranslators").value = SelectedTranslators;
 }
 
 
