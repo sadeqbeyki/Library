@@ -1,4 +1,5 @@
 ﻿using AppFramework.Domain;
+using LibBook.Domain.BookAgg;
 
 namespace LibBook.Domain.AuthorAgg
 {
@@ -7,5 +8,11 @@ namespace LibBook.Domain.AuthorAgg
         public string Name { get; set; }
         public string Description { get; set; }
         public List<BookAuthor> AuthorBooks { get; set; }
+
+        //public List<Book> GetAuthorBooks()
+        //{
+        //    var authorBooks = AuthorBooks.Select(ab => ab.Book).ToList();
+        //    return authorBooks;
+        //}
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AppFramework.Domain;
+using LibBook.Domain;
 using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
 using LibBook.DomainContracts.Author;
@@ -16,8 +17,8 @@ public class AuthorRepository : Repository<Author, int>, IAuthorRepository
 
     public async Task<List<Book>> GetAuthorBooks(int id)
     {
-        List<Book> books = await _dbContext.Books.Where(b => b.AuthorId == id).ToListAsync();
-        return books;
+        var authorBooks = await _dbContext.AuthorBooks.Select(b => b.Book).ToListAsync();
+        return authorBooks;
     }
 
     public async Task<List<AuthorDto>> GetAuthors()
