@@ -37,3 +37,8 @@ public class CreateBookViewModel
     public List<string> Translators { get; set; }
 
 }
+
+public class UpdateBookViewModel : CreateBookViewModel
+{
+    public int Id { get; set; }
+}

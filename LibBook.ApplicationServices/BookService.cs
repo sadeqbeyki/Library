@@ -152,20 +152,21 @@ public class BookService : IBookService
         return result;
     }
 
-    public async Task<BookViewModel> GetById(int id)
+    public async Task<UpdateBookViewModel> GetById(int id)
     {
-        var result = await _bookRepository.GetByIdAsync(id);
-        BookViewModel dto = new()
+        var book = await _bookRepository.GetByIdAsync(id);
+        UpdateBookViewModel dto = new()
         {
             Id = id,
-            Title = result.Title,
-            ISBN = result.ISBN,
-            Code = result.Code,
-            Description = result.Description,
-            AuthorId = result.AuthorId,
-            PublisherId = result.PublisherId,
-            TranslatorId = result.TranslatorId,
-            CategoryId = result.CategoryId,
+            Title = book.Title,
+            ISBN = book.ISBN,
+            Code = book.Code,
+            Description = book.Description,
+            CategoryId = book.CategoryId,
+            Category = book.Category.Name,
+            Authors = book.BookAuthors.Select(ba => ba.Author.Name).ToList(),
+            Publishers = book.BookPublishers.Select(bp => bp.Publisher.Name).ToList(),
+            Translators = book.BookTranslators.Select(bt => bt.Translator.Name).ToList(),
         };
         return dto;
     }

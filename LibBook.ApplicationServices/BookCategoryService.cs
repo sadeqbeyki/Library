@@ -91,7 +91,7 @@ namespace LibBook.ApplicationServices
                 Code = b.Code,
                 Description = b.Description,
                 PublisherId = b.PublisherId,
-                AuthorId = b.AuthorId,
+                AuthorId = 0,
                 TranslatorId = b.TranslatorId,
                 CategoryId = b.CategoryId,
             }).ToList();
