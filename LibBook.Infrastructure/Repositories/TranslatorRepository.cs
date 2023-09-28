@@ -16,8 +16,8 @@ namespace LibBook.Infrastructure.Repositories
 
         public async Task<List<Book>> GetTranslatorBooks(int id)
         {
-            List<Book> books = await _dbContext.Books.Where(b => b.TranslatorId == id).ToListAsync();
-            return books;
+            var translatorBooks = await _dbContext.TranslatorBooks.Select(b => b.Book).ToListAsync();
+            return translatorBooks;
         }
 
         public async Task<List<TranslatorDto>> GetTranslators()
