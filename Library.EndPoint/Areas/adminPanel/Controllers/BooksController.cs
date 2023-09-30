@@ -102,9 +102,9 @@ public class BooksController : Controller
 
     #region Update
     [HttpGet]
-    public async Task<ActionResult<BookViewModel>> Update(int id)
+    public async Task<ActionResult<LibBook.DomainContracts.Book.UpdateBookViewModel>> Update(int id)
     {
-        var model = new UpdateBookViewModel
+        var model = new Models.UpdateBookViewModel
         {
             Book = await _bookService.GetById(id),
             BookCategories = await _bookCategoryService.GetCategories(),
@@ -116,7 +116,7 @@ public class BooksController : Controller
         return View("Update", model);
     }
     [HttpPut, HttpPost]
-    public async Task<ActionResult> Update(UpdateBookViewModel model)
+    public async Task<ActionResult> Update(Models.UpdateBookViewModel model)
     {
         var result = await _bookService.Update(model.Book);
         return RedirectToAction("Index", result);

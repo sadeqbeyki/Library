@@ -173,7 +173,7 @@ public class BookService : IBookService
     #endregion
 
     #region Update
-    public async Task<OperationResult> Update(BookViewModel dto)
+    public async Task<OperationResult> Update(UpdateBookViewModel dto)
     {
         OperationResult operationResult = new();
         var book = await _bookRepository.GetByIdAsync(dto.Id);

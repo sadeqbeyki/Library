@@ -1,4 +1,5 @@
 ﻿using AppFramework.Domain;
+using LibBook.Domain.BookAgg;
 using LibBook.Domain.PublisherAgg;
 using LibBook.DomainContracts.Publisher;
 using Microsoft.EntityFrameworkCore;
@@ -27,5 +28,11 @@ public class PublisherRepository : Repository<Publisher, int>, IPublisherReposit
             Name = x.Name
         }).ToListAsync();
 
+    }
+
+    public async Task<List<Book>> GetPublisherBooks(int id)
+    {
+        var publisherBooks = await _dbContext.PublisherBooks.Select(b => b.Book).ToListAsync();
+        return publisherBooks;
     }
 }

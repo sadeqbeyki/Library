@@ -10,7 +10,7 @@ public interface IBookCategoryService
     Task<OperationResult> Create(BookCategoryDto entity);
     Task Delete(int id);
     Task<OperationResult> Update(int id, BookCategoryDto entity);
-    Task<List<BookDto>> GetCategoryWithBooks(int id);
+    Task<List<CreateBookViewModel>> GetCategoryWithBooks(int id);
 
     Task<List<BookCategoryDto>> GetCategories();
 

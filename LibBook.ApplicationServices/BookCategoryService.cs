@@ -81,18 +81,15 @@ namespace LibBook.ApplicationServices
             return operationResult.Succeeded();
         }
 
-        public async Task<List<BookDto>> GetCategoryWithBooks(int id)
+        public async Task<List<CreateBookViewModel>> GetCategoryWithBooks(int id)
         {
             var books = await _repository.GetCategoryWithBooks(id);
-            var result = books.Select(b => new BookDto
+            var result = books.Select(b => new CreateBookViewModel
             {
                 Title = b.Title,
                 ISBN = b.ISBN,
                 Code = b.Code,
                 Description = b.Description,
-                PublisherId = b.PublisherId,
-                AuthorId = 0,
-                TranslatorId = b.TranslatorId,
                 CategoryId = b.CategoryId,
             }).ToList();
             return result;
