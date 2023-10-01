@@ -49,7 +49,7 @@ public class BooksController : Controller
     #endregion
 
     #region Create
-    public async Task<ActionResult<CreateBookViewModel>> Create()
+    public async Task<ActionResult<BookDto>> Create()
     {
         var model = new BookCreateViewModel
         {
@@ -62,27 +62,23 @@ public class BooksController : Controller
         return View(model);
     }
     [HttpPost]
-    public async Task<ActionResult> Create(CreateBookViewModel model)
+    public async Task<ActionResult> Create(BookDto model)
     {
         var bookCategory = await _bookCategoryService.GetById(model.CategoryId);
-        // بازیابی مقادیر ارسالی از Request.Form
+
         var selectedAuthors = Request.Form["selectedAuthors"].ToString();
         var selectedPublishers = Request.Form["selectedPublishers"].ToString();
         var selectedTranslators = Request.Form["selectedTranslators"].ToString();
 
-        // اکنون شما می‌توانید از این مقادیر در ادامه اکشن استفاده کنید.
-
-        // تبدیل مقادیر رشته‌ای به لیست
-        //model.CategoryId = CategoryId;
         model.Category = bookCategory.Name;
+
         model.Authors = selectedAuthors.Split(',').ToList();
         model.Publishers = selectedPublishers.Split(',').ToList();
-
         model.Translators = selectedTranslators.Split(',').ToList();
-        //
+
+        
         ModelState.Clear();
         TryValidateModel(model);
-
         if (ModelState.IsValid)
         {
             var result = await _bookService.Create(model);

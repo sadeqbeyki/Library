@@ -18,7 +18,7 @@ namespace LibBook.EndPoint.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var bookCategory = _bookCategoryService.GetAll();
+            var bookCategory = _bookCategoryService.GetCategories();
             return Ok(bookCategory);
         }
 

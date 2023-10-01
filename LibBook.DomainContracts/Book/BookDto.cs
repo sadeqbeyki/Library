@@ -12,10 +12,6 @@ public class BookDto
     public int CategoryId { get; set; }
     public string Category { get; set; }
 
-    public int PublisherId { get; set; }
-    public int AuthorId { get; set; }
-    public int TranslatorId { get; set; }
-
     public List<string> Publishers { get; set; }
     public List<string> Authors { get; set; }
     public List<string> Translators { get; set; }

@@ -29,20 +29,6 @@ namespace LibBook.ApplicationServices
             return operationResult.Succeeded();
         }
 
-        public async Task<List<BookCategoryDto>> GetAll()
-        {
-            //List<BookCategory> categories = await _repository.GetAll().Take(50).ToListAsync();
-            //return _mapper.Map<List<BookCategoryDto>>(categories);
-            var result = _repository.GetAll()
-                .Select(bookCategory => new BookCategoryDto
-                {
-                    Id = bookCategory.Id,
-                    Name = bookCategory.Name,
-                    Description = bookCategory.Description,
-                }).ToList();
-
-            return await Task.FromResult(result);
-        }
         public async Task<List<BookCategoryDto>> GetCategories()
         {
             return await _repository.GetCategories();
@@ -81,10 +67,10 @@ namespace LibBook.ApplicationServices
             return operationResult.Succeeded();
         }
 
-        public async Task<List<CreateBookViewModel>> GetCategoryWithBooks(int id)
+        public async Task<List<BookDto>> GetCategoryWithBooks(int id)
         {
             var books = await _repository.GetCategoryWithBooks(id);
-            var result = books.Select(b => new CreateBookViewModel
+            var result = books.Select(b => new BookDto
             {
                 Title = b.Title,
                 ISBN = b.ISBN,

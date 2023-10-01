@@ -1,6 +1,5 @@
 ﻿using AppFramework.Domain;
 using LibBook.Domain.BookAgg;
-using LibBook.Domain.TranslatorAgg;
 using LibBook.DomainContracts.Publisher;
 
 namespace LibBook.Domain.PublisherAgg;

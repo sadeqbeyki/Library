@@ -4,6 +4,7 @@ using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
 using LibBook.DomainContracts.Author;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace LibBook.Infrastructure.Repositories;
 
@@ -30,8 +31,9 @@ public class AuthorRepository : Repository<Author, int>, IAuthorRepository
         }).ToListAsync();
     }
 
-    public async Task<Author> GetByName(string name)
+    public async Task<Author?> GetByName(string name)
     {
-        return await _dbContext.Authors.FirstOrDefaultAsync(x => x.Name == name);
+        Author? author = await _dbContext.Authors.FirstOrDefaultAsync(x => x.Name == name);
+        return author;
     }
 }

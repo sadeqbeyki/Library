@@ -25,60 +25,82 @@ public class BookService : IBookService
         _publisherRepository = publisherRepository;
     }
     #region Create
-    public async Task<OperationResult> Create(CreateBookViewModel bookDto)
+    public async Task<OperationResult> Create(BookDto model)
     {
         OperationResult operationResult = new();
 
         // chk duplicate
-        if (_bookRepository.Exists(x => x.Title == bookDto.Title))
+        if (_bookRepository.Exists(x => x.Title == model.Title))
         {
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
         }
 
         // 2. add new book
         Book book = new(
-            title: bookDto.Title,
-            iSBN: bookDto.ISBN,
-            code: bookDto.Code,
-            description: bookDto.Description,
-            categoryId: bookDto.CategoryId);
+            title: model.Title,
+            iSBN: model.ISBN,
+            code: model.Code,
+            description: model.Description,
+            categoryId: model.CategoryId);
 
         // 3. add Authors
-        if (bookDto.Authors != null && bookDto.Authors.Any())
+        if (model.Authors != null && model.Authors.Any())
         {
-            foreach (var authorName in bookDto.Authors)
+            foreach (var authorName in model.Authors)
             {
                 var author = await _authorRepository.GetByName(authorName);
                 if (author != null)
                 {
-                    book.BookAuthors.Add(new BookAuthor { Author = author });
+                    var bookAuthor = new BookAuthor
+                    {
+                        Book = book,
+                        Author = author,
+                        AuthorBookId = book.Id,
+                        AuthorId = author.Id,
+                    };
+                    book.BookAuthors.Add(bookAuthor);
                 }
                 //else
             }
         }
-        // 4. add Translators
-        if (bookDto.Translators != null && bookDto.Translators.Any())
+        // 4. add Publishers
+
+        if (model.Publishers != null && model.Publishers.Any())
         {
-            foreach (var translatorName in bookDto.Translators)
+            foreach (var publisherName in model.Publishers)
             {
-                var translator = await _translatorRepository.GetByName(translatorName);
-                if (translator != null)
+                var publisher = await _publisherRepository.GetByName(publisherName);
+                if (publisher != null)
                 {
-                    book.BookTranslators.Add(new BookTranslator { Translator = translator });
+                    var bookPublisher = new BookPublisher
+                    {
+                        PublisherBookId = publisher.Id,
+                        Book = book,
+                        PublisherId = publisher.Id,
+                        Publisher = publisher
+                    };
+                    book.BookPublishers.Add(bookPublisher);
                 }
                 //else
             }
         }
 
         // 5. add Translators
-        if (bookDto.Publishers != null && bookDto.Publishers.Any())
+        if (model.Translators != null && model.Translators.Any())
         {
-            foreach (var publisherName in bookDto.Publishers)
+            foreach (var translatorName in model.Translators)
             {
-                var publisher = await _publisherRepository.GetByName(publisherName);
-                if (publisher != null)
+                var translator = await _translatorRepository.GetByName(translatorName);
+                if (translator != null)
                 {
-                    book.BookPublishers.Add(new BookPublisher { Publisher = publisher });
+                    var bookTranslator = new BookTranslator
+                    {
+                        TranslatorBookId = translator.Id,
+                        Book = book,
+                        TranslatorId = translator.Id,
+                        Translator = translator
+                    };
+                    book.BookTranslators.Add(bookTranslator);
                 }
                 //else
             }

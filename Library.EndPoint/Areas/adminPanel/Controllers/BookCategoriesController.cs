@@ -18,7 +18,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
 
         public async Task<ActionResult<List<BookCategoryDto>>> Index()
         {
-            var result = await _bookCategoryService.GetAll();
+            var result = await _bookCategoryService.GetCategories();
             return View(result);
         }
         [HttpGet]
