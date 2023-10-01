@@ -10,6 +10,7 @@ public class BookCategoryConfig : IEntityTypeConfiguration<BookCategory>
     {
         builder.HasKey(a => a.Id);
         builder.ToTable("BookCategories");
+        builder.Property(c => c.Description).HasMaxLength(780).IsRequired(false);
 
         builder.HasMany(b => b.Books).WithOne(c => c.Category).HasForeignKey(fk => fk.CategoryId);
 

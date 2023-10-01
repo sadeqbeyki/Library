@@ -51,18 +51,16 @@ namespace AppFramework.Domain
         public async Task<TEntity> CreateAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
-            //await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
         }
 
-        //public async Task<TEntity> CreateAsync(TEntity entity)
+        //public async Task<TEntity> Addsync(TEntity entity)
         //{
         //    await _dbSet.AddAsync(entity);
-        //    await SaveChangesAsync();
+        //    await _dbContext.SaveChangesAsync();
         //    return entity;
         //}
-
 
         public async Task UpdateAsync(TEntity entity)
         {

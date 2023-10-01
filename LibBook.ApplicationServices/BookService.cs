@@ -41,7 +41,8 @@ public class BookService : IBookService
             iSBN: model.ISBN,
             code: model.Code,
             description: model.Description,
-            categoryId: model.CategoryId);
+            categoryId: model.CategoryId
+            );
 
         // 3. add Authors
         if (model.Authors != null && model.Authors.Any())
@@ -53,10 +54,10 @@ public class BookService : IBookService
                 {
                     var bookAuthor = new BookAuthor
                     {
-                        Book = book,
-                        Author = author,
                         AuthorBookId = book.Id,
+                        Book = book,
                         AuthorId = author.Id,
+                        Author = author,
                     };
                     book.BookAuthors.Add(bookAuthor);
                 }
@@ -74,7 +75,7 @@ public class BookService : IBookService
                 {
                     var bookPublisher = new BookPublisher
                     {
-                        PublisherBookId = publisher.Id,
+                        PublisherBookId = book.Id,
                         Book = book,
                         PublisherId = publisher.Id,
                         Publisher = publisher
@@ -95,7 +96,7 @@ public class BookService : IBookService
                 {
                     var bookTranslator = new BookTranslator
                     {
-                        TranslatorBookId = translator.Id,
+                        TranslatorBookId = book.Id,
                         Book = book,
                         TranslatorId = translator.Id,
                         Translator = translator
