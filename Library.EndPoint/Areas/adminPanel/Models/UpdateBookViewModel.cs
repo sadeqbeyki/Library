@@ -8,7 +8,7 @@ namespace Library.EndPoint.Areas.adminPanel.Models;
 
 public class UpdateBookViewModel
 {
-    public LibBook.DomainContracts.Book.UpdateBookViewModel Book { get; set; } = new LibBook.DomainContracts.Book.UpdateBookViewModel();
+    public BookViewModel Book { get; set; } = new BookViewModel();
 
     public List<BookCategoryDto> BookCategories { get; set; } = new List<BookCategoryDto>();
     public List<AuthorDto> Authors { get; set; } = new List<AuthorDto>();

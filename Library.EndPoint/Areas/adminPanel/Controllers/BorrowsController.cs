@@ -36,7 +36,7 @@ public class BorrowsController : Controller
         var command = new CreateBorrowViewModel
         {
             Members = await _userService.GetUsers(),
-            Books = await _bookService.GetAllBooks(),
+            Books = await _bookService.GetAll(),
         };
         return View("Borrowing", command);
     }
@@ -84,7 +84,7 @@ public class BorrowsController : Controller
         {
             Borrow = await _borrowService.GetBorrowById(id),
             Members = await _userService.GetUsers(),
-            Books = await _bookService.GetAllBooks(),
+            Books = await _bookService.GetAll(),
         };
 
         return View("Update", model);

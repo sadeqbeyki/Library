@@ -35,7 +35,7 @@ public class BooksController : Controller
     [HttpGet]
     public async Task<ActionResult<List<BookViewModel>>> Index()
     {
-        var result = await _bookService.GetAllBooks();
+        var result = await _bookService.GetAll();
         return View(result);
     }
     [HttpGet]
@@ -98,7 +98,7 @@ public class BooksController : Controller
 
     #region Update
     [HttpGet]
-    public async Task<ActionResult<LibBook.DomainContracts.Book.UpdateBookViewModel>> Update(int id)
+    public async Task<ActionResult<BookViewModel>> Update(int id)
     {
         var model = new Models.UpdateBookViewModel
         {

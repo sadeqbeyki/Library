@@ -17,7 +17,7 @@ namespace LMS.EndPoint.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var book = _bookService.GetAllBooks();
+            var book = _bookService.GetAll();
             return Ok(book);
         }
 

@@ -65,7 +65,6 @@ public class BookService : IBookService
             }
         }
         // 4. add Publishers
-
         if (model.Publishers != null && model.Publishers.Any())
         {
             foreach (var publisherName in model.Publishers)
@@ -85,7 +84,6 @@ public class BookService : IBookService
                 //else
             }
         }
-
         // 5. add Translators
         if (model.Translators != null && model.Translators.Any())
         {
@@ -121,64 +119,36 @@ public class BookService : IBookService
     #endregion
 
     #region Read
-    //public Task<List<BookViewModel>> GetAll()
-    //{
-    //    var result = _bookRepository.GetAll()
-    //        .Select(book => new BookViewModel
-    //        {
-    //            Id = book.Id,
-    //            Title = book.Title,
-    //            ISBN = book.ISBN,
-    //            Code = book.Code,
-    //            Description = book.Description,
-    //            AuthorId = book.AuthorId,
-    //            PublisherId = book.PublisherId,
-    //            TranslatorId = book.TranslatorId,
-    //            CategoryId = book.CategoryId,
-    //            Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
-    //            Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
-    //            Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
-    //            Category = book.Category.Name,
-    //        }).ToList();
+    public Task<List<BookViewModel>> GetAll()
+    {
+        var result = _bookRepository.GetAll()
+            .Select(book => new BookViewModel
+            {
+                Id = book.Id,
+                Title = book.Title,
+                ISBN = book.ISBN,
+                Code = book.Code,
+                Description = book.Description,
+                CategoryId = book.CategoryId,
+                Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
+                Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
+                Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
+                Category = book.Category.Name,
+            }).ToList();
 
-    //    return Task.FromResult(result);
-    //}
+        return Task.FromResult(result);
+    }
 
+    //select box in inventory
     public async Task<List<BookViewModel>> GetBooks()
     {
         return await _bookRepository.GetBooks();
     }
 
-    public async Task<List<BookViewModel>> GetAllBooks()
-    {
-        var result = await _bookRepository.GetAll()
-            .Include(book => book.Category)
-            .Include(book => book.BookAuthors)
-            .ThenInclude(ab => ab.Author)
-            .Include(ap => ap.BookPublishers)
-            .ThenInclude(ap => ap.Publisher)
-            .Include(at => at.BookTranslators)
-            .ThenInclude(at => at.Translator)
-                    .Select(book => new BookViewModel
-                    {
-                        Id = book.Id,
-                        Title = book.Title,
-                        ISBN = book.ISBN,
-                        Code = book.Code,
-                        Description = book.Description,
-                        CategoryId = book.CategoryId,
-                        Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
-                        Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
-                        Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
-                        Category = book.Category.Name,
-                    }).ToListAsync();
-        return result;
-    }
-
-    public async Task<UpdateBookViewModel> GetById(int id)
+    public async Task<BookViewModel> GetById(int id)
     {
         var book = await _bookRepository.GetByIdAsync(id);
-        UpdateBookViewModel dto = new()
+        BookViewModel dto = new()
         {
             Id = id,
             Title = book.Title,
@@ -196,7 +166,7 @@ public class BookService : IBookService
     #endregion
 
     #region Update
-    public async Task<OperationResult> Update(UpdateBookViewModel dto)
+    public async Task<OperationResult> Update(BookViewModel dto)
     {
         OperationResult operationResult = new();
         var book = await _bookRepository.GetByIdAsync(dto.Id);
