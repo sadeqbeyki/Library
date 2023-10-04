@@ -10,7 +10,7 @@ public interface IAuthorService
     Task Delete(int id);
     Task<AuthorDto> Update(int id, AuthorDto entity);
 
-    Task<List<CreateBookViewModel>> GetAuthorBooks(int id);
+    Task<List<BookViewModel>> GetAuthorBooks(int id);
     Task<List<AuthorDto>> GetAuthors();
 
 }

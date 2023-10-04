@@ -46,6 +46,7 @@ namespace AppFramework.Domain
         public async Task<TEntity> GetByIdAsync(TKey id)
         {
             return await _dbSet.FindAsync(id);
+
         }
 
         public async Task<TEntity> CreateAsync(TEntity entity)

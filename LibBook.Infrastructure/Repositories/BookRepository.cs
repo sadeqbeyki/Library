@@ -13,11 +13,6 @@ public class BookRepository : Repository<Book, int>, IBookRepository
         _bookDbContext = bookDbContext;
     }
 
-    public Task<BookViewModel> GetBookById(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<List<BookViewModel>> GetBooks()
     {
         return await _bookDbContext.Books.Select(x => new BookViewModel

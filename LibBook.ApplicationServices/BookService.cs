@@ -147,21 +147,45 @@ public class BookService : IBookService
 
     public async Task<BookViewModel> GetById(int id)
     {
-        var book = await _bookRepository.GetByIdAsync(id);
-        BookViewModel dto = new()
+        var result = await _bookRepository.GetAll()
+            .Select(book => new BookViewModel
         {
-            Id = id,
+            Id = book.Id,
             Title = book.Title,
             ISBN = book.ISBN,
             Code = book.Code,
             Description = book.Description,
             CategoryId = book.CategoryId,
+            
+            Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
+            Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
+            Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
             Category = book.Category.Name,
-            Authors = book.BookAuthors.Select(ba => ba.Author.Name).ToList(),
-            Publishers = book.BookPublishers.Select(bp => bp.Publisher.Name).ToList(),
-            Translators = book.BookTranslators.Select(bt => bt.Translator.Name).ToList(),
-        };
-        return dto;
+        }).FirstOrDefaultAsync(b=>b.Id == id);
+
+        return result;
+
+
+
+
+        //var book = await _bookRepository.GetByIdAsync(id);
+        //BookViewModel result = new()
+        //{
+        //    Id = id,
+        //    Title = book.Title,
+        //    ISBN = book.ISBN,
+        //    Code = book.Code,
+        //    Description = book.Description,
+        //    CategoryId = book.CategoryId,
+        //    //Category = book.Category.Name,
+        //    Category = "salam",
+        //    Authors = book.BookAuthors.Select(ba => ba.Author.Name).ToList(),
+        //    Publishers = book.BookPublishers.Select(bp => bp.Publisher.Name).ToList(),
+        //    Translators = book.BookTranslators.Select(bt => bt.Translator.Name).ToList(),
+        //};
+        //return result;
+
+
     }
     #endregion
 
