@@ -165,9 +165,6 @@ public class BookService : IBookService
 
         return result;
 
-
-
-
         //var book = await _bookRepository.GetByIdAsync(id);
         //BookViewModel result = new()
         //{

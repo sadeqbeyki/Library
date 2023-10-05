@@ -34,18 +34,53 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-
-
+    
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CategoryId)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CategoryId)
         </dd>
-
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category)
+        </dd>
     </dl>
 </div>
+
+<div>
+    <h4>Authors</h4>
+    <ul>
+        @foreach (var author in Model.Authors)
+        {
+            <li>@author</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Publishers</h4>
+    <ul>
+        @foreach (var publisher in Model.Publishers)
+        {
+            <li>@publisher</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Translators</h4>
+    <ul>
+        @foreach (var translator in Model.Translators)
+        {
+            <li>@translator</li>
+        }
+    </ul>
+</div>
+
 <div>
     <a asp-action="Update" asp-route-id="@Model?.Id" class="btn btn-success">Update</a> |
-    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
