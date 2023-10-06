@@ -129,10 +129,10 @@ public class BookService : IBookService
                 ISBN = book.ISBN,
                 Code = book.Code,
                 Description = book.Description,
-                CategoryId = book.CategoryId,
-                Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
-                Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
-                Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
+                //CategoryId = book.CategoryId,
+                //Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
+                //Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
+                //Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
                 Category = book.Category.Name,
             }).ToList();
 

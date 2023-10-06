@@ -52,6 +52,7 @@
                                     <th>ISBN</th>
                                     <th>Code</th>
                                     <th>Description</th>
+                                    <th>Category</th>
 
                                     <th>Operations</th>
                                 </tr>
@@ -66,6 +67,7 @@
                                         <td>@item.ISBN</td>
                                         <td>@item.Code</td>
                                         <td>@item.Description</td>
+                                        <td>@item.Category</td>
                                         <td>
                                             <a class="btn btn-success pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">
                                                 <i class="fa fa-edit"></i>Update
