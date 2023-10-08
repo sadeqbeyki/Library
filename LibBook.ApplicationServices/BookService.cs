@@ -187,21 +187,107 @@ public class BookService : IBookService
     #endregion
 
     #region Update
-    public async Task<OperationResult> Update(BookViewModel dto)
+
+    public async Task<OperationResult> Update(BookViewModel model)
     {
         OperationResult operationResult = new();
-        var book = await _bookRepository.GetByIdAsync(dto.Id);
-        if (book == null)
+
+        // 1. Check if the book exists
+        var existingBook = await _bookRepository.GetByIdAsync(model.Id);
+        if (existingBook == null)
+        {
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
+        }
 
-        if (_bookRepository.Exists(x => x.Title == dto.Title && x.Id != dto.Id))
-            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
+        // 2. Update the book properties
+        existingBook.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId);
 
-        book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId);
+        // 3. Clear the existing relationships with authors, publishers, and translators
+        existingBook.BookAuthors.Clear();
+        existingBook.BookPublishers.Clear();
+        existingBook.BookTranslators.Clear();
 
-        await _bookRepository.UpdateAsync(book);
+        // 4. Add Authors
+        if (model.Authors != null && model.Authors.Any())
+        {
+            foreach (var authorName in model.Authors)
+            {
+                var author = await _authorRepository.GetByName(authorName);
+                if (author != null)
+                {
+                    var bookAuthor = new BookAuthor
+                    {
+                        AuthorId = author.Id,
+                        Author = author,
+                    };
+                    existingBook.BookAuthors.Add(bookAuthor);
+                }
+            }
+        }
+
+        // 5. Add Publishers
+        if (model.Publishers != null && model.Publishers.Any())
+        {
+            foreach (var publisherName in model.Publishers)
+            {
+                var publisher = await _publisherRepository.GetByName(publisherName);
+                if (publisher != null)
+                {
+                    var bookPublisher = new BookPublisher
+                    {
+                        PublisherId = publisher.Id,
+                        Publisher = publisher
+                    };
+                    existingBook.BookPublishers.Add(bookPublisher);
+                }
+            }
+        }
+
+        // 6. Add Translators
+        if (model.Translators != null && model.Translators.Any())
+        {
+            foreach (var translatorName in model.Translators)
+            {
+                var translator = await _translatorRepository.GetByName(translatorName);
+                if (translator != null)
+                {
+                    var bookTranslator = new BookTranslator
+                    {
+                        TranslatorId = translator.Id,
+                        Translator = translator
+                    };
+                    existingBook.BookTranslators.Add(bookTranslator);
+                }
+            }
+        }
+
+        // 7. Update the book in the database
+        var result = _bookRepository.UpdateAsync(existingBook);
+
+        if (result == null)
+        {
+            return operationResult.Failed(ApplicationMessages.ProblemFound);
+        }
+
         return operationResult.Succeeded();
     }
+
+
+    //public async Task<OperationResult> Update(BookViewModel dto)
+    //{
+    //    OperationResult operationResult = new();
+    //    var book = await _bookRepository.GetByIdAsync(dto.Id);
+    //    if (book == null)
+    //        return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
+    //    if (_bookRepository.Exists(x => x.Title == dto.Title && x.Id != dto.Id))
+    //        return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
+
+    //    book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId);
+
+    //    await _bookRepository.UpdateAsync(book);
+    //    return operationResult.Succeeded();
+    //}
     #endregion
 
     #region Delete
