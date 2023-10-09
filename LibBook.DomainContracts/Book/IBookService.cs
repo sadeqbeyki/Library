@@ -10,5 +10,5 @@ public interface IBookService
 
     Task<OperationResult> Create(BookDto bookDto);
     Task Delete(int id);
-    Task<OperationResult> Update(BookViewModel dto);
+    Task<OperationResult> Update(BookViewModel model);
 }

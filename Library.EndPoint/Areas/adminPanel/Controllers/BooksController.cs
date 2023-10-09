@@ -137,5 +137,75 @@ public class BooksController : Controller
     }
     #endregion
 
+    #region EditBook
+    [HttpGet]
+    public async Task<ActionResult> Edit(int id)
+    {
+        var book = await _bookService.GetById(id);
+        if (book == null)
+        {
+            return NotFound();
+        }
+
+        var model = new EditBookViewModel
+        {
+            Book = book,
+            BookCategories = await _bookCategoryService.GetCategories(),
+            Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
+            Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
+            Translators = (await _translatorService.GetTranslators()).Select(translator => translator.Name).ToList()
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Edit(int id, BookViewModel model)
+    {
+        if (id != model.Id)
+        {
+            return BadRequest();
+        }
+
+        var bookCategory = await _bookCategoryService.GetById(model.CategoryId);
+
+        var selectedAuthors = Request.Form["selectedAuthors"].ToString();
+        var selectedPublishers = Request.Form["selectedPublishers"].ToString();
+        var selectedTranslators = Request.Form["selectedTranslators"].ToString();
+
+        model.Category = bookCategory.Name;
+        model.Authors = selectedAuthors.Split(',').ToList();
+        model.Publishers = selectedPublishers.Split(',').ToList();
+        model.Translators = selectedTranslators.Split(',').ToList();
+
+        ModelState.Clear();
+        TryValidateModel(model);
+
+        if (ModelState.IsValid)
+        {
+            var result = await _bookService.Update(model); // اضافه کردن متد Update به سرویس کتاب
+            if (result.IsSucceeded)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "خطا در ویرایش کتاب.");
+            }
+        }
+
+        // در صورت بروز خطا، دوباره فرم ویرایش را نمایش دهید.
+        var editModel = new EditBookViewModel
+        {
+            Book = model,
+            BookCategories = await _bookCategoryService.GetCategories(),
+            Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
+            Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
+            Translators = (await _translatorService.GetTranslators()).Select(translator => translator.Name).ToList()
+        };
+        return View(editModel);
+    }
+    #endregion
+
 
 }
