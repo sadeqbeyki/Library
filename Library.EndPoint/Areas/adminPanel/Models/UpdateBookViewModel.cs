@@ -20,9 +20,15 @@ public class UpdateBookViewModel
 
 public class EditBookViewModel
 {
-    public BookViewModel Book { get; set; } = new BookViewModel();
-    public List<BookCategoryDto> BookCategories { get; set; } = new List<BookCategoryDto>();
-    public List<string> Authors { get; set; } // لیست نویسندگان
-    public List<string> Publishers { get; set; } // لیست ناشران
-    public List<string> Translators { get; set; } // لیست مترجمان
+    //public BookViewModel Book { get; set; } = new BookViewModel();
+    //public List<BookCategoryDto> BookCategories { get; set; } = new List<BookCategoryDto>();
+    //public List<string> Authors { get; set; } = new List<string>();
+    //public List<string> Publishers { get; set; } = new List<string>();
+    //public List<string> Translators { get; set; } = new List<string>();
+
+    public BookViewModel Book { get; set; }
+    public List<BookCategoryDto> BookCategories { get; set; }
+    public List<string> Authors { get; set; } 
+    public List<string> Publishers { get; set; } 
+    public List<string> Translators { get; set; } 
 }

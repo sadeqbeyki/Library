@@ -1,5 +1,6 @@
 ﻿@using Library.EndPoint.Areas.adminPanel.Models;
 @model EditBookViewModel
+
 @{
     ViewData["Title"] = "Edit Book";
 }
@@ -9,9 +10,7 @@
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Edit" method="post">
-            <input type="hidden" asp-for="Book.Id" />
 
-            <!-- اطلاعات کتاب -->
             <div class="form-group">
                 <label asp-for="Book.Title">Book Title:</label>
                 <input asp-for="Book.Title" class="form-control" />
@@ -83,6 +82,7 @@
                 </ul>
                 <span id="duplicateTranslatorError" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="Book.Id" value="@Model.Book.Id" />
 
             <input type="hidden" name="SelectedAuthors" id="SelectedAuthors" />
             <input type="hidden" name="SelectedPublishers" id="SelectedPublishers" />
