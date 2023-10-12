@@ -76,7 +76,7 @@ public class BooksController : Controller
         model.Publishers = selectedPublishers.Split(',').ToList();
         model.Translators = selectedTranslators.Split(',').ToList();
 
-        
+
         ModelState.Clear();
         TryValidateModel(model);
         if (ModelState.IsValid)
@@ -97,47 +97,6 @@ public class BooksController : Controller
     #endregion
 
     #region Update
-    [HttpGet]
-    public async Task<ActionResult<BookViewModel>> Update(int id)
-    {
-        var model = new UpdateBookViewModel
-        {
-            Book = await _bookService.GetById(id),
-            BookCategories = await _bookCategoryService.GetCategories(),
-            Authors = await _authorService.GetAuthors(),
-            Publishers = await _publisherService.GetPublishers(),
-            Translators = await _translatorService.GetTranslators()
-        };
-
-        return View("Update", model);
-    }
-    [HttpPut, HttpPost]
-    public async Task<ActionResult> Update(UpdateBookViewModel model)
-    {
-        var result = await _bookService.Update(model.Book);
-        return RedirectToAction("Index", result);
-    }
-    #endregion
-
-    #region Delete
-    [HttpGet]
-    public async Task<ActionResult<BookViewModel>> Delete(int id)
-    {
-        var result = await _bookService.GetById(id);
-        if (result == null)
-            return NotFound();
-        return View(result);
-    }
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> ConfirmDelete(int id)
-    {
-        await _bookService.Delete(id);
-        return RedirectToAction("Index");
-    }
-    #endregion
-
-    #region EditBook
     [HttpGet]
     public async Task<ActionResult<BookViewModel>> Edit(int id)
     {
@@ -181,29 +140,48 @@ public class BooksController : Controller
         //ModelState.Clear();
         //TryValidateModel(model);
 
-        if (ModelState.IsValid)
+        //if (!ModelState.IsValid)
+        //{
+        //    foreach (var modelState in ViewData.ModelState.Values)
+        //    {
+        //        foreach (var error in modelState.Errors)
+        //        {
+        //            return View(error);
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        var result = await _bookService.Update(model.Book);
+        if (result.IsSucceeded)
         {
-            var result = await _bookService.Update(model.Book);
-            if (result.IsSucceeded)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "خطا در ویرایش کتاب.");
-            }
+            return RedirectToAction("Index");
         }
-
-        // در صورت بروز خطا، دوباره فرم ویرایش را نمایش دهید.
-        var editModel = new EditBookViewModel
+        else
         {
-            Book = model.Book,
-            BookCategories = await _bookCategoryService.GetCategories(),
-            Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
-            Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
-            Translators = (await _translatorService.GetTranslators()).Select(translator => translator.Name).ToList()
-        };
+            ModelState.AddModelError(string.Empty, "خطا در ویرایش کتاب.");
+        }
+        //}
+
         return View(model);
+    }
+    #endregion
+
+    #region Delete
+    [HttpGet]
+    public async Task<ActionResult<BookViewModel>> Delete(int id)
+    {
+        var result = await _bookService.GetById(id);
+        if (result == null)
+            return NotFound();
+        return View(result);
+    }
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> ConfirmDelete(int id)
+    {
+        await _bookService.Delete(id);
+        return RedirectToAction("Index");
     }
     #endregion
 
