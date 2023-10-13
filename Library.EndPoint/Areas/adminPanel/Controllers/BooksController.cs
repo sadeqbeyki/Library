@@ -98,7 +98,7 @@ public class BooksController : Controller
 
     #region Update
     [HttpGet]
-    public async Task<ActionResult<BookViewModel>> Edit(int id)
+    public async Task<ActionResult<BookViewModel>> Update(int id)
     {
         var book = await _bookService.GetById(id);
         if (book == null)
@@ -119,7 +119,7 @@ public class BooksController : Controller
     }
 
     [HttpPut, HttpPost]
-    public async Task<ActionResult> Edit(int id, EditBookViewModel model)
+    public async Task<ActionResult> Update(int id, EditBookViewModel model)
     {
         if (id != model.Book.Id)
         {

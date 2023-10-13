@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Edit" method="post">
+        <form asp-action="Update" method="post">
 
             <div class="form-group">
                 <label asp-for="Book.Title">Book Title:</label>
@@ -44,7 +44,6 @@
                 <span asp-validation-for="Book.CategoryId" class="text-danger"></span>
             </div>
 
-            <!-- نویسندگان -->
             <div class="form-group">
                 <label class="control-label">Authors:</label>
                 <select class="form-control" id="authorInput" asp-items='new SelectList(Model.Authors,"Name")'>
@@ -57,7 +56,6 @@
                 <span id="duplicateAuthorError" class="text-danger"></span>
             </div>
                 
-            <!-- ناشران -->
             <div class="form-group">
                 <label class="control-label">Publishers:</label>
                 <select class="form-control" id="publisherInput" asp-items='new SelectList(Model.Publishers,"Name")'>
@@ -70,7 +68,6 @@
                 <span id="duplicatePublisherError" class="text-danger"></span>
             </div>
 
-            <!-- مترجمان -->
             <div class="form-group">
                 <label class="control-label">Translators:</label>
                 <select class="form-control" id="translatorInput" asp-items='new SelectList(Model.Translators,"Name")'>

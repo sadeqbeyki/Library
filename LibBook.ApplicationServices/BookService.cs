@@ -149,19 +149,19 @@ public class BookService : IBookService
     {
         var result = await _bookRepository.GetAll()
             .Select(book => new BookViewModel
-        {
-            Id = book.Id,
-            Title = book.Title,
-            ISBN = book.ISBN,
-            Code = book.Code,
-            Description = book.Description,
-            CategoryId = book.CategoryId,
-            
-            Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
-            Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
-            Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
-            Category = book.Category.Name,
-        }).FirstOrDefaultAsync(b=>b.Id == id);
+            {
+                Id = book.Id,
+                Title = book.Title,
+                ISBN = book.ISBN,
+                Code = book.Code,
+                Description = book.Description,
+                CategoryId = book.CategoryId,
+
+                Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
+                Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
+                Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
+                Category = book.Category.Name,
+            }).FirstOrDefaultAsync(b => b.Id == id);
 
         return result;
 
@@ -199,6 +199,10 @@ public class BookService : IBookService
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
         }
 
+        // 1.1. Check if duplicate found
+        if (_bookRepository.Exists(x => x.Title == model.Title && x.Id != model.Id))
+            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
+
         // 2. Update the book properties
         existingBook.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId);
 
@@ -217,6 +221,8 @@ public class BookService : IBookService
                 {
                     var bookAuthor = new BookAuthor
                     {
+                        AuthorBookId = existingBook.Id,
+                        Book = existingBook,
                         AuthorId = author.Id,
                         Author = author,
                     };
@@ -235,6 +241,8 @@ public class BookService : IBookService
                 {
                     var bookPublisher = new BookPublisher
                     {
+                        PublisherBookId = existingBook.Id,
+                        Book = existingBook,
                         PublisherId = publisher.Id,
                         Publisher = publisher
                     };
@@ -253,6 +261,8 @@ public class BookService : IBookService
                 {
                     var bookTranslator = new BookTranslator
                     {
+                        TranslatorBookId = existingBook.Id,
+                        Book = existingBook,
                         TranslatorId = translator.Id,
                         Translator = translator
                     };
@@ -271,23 +281,6 @@ public class BookService : IBookService
 
         return operationResult.Succeeded();
     }
-
-
-    //public async Task<OperationResult> Update(BookViewModel dto)
-    //{
-    //    OperationResult operationResult = new();
-    //    var book = await _bookRepository.GetByIdAsync(dto.Id);
-    //    if (book == null)
-    //        return operationResult.Failed(ApplicationMessages.RecordNotFound);
-
-    //    if (_bookRepository.Exists(x => x.Title == dto.Title && x.Id != dto.Id))
-    //        return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
-
-    //    book.Edit(dto.Title, dto.ISBN, dto.Code, dto.Description, dto.CategoryId);
-
-    //    await _bookRepository.UpdateAsync(book);
-    //    return operationResult.Succeeded();
-    //}
     #endregion
 
     #region Delete
