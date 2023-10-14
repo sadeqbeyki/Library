@@ -119,7 +119,7 @@ public class BooksController : Controller
     }
 
     [HttpPut, HttpPost]
-    public async Task<ActionResult> Update(int id, EditBookViewModel model)
+    public async Task<IActionResult> Update(int id, EditBookViewModel model)
     {
         if (id != model.Book.Id)
         {
@@ -157,6 +157,7 @@ public class BooksController : Controller
         {
             return RedirectToAction("Index");
         }
+
         else
         {
             ModelState.AddModelError(string.Empty, "خطا در ویرایش کتاب.");

@@ -10,8 +10,11 @@ namespace AppFramework.Domain
     {
         IQueryable<TEntity> GetAll();
         Task<TEntity> GetByIdAsync(TKey id);
+
         Task<TEntity> CreateAsync(TEntity entity);
+
         Task UpdateAsync(TEntity entity);
+        Task Update(TEntity entity);
         Task DeleteAsync(TEntity entity);
 
         bool Exists(Expression<Func<TEntity, bool>> expression);
@@ -48,7 +51,6 @@ namespace AppFramework.Domain
             return await _dbSet.FindAsync(id);
 
         }
-
         public async Task<TEntity> CreateAsync(TEntity entity)
         {
             await _dbContext.Set<TEntity>().AddAsync(entity);
@@ -63,19 +65,20 @@ namespace AppFramework.Domain
         //    return entity;
         //}
 
+
         public async Task UpdateAsync(TEntity entity)
         {
+            //_dbContext.Entry(entity).State = EntityState.Modified;
+            //_dbContext.Update(entity);
             _dbSet.Update(entity);
-            await _dbContext.SaveChangesAsync();
+           await  _dbContext.SaveChangesAsync();
         }
 
-
-        //public async Task UpdateAsync(TEntity entity)
-        //{
-        //    _dbContext.Entry(entity).State = EntityState.Modified;
-        //    await SaveChangesAsync();
-        //}
-
+        public async Task Update(TEntity entity)
+        {
+            _dbSet.Update(entity);
+            _dbContext.SaveChanges();
+        }
         public async Task DeleteAsync(TEntity entity)
         {
             _dbSet.Remove(entity);
