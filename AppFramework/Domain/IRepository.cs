@@ -14,7 +14,6 @@ namespace AppFramework.Domain
         Task<TEntity> CreateAsync(TEntity entity);
 
         Task UpdateAsync(TEntity entity);
-        Task Update(TEntity entity);
         Task DeleteAsync(TEntity entity);
 
         bool Exists(Expression<Func<TEntity, bool>> expression);
@@ -71,14 +70,9 @@ namespace AppFramework.Domain
             //_dbContext.Entry(entity).State = EntityState.Modified;
             //_dbContext.Update(entity);
             _dbSet.Update(entity);
-           await  _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(TEntity entity)
-        {
-            _dbSet.Update(entity);
-            _dbContext.SaveChanges();
-        }
         public async Task DeleteAsync(TEntity entity)
         {
             _dbSet.Remove(entity);
@@ -94,12 +88,10 @@ namespace AppFramework.Domain
         public bool Exists(Expression<Func<TEntity, bool>> expression)
         {
             return _dbContext.Set<TEntity>().Any(expression);
+            //Or
+            //    return _dbSet.Any(expression);
         }
 
-        //public bool Exists(Expression<Func<TEntity, bool>> expression)
-        //{
-        //    return _dbSet.Any(expression);
-        //}
 
         public void SaveChanges()
         {

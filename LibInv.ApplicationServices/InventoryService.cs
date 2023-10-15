@@ -83,10 +83,10 @@ namespace LibInventory.ApplicationServices
             try
             {
                 var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
+                inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
 
-            _inventoryRepository.SaveChanges();
-            return operation.Succeeded();
+                _inventoryRepository.SaveChanges();
+                return operation.Succeeded();
             }
             catch (InvalidOperationException ex)
             {
@@ -116,13 +116,21 @@ namespace LibInventory.ApplicationServices
         public OperationResult Borrowing(DecreaseInventory command)
         {
             var operation = new OperationResult();
-            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var inventory = _inventoryRepository.GetBy(command.BookId);
-            inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
+            if (inventory == null)
+                return operation.Failed(ApplicationMessages.RecordNotFound);
+            try
+            {
+                var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
+                _inventoryRepository.SaveChanges();
+                return operation.Succeeded();
 
-            _inventoryRepository.SaveChanges();
-            return operation.Succeeded();
+            }
+            catch
+            {
+                return operation.Failed("عدم موجودی کتاب");
+            }
         }
 
         public OperationResult Returning(ReturnBook command)

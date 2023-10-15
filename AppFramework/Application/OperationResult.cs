@@ -17,7 +17,7 @@ public class OperationResult
         return this;
     }
 
-    public OperationResult Failed(string message)
+    public OperationResult Failed(string message = "")
     {
         IsSucceeded = false;
         Message = message;
