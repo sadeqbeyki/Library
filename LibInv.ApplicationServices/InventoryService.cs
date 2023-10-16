@@ -113,26 +113,6 @@ namespace LibInventory.ApplicationServices
             return _inventoryRepository.Search(searchModel);
         }
 
-        public OperationResult Borrowing(DecreaseInventory command)
-        {
-            var operation = new OperationResult();
-            var inventory = _inventoryRepository.GetBy(command.BookId);
-            if (inventory == null)
-                return operation.Failed(ApplicationMessages.RecordNotFound);
-            try
-            {
-                var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
-                _inventoryRepository.SaveChanges();
-                return operation.Succeeded();
-
-            }
-            catch
-            {
-                return operation.Failed("عدم موجودی کتاب");
-            }
-        }
-
         public OperationResult Returning(ReturnBook command)
         {
             OperationResult operationResult = new();
@@ -146,5 +126,70 @@ namespace LibInventory.ApplicationServices
             _inventoryRepository.SaveChanges();
             return operationResult.Succeeded();
         }
+
+        //public OperationResult Borrowing(DecreaseInventory command)
+        //{
+        //    var operation = new OperationResult();
+        //    var inventory = _inventoryRepository.GetBy(command.BookId);
+        //    if (inventory == null)
+        //        return operation.Failed(ApplicationMessages.RecordNotFound);
+
+        //    var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    try
+        //    {
+        //        inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
+        //        _inventoryRepository.SaveChanges();
+        //        return operation.Succeeded();
+
+        //    }
+        //    catch
+        //    {
+        //        return operation.Failed("عدم موجودی کتاب");
+        //    }
+        //}
+
+        public OperationResult Borrowing(DecreaseInventory command)
+        {
+            var operation = new OperationResult();
+            var inventory = _inventoryRepository.GetBy(command.BookId);
+            if (inventory == null)
+            {
+                return operation.Failed(ApplicationMessages.RecordNotFound);
+            }
+
+            var decreaseResult = DecreaseInventorySafely(inventory, command.Count, command.Description, command.LendId);
+
+            if (decreaseResult.IsSucceeded)
+            {
+                _inventoryRepository.SaveChanges();
+            }
+            else
+            {
+                return decreaseResult;
+            }
+
+            return operation.Succeeded();
+        }
+
+
+        private OperationResult DecreaseInventorySafely(Inventory inventory, long count, string description, int lendId)
+        {
+            OperationResult operation = new();
+            try
+            {
+                inventory.Decrease(count, GetCurrentOperatorId(), description, lendId);
+                return operation.Succeeded();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return operation.Failed(ex.Message);
+            }
+        }
+
+        private string GetCurrentOperatorId()
+        {
+            return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
     }
 }
