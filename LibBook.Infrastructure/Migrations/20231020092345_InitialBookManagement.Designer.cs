@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibBook.Infrastructure.Migrations
 {
     [DbContext(typeof(BookDbContext))]
-    [Migration("20230930165340_initialRemoveIdsInBooks")]
-    partial class initialRemoveIdsInBooks
+    [Migration("20231020092345_InitialBookManagement")]
+    partial class InitialBookManagement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,8 +119,8 @@ namespace LibBook.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(780)
+                        .HasColumnType("nvarchar(780)");
 
                     b.Property<string>("Name")
                         .IsRequired()

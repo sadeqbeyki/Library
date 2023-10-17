@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibBook.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initBook : Migration
+    public partial class InitialBookManagement : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +17,8 @@ namespace LibBook.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -33,7 +33,7 @@ namespace LibBook.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(780)", maxLength: 780, nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -67,8 +67,8 @@ namespace LibBook.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -82,8 +82,8 @@ namespace LibBook.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -97,14 +97,11 @@ namespace LibBook.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     ISBN = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(750)", maxLength: 750, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
-                    PublisherId = table.Column<int>(type: "int", nullable: false),
-                    TranslatorId = table.Column<int>(type: "int", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -119,7 +116,7 @@ namespace LibBook.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AuthorBooks",
+                name: "BookAuthors",
                 columns: table => new
                 {
                     AuthorId = table.Column<int>(type: "int", nullable: false),
@@ -127,15 +124,15 @@ namespace LibBook.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthorBooks", x => new { x.AuthorId, x.AuthorBookId });
+                    table.PrimaryKey("PK_BookAuthors", x => new { x.AuthorId, x.AuthorBookId });
                     table.ForeignKey(
-                        name: "FK_AuthorBooks_Authors_AuthorId",
+                        name: "FK_BookAuthors_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AuthorBooks_Books_AuthorBookId",
+                        name: "FK_BookAuthors_Books_AuthorBookId",
                         column: x => x.AuthorBookId,
                         principalTable: "Books",
                         principalColumn: "Id",
@@ -143,7 +140,7 @@ namespace LibBook.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PublisherBooks",
+                name: "BookPublishers",
                 columns: table => new
                 {
                     PublisherId = table.Column<int>(type: "int", nullable: false),
@@ -151,15 +148,15 @@ namespace LibBook.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PublisherBooks", x => new { x.PublisherId, x.PublisherBookId });
+                    table.PrimaryKey("PK_BookPublishers", x => new { x.PublisherId, x.PublisherBookId });
                     table.ForeignKey(
-                        name: "FK_PublisherBooks_Books_PublisherBookId",
+                        name: "FK_BookPublishers_Books_PublisherBookId",
                         column: x => x.PublisherBookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PublisherBooks_Publishers_PublisherId",
+                        name: "FK_BookPublishers_Publishers_PublisherId",
                         column: x => x.PublisherId,
                         principalTable: "Publishers",
                         principalColumn: "Id",
@@ -167,7 +164,7 @@ namespace LibBook.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TranslatorBooks",
+                name: "BookTranslators",
                 columns: table => new
                 {
                     TranslatorId = table.Column<int>(type: "int", nullable: false),
@@ -175,15 +172,15 @@ namespace LibBook.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TranslatorBooks", x => new { x.TranslatorId, x.TranslatorBookId });
+                    table.PrimaryKey("PK_BookTranslators", x => new { x.TranslatorId, x.TranslatorBookId });
                     table.ForeignKey(
-                        name: "FK_TranslatorBooks_Books_TranslatorBookId",
+                        name: "FK_BookTranslators_Books_TranslatorBookId",
                         column: x => x.TranslatorBookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TranslatorBooks_Translators_TranslatorId",
+                        name: "FK_BookTranslators_Translators_TranslatorId",
                         column: x => x.TranslatorId,
                         principalTable: "Translators",
                         principalColumn: "Id",
@@ -191,9 +188,14 @@ namespace LibBook.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorBooks_AuthorBookId",
-                table: "AuthorBooks",
+                name: "IX_BookAuthors_AuthorBookId",
+                table: "BookAuthors",
                 column: "AuthorBookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookPublishers_PublisherBookId",
+                table: "BookPublishers",
+                column: "PublisherBookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_CategoryId",
@@ -201,13 +203,8 @@ namespace LibBook.Infrastructure.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PublisherBooks_PublisherBookId",
-                table: "PublisherBooks",
-                column: "PublisherBookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TranslatorBooks_TranslatorBookId",
-                table: "TranslatorBooks",
+                name: "IX_BookTranslators_TranslatorBookId",
+                table: "BookTranslators",
                 column: "TranslatorBookId");
         }
 
@@ -215,16 +212,16 @@ namespace LibBook.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AuthorBooks");
+                name: "BookAuthors");
+
+            migrationBuilder.DropTable(
+                name: "BookPublishers");
+
+            migrationBuilder.DropTable(
+                name: "BookTranslators");
 
             migrationBuilder.DropTable(
                 name: "Borrows");
-
-            migrationBuilder.DropTable(
-                name: "PublisherBooks");
-
-            migrationBuilder.DropTable(
-                name: "TranslatorBooks");
 
             migrationBuilder.DropTable(
                 name: "Authors");

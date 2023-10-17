@@ -165,7 +165,7 @@ namespace LibInventory.ApplicationServices
             }
             else
             {
-                return decreaseResult;
+                return decreaseResult.Failed();
             }
 
             return operation.Succeeded();
