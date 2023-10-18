@@ -39,16 +39,19 @@ public class BorrowService : IBorrowService
         return operationResult.Succeeded();
     }
 
-    public async Task<OperationResult> BorrowingRegistration(int borrowId)
+    public async Task<OperationResult> SubmitLend(int lendId)
     {
         OperationResult operationResult = new();
-        Borrow borrow = await _borrowRepository.GetByIdAsync(borrowId);
-        if (borrow == null)
+        Borrow lend = await _borrowRepository.GetByIdAsync(lendId);
+        if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        _inventoryAcl.BorrowFromInventory(borrow);
-        _borrowRepository.SaveChanges();
-        return operationResult.Succeeded();
+        if (_inventoryAcl.LoanFromInventory(lend) == true)
+        {
+            _borrowRepository.SaveChanges();
+            return operationResult.Succeeded();
+        }
+        return operationResult.Failed();
     }
     #endregion
 

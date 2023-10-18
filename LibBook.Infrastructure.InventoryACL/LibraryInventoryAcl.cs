@@ -13,11 +13,14 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
         _inventoryService = inventoryService;
     }
 
-    public bool BorrowFromInventory(Borrow borrow)
+    public bool LoanFromInventory(Borrow lend)
     {
-        var item = new DecreaseInventory(borrow.BookId, 1, "Borrowed...", borrow.Id);
-
-        return _inventoryService.Borrowing(item).IsSucceeded;
+        var item = new DecreaseInventory(lend.BookId, 1, "Borrowed...", lend.Id);
+        if (_inventoryService.Borrowing(item).IsSucceeded == true)
+        {
+            return true;
+        }
+        return false;
     }
     public bool ReturnToInventory(Borrow borrow)
     {

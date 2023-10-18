@@ -51,9 +51,9 @@ public class BorrowsController : Controller
         return RedirectToAction("Index", result);
     }
 
-    public async Task<ActionResult> BorrowingRegistration(int id)
+    public async Task<ActionResult> SubmitLend(int id)
     {
-        await _borrowService.BorrowingRegistration(id);
+        await _borrowService.SubmitLend(id);
         return RedirectToAction("Index");
     }
     #endregion
