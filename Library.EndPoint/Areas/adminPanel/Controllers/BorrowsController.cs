@@ -98,9 +98,9 @@ public class BorrowsController : Controller
     #endregion
 
     [HttpGet]
-    public async Task<ActionResult> ReturnBorrow(int id)
+    public async Task<ActionResult> ReturnLoan(int id)
     {
-        await _borrowService.ReturnBorrow(id);
+        await _borrowService.ReturnLoan(id);
         return RedirectToAction("Index");
     }
 

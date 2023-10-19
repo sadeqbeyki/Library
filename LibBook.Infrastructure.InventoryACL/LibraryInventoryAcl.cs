@@ -25,7 +25,11 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
     public bool ReturnToInventory(Borrow borrow)
     {
         var item = new ReturnBook(borrow.BookId, 1, "Returned...", borrow.Id);
-        return _inventoryService.Returning(item).IsSucceeded;
+        if (_inventoryService.Returning(item).IsSucceeded == true)
+        {
+            return true;
+        }
+        return false;
     }
 
     //public bool LendFromInventory(List<LendItem> items)

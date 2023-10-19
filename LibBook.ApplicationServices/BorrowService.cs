@@ -131,15 +131,18 @@ public class BorrowService : IBorrowService
         return operationResult.Succeeded();
     }
 
-    public async Task<OperationResult> ReturnBorrow(int borrowId)
+    public async Task<OperationResult> ReturnLoan(int lendId)
     {
         OperationResult operationResult = new();
-        Borrow borrow = await _borrowRepository.GetByIdAsync(borrowId);
-        if (borrow == null)
+        Borrow lend = await _borrowRepository.GetByIdAsync(lendId);
+        if (lend == null)
             operationResult.Failed(ApplicationMessages.RecordNotFound);
-        _inventoryAcl.ReturnToInventory(borrow);
-        _borrowRepository.SaveChanges();
-        return operationResult.Succeeded();
+        if (_inventoryAcl.ReturnToInventory(lend) == true)
+        {
+            _borrowRepository.SaveChanges();
+            return operationResult.Succeeded();
+        }
+        return operationResult.Failed();
     }
     #endregion
 
