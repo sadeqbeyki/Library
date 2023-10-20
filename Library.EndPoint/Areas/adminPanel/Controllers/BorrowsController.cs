@@ -50,12 +50,6 @@ public class BorrowsController : Controller
         }
         return RedirectToAction("Index", result);
     }
-
-    public async Task<ActionResult> SubmitLend(int id)
-    {
-        await _borrowService.SubmitLend(id);
-        return RedirectToAction("Index");
-    }
     #endregion
 
     #region Read
@@ -97,6 +91,11 @@ public class BorrowsController : Controller
     }
     #endregion
 
+    public async Task<ActionResult> SubmitLend(int id)
+    {
+        await _borrowService.SubmitLend(id);
+        return RedirectToAction("Index");
+    }
     [HttpGet]
     public async Task<ActionResult> ReturnLoan(int id)
     {

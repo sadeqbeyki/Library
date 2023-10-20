@@ -8,5 +8,8 @@
         public const string WrongUserPass = "نام کاربری یا گذرواژه اشتباه است";
         public const string MoreThanStock = "مقدار درخواستی از موجودی انبار بیشتر است";
         public const string ProblemFound = "عملیات ایجاد با مشکل مواجه شد";
+
+        //Lend System
+        public const string BookIsLoaned = "کتاب امانت داده شده است";
     }
 }

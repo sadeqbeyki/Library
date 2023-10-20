@@ -148,14 +148,16 @@ namespace LibInventory.ApplicationServices
         //    }
         //}
 
-        public OperationResult Borrowing(DecreaseInventory command)
+        public OperationResult Lending(DecreaseInventory command)
         {
             var operation = new OperationResult();
+
             var inventory = _inventoryRepository.GetBy(command.BookId);
             if (inventory == null)
-            {
                 return operation.Failed(ApplicationMessages.RecordNotFound);
-            }
+
+            if (inventory.IsLoaned == true)
+                return operation.Failed(ApplicationMessages.BookIsLoaned);
 
             var decreaseResult = DecreaseInventorySafely(inventory, command.Count, command.Description, command.LendId);
 
@@ -168,6 +170,7 @@ namespace LibInventory.ApplicationServices
                 return decreaseResult.Failed();
             }
 
+            inventory.IsLoaned == true;
             return operation.Succeeded();
         }
 

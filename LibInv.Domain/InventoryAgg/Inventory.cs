@@ -7,6 +7,7 @@ public class Inventory : BaseEntity
     public int BookId { get; private set; }
     public double UnitPrice { get; private set; }
     public bool InStock { get; private set; }
+    public bool IsLoaned { get; private set; }
     public List<InventoryOperation> Operations { get; private set; }
 
     public Inventory(int bookId, double unitPrice)
@@ -14,6 +15,7 @@ public class Inventory : BaseEntity
         BookId = bookId;
         UnitPrice = unitPrice;
         InStock = false;
+        IsLoaned = false;
     }
     public void Edit(int bookId, double unitPrice)
     {
