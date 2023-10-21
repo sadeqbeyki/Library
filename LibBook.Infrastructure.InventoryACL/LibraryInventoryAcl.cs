@@ -16,7 +16,7 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
     public bool LoanFromInventory(Borrow lend)
     {
         var item = new DecreaseInventory(lend.BookId, 1, "Borrowed...", lend.Id);
-        if (_inventoryService.Lending(item).IsSucceeded == true)
+        if (_inventoryService.Borrowing(item).IsSucceeded == true)
         {
             return true;
         }

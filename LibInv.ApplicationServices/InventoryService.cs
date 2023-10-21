@@ -148,7 +148,7 @@ namespace LibInventory.ApplicationServices
         //    }
         //}
 
-        public OperationResult Lending(DecreaseInventory command)
+        public OperationResult Borrowing(DecreaseInventory command)
         {
             var operation = new OperationResult();
 
@@ -167,10 +167,9 @@ namespace LibInventory.ApplicationServices
             }
             else
             {
-                return decreaseResult.Failed();
+                return decreaseResult.Failed(ApplicationMessages.TheBookIsNotInStock);
             }
 
-            inventory.IsLoaned == true;
             return operation.Succeeded();
         }
 
@@ -180,12 +179,13 @@ namespace LibInventory.ApplicationServices
             OperationResult operation = new();
             try
             {
+                inventory.IsLoaned = true;
                 inventory.Decrease(count, GetCurrentOperatorId(), description, lendId);
                 return operation.Succeeded();
             }
-            catch (InvalidOperationException ex)
+            catch
             {
-                return operation.Failed(ex.Message);
+                return operation.Failed(ApplicationMessages.TheBookIsNotInStock);
             }
         }
 

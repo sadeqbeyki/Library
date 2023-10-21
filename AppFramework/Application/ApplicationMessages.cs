@@ -11,5 +11,6 @@
 
         //Lend System
         public const string BookIsLoaned = "کتاب امانت داده شده است";
+        public const string TheBookIsNotInStock = "کتاب در انبار موجود نیست";
     }
 }
