@@ -13,7 +13,7 @@ namespace LibInventory.DomainContracts.Inventory
         List<InventoryViewModel> Search(InventorySearchModel searchModel);
         List<InventoryOperationViewModel> GetOperationLog(int inventoryId);
 
-        OperationResult Borrowing(DecreaseInventory command);
+        OperationResult Lending(DecreaseInventory command);
         OperationResult Returning(ReturnBook command);
     }
 }

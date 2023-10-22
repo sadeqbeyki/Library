@@ -116,15 +116,66 @@ namespace LibInventory.ApplicationServices
         public OperationResult Returning(ReturnBook command)
         {
             OperationResult operationResult = new();
-            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var inventory = _inventoryRepository.GetBy(command.BookId);
             if (inventory == null)
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            inventory.Return(command.Count, operatorId, command.Description, command.LendId);
+            if (inventory.IsLoaned == false)
+                operationResult.Failed(ApplicationMessages.BookWasAlreadyReturned);
+
+            inventory.Return(command.Count, GetCurrentOperatorId(), command.Description, command.LendId);
             _inventoryRepository.SaveChanges();
             return operationResult.Succeeded();
+        }
+
+
+
+
+        public OperationResult Lending(DecreaseInventory command)
+        {
+            var operation = new OperationResult();
+
+            var inventory = _inventoryRepository.GetBy(command.BookId);
+            if (inventory == null)
+                return operation.Failed(ApplicationMessages.RecordNotFound);
+
+            if (inventory.IsLoaned == true)
+                return operation.Failed(ApplicationMessages.BookIsLoaned);
+
+            var decreaseResult = DecreaseInventorySafely(inventory, command.Count, command.Description, command.LendId);
+
+            if (decreaseResult.IsSucceeded)
+            {
+                _inventoryRepository.SaveChanges();
+            }
+            else
+            {
+                return decreaseResult.Failed();
+            }
+
+            return operation.Succeeded();
+        }
+
+
+        private OperationResult DecreaseInventorySafely(Inventory inventory, long count, string description, int lendId)
+        {
+            OperationResult operation = new();
+            try
+            {
+                inventory.IsLoaned = true;
+                inventory.Decrease(count, GetCurrentOperatorId(), description, lendId);
+                return operation.Succeeded();
+            }
+            catch /*(InvalidOperationException ex)*/
+            {
+                return operation.Failed(ApplicationMessages.TheBookIsNotInStock);
+            }
+        }
+
+        private string GetCurrentOperatorId()
+        {
+            return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         //public OperationResult Borrowing(DecreaseInventory command)
@@ -147,52 +198,5 @@ namespace LibInventory.ApplicationServices
         //        return operation.Failed("عدم موجودی کتاب");
         //    }
         //}
-
-        public OperationResult Borrowing(DecreaseInventory command)
-        {
-            var operation = new OperationResult();
-
-            var inventory = _inventoryRepository.GetBy(command.BookId);
-            if (inventory == null)
-                return operation.Failed(ApplicationMessages.RecordNotFound);
-
-            if (inventory.IsLoaned == true)
-                return operation.Failed(ApplicationMessages.BookIsLoaned);
-
-            var decreaseResult = DecreaseInventorySafely(inventory, command.Count, command.Description, command.LendId);
-
-            if (decreaseResult.IsSucceeded)
-            {
-                _inventoryRepository.SaveChanges();
-            }
-            else
-            {
-                return decreaseResult.Failed(ApplicationMessages.TheBookIsNotInStock);
-            }
-
-            return operation.Succeeded();
-        }
-
-
-        private OperationResult DecreaseInventorySafely(Inventory inventory, long count, string description, int lendId)
-        {
-            OperationResult operation = new();
-            try
-            {
-                inventory.IsLoaned = true;
-                inventory.Decrease(count, GetCurrentOperatorId(), description, lendId);
-                return operation.Succeeded();
-            }
-            catch
-            {
-                return operation.Failed(ApplicationMessages.TheBookIsNotInStock);
-            }
-        }
-
-        private string GetCurrentOperatorId()
-        {
-            return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
-
     }
 }
