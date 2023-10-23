@@ -129,7 +129,20 @@ namespace LibInventory.ApplicationServices
             return operationResult.Succeeded();
         }
 
-
+        private OperationResult ReturnToInventory(Inventory inventory, long count, string description, int lendId)
+        {
+            OperationResult operation = new();
+            try
+            {
+                inventory.IsLoaned = false;
+                inventory.Return(count, GetCurrentOperatorId(), description, lendId);
+                return operation.Succeeded();
+            }
+            catch
+            {
+                return operation.Failed(ApplicationMessages.RecordNotFound);
+            }
+        }
 
 
         public OperationResult Lending(DecreaseInventory command)
@@ -156,7 +169,6 @@ namespace LibInventory.ApplicationServices
 
             return operation.Succeeded();
         }
-
 
         private OperationResult DecreaseInventorySafely(Inventory inventory, long count, string description, int lendId)
         {
