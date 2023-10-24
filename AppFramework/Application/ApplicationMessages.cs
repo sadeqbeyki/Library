@@ -13,5 +13,7 @@
         public const string BookIsLoaned = "کتاب امانت داده شده است";
         public const string TheBookIsNotInStock = "کتاب در انبار موجود نیست";
         public const string BookWasAlreadyReturned = "کتاب قبلا به انبار بازگردانده شده است";
+        public const string ReturnFailed = "مشکل در بازپس دادن کتاب";
+        public const string LendFailed = "مشکل در امانت گرفتن کتاب";
     }
 }

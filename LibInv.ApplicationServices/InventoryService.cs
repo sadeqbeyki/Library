@@ -122,10 +122,18 @@ namespace LibInventory.ApplicationServices
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
             if (inventory.IsLoaned == false)
-                operationResult.Failed(ApplicationMessages.BookWasAlreadyReturned);
+                return operationResult.Failed(ApplicationMessages.BookWasAlreadyReturned);
 
-            inventory.Return(command.Count, GetCurrentOperatorId(), command.Description, command.LendId);
-            _inventoryRepository.SaveChanges();
+            //inventory.Return(command.Count, GetCurrentOperatorId(), command.Description, command.LendId);
+            var returnResult = ReturnToInventory(inventory, command.Count, command.Description, command.LendId);
+            if (returnResult.IsSucceeded)
+            {
+                _inventoryRepository.SaveChanges();
+            }
+            else
+            {
+                return operationResult.Failed(ApplicationMessages.ReturnFailed);
+            }
             return operationResult.Succeeded();
         }
 
@@ -140,37 +148,37 @@ namespace LibInventory.ApplicationServices
             }
             catch
             {
-                return operation.Failed(ApplicationMessages.RecordNotFound);
+                return operation.Failed(ApplicationMessages.ReturnFailed);
             }
         }
 
-
         public OperationResult Lending(DecreaseInventory command)
         {
-            var operation = new OperationResult();
+            OperationResult operationResult = new();
 
             var inventory = _inventoryRepository.GetBy(command.BookId);
             if (inventory == null)
-                return operation.Failed(ApplicationMessages.RecordNotFound);
+                return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
             if (inventory.IsLoaned == true)
-                return operation.Failed(ApplicationMessages.BookIsLoaned);
+                return operationResult.Failed(ApplicationMessages.BookIsLoaned);
 
-            var decreaseResult = DecreaseInventorySafely(inventory, command.Count, command.Description, command.LendId);
+            //inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
+            var lendResult = LoanFromInventory(inventory, command.Count, command.Description, command.LendId);
 
-            if (decreaseResult.IsSucceeded)
+            if (lendResult.IsSucceeded)
             {
                 _inventoryRepository.SaveChanges();
             }
             else
             {
-                return decreaseResult.Failed();
+                return lendResult.Failed(ApplicationMessages.LendFailed);
             }
 
-            return operation.Succeeded();
+            return operationResult.Succeeded();
         }
 
-        private OperationResult DecreaseInventorySafely(Inventory inventory, long count, string description, int lendId)
+        private OperationResult LoanFromInventory(Inventory inventory, long count, string description, int lendId)
         {
             OperationResult operation = new();
             try
@@ -189,26 +197,5 @@ namespace LibInventory.ApplicationServices
         {
             return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
-
-        //public OperationResult Borrowing(DecreaseInventory command)
-        //{
-        //    var operation = new OperationResult();
-        //    var inventory = _inventoryRepository.GetBy(command.BookId);
-        //    if (inventory == null)
-        //        return operation.Failed(ApplicationMessages.RecordNotFound);
-
-        //    var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    try
-        //    {
-        //        inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
-        //        _inventoryRepository.SaveChanges();
-        //        return operation.Succeeded();
-
-        //    }
-        //    catch
-        //    {
-        //        return operation.Failed("عدم موجودی کتاب");
-        //    }
-        //}
     }
 }
