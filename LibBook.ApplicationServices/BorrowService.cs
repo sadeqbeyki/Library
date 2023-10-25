@@ -27,12 +27,11 @@ public class BorrowService : IBorrowService
     }
 
     #region Create
-    public async Task<OperationResult> Borrowing(BorrowDto dto)
+    public async Task<OperationResult> Lending(BorrowDto dto)
     {
         OperationResult operationResult = new();
-        var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        Borrow borrow = new(dto.BookId, dto.MemberId, operatorId, dto.IdealReturnDate,
+        Borrow borrow = new(dto.BookId, dto.MemberId, GetCurrentOperatorId(), dto.IdealReturnDate,
             dto.ReturnEmployeeId, dto.ReturnDate, dto.Description);
 
         var result = await _borrowRepository.CreateAsync(borrow);
@@ -115,7 +114,7 @@ public class BorrowService : IBorrowService
     #endregion
 
     #region Update
-    public async Task<OperationResult> Update(BorrowDto dto)
+    public async Task<OperationResult> Returning(BorrowDto dto)
     {
         OperationResult operationResult = new();
 
@@ -123,15 +122,17 @@ public class BorrowService : IBorrowService
         if (borrow == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        borrow.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate,
-            dto.ReturnEmployeeId = operatorId, dto.ReturnDate = DateTime.Now, dto.Description);
+        borrow.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, GetCurrentOperatorId(), DateTime.Now, dto.Description);
 
-        await _borrowRepository.UpdateAsync(borrow);
-        return operationResult.Succeeded();
+        if (ReturnLoan(dto.Id).IsCompletedSuccessfully)
+        {
+            await _borrowRepository.UpdateAsync(borrow);
+            return operationResult.Succeeded();
+        }
+        return operationResult.Failed(ApplicationMessages.ReturnFailed);
     }
 
-    public async Task<OperationResult> ReturnLoan(int lendId)
+    private async Task<OperationResult> ReturnLoan(int lendId)
     {
         OperationResult operationResult = new();
         Borrow lend = await _borrowRepository.GetByIdAsync(lendId);
@@ -155,4 +156,8 @@ public class BorrowService : IBorrowService
 
     #endregion
 
+    private string GetCurrentOperatorId()
+    {
+        return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 }

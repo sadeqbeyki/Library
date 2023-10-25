@@ -43,7 +43,7 @@ public class BorrowsController : Controller
     [HttpPost]
     public async Task<ActionResult> Borrowing(BorrowDto dto)
     {
-        var result = await _borrowService.Borrowing(dto);
+        var result = await _borrowService.Lending(dto);
         if (result == null)
         {
             return View("Error");
@@ -86,7 +86,7 @@ public class BorrowsController : Controller
     [HttpPut, HttpPost]
     public async Task<ActionResult> Update(UpdateBorrowViewModel model)
     {
-        var result = await _borrowService.Update(model.Borrow);
+        var result = await _borrowService.Returning(model.Borrow);
         return RedirectToAction("Index", result);
     }
     #endregion
@@ -96,11 +96,11 @@ public class BorrowsController : Controller
         await _borrowService.SubmitLend(id);
         return RedirectToAction("Index");
     }
-    [HttpGet]
-    public async Task<ActionResult> ReturnLoan(int id)
-    {
-        await _borrowService.ReturnLoan(id);
-        return RedirectToAction("Index");
-    }
+    //[HttpGet]
+    //public async Task<ActionResult> ReturnLoan(int id)
+    //{
+    //    await _borrowService.ReturnLoan(id);
+    //    return RedirectToAction("Index");
+    //}
 
 }
