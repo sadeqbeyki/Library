@@ -114,28 +114,32 @@ public class BorrowService : IBorrowService
     #endregion
 
     #region Update
-    public async Task<OperationResult> Returning(BorrowDto dto)
+    public OperationResult Returning(BorrowDto dto)
     {
         OperationResult operationResult = new();
 
-        var borrow = await _borrowRepository.GetByIdAsync(dto.Id);
+        var borrow = _borrowRepository.GetByIdAsync(dto.Id).Result;
         if (borrow == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
         borrow.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, GetCurrentOperatorId(), DateTime.Now, dto.Description);
 
-        if (ReturnLoan(dto.Id).IsCompletedSuccessfully)
+
+        if (ReturnLoan(dto.Id).IsSucceeded)
         {
-            await _borrowRepository.UpdateAsync(borrow);
+            _borrowRepository.UpdateAsync(borrow);
             return operationResult.Succeeded();
         }
-        return operationResult.Failed(ApplicationMessages.ReturnFailed);
+        else
+        {
+            return operationResult.Failed(ApplicationMessages.ReturnFailed);
+        }
     }
 
-    private async Task<OperationResult> ReturnLoan(int lendId)
+    private OperationResult ReturnLoan(int lendId)
     {
         OperationResult operationResult = new();
-        Borrow lend = await _borrowRepository.GetByIdAsync(lendId);
+        Borrow lend = _borrowRepository.GetByIdAsync(lendId).Result;
         if (lend == null)
             operationResult.Failed(ApplicationMessages.RecordNotFound);
         if (_inventoryAcl.ReturnToInventory(lend) == true)

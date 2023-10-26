@@ -72,7 +72,7 @@ public class BorrowsController : Controller
 
     #region Update
     [HttpGet]
-    public async Task<ActionResult<BorrowDto>> Update(int id)
+    public async Task<ActionResult<BorrowDto>> Return(int id)
     {
         var model = new UpdateBorrowViewModel
         {
@@ -81,13 +81,15 @@ public class BorrowsController : Controller
             Books = await _bookService.GetAll(),
         };
 
-        return View("Update", model);
+        return View("Return", model);
     }
     [HttpPut, HttpPost]
-    public async Task<ActionResult> Update(UpdateBorrowViewModel model)
+    public IActionResult Return(UpdateBorrowViewModel model)
     {
-        var result = await _borrowService.Returning(model.Borrow);
-        return RedirectToAction("Index", result);
+        var result = _borrowService.Returning(model.Borrow);
+        if (result.IsSucceeded)
+            return RedirectToAction("Index", result);
+        return RedirectToAction("Return", model);
     }
     #endregion
 
@@ -96,11 +98,4 @@ public class BorrowsController : Controller
         await _borrowService.SubmitLend(id);
         return RedirectToAction("Index");
     }
-    //[HttpGet]
-    //public async Task<ActionResult> ReturnLoan(int id)
-    //{
-    //    await _borrowService.ReturnLoan(id);
-    //    return RedirectToAction("Index");
-    //}
-
 }

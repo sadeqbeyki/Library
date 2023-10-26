@@ -16,6 +16,5 @@ public interface IBorrowService
     Task<OperationResult> Lending(BorrowDto dto);
     Task<OperationResult> SubmitLend(int borrowId);
     
-    Task<OperationResult> Returning(BorrowDto dto);
-    //Task<OperationResult> ReturnLoan(int borrowId);
+    OperationResult Returning(BorrowDto dto);
 }

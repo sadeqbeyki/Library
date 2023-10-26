@@ -1,14 +1,14 @@
 ﻿@using Library.EndPoint.Areas.adminPanel.Models;
 @model UpdateBorrowViewModel
 @{
-    ViewData["Title"] = "Update Borrow";
+    ViewData["Title"] = "Returning The Loan";
 }
 
 <h1 class="bg-info text-white">@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-6">
 
-        <form asp-action="Update" method="post">
+        <form asp-action="Return" method="post">
             <div>
                 <div class="row">
                     <div class="col-md-6">
@@ -84,7 +84,7 @@
             </div>
             <div>
                 <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
-                <button type="submit" class="btn btn-info waves-effect waves-light">Update</button>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Return</button>
             </div>
         </form>
     </div>
