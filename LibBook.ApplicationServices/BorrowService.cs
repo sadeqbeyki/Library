@@ -64,17 +64,17 @@ public class BorrowService : IBorrowService
     public async Task<List<BorrowDto>> GetAllBorrows()
     {
         var result = await _borrowRepository.GetAll()
-                    .Select(borrow => new BorrowDto
+                    .Select(lend => new BorrowDto
                     {
-                        Id = borrow.Id,
-                        BookId = borrow.Id,
-                        MemberId = borrow.MemberID,
-                        EmployeeId = borrow.EmployeeId,
-                        BorrowDate = borrow.CreationDate,
-                        IdealReturnDate = borrow.IdealReturnDate,
-                        ReturnEmployeeId = borrow.ReturnEmployeeID,
-                        ReturnDate = borrow.ReturnDate,
-                        Description = borrow.Description,
+                        Id = lend.Id,
+                        BookId = lend.BookId,
+                        MemberId = lend.MemberID,
+                        EmployeeId = lend.EmployeeId,
+                        BorrowDate = lend.CreationDate,
+                        IdealReturnDate = lend.IdealReturnDate,
+                        ReturnEmployeeId = lend.ReturnEmployeeID,
+                        ReturnDate = lend.ReturnDate,
+                        Description = lend.Description,
                     }).ToListAsync();
         return result;
     }
