@@ -12,6 +12,7 @@ public interface IBorrowService
     Task<List<BorrowDto>> GetOverdueBorrows();
 
     Task Delete(int borrowId);
+    void SoftDelete(int borrowId);
 
     Task<OperationResult> Lending(BorrowDto dto);
     Task<OperationResult> SubmitLend(int borrowId);

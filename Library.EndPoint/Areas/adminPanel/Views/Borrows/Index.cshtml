@@ -16,9 +16,9 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
-            <div class="panel-heading">
+@*             <div class="panel-heading">
                 <h3 class="panel-title pull-right">@ViewData["Title"] - List of borrows</h3>
-            </div>
+            </div> *@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -57,16 +57,16 @@
                                                 <i class="fa fa-send"></i>Submit
                                             </a>
 
-                                            <a class="btn btn-success" asp-action="Return" asp-route-id="@item.Id">
+                                            <a class="btn btn-warning" asp-action="Return" asp-route-id="@item.Id">
                                                 <i class="fa fa-redo"></i>Return
                                             </a>
 
 @*                                             <a class="btn btn-warning pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">
                                                 <i class="fa fa-edit"></i>Update
                                             </a> *@
-                                            <a class="btn btn-danger pull-right m-rl-5" asp-action="Delete" asp-route-id="@item.Id">
+@*                                             <a class="btn btn-danger pull-right m-rl-5" asp-action="Delete" asp-route-id="@item.Id">
                                                 <i class="fa fa-remove"></i>Delete
-                                            </a>
+                                            </a> *@
                                             <a class="btn btn-info pull-right m-rl-5" asp-action="Details" asp-route-id="@item.Id">
                                                 <i class="fa fa-info"></i>Details
                                             </a>

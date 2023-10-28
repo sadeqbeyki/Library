@@ -152,12 +152,16 @@ public class BorrowService : IBorrowService
     #endregion
 
     #region Delete
-    public async Task Delete(int borrowId)
+    public async Task Delete(int lendId)
     {
-        var borrow = await _borrowRepository.GetByIdAsync(borrowId);
+        var borrow = await _borrowRepository.GetByIdAsync(lendId);
         await _borrowRepository.DeleteAsync(borrow);
     }
 
+    public void SoftDelete(int lendId)
+    {
+        _borrowRepository.SoftDelete(lendId);
+    }
     #endregion
 
     private string GetCurrentOperatorId()

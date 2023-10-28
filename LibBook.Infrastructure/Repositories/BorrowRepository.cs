@@ -72,4 +72,11 @@ public partial class BorrowRepository : Repository<Borrow, int>, IBorrowReposito
         }).ToList();
         return result;
     }
+
+    public void SoftDelete(int lendId)
+    {
+        var borrow = _bookDbContext.Borrows.FirstOrDefault(lid => lid.Id == lendId);
+        if (borrow != null && borrow.IsDeleted == false)
+            borrow.IsDeleted = true;
+    }
 }

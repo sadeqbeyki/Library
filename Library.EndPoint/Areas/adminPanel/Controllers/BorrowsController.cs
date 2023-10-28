@@ -68,6 +68,15 @@ public class BorrowsController : Controller
         await _borrowService.Delete(id);
         return RedirectToAction("Index");
     }
+    public IActionResult SoftDelete(int id)
+    {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction("Details");
+        }
+        _borrowService.SoftDelete(id);
+        return RedirectToAction("Index");
+    }
     #endregion
 
     #region Update
