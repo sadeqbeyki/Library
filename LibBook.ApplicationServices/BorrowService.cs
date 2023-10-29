@@ -64,6 +64,7 @@ public class BorrowService : IBorrowService
     public async Task<List<BorrowDto>> GetAllBorrows()
     {
         var result = await _borrowRepository.GetAll()
+            .Where(x => x.IsDeleted == false)
                     .Select(lend => new BorrowDto
                     {
                         Id = lend.Id,
