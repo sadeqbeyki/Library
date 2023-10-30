@@ -15,6 +15,8 @@ namespace AppFramework.Domain
 
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
+        Task SoftDeleteAsync(TEntity entity);
+
 
         bool Exists(Expression<Func<TEntity, bool>> expression);
         void SaveChanges();
@@ -76,6 +78,13 @@ namespace AppFramework.Domain
         public async Task DeleteAsync(TEntity entity)
         {
             _dbSet.Remove(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task SoftDeleteAsync(TEntity entity)
+        {
+            entity.IsDeleted = true;
+            _dbContext.Update(entity);
             await _dbContext.SaveChangesAsync();
         }
 

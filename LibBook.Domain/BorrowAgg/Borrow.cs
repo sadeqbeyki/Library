@@ -11,7 +11,6 @@ public class Borrow : BaseEntity
     public string? ReturnEmployeeID { get; set; }
     public DateTime? ReturnDate { get; set; }
     public string? Description { get; set; }
-    public bool IsDeleted { get; set; }
 
 
     public Borrow(int bookId, string memberID, string employeeId, DateTime idealReturnDate, string? returnEmployeeID, DateTime? returnDate, string? description)
@@ -23,7 +22,6 @@ public class Borrow : BaseEntity
         ReturnEmployeeID = returnEmployeeID;
         ReturnDate = returnDate;
         Description = description;
-        IsDeleted = false;
     }
     public void Edit(int bookId, string memberID, string employeeId, DateTime idealReturnDate, string? returnEmployeeID, DateTime? returnDate, string? description)
     {

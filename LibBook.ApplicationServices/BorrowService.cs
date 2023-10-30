@@ -159,9 +159,10 @@ public class BorrowService : IBorrowService
         await _borrowRepository.DeleteAsync(borrow);
     }
 
-    public void SoftDelete(int lendId)
+    public async Task SoftDeleteAsync(BorrowDto model)
     {
-        _borrowRepository.SoftDelete(lendId);
+        Borrow borrow = await _borrowRepository.GetByIdAsync(model.Id);
+        await _borrowRepository.SoftDeleteAsync(borrow);
     }
     #endregion
 
@@ -169,4 +170,6 @@ public class BorrowService : IBorrowService
     {
         return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
+
+
 }
