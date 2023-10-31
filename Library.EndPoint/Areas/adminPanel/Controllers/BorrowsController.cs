@@ -24,35 +24,13 @@ public class BorrowsController : Controller
         _userService = userService;
     }
 
+    #region Read
     public async Task<ActionResult<List<BorrowDto>>> Index()
     {
         List<BorrowDto> borrows = await _borrowService.GetAllBorrows();
         return View("Index", borrows);
     }
-    #region Create
-    [HttpGet]
-    public async Task<ActionResult<BorrowDto>> Borrowing()
-    {
-        var command = new CreateBorrowViewModel
-        {
-            Members = await _userService.GetUsers(),
-            Books = await _bookService.GetAll(),
-        };
-        return View("Borrowing", command);
-    }
-    [HttpPost]
-    public async Task<ActionResult> Borrowing(BorrowDto dto)
-    {
-        var result = await _borrowService.Lending(dto);
-        if (result == null)
-        {
-            return View("Error");
-        }
-        return RedirectToAction("Index", result);
-    }
-    #endregion
 
-    #region Read
     [HttpGet]
     public async Task<ActionResult<BorrowDto>> Details(int id)
     {
@@ -61,6 +39,61 @@ public class BorrowsController : Controller
             return NotFound();
         return View(result);
     }
+    #endregion
+
+    #region Create
+    [HttpGet]
+    public async Task<ActionResult<BorrowDto>> Lending()
+    {
+        var command = new CreateBorrowViewModel
+        {
+            Members = await _userService.GetUsers(),
+            Books = await _bookService.GetAll(),
+        };
+        return View("Lending", command);
+    }
+    [HttpPost]
+    public async Task<ActionResult> Lending(BorrowDto dto)
+    {
+        var result = await _borrowService.Lending(dto);
+        if (result == null)
+        {
+            return View("Error");
+        }
+        return RedirectToAction("Index", result);
+    }
+
+    public async Task<ActionResult> SubmitLend(int id)
+    {
+        await _borrowService.SubmitLend(id);
+        return RedirectToAction("Index");
+    }
+    #endregion
+
+    #region Update
+    [HttpGet]
+    public async Task<ActionResult<BorrowDto>> Update(int id)
+    {
+        var model = new UpdateBorrowViewModel
+        {
+            Borrow = await _borrowService.GetBorrowById(id),
+            Members = await _userService.GetUsers(),
+            Books = await _bookService.GetAll(),
+        };
+
+        return View("Update", model);
+    }
+    [HttpPut, HttpPost]
+    public IActionResult Update(UpdateBorrowViewModel model)
+    {
+        var result = _borrowService.Update(model.Borrow);
+        if (result.IsSucceeded)
+            return RedirectToAction("Index", result);
+        return RedirectToAction("Update", model);
+    }
+    #endregion
+
+    #region Delete
     [HttpPost, ActionName("Details")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Delete(int id)
@@ -79,7 +112,7 @@ public class BorrowsController : Controller
     }
     #endregion
 
-    #region Update
+    #region Return
     [HttpGet]
     public async Task<ActionResult<BorrowDto>> Return(int id)
     {
@@ -102,9 +135,5 @@ public class BorrowsController : Controller
     }
     #endregion
 
-    public async Task<ActionResult> SubmitLend(int id)
-    {
-        await _borrowService.SubmitLend(id);
-        return RedirectToAction("Index");
-    }
+
 }

@@ -11,6 +11,7 @@ public interface IBorrowService
     Task<List<BorrowDto>> GetBorrowsByEmployeeId(string EmployeeId);
     Task<List<BorrowDto>> GetOverdueBorrows();
 
+    OperationResult Update(BorrowDto dto);
     Task Delete(int borrowId);
     Task SoftDeleteAsync(BorrowDto entity);
 

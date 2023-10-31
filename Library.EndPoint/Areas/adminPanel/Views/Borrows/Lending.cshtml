@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-6">
 
-        <form asp-action="Borrowing" method="post">
+        <form asp-action="Lending" method="post">
             <div>
                 <div class="row">
                     <div class="col-md-6">
@@ -50,7 +50,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="IdealReturnDate" class="control-label">IdealReturnDate</label>
-                            <input type="text" class="form-control" asp-for="IdealReturnDate" required>
+                            <input type="date" class="form-control" asp-for="IdealReturnDate" required>
                             <span asp-validation-for="IdealReturnDate" class="error"></span>
                         </div>
                     </div>

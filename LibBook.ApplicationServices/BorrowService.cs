@@ -31,8 +31,15 @@ public class BorrowService : IBorrowService
     {
         OperationResult operationResult = new();
 
-        Borrow borrow = new(dto.BookId, dto.MemberId, GetCurrentOperatorId(), dto.IdealReturnDate,
-            dto.ReturnEmployeeId, dto.ReturnDate, dto.Description);
+        Borrow borrow = new(
+            dto.BookId,
+            dto.MemberId,
+            GetCurrentOperatorId(),
+            dto.IdealReturnDate,
+            dto.ReturnEmployeeId,
+            dto.ReturnDate,
+            dto.Description
+            );
 
         var result = await _borrowRepository.CreateAsync(borrow);
         return operationResult.Succeeded();
@@ -115,6 +122,29 @@ public class BorrowService : IBorrowService
     #endregion
 
     #region Update
+    public OperationResult Update(BorrowDto dto)
+    {
+        OperationResult operationResult = new();
+
+        var borrow = _borrowRepository.GetByIdAsync(dto.Id).Result;
+        if (borrow == null)
+            return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
+        borrow.Edit(
+            dto.BookId,
+            dto.MemberId,
+            dto.EmployeeId,
+            dto.IdealReturnDate,
+            dto.ReturnEmployeeId,
+            dto.ReturnDate,
+            dto.Description);
+
+            _borrowRepository.UpdateAsync(borrow);
+            return operationResult.Succeeded();
+    }
+
+    #endregion
+    #region Return
     public OperationResult Returning(BorrowDto dto)
     {
         OperationResult operationResult = new();
