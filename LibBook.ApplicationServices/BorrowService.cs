@@ -71,7 +71,7 @@ public class BorrowService : IBorrowService
     public async Task<List<BorrowDto>> GetAllBorrows()
     {
         var result = await _borrowRepository.GetAll()
-            .Where(x => x.IsDeleted == false)
+            .Where(x => x.IsDeleted == false && x.IsApproved == false)
                     .Select(lend => new BorrowDto
                     {
                         Id = lend.Id,
@@ -139,11 +139,12 @@ public class BorrowService : IBorrowService
             dto.ReturnDate,
             dto.Description);
 
-            _borrowRepository.UpdateAsync(borrow);
-            return operationResult.Succeeded();
+        _borrowRepository.UpdateAsync(borrow);
+        return operationResult.Succeeded();
     }
 
     #endregion
+
     #region Return
     public OperationResult Returning(BorrowDto dto)
     {
