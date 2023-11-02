@@ -2,7 +2,7 @@
 @model List<BorrowDto>
 
 @{
-    ViewData["Title"] = "All Loans";
+    ViewData["Title"] = "Apporved Loans";
 }
 
 <div class="row">
@@ -52,8 +52,8 @@
                                         <td>@item.Description</td>
                                         <td>
 
-                                            <a class="btn btn-primary" asp-action="SubmitLend" asp-route-id="@item.Id">
-                                                <i class="fa fa-send"></i>Submit
+                                            <a class="btn btn-warning" asp-action="Return" asp-route-id="@item.Id">
+                                                <i class="fa fa-redo"></i>Return
                                             </a>
 
                                             <a class="btn btn-info pull-right m-rl-5" asp-action="Details" asp-route-id="@item.Id">

@@ -69,10 +69,19 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Borrows" asp-action="Index">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Borrows</span>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+               aria-expanded="true" aria-controls="collapseFour">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Lendings</span>
             </a>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Loan Management:</h6>
+                    <a class="collapse-item" asp-controller="Borrows" asp-action="Index">All Loans</a>
+                    <a class="collapse-item" asp-controller="Borrows" asp-action="ApprovedLoans">Approved Loans</a>
+                    <a class="collapse-item" asp-controller="Borrows" asp-action="Lending">Lending</a>
+                </div>
+            </div>
         </li>
 
         @*        <!-- Nav Item - Charts -->

@@ -27,8 +27,13 @@ public class BorrowsController : Controller
     #region Read
     public async Task<ActionResult<List<BorrowDto>>> Index()
     {
-        List<BorrowDto> borrows = await _borrowService.GetAllBorrows();
-        return View("Index", borrows);
+        List<BorrowDto> loans = await _borrowService.GetAllLoans();
+        return View("Index", loans);
+    }
+    public ActionResult<List<BorrowDto>> ApprovedLoans()
+    {
+        List<BorrowDto> loans = _borrowService.GetAllApprovedLoans();
+        return View("ApprovedLoans", loans);
     }
 
     [HttpGet]

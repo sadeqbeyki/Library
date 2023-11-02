@@ -5,7 +5,8 @@ namespace LibBook.DomainContracts.Borrow;
 public interface IBorrowService
 {
     Task<List<BorrowDto>> GetAll();
-    Task<List<BorrowDto>> GetAllBorrows();
+    Task<List<BorrowDto>> GetAllLoans();
+    List<BorrowDto> GetAllApprovedLoans();
     Task<BorrowDto> GetBorrowById(int borrowId);
     Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId);
     Task<List<BorrowDto>> GetBorrowsByEmployeeId(string EmployeeId);
@@ -17,6 +18,6 @@ public interface IBorrowService
 
     Task<OperationResult> Lending(BorrowDto dto);
     Task<OperationResult> SubmitLend(int borrowId);
-    
+
     OperationResult Returning(BorrowDto dto);
 }

@@ -54,6 +54,7 @@ public class BorrowService : IBorrowService
 
         if (_inventoryAcl.LoanFromInventory(lend) == true)
         {
+            lend.IsApproved = true;
             _borrowRepository.SaveChanges();
             return operationResult.Succeeded();
         }
@@ -68,7 +69,7 @@ public class BorrowService : IBorrowService
         return _mapper.Map<List<BorrowDto>>(borrows);
     }
 
-    public async Task<List<BorrowDto>> GetAllBorrows()
+    public async Task<List<BorrowDto>> GetAllLoans()
     {
         var result = await _borrowRepository.GetAll()
             .Where(x => x.IsDeleted == false && x.IsApproved == false)
@@ -84,6 +85,25 @@ public class BorrowService : IBorrowService
                         ReturnDate = lend.ReturnDate,
                         Description = lend.Description,
                     }).ToListAsync();
+        return result;
+    }
+
+    public List<BorrowDto> GetAllApprovedLoans()
+    {
+        var result = _borrowRepository.GetAll()
+            .Where(x => x.IsDeleted == false && x.IsApproved == true)
+                    .Select(lend => new BorrowDto
+                    {
+                        Id = lend.Id,
+                        BookId = lend.BookId,
+                        MemberId = lend.MemberID,
+                        EmployeeId = lend.EmployeeId,
+                        BorrowDate = lend.CreationDate,
+                        IdealReturnDate = lend.IdealReturnDate,
+                        ReturnEmployeeId = lend.ReturnEmployeeID,
+                        ReturnDate = lend.ReturnDate,
+                        Description = lend.Description,
+                    }).ToList();
         return result;
     }
 
