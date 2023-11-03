@@ -12,6 +12,7 @@ public class Borrow : BaseEntity
     public DateTime? ReturnDate { get; set; }
     public string? Description { get; set; }
     public bool IsApproved { get; set; }
+    public bool IsReturned { get; set; }
 
 
     public Borrow(int bookId, string memberID, string employeeId, DateTime idealReturnDate, string? returnEmployeeID, DateTime? returnDate, string? description)
@@ -24,6 +25,7 @@ public class Borrow : BaseEntity
         ReturnDate = returnDate;
         Description = description;
         IsApproved = false; 
+        IsReturned = false;
     }
     public void Edit(int bookId, string memberID, string employeeId, DateTime idealReturnDate, string? returnEmployeeID, DateTime? returnDate, string? description)
     {

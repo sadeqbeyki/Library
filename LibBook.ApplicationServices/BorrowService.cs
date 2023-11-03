@@ -72,7 +72,7 @@ public class BorrowService : IBorrowService
     public async Task<List<BorrowDto>> GetAllLoans()
     {
         var result = await _borrowRepository.GetAll()
-            .Where(x => x.IsDeleted == false && x.IsApproved == false)
+            .Where(x => !x.IsDeleted && x.IsApproved == false)
                     .Select(lend => new BorrowDto
                     {
                         Id = lend.Id,
@@ -88,10 +88,29 @@ public class BorrowService : IBorrowService
         return result;
     }
 
-    public List<BorrowDto> GetAllApprovedLoans()
+    public List<BorrowDto> GetApprovedLoans()
     {
         var result = _borrowRepository.GetAll()
-            .Where(x => x.IsDeleted == false && x.IsApproved == true)
+            .Where(x => !x.IsDeleted && x.IsApproved && !x.IsReturned)
+                    .Select(lend => new BorrowDto
+                    {
+                        Id = lend.Id,
+                        BookId = lend.BookId,
+                        MemberId = lend.MemberID,
+                        EmployeeId = lend.EmployeeId,
+                        BorrowDate = lend.CreationDate,
+                        IdealReturnDate = lend.IdealReturnDate,
+                        ReturnEmployeeId = lend.ReturnEmployeeID,
+                        ReturnDate = lend.ReturnDate,
+                        Description = lend.Description,
+                    }).ToList();
+        return result;
+    }
+
+    public List<BorrowDto> GetReturnedLoans()
+    {
+        var result = _borrowRepository.GetAll()
+            .Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned)
                     .Select(lend => new BorrowDto
                     {
                         Id = lend.Id,
@@ -170,16 +189,24 @@ public class BorrowService : IBorrowService
     {
         OperationResult operationResult = new();
 
-        var borrow = _borrowRepository.GetByIdAsync(dto.Id).Result;
-        if (borrow == null)
+        var lend = _borrowRepository.GetByIdAsync(dto.Id).Result;
+        if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        borrow.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, GetCurrentOperatorId(), DateTime.Now, dto.Description);
+        lend.Edit(
+            dto.BookId,
+            dto.MemberId,
+            dto.EmployeeId,
+            dto.IdealReturnDate,
+            GetCurrentOperatorId(),
+            DateTime.Now,
+            dto.Description
+            );
 
 
         if (ReturnLoan(dto.Id).IsSucceeded)
         {
-            _borrowRepository.UpdateAsync(borrow);
+            _borrowRepository.UpdateAsync(lend);
             return operationResult.Succeeded();
         }
         else
@@ -196,6 +223,7 @@ public class BorrowService : IBorrowService
             operationResult.Failed(ApplicationMessages.RecordNotFound);
         if (_inventoryAcl.ReturnToInventory(lend) == true)
         {
+            lend.IsReturned = true;
             _borrowRepository.SaveChanges();
             return operationResult.Succeeded();
         }

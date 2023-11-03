@@ -6,10 +6,13 @@ public interface IBorrowService
 {
     Task<List<BorrowDto>> GetAll();
     Task<List<BorrowDto>> GetAllLoans();
-    List<BorrowDto> GetAllApprovedLoans();
+    List<BorrowDto> GetApprovedLoans();
+    List<BorrowDto> GetReturnedLoans();
+
     Task<BorrowDto> GetBorrowById(int borrowId);
     Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId);
     Task<List<BorrowDto>> GetBorrowsByEmployeeId(string EmployeeId);
+
     Task<List<BorrowDto>> GetOverdueBorrows();
 
     OperationResult Update(BorrowDto dto);

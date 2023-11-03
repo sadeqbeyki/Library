@@ -32,8 +32,14 @@ public class BorrowsController : Controller
     }
     public ActionResult<List<BorrowDto>> ApprovedLoans()
     {
-        List<BorrowDto> loans = _borrowService.GetAllApprovedLoans();
+        List<BorrowDto> loans = _borrowService.GetApprovedLoans();
         return View("ApprovedLoans", loans);
+    }
+
+    public ActionResult<List<BorrowDto>> ReturnedLoans()
+    {
+        List<BorrowDto> loans = _borrowService.GetReturnedLoans();
+        return View("ReturnedLoans", loans);
     }
 
     [HttpGet]
