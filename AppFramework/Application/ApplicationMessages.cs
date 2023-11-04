@@ -15,5 +15,6 @@
         public const string BookWasAlreadyReturned = "کتاب قبلا به انبار بازگردانده شده یا هنوز امانت ثبت نشده است";
         public const string ReturnFailed = "مشکل در بازپس دادن کتاب";
         public const string LendFailed = "مشکل در امانت گرفتن کتاب";
+        public const string ModelIsNull = "فیلد های الزامی را پر کنید";
     }
 }

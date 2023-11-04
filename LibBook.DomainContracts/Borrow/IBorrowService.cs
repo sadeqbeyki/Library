@@ -8,6 +8,7 @@ public interface IBorrowService
     Task<List<BorrowDto>> GetAllLoans();
     List<BorrowDto> GetApprovedLoans();
     List<BorrowDto> GetReturnedLoans();
+    List<BorrowDto> GetDeletedLoans();
 
     Task<BorrowDto> GetBorrowById(int borrowId);
     Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId);
@@ -17,7 +18,7 @@ public interface IBorrowService
 
     OperationResult Update(BorrowDto dto);
     Task Delete(int borrowId);
-    Task SoftDeleteAsync(BorrowDto entity);
+    void SoftDelete(BorrowDto entity);
 
     Task<OperationResult> Lending(BorrowDto dto);
     Task<OperationResult> SubmitLend(int borrowId);

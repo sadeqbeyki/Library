@@ -1,12 +1,15 @@
 ﻿using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.Borrow;
 using LibIdentity.DomainContracts.UserContracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace Library.EndPoint.Areas.adminPanel.Models;
 
 public class CreateBorrowViewModel
 {
+    [Required(ErrorMessage = "Book Name field cannot be empty!")]
     public int BookId { get; set; }
+    [Required(ErrorMessage = "Username field cannot be empty!")]
     public string MemberId { get; set; }
     public string EmployeeId { get; set; }
     public DateTime BorrowDate { get; set; }

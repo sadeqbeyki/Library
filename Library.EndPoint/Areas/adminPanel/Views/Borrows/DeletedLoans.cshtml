@@ -2,16 +2,8 @@
 @model List<BorrowDto>
 
 @{
-    ViewData["Title"] = "List of pending loans";
+    ViewData["Title"] = "Deleted Loans";
 }
-
-<div class="row">
-    <div class="col-sm-12">
-        <p class="pull-left">
-            <a class="btn btn-primary btn-lg" asp-action="Lending">Lending</a>
-        </p>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -33,7 +25,7 @@
                                     <th>Return Employee ID</th>
                                     <th>Return Date</th>
                                     <th>Description</th>
-                                    <th>Operations</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,14 +43,7 @@
                                         <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
-
-                                            <a class="btn btn-primary" asp-action="SubmitLend" asp-route-id="@item.Id">
-                                                <i class="fa fa-send"></i>Submit
-                                            </a>
-
-                                            <a class="btn btn-info pull-right m-rl-5" asp-action="Details" asp-route-id="@item.Id">
-                                                <i class="fa fa-info"></i>Details
-                                            </a>
+                                            Deleted
                                         </td>
                                     </tr>
                                 }

@@ -27,18 +27,19 @@ public class BorrowService : IBorrowService
     }
 
     #region Create
-    public async Task<OperationResult> Lending(BorrowDto dto)
+    public async Task<OperationResult> Lending(BorrowDto model)
     {
         OperationResult operationResult = new();
-
+        if (model.BookId == 0 || model.MemberId == null)
+            return operationResult.Failed(ApplicationMessages.ModelIsNull);
         Borrow borrow = new(
-            dto.BookId,
-            dto.MemberId,
+            model.BookId,
+            model.MemberId,
             GetCurrentOperatorId(),
-            dto.IdealReturnDate,
-            dto.ReturnEmployeeId,
-            dto.ReturnDate,
-            dto.Description
+            model.IdealReturnDate,
+            model.ReturnEmployeeId,
+            model.ReturnDate,
+            model.Description
             );
 
         var result = await _borrowRepository.CreateAsync(borrow);
@@ -111,6 +112,25 @@ public class BorrowService : IBorrowService
     {
         var result = _borrowRepository.GetAll()
             .Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned)
+                    .Select(lend => new BorrowDto
+                    {
+                        Id = lend.Id,
+                        BookId = lend.BookId,
+                        MemberId = lend.MemberID,
+                        EmployeeId = lend.EmployeeId,
+                        BorrowDate = lend.CreationDate,
+                        IdealReturnDate = lend.IdealReturnDate,
+                        ReturnEmployeeId = lend.ReturnEmployeeID,
+                        ReturnDate = lend.ReturnDate,
+                        Description = lend.Description,
+                    }).ToList();
+        return result;
+    }
+
+    public List<BorrowDto> GetDeletedLoans()
+    {
+        var result = _borrowRepository.GetAll()
+            .Where(x => x.IsDeleted)
                     .Select(lend => new BorrowDto
                     {
                         Id = lend.Id,
@@ -238,10 +258,10 @@ public class BorrowService : IBorrowService
         await _borrowRepository.DeleteAsync(borrow);
     }
 
-    public async Task SoftDeleteAsync(BorrowDto model)
+    public void SoftDelete(BorrowDto model)
     {
-        Borrow borrow = await _borrowRepository.GetByIdAsync(model.Id);
-        await _borrowRepository.SoftDeleteAsync(borrow);
+        Borrow borrow = _borrowRepository.GetByIdAsync(model.Id).Result;
+        _borrowRepository.SoftDelete(borrow);
     }
     #endregion
 

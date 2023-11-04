@@ -42,6 +42,12 @@ public class BorrowsController : Controller
         return View("ReturnedLoans", loans);
     }
 
+    public ActionResult<List<BorrowDto>> DeletedLoans()
+    {
+        List<BorrowDto> loans = _borrowService.GetDeletedLoans();
+        return View("DeletedLoans", loans);
+    }
+
     [HttpGet]
     public async Task<ActionResult<BorrowDto>> Details(int id)
     {
@@ -64,13 +70,11 @@ public class BorrowsController : Controller
         return View("Lending", command);
     }
     [HttpPost]
-    public async Task<ActionResult> Lending(BorrowDto dto)
+    public async Task<ActionResult> Lending(BorrowDto model)
     {
-        var result = await _borrowService.Lending(dto);
-        if (result == null)
-        {
-            return View("Error");
-        }
+        var result = await _borrowService.Lending(model);
+        if (!result.IsSucceeded)
+            return RedirectToAction("Lending", model);
         return RedirectToAction("Index", result);
     }
 
@@ -109,20 +113,18 @@ public class BorrowsController : Controller
     #endregion
 
     #region Delete
+    //[HttpPost, ActionName("Details")]
+    //[ValidateAntiForgeryToken]
+    //public async Task<ActionResult> Delete(int id)
+    //{
+    //    await _borrowService.Delete(id);
+    //    return RedirectToAction("Index");
+    //}
     [HttpPost, ActionName("Details")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(int id)
-    {
-        await _borrowService.Delete(id);
-        return RedirectToAction("Index");
-    }
     public IActionResult SoftDelete(BorrowDto model)
     {
-        if (!ModelState.IsValid)
-        {
-            return RedirectToAction("Details");
-        }
-        _borrowService.SoftDeleteAsync(model);
+        _borrowService.SoftDelete(model);
         return RedirectToAction("Index");
     }
     #endregion
