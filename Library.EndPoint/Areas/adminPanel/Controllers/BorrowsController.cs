@@ -1,6 +1,4 @@
-﻿using AppFramework.Infrastructure;
-using Humanizer;
-using LibBook.DomainContracts.Book;
+﻿using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.Borrow;
 using LibIdentity.DomainContracts.UserContracts;
 using Library.EndPoint.Areas.adminPanel.Models;
@@ -40,6 +38,12 @@ public class BorrowsController : Controller
     {
         List<BorrowDto> loans = _borrowService.GetReturnedLoans();
         return View("ReturnedLoans", loans);
+    }
+
+    public async Task<ActionResult<List<BorrowDto>>> OverdueLoans()
+    {
+        List<BorrowDto> loans = await _borrowService.GetOverdueLones();
+        return View("OverdueLoans", loans);
     }
 
     public ActionResult<List<BorrowDto>> DeletedLoans()

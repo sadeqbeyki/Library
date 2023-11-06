@@ -14,7 +14,7 @@ public interface IBorrowService
     Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId);
     Task<List<BorrowDto>> GetBorrowsByEmployeeId(string EmployeeId);
 
-    Task<List<BorrowDto>> GetOverdueBorrows();
+    Task<List<BorrowDto>> GetOverdueLones();
 
     OperationResult Update(BorrowDto dto);
     Task Delete(int borrowId);

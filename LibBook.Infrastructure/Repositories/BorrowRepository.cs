@@ -53,7 +53,7 @@ public partial class BorrowRepository : Repository<Borrow, int>, IBorrowReposito
         return result;
     }
 
-    public async Task<List<BorrowDto>> GetOverdueBorrows()
+    public async Task<List<BorrowDto>> GetOverdueLones()
     {
         var borrows = await _bookDbContext.Borrows
             .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();

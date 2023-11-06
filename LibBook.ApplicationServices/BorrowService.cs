@@ -174,9 +174,9 @@ public class BorrowService : IBorrowService
         return dto;
     }
 
-    public async Task<List<BorrowDto>> GetOverdueBorrows()
+    public async Task<List<BorrowDto>> GetOverdueLones()
     {
-        return await _borrowRepository.GetOverdueBorrows();
+        return await _borrowRepository.GetOverdueLones();
     }
     #endregion
 

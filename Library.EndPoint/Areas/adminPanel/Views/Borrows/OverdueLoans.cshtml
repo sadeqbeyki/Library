@@ -1,0 +1,63 @@
+﻿@using LibBook.DomainContracts.Borrow;
+@model List<BorrowDto>
+
+@{
+    ViewData["Title"] = "Overdue Loans";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <table id="datatable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+
+                                    <th>Book ID</th>
+                                    <th>Member ID</th>
+                                    <th>Employee ID</th>
+                                    <th>Borrow Date</th>
+                                    <th>Ideal Return Date</th>
+                                    <th>Return Employee ID</th>
+                                    <th>Return Date</th>
+                                    <th>Description</th>
+                                    <th>Operations</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+
+                                        <td>@item.BookId</td>
+                                        <td>@item.MemberId</td>
+                                        <td>@item.EmployeeId</td>
+                                        <td>@item.BorrowDate</td>
+                                        <td>@item.IdealReturnDate</td>
+                                        <td>@item.ReturnEmployeeId</td>
+                                        <td>@item.ReturnDate</td>
+                                        <td>@item.Description</td>
+                                        <td>
+                                            <a class="btn btn-warning" asp-action="Return" asp-route-id="@item.Id">
+                                                <i class="fa fa-redo"></i>Return
+                                            </a>
+
+                                            <a class="btn btn-info pull-right m-rl-5" asp-action="Details" asp-route-id="@item.Id">
+                                                <i class="fa fa-info"></i>Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
