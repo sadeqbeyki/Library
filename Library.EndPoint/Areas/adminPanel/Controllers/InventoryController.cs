@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Authorization;
+using X.PagedList;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Authorize(Roles ="admin, manager")]
@@ -96,10 +97,23 @@ public class InventoryController : Controller
         var result = await _inventoryService.Decrease(command);
         return RedirectToAction("Index", result);
     }
+    //[HttpGet]
+    //public IActionResult OperationLog(int id)
+    //{
+    //    var log = _inventoryService.GetOperationLog(id);
+    //    return View("OperationLog", log);
+    //}
+
     [HttpGet]
-    public IActionResult OperationLog(int id)
+    public IActionResult OperationLog(int id, int? page)
     {
         var log = _inventoryService.GetOperationLog(id);
-        return View("OperationLog", log);
+
+        int pageNumber = page ?? 1;
+        int pageSize = 8;
+
+        var pagedLog = log.ToPagedList(pageNumber, pageSize);
+
+        return View("OperationLog", pagedLog);
     }
 }

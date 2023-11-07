@@ -1,5 +1,10 @@
 ﻿@using LibInventory.DomainContracts.Inventory;
-@model List<InventoryOperationViewModel>
+@* @model List<InventoryOperationViewModel> *@
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@model IPagedList<InventoryOperationViewModel>
 
 @{
     ViewData["Title"] = "Operation Log";
@@ -45,11 +50,24 @@
                     }
                 </tbody>
             </table>
+            Page : @Html.PagedListPager(Model, page => Url.Action("OperationLog", new { page = page }),
+            new PagedListRenderOptions {
+            ClassToApplyToFirstListItemInPager = null,
+            ClassToApplyToLastListItemInPager = null,
+            ContainerDivClasses = new [] { "pagination-container" },
+            UlElementClasses = new[] { "pagination" },
 
+            DisplayLinkToIndividualPages = true,
+            DisplayPageCountAndCurrentLocation = false,
+            MaximumPageNumbersToDisplay = 8,
+
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+            })
         </div>
 
         <div>
-            <a class="btn btn-default waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
+            <a class="btn btn-secondary" asp-controller="Inventory" asp-action="Index">Back to list</a>
         </div>
     </div>
 </div>
