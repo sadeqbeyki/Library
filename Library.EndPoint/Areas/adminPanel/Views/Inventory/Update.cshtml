@@ -5,7 +5,7 @@
     ViewData["Title"] = "Update";
 }
 
-<h1 class="bg-info text-white">Create Inventory</h1>
+<h1 class="bg-info text-white">Update Inventory</h1>
 <div class="row">
     <div class="col-md-6">
         <form asp-controller="Inventory" asp-action="Update" method="post">
@@ -32,7 +32,7 @@
             <input type="hidden" asp-for="Id" value="@Model.Id" />
 
             <div>
-                <a class="btn btn-default waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
+                <a class="btn btn-secondary waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
                 <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
             </div>
         </form>

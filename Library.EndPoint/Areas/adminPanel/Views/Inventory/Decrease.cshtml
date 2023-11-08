@@ -1,10 +1,9 @@
 ﻿@using LibInventory.DomainContracts.Inventory;
 @model DecreaseInventory
 @{
-    ViewData["Title"] = "Decrease";
+    ViewData["Title"] = "Decrease Inventory Item";
 }
 
-<h1 class="bg-info text-white">Decrease</h1>
 <div class="row">
     <div class="col-md-6">
 
@@ -31,7 +30,7 @@
                 <input type="hidden" asp-for="InventoryId" value="@Model.InventoryId" />
             </div>
             <div>
-                <a class="btn btn-default waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
+                <a class="btn btn-secondary waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
                 <button type="submit" class="btn btn-info waves-effect waves-light">Decrease</button>
             </div>
         </form>

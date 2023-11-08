@@ -4,6 +4,7 @@ using LibIdentity.DomainContracts.UserContracts;
 using Library.EndPoint.Areas.adminPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
@@ -33,19 +34,21 @@ public class BorrowsController : Controller
         List<BorrowDto> loans = _borrowService.GetApprovedLoans();
         return View("ApprovedLoans", loans);
     }
-
     public ActionResult<List<BorrowDto>> ReturnedLoans()
     {
         List<BorrowDto> loans = _borrowService.GetReturnedLoans();
         return View("ReturnedLoans", loans);
     }
-
-    public async Task<ActionResult<List<BorrowDto>>> OverdueLoans()
+    public async Task<ActionResult<List<BorrowDto>>> OverdueLoans(int? page)
     {
         List<BorrowDto> loans = await _borrowService.GetOverdueLones();
-        return View("OverdueLoans", loans);
-    }
 
+        int pageNumber = page ?? 1;
+        int pageSize = 6;
+        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+
+        return View("OverdueLoans", pagedLog);
+    }
     public ActionResult<List<BorrowDto>> DeletedLoans()
     {
         List<BorrowDto> loans = _borrowService.GetDeletedLoans();

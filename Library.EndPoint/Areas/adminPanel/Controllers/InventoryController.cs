@@ -11,10 +11,7 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class InventoryController : Controller
 {
-    public List<InventoryViewModel> Inventory;
-    public List<SelectListItem> Books { get; set; }
-    public InventorySearchModel SearchModel { get; set; }
-
+    public List<InventoryViewModel> Inventory = new();
 
     private readonly IBookService _bookService;
     private readonly IInventoryService _inventoryService;
@@ -110,8 +107,7 @@ public class InventoryController : Controller
         var log = _inventoryService.GetOperationLog(id);
 
         int pageNumber = page ?? 1;
-        int pageSize = 8;
-
+        int pageSize = 6;
         var pagedLog = log.ToPagedList(pageNumber, pageSize);
 
         return View("OperationLog", pagedLog);
