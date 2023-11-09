@@ -94,13 +94,6 @@ public class InventoryController : Controller
         var result = await _inventoryService.Decrease(command);
         return RedirectToAction("Index", result);
     }
-    //[HttpGet]
-    //public IActionResult OperationLog(int id)
-    //{
-    //    var log = _inventoryService.GetOperationLog(id);
-    //    return View("OperationLog", log);
-    //}
-
     [HttpGet]
     public IActionResult OperationLog(int id, int? page)
     {

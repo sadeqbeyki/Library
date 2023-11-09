@@ -26,4 +26,9 @@ public class BookRepositoryDapper : Repository<Book, int>, IBookRepository
             Title = x.Title
         }).ToListAsync();
     }
+
+    public List<BookViewModel> Search(BookSearchModel searchModel)
+    {
+        throw new NotImplementedException();
+    }
 }

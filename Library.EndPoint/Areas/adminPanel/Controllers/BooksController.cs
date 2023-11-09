@@ -1,6 +1,4 @@
-﻿using AppFramework.Infrastructure;
-using LibBook.Domain.AuthorAgg;
-using LibBook.DomainContracts.Author;
+﻿using LibBook.DomainContracts.Author;
 using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.BookCategory;
 using LibBook.DomainContracts.Publisher;
@@ -8,7 +6,7 @@ using LibBook.DomainContracts.Translator;
 using Library.EndPoint.Areas.adminPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
@@ -16,6 +14,9 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Authorize(Roles = "admin, manager")]
 public class BooksController : Controller
 {
+    public List<BookViewModel> Books = new();
+    //public SelectList BookCategories;
+
     private readonly IBookService _bookService;
     private readonly IBookCategoryService _bookCategoryService;
     private readonly IAuthorService _authorService;
@@ -31,12 +32,18 @@ public class BooksController : Controller
         _publisherService = publisherService;
         _translatorService = translatorService;
     }
+
     #region Get
     [HttpGet]
-    public async Task<ActionResult<List<BookViewModel>>> Index()
+    public async Task<IActionResult> Index(BookSearchModel searchModel)
     {
-        var result = await _bookService.GetAll();
-        return View(result);
+        BookWithCategoryViewModel model = new()
+        {
+            Books = _bookService.Search(searchModel),
+            SearchModel = searchModel,
+            Categories = new SelectList(await _bookCategoryService.GetCategories(), "Id", "Name").ToList()
+        };
+        return View(model);
     }
     [HttpGet]
     public async Task<ActionResult<BookViewModel>> Details(int id)

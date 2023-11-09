@@ -6,4 +6,5 @@ namespace LibBook.Domain.BookAgg;
 public interface IBookRepository : IRepository<Book, int>
 {
     Task<List<BookViewModel>> GetBooks();
+    List<BookViewModel> Search(BookSearchModel searchModel);
 }

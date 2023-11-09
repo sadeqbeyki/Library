@@ -1,5 +1,5 @@
-﻿@using LibBook.DomainContracts.Book;
-@model List<BookViewModel>
+﻿@using Library.EndPoint.Areas.adminPanel.Models;
+@model BookWithCategoryViewModel
 
 @{
     ViewData["Title"] = "Book Management";
@@ -14,30 +14,40 @@
     </div>
 </div>
 
-@*<div  class=" row">
+<div class=" row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">جستجو در گروه محصولات</h3>
+                <h3 class="panel-title">Search Books</h3>
             </div>
             <div class="panel-body">
-                <form asp-controller="BookCategories" asp-action="Index" class="form-inline" role="form" method="get">
+                <form asp-controller="Books" asp-action="Index" class="form-inline" role="form" method="get">
                     <div class="form-group">
-                        <label class="sr-only" asp-for="SearchModel.Name"></label>
-                        <input class="form-control" asp-for="SearchModel.Name" placeholder="نام گروه محصولی">
+                        <label class="sr-only" asp-for="SearchModel.Title"></label>
+                        <input class="form-control" asp-for="SearchModel.Title" placeholder="Book Name">
                     </div>
-                    <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">جستجو</button>
-                    <a class="btn btn-primary waves-effect waves-light m-l-10" asp-page="Index">مشاهده همه</a>
+                    <div class="form-group">
+                        <label class="sr-only" asp-for="SearchModel.Code"></label>
+                        <input class="form-control" asp-for="SearchModel.Code" placeholder="Code">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" asp-for="SearchModel.CategoryId"></label>
+                        <select class="form-control" asp-for="SearchModel.CategoryId" asp-items="Model.Categories">
+                            <option value="0">Book Category</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">Search</button>
+                    <a class="btn btn-primary waves-effect waves-light m-l-10" asp-action="Index">Show All</a>
                 </form>
             </div>
         </div>
     </div>
-</div>*@
+</div>
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
- 
+
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -56,7 +66,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.Books)
                                 {
                                     <tr>
                                         <td>@item.Id</td>
@@ -69,7 +79,7 @@
                                         <td>
                                             <a class="btn btn-success pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">
                                                 <i class="fa fa-edit"></i>Update
-                                            </a> 
+                                            </a>
                                             <a class="btn btn-danger pull-right m-rl-5" asp-action="Delete" asp-route-id="@item.Id">
                                                 <i class="fa fa-remove"></i>Delete
                                             </a>
