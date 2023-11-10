@@ -17,4 +17,9 @@ public class LibraryIdentityAcl : ILibraryIdentityAcl
         var account = _userService.GetAccountBy(id);
         return (account.FirstName, account.Email);
     }
+    public async Task<string> GetUserName(string id)
+    {
+        var userName = await _userService.GetUserNameByIdAsync(id);
+        return userName;
+    }
 }

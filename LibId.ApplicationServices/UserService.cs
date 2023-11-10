@@ -3,10 +3,7 @@ using AutoMapper;
 using LibIdentity.Domain.UserAgg;
 using LibIdentity.DomainContracts.UserContracts;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Security.Policy;
 
 namespace LibIdentity.ApplicationServices;
 
@@ -27,6 +24,12 @@ public class UserService : IUserService
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         return _mapper.Map<UpdateUserViewModel>(user);
+    }
+
+    public async Task<string> GetUserNameByIdAsync(string userId)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+        return user?.UserName ?? string.Empty;
     }
 
     public UpdateUserViewModel GetAccountBy(int id)
@@ -81,7 +84,7 @@ public class UserService : IUserService
             return IdentityResult.Failed(error);
         }
         var userMap = _mapper.Map<UserIdentity>(model);
-        var result =  await _userManager.CreateAsync(userMap, model.Password);
+        var result = await _userManager.CreateAsync(userMap, model.Password);
         await _userManager.AddToRoleAsync(userMap, "member");
         return result;
     }
@@ -96,7 +99,7 @@ public class UserService : IUserService
                 Code = "Duplicate Email",
                 Description = "این ایمیل قبلاً ثبت شده است."
             };
-            return IdentityResult.Failed(error) ;
+            return IdentityResult.Failed(error);
         }
         //jwt token
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);

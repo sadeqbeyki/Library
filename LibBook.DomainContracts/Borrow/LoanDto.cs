@@ -2,7 +2,7 @@
 
 namespace LibBook.DomainContracts.Borrow;
 
-public class BorrowDto
+public class LoanDto
 {
     public int Id { get; set; }
     [Required(ErrorMessage = "Book Name field cannot be empty!")]
@@ -16,3 +16,5 @@ public class BorrowDto
     public DateTime? ReturnDate { get; set; }
     public string Description { get; set; }
 }
+
+

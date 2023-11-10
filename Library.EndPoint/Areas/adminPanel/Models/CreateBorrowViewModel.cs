@@ -23,7 +23,7 @@ public class CreateBorrowViewModel
 
 public class UpdateBorrowViewModel
 {
-    public BorrowDto Borrow { get; set; }
+    public LoanDto Borrow { get; set; }
     public List<UpdateUserViewModel> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }

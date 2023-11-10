@@ -40,8 +40,8 @@ public static class LMSConfigureServices
         services.AddScoped<ITranslatorRepository, TranslatorRepository>();
         services.AddScoped<ITranslatorService, TranslatorService>();
 
-        services.AddScoped<IBorrowRepository, BorrowRepository>();
-        services.AddScoped<IBorrowService, BorrowService>();
+        services.AddScoped<ILoanRepository, LoanRepository>();
+        services.AddScoped<ILoanService, LoanService>();
 
         services.AddScoped<ILibraryInventoryAcl, LibraryInventoryAcl>();
         services.AddScoped<ILibraryIdentityAcl, LibraryIdentityAcl>();

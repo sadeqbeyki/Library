@@ -11,12 +11,12 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Authorize(Roles = "admin, manager")]
 public class BorrowsController : Controller
 {
-    private readonly IBorrowService _borrowService;
+    private readonly ILoanService _borrowService;
     private readonly IBookService _bookService;
     private readonly IUserService _userService;
 
 
-    public BorrowsController(IBorrowService borrowService, IBookService bookService, IUserService userService)
+    public BorrowsController(ILoanService borrowService, IBookService bookService, IUserService userService)
     {
         _borrowService = borrowService;
         _bookService = bookService;
@@ -24,24 +24,24 @@ public class BorrowsController : Controller
     }
 
     #region Read
-    public async Task<ActionResult<List<BorrowDto>>> Index()
+    public async Task<ActionResult<List<LoanDto>>> Index()
     {
-        List<BorrowDto> loans = await _borrowService.GetAllLoans();
+        List<LoanDto> loans = await _borrowService.GetAllLoans();
         return View("Index", loans);
     }
-    public ActionResult<List<BorrowDto>> ApprovedLoans()
+    public ActionResult<List<LoanDto>> ApprovedLoans()
     {
-        List<BorrowDto> loans = _borrowService.GetApprovedLoans();
+        List<LoanDto> loans = _borrowService.GetApprovedLoans();
         return View("ApprovedLoans", loans);
     }
-    public ActionResult<List<BorrowDto>> ReturnedLoans()
+    public ActionResult<List<LoanDto>> ReturnedLoans()
     {
-        List<BorrowDto> loans = _borrowService.GetReturnedLoans();
+        List<LoanDto> loans = _borrowService.GetReturnedLoans();
         return View("ReturnedLoans", loans);
     }
-    public async Task<ActionResult<List<BorrowDto>>> OverdueLoans(int? page)
+    public async Task<ActionResult<List<LoanDto>>> OverdueLoans(int? page)
     {
-        List<BorrowDto> loans = await _borrowService.GetOverdueLones();
+        List<LoanDto> loans = await _borrowService.GetOverdueLones();
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -49,16 +49,16 @@ public class BorrowsController : Controller
 
         return View("OverdueLoans", pagedLog);
     }
-    public ActionResult<List<BorrowDto>> DeletedLoans()
+    public ActionResult<List<LoanDto>> DeletedLoans()
     {
-        List<BorrowDto> loans = _borrowService.GetDeletedLoans();
+        List<LoanDto> loans = _borrowService.GetDeletedLoans();
         return View("DeletedLoans", loans);
     }
 
     [HttpGet]
-    public async Task<ActionResult<BorrowDto>> Details(int id)
+    public async Task<ActionResult<LoanDto>> Details(int id)
     {
-        var result = await _borrowService.GetBorrowById(id);
+        var result = await _borrowService.GetLoanById(id);
         if (result == null)
             return NotFound();
         return View(result);
@@ -67,7 +67,7 @@ public class BorrowsController : Controller
 
     #region Create
     [HttpGet]
-    public async Task<ActionResult<BorrowDto>> Lending()
+    public async Task<ActionResult<LoanDto>> Lending()
     {
         var command = new CreateBorrowViewModel
         {
@@ -77,7 +77,7 @@ public class BorrowsController : Controller
         return View("Lending", command);
     }
     [HttpPost]
-    public async Task<ActionResult> Lending(BorrowDto model)
+    public async Task<ActionResult> Lending(LoanDto model)
     {
         var result = await _borrowService.Lending(model);
         if (!result.IsSucceeded)
@@ -98,11 +98,11 @@ public class BorrowsController : Controller
 
     #region Update
     [HttpGet]
-    public async Task<ActionResult<BorrowDto>> Update(int id)
+    public async Task<ActionResult<LoanDto>> Update(int id)
     {
         var model = new UpdateBorrowViewModel
         {
-            Borrow = await _borrowService.GetBorrowById(id),
+            Borrow = await _borrowService.GetLoanById(id),
             Members = await _userService.GetUsers(),
             Books = await _bookService.GetAll(),
         };
@@ -129,7 +129,7 @@ public class BorrowsController : Controller
     //}
     [HttpPost, ActionName("Details")]
     [ValidateAntiForgeryToken]
-    public IActionResult SoftDelete(BorrowDto model)
+    public IActionResult SoftDelete(LoanDto model)
     {
         _borrowService.SoftDelete(model);
         return RedirectToAction("Index");
@@ -138,11 +138,11 @@ public class BorrowsController : Controller
 
     #region Return
     [HttpGet]
-    public async Task<ActionResult<BorrowDto>> Return(int id)
+    public async Task<ActionResult<LoanDto>> Return(int id)
     {
         var model = new UpdateBorrowViewModel
         {
-            Borrow = await _borrowService.GetBorrowById(id),
+            Borrow = await _borrowService.GetLoanById(id),
             Members = await _userService.GetUsers(),
             Books = await _bookService.GetAll(),
         };

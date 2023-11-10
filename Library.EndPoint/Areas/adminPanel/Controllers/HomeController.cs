@@ -9,9 +9,9 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class HomeController : Controller
 {
-    private readonly IBorrowService _borrowService;
+    private readonly ILoanService _borrowService;
     private readonly UserManager<UserIdentity> _userManager;
-    public HomeController(IBorrowService borrowService, UserManager<UserIdentity> userManager)
+    public HomeController(ILoanService borrowService, UserManager<UserIdentity> userManager)
     {
         _borrowService = borrowService;
         _userManager = userManager;

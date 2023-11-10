@@ -22,6 +22,7 @@ public class BookRepository : Repository<Book, int>, IBookRepository
         }).ToListAsync();
     }
 
+
     public List<BookViewModel> Search(BookSearchModel searchModel)
     {
         var query = _bookDbContext.Books

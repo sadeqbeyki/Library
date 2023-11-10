@@ -8,12 +8,12 @@ namespace LibIdentity.DomainContracts.UserContracts
         Task<IdentityResult> CreateUser(CreateUserViewModel model);
         Task<IdentityResult> Register(CreateUserViewModel model);
         Task<IdentityResult> DeleteUser(int id);
-        Task<UpdateUserViewModel> GetUser(int id);
-        Task<List<UpdateUserViewModel>> GetUsers();
         Task<IdentityResult> Update(UpdateUserViewModel user);
 
+        Task<UpdateUserViewModel> GetUser(int id);
         UpdateUserViewModel GetAccountBy(int id);
-
+        Task<string> GetUserNameByIdAsync(string userId);
+        Task<List<UpdateUserViewModel>> GetUsers();
         Task<List<UserRolesViewModel>> GetAllUsers();
 
 

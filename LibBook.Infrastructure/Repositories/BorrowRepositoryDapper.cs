@@ -16,7 +16,7 @@ public class BorrowRepositoryDapper
         _bookDbContext = bookDbContext;
     }
 
-    public async Task<List<BorrowDto>> GetBorrowsByEmployeeId(string employeeId)
+    public async Task<List<LoanDto>> GetBorrowsByEmployeeId(string employeeId)
     {
         var parameters = new[] {
                 new SqlParameter("@EmployeeId", employeeId)
@@ -24,7 +24,7 @@ public class BorrowRepositoryDapper
         var borrows = await _bookDbContext.Borrows
             .FromSqlRaw("EXEC GetBorrowsByEmployeeId @EmployeeId", parameters)
             .ToListAsync();
-        List<BorrowDto> result = borrows.Select(b => new BorrowDto
+        List<LoanDto> result = borrows.Select(b => new LoanDto
         {
             Id = b.Id,
             BookId = b.BookId,
@@ -39,7 +39,7 @@ public class BorrowRepositoryDapper
 
         return result;
     }
-    public async Task<List<BorrowDto>> GetBorrowsByMemberId(string memberId)
+    public async Task<List<LoanDto>> GetBorrowsByMemberId(string memberId)
     {
         var parameters = new[] {
                 new SqlParameter("@MemberId", memberId)
@@ -49,7 +49,7 @@ public class BorrowRepositoryDapper
             .FromSqlRaw("EXEC GetBorrowsByMemberId @MemberId", parameters)
             .ToListAsync();
 
-        List<BorrowDto> result = borrows.Select(b => new BorrowDto
+        List<LoanDto> result = borrows.Select(b => new LoanDto
         {
             Id = b.Id,
             BookId = b.BookId,
@@ -65,13 +65,13 @@ public class BorrowRepositoryDapper
         return result;
     }
 
-    public async Task<List<BorrowDto>> GetOverdueBorrows()
+    public async Task<List<LoanDto>> GetOverdueBorrows()
     {
         var borrows = await _bookDbContext.Borrows.FromSqlRaw("EXEC GetOverdueBorrows").ToListAsync();
 
         //var result = await _bookDbContext.Database.SqlQuery<BorrowDto>("EXEC GetOverdueBorrows").ToListAsync();
 
-        List<BorrowDto> result = borrows.Select(b => new BorrowDto
+        List<LoanDto> result = borrows.Select(b => new LoanDto
         {
             Id = b.Id,
             BookId = b.BookId,

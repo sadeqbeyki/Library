@@ -12,9 +12,9 @@ public class MappingProfile : Profile
     {
         CreateMap<BookCategoryDto, BookCategory>().ReverseMap();
 
-        CreateMap<BorrowDto, Borrow>()
+        CreateMap<LoanDto, Borrow>()
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.BorrowDate));
-        CreateMap<Borrow, BorrowDto>()
+        CreateMap<Borrow, LoanDto>()
             .ForMember(dest => dest.BorrowDate, opt => opt.MapFrom(src => src.CreationDate));
 
         //CreateMap<UpdateUserDto, User>().ReverseMap();
