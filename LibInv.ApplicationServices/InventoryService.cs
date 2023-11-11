@@ -10,14 +10,12 @@ namespace LibInventory.ApplicationServices
 {
     public class InventoryService : IInventoryService
     {
-        private readonly IAuthHelper _authHelper;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public InventoryService(IInventoryRepository inventoryRepository, IAuthHelper authHelper, IHttpContextAccessor contextAccessor)
+        public InventoryService(IInventoryRepository inventoryRepository, IHttpContextAccessor contextAccessor)
         {
             _inventoryRepository = inventoryRepository;
-            _authHelper = authHelper;
             _contextAccessor = contextAccessor;
         }
 

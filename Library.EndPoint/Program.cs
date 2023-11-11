@@ -57,10 +57,11 @@ builder.Services.AddIdentityCore<UserIdentity>(options => options.SignIn.Require
 
 builder.Services.AddScoped<IPasswordValidator<UserIdentity>, LIPasswordValidator>();
 builder.Services.AddScoped<IUserValidator<UserIdentity>, LIUserValidator>();
-builder.Services.AddTransient<IAuthHelper, AuthHelper>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
+//token
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddDbContext<IdentityDbContext>(c =>
     c.UseSqlServer(builder.Configuration.GetConnectionString("AAA")));

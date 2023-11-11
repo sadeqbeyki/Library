@@ -89,7 +89,7 @@ public class UserService : IUserService
         return result;
     }
 
-    public async Task<IdentityResult> Register(CreateUserViewModel model)
+    public async Task<IdentityResult> Registers(CreateUserViewModel model)
     {
         var existingUser = await _userManager.FindByEmailAsync(model.Email);
         if (existingUser != null)
@@ -110,6 +110,30 @@ public class UserService : IUserService
 
         //send mail
         //...
+
+        return result;
+    }
+
+    public async Task<IdentityResult> Register(CreateUserViewModel model)
+    {
+        var existingUser = await _userManager.FindByEmailAsync(model.Email);
+        if (existingUser != null)
+        {
+            var error = new IdentityError
+            {
+                Code = "Duplicate Email",
+                Description = "این ایمیل قبلاً ثبت شده است."
+            };
+            return IdentityResult.Failed(error);
+        }
+
+        var userMap = _mapper.Map<UserIdentity>(model);
+        var result = await _userManager.CreateAsync(userMap, model.Password);
+        await _userManager.AddToRoleAsync(userMap, "member");
+
+        // Generate JWT token
+        var jwtService = new JwtService();
+        var token = jwtService.GenerateJwtToken(userMap);
 
         return result;
     }

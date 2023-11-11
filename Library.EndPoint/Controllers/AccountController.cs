@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using LibIdentity.ApplicationServices;
 
 namespace Library.EndPoint.Controllers;
 
@@ -93,6 +94,10 @@ public class AccountController : Controller
 
         //add to default role
         await _userManager.AddToRoleAsync(user, "member");
+
+        // Generate JWT token
+        var jwtService = new JwtService();
+        var tokenNew = jwtService.GenerateJwtToken(user);
 
         //return RedirectToAction("Login", result);
         return RedirectToAction(nameof(SuccessRegistration));
