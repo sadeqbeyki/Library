@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using AppFramework.Application.Email;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using LibIdentity.DomainContracts.Auth;
 using LibIdentity.ApplicationServices;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Library.EndPoint.Controllers;
 
@@ -22,12 +20,15 @@ public class AccountController : Controller
     private readonly IEmailService _email;
     private readonly IConfiguration _configuration;
 
+    private readonly IJwtService _jwtService;
+
     public AccountController(UserManager<UserIdentity> userManager,
         SignInManager<UserIdentity> signInManager,
         ILogger<LoginViewModel> logger,
         IMapper mapper,
         IEmailService email,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IJwtService jwtService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -35,14 +36,54 @@ public class AccountController : Controller
         _mapper = mapper;
         _email = email;
         _configuration = configuration;
+        _jwtService = jwtService;
     }
 
     public IActionResult Index()
     {
         return View();
     }
+    [HttpGet]
+    public IActionResult Login(string returnUrl)
+    {
+        return View(new LoginViewModel { ReturnUrl = returnUrl });
+    }
+    [HttpPost]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel model)
+    {
+        //jwt
+        IActionResult response = Unauthorized();
 
+        model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
+        if (ModelState.IsValid)
+        {
+            UserIdentity user = await _userManager.FindByNameAsync(model.UserName) ?? await _userManager.FindByEmailAsync(model.UserName);
 
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    //jwt
+                    var jwtToken = _jwtService.GenerateJWTAuthetication(user);
+                    var validateToken = _jwtService.ValidateToken(jwtToken);
+                    return RedirectToAction("Index", "Home", new { token = validateToken });
+
+                    //var jwtSecurityToken = _jwtService.GenerateJwtToken(user);
+                    ////Session["LoginedIn"] = user.UserName;
+                    //return RedirectToAction("Index", "Home", new { token = jwtSecurityToken });
+                    //jwt
+                    //return Redirect(model?.ReturnUrl ?? "/");
+                }
+
+                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                return View();
+            }
+        }
+        return View(model);
+    }
     public IActionResult Register(string returnUrl)
     {
         return View(new CreateUserViewModel { ReturnUrl = returnUrl });
@@ -54,7 +95,6 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
         {
             return Redirect(model?.ReturnUrl ?? "/");
-
         }
 
         var email = await _userManager.FindByEmailAsync(model.Email);
@@ -77,9 +117,8 @@ public class AccountController : Controller
         }
 
         //confirmation email 
-
-        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+        var emailConfirm = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { emailConfirm, email = user.Email }, Request.Scheme);
 
         EmailModel message = new()
         {
@@ -96,8 +135,11 @@ public class AccountController : Controller
         await _userManager.AddToRoleAsync(user, "member");
 
         // Generate JWT token
-        var jwtService = new JwtService();
-        var tokenNew = jwtService.GenerateJwtToken(user);
+        var token = _jwtService.GenerateJWTAuthetication(user);
+        var validUserName = _jwtService.ValidateToken(token);
+
+        // Set JWT token in the response
+        Response.Headers.Add("Authorization", "Bearer " + token);
 
         //return RedirectToAction("Login", result);
         return RedirectToAction(nameof(SuccessRegistration));
@@ -117,51 +159,10 @@ public class AccountController : Controller
     {
         return View();
     }
-
-
     public IActionResult Error()
     {
         return View();
     }
-
-    [HttpGet]
-    public IActionResult Login(string returnUrl)
-    {
-        return View(new LoginViewModel { ReturnUrl = returnUrl });
-    }
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model)
-    {
-        model.ReturnUrl = model.ReturnUrl ?? Url.Content("~/");
-        if (ModelState.IsValid)
-        {
-            UserIdentity user = await _userManager.FindByNameAsync(model.Name) ?? await _userManager.FindByEmailAsync(model.Name);
-
-            //if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
-            //{
-            //    return BadRequest("wrong password!");
-            //}
-            //string token = CreateToken(user);
-            //return View(token);
-            if (user != null)
-            {
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return Redirect(model?.ReturnUrl ?? "/");
-                }
-
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-                return View();
-            }
-        }
-
-
-        return View(model);
-    }
-
 
     public async Task<RedirectResult> Logout(string returnUrl = "/")
     {
@@ -172,26 +173,4 @@ public class AccountController : Controller
     {
         return View();
     }
-
-    private string CreateToken(UserIdentity user)
-    {
-        List<Claim> claims = new() { new Claim(ClaimTypes.Name, user.UserName) };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetSection("AppSettings:Token").Value!));
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-        var token = new JwtSecurityToken
-            (
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds
-            );
-
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-        return jwt;
-    }
-
 }

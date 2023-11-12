@@ -89,7 +89,7 @@ public class UserService : IUserService
         return result;
     }
 
-    public async Task<IdentityResult> Registers(CreateUserViewModel model)
+    public async Task<IdentityResult> Register(CreateUserViewModel model)
     {
         var existingUser = await _userManager.FindByEmailAsync(model.Email);
         if (existingUser != null)
@@ -114,7 +114,7 @@ public class UserService : IUserService
         return result;
     }
 
-    public async Task<IdentityResult> Register(CreateUserViewModel model)
+    public async Task<IdentityResult> Registerssssssssss(CreateUserViewModel model)
     {
         var existingUser = await _userManager.FindByEmailAsync(model.Email);
         if (existingUser != null)
@@ -132,8 +132,8 @@ public class UserService : IUserService
         await _userManager.AddToRoleAsync(userMap, "member");
 
         // Generate JWT token
-        var jwtService = new JwtService();
-        var token = jwtService.GenerateJwtToken(userMap);
+        //var jwtService = new JwtService();
+        //var token = jwtService.GenerateJwtToken(userMap);
 
         return result;
     }

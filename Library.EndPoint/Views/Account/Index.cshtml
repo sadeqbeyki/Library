@@ -1,0 +1,18 @@
+﻿@using LibIdentity.Domain.UserAgg;
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@inject SignInManager<UserIdentity> SignInManager
+@inject UserManager<UserIdentity> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="container text-center mt-5">
+    <h1 class="display-4">Welcome to the Library System</h1>
+    <p class="lead">Explore and manage your library resources.</p>
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="btn btn-primary">Login</a>
+    }
+</div>

@@ -8,7 +8,7 @@ public class LoginViewModel
 {
     [Required]
     [Display(Name = "User Name / Email ")]
-    public string Name { get; set; }
+    public string UserName { get; set; }
 
     [Required]
     [UIHint("Password")]

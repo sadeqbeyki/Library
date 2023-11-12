@@ -9,11 +9,14 @@ using LibIdentity.DomainContracts.UserContracts;
 using LibIdentity.Infrastructure;
 using LibIdentity.Infrastructure.Repositories;
 using LibInventory.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//ConfigurationManager configuration = new();
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -21,6 +24,35 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
+
+//token
+//Jwt configuration starts here
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true
+
+    };
+});
+builder.Services.AddAuthorization();
+// Add configuration from appsettings.json
+builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
+//Jwt configuration ends here
+//end token
 
 #region Email
 builder.Services.AddTransient<IEmailService, EmailService>();
@@ -60,8 +92,6 @@ builder.Services.AddScoped<IUserValidator<UserIdentity>, LIUserValidator>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
-//token
-builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddDbContext<IdentityDbContext>(c =>
     c.UseSqlServer(builder.Configuration.GetConnectionString("AAA")));
@@ -89,7 +119,8 @@ app.UseRouting();
 app.UseSession();
 
 app.UseAuthorization();
-
+IConfiguration configuration = app.Configuration;
+IWebHostEnvironment environment = app.Environment;
 
 
 app.UseEndpoints(endpoints =>

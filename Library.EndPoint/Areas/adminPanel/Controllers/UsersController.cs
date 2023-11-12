@@ -1,9 +1,11 @@
-﻿using LibIdentity.Domain.RoleAgg;
+﻿using LibIdentity.ApplicationServices;
+using LibIdentity.Domain.RoleAgg;
 using LibIdentity.Domain.UserAgg;
 using LibIdentity.DomainContracts.RoleContracts;
 using LibIdentity.DomainContracts.UserContracts;
 using Library.EndPoint.Areas.adminPanel.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,8 +70,6 @@ public class UsersController : Controller
         }
         return RedirectToAction("Index");
     }
-
-
 
     public async Task<ActionResult> Update(int id)
     {
@@ -172,5 +172,4 @@ public class UsersController : Controller
 
         return RedirectToAction("AssignRole");
     }
-
 }
