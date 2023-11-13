@@ -69,11 +69,11 @@ public class AccountController : Controller
                     //jwt
                     var jwtToken = _jwtService.GenerateJWTAuthetication(user);
                     var validateToken = _jwtService.ValidateToken(jwtToken);
-                    return RedirectToAction("Index", "Home", new { token = validateToken });
-
-                    //var jwtSecurityToken = _jwtService.GenerateJwtToken(user);
+                    if (validateToken == null)
+                        return response;
                     ////Session["LoginedIn"] = user.UserName;
-                    //return RedirectToAction("Index", "Home", new { token = jwtSecurityToken });
+                    return RedirectToAction("Index", "Home", new { token = jwtToken });
+
                     //jwt
                     //return Redirect(model?.ReturnUrl ?? "/");
                 }
@@ -134,12 +134,13 @@ public class AccountController : Controller
         //add to default role
         await _userManager.AddToRoleAsync(user, "member");
 
+        #region jwt 
         // Generate JWT token
         var token = _jwtService.GenerateJWTAuthetication(user);
         var validUserName = _jwtService.ValidateToken(token);
-
         // Set JWT token in the response
         Response.Headers.Add("Authorization", "Bearer " + token);
+        #endregion
 
         //return RedirectToAction("Login", result);
         return RedirectToAction(nameof(SuccessRegistration));
