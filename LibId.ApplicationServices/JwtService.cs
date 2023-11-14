@@ -50,7 +50,7 @@ public class JwtService : IJwtService
     public string ValidateToken(string token)
     {
         if (token == null)
-            return null;
+            return "Invalid token: Token is null.";
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")));
@@ -74,9 +74,9 @@ public class JwtService : IJwtService
 
             return kid;
         }
-        catch
+        catch (Exception ex)
         {
-            return null;
+            return $"Invalid token: {ex.Message}";
         }
     }
     //public string GenerateJwtToken(UserIdentity user)

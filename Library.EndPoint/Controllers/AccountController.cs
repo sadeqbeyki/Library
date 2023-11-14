@@ -66,15 +66,15 @@ public class AccountController : Controller
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    //jwt
+                    //JWT
                     var jwtToken = _jwtService.GenerateJWTAuthetication(user);
                     var validateToken = _jwtService.ValidateToken(jwtToken);
                     if (validateToken == null)
                         return response;
-                    ////Session["LoginedIn"] = user.UserName;
+                    //Session["LoginedIn"] = user.UserName;
                     return RedirectToAction("Index", "Home", new { token = jwtToken });
 
-                    //jwt
+                    //JWT
                     //return Redirect(model?.ReturnUrl ?? "/");
                 }
 
