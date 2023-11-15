@@ -74,7 +74,7 @@ public class LoanService : ILoanService
         return _mapper.Map<List<LoanDto>>(borrows);
     }
 
-    public async Task<List<LoanDto>> GetAllLoans()
+    public async Task<List<LoanDto>> GetPendingLoans()
     {
         var result = await _borrowRepository.GetAll()
             .Where(x => !x.IsDeleted && x.IsApproved == false)

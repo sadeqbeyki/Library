@@ -119,8 +119,8 @@ app.UseRouting();
 app.UseSession();
 
 app.UseAuthorization();
-IConfiguration configuration = app.Configuration;
-IWebHostEnvironment environment = app.Environment;
+//IConfiguration configuration = app.Configuration;
+//IWebHostEnvironment environment = app.Environment;
 
 
 app.UseEndpoints(endpoints =>
