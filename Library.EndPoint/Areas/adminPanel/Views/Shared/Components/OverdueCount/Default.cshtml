@@ -1,0 +1,42 @@
+﻿@model List<LibBook.DomainContracts.Borrow.LoanDto>
+
+
+
+<a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-bell fa-fw"></i>
+    <!-- Counter - Alerts -->
+    <span class="badge badge-danger badge-counter">@Model.Count</span>
+</a>
+<!-- Dropdown - Alerts -->
+<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+     aria-labelledby="alertsDropdown">
+    <h6 class="dropdown-header">
+        Alerts Center
+    </h6>
+    @foreach (var item in Model)
+    {
+        <a asp-controller="Borrows" asp-action="Details" asp-route-id="@item.Id"
+           class="dropdown-item d-flex align-items-center">
+            <div class="mr-3">
+@*                 <div class="icon-circle bg-primary">
+                    <i class="fas fa-file-alt text-white"></i>
+                </div> *@
+                <div class="icon-circle bg-warning">
+                    <i class="fas fa-exclamation-triangle text-white"></i>
+                </div>
+@*                 <div class="icon-circle bg-success">
+                    <i class="fas fa-donate text-white"></i>
+                </div> *@
+            </div>
+            <div>
+                <div class="small text-gray-500">@item.IdealReturnDate</div>
+                <span class="font-weight-bold">@item.BookId</span>
+            </div>
+        </a>
+    }
+    <a asp-controller="Borrows" asp-action="OverdueLoans"
+       class="dropdown-item text-center small text-gray-500">Show All Alerts</a>
+</div>
+
+

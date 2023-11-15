@@ -67,7 +67,7 @@
                                 }
                             </tbody>
                         </table>
-                        Page : @Html.PagedListPager(Model, page => Url.Action("OverdueLoans", new { page = page }),
+                        Page : @Html.PagedListPager(Model, page => Url.Action("PendingLoans", new { page = page }),
                         new PagedListRenderOptions {
 
                         DisplayLinkToIndividualPages = true,

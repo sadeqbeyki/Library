@@ -9,23 +9,31 @@ using LibIdentity.DomainContracts.UserContracts;
 using LibIdentity.Infrastructure;
 using LibIdentity.Infrastructure.Repositories;
 using LibInventory.Configuration;
+using Library.EndPoint.Areas.adminPanel.ViewComponents;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-//ConfigurationManager configuration = new();
+
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddControllersWithViews();
+
+//builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+     .AddRazorOptions(options =>
+     {
+         options.ViewLocationFormats.Add("/{0}.cshtml");
+     });
 
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
-//token
+#region token
 //Jwt configuration starts here
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddAuthentication(x =>
@@ -52,7 +60,7 @@ builder.Services.AddAuthorization();
 builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 //Jwt configuration ends here
-//end token
+#endregion end token
 
 #region Email
 builder.Services.AddTransient<IEmailService, EmailService>();
@@ -64,6 +72,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 LMSConfigureServices.Configure(builder.Services, connectionString);
 InventoryConfigureServices.Configure(builder.Services, connectionString);
 #endregion
+
+
 
 #region Identity
 builder.Services.AddIdentity<UserIdentity, RoleIdentity>(i =>

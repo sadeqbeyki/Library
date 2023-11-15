@@ -27,3 +27,9 @@ public class UpdateBorrowViewModel
     public List<UpdateUserViewModel> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }
+
+public class LoanViewModel
+{
+    public int BookId { get; set; }
+    public string MemberId { get; set; }
+}
