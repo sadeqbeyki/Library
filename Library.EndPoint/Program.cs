@@ -1,5 +1,6 @@
 using AppFramework.Application.Email;
 using LibBook.Configurations;
+using LibBook.Domain;
 using LibIdentity.ApplicationServices;
 using LibIdentity.Domain.RoleAgg;
 using LibIdentity.Domain.UserAgg;
@@ -20,7 +21,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //builder.Services.AddControllersWithViews();

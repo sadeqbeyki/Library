@@ -24,9 +24,9 @@ public class BorrowsController : Controller
     }
 
     #region Read
-    public async Task<ActionResult<List<LoanDto>>> Index()
+    public ActionResult<List<LoanDto>> Index()
     {
-        List<LoanDto> loans = await _borrowService.GetAll();
+        List<LoanDto> loans = _borrowService.GetAll();
         return View("Index", loans);
     }
     public async Task<ActionResult<List<LoanDto>>> PendingLoans(int? page)

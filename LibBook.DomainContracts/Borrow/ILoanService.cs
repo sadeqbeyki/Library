@@ -4,7 +4,7 @@ namespace LibBook.DomainContracts.Borrow;
 
 public interface ILoanService
 {
-    Task<List<LoanDto>> GetAll();
+    List<LoanDto> GetAll();
     Task<List<LoanDto>> GetPendingLoans();
     List<LoanDto> GetApprovedLoans();
     List<LoanDto> GetReturnedLoans();

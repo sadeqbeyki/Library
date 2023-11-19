@@ -68,10 +68,25 @@ public class LoanService : ILoanService
     #endregion
 
     #region Read
-    public async Task<List<LoanDto>> GetAll()
+    public List<LoanDto> GetAll()
     {
-        var borrows = await _borrowRepository.GetAll().ToListAsync();
-        return _mapper.Map<List<LoanDto>>(borrows);
+        //var loans = _borrowRepository.GetAll()
+        //            .Where(x => !x.IsDeleted)
+        //            .Select(lend => new LoanDto
+        //            {
+        //                Id = lend.Id,
+        //                BookId = lend.BookId,
+        //                MemberId = lend.MemberID,
+        //                EmployeeId = lend.EmployeeId,
+        //                CreationDate = lend.CreationDate,
+        //                IdealReturnDate = lend.IdealReturnDate,
+        //                ReturnEmployeeId = lend.ReturnEmployeeID,
+        //                ReturnDate = lend.ReturnDate,
+        //                Description = lend.Description,
+        //            }).ToList();
+        //return loans;
+        var loans = _borrowRepository.GetAll().ToList();
+        return _mapper.Map<List<LoanDto>>(loans);
     }
 
     public async Task<List<LoanDto>> GetPendingLoans()

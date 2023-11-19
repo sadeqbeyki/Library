@@ -12,12 +12,12 @@ public class MappingProfile : Profile
     {
         CreateMap<BookCategoryDto, BookCategory>().ReverseMap();
 
-        CreateMap<LoanDto, Borrow>()
-            .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate));
         CreateMap<Borrow, LoanDto>()
-            .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate));
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => DateTime.Now))
+            .ForMember(dest => dest.ReturnEmployeeId, opt => opt.MapFrom(src => src.ReturnEmployeeID))
+            .ReverseMap();
 
-        //CreateMap<UpdateUserDto, User>().ReverseMap();
-        //CreateMap<RoleDto, Role>().ReverseMap();
+        CreateMap<Borrow, LoanDto>().ReverseMap();
     }
 }
