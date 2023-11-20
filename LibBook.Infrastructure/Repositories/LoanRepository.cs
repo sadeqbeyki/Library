@@ -51,13 +51,14 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
 
     public async Task<List<LoanDto>> GetOverdueLones()
     {
-        var borrows = await _bookDbContext.Borrows
+        var loans = await _bookDbContext.Borrows
             .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();
 
-        List<LoanDto> result = borrows.Select(b => new LoanDto
+        List<LoanDto> result = loans.Select(b => new LoanDto
         {
             Id = b.Id,
             BookId = b.BookId,
+            BookTitle = _bookDbContext.Books.Find(b.BookId).Title ?? string.Empty,
             MemberId = b.MemberID,
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,

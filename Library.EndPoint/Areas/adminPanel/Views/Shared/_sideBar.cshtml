@@ -63,7 +63,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Inventory Management:</h6>
                     <a class="collapse-item" asp-controller="Inventory" asp-action="Index">Inventory</a>
-                    <a class="collapse-item" asp-controller="Inventory" asp-action="Create">Add Inventory</a>
+                    <a class="collapse-item text-success" asp-controller="Inventory" asp-action="Create">Add Inventory</a>
                 </div>
             </div>
         </li>
@@ -79,14 +79,14 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Loan Management:</h6>
                     <a class="collapse-item" asp-controller="Borrows" asp-action="Index">All Loans</a>
-                    <a class="collapse-item" asp-controller="Borrows" asp-action="Lending">Add Book Loan</a>
+                    <a class="collapse-item text-success" asp-controller="Borrows" asp-action="Lending">Add Book Loan</a>
                     <hr class="hr hr-blurry" />
                     <a class="collapse-item" asp-controller="Borrows" asp-action="PendingLoans">Pending Loans</a>
                     <a class="collapse-item" asp-controller="Borrows" asp-action="ApprovedLoans">Approved Loans</a>
                     <a class="collapse-item" asp-controller="Borrows" asp-action="ReturnedLoans">Returned Loans</a>
                     <hr class="hr hr-blurry" />
                     <a class="collapse-item" asp-controller="Borrows" asp-action="OverdueLoans">Overdue Loans</a>
-                    <a class="collapse-item" asp-controller="Borrows" asp-action="DeletedLoans">Deleted Loans</a>
+                    <a class="collapse-item text-secondary" asp-controller="Borrows" asp-action="DeletedLoans">Deleted Loans</a>
                 </div>
             </div>
         </li>

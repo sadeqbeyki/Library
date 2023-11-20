@@ -26,6 +26,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews()
+    //need for component
      .AddRazorOptions(options =>
      {
          options.ViewLocationFormats.Add("/{0}.cshtml");

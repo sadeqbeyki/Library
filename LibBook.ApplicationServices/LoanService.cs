@@ -1,5 +1,6 @@
 ﻿using AppFramework.Application;
 using AutoMapper;
+using LibBook.Domain.BookAgg;
 using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
 using LibBook.DomainContracts.Borrow;
@@ -14,13 +15,15 @@ public class LoanService : ILoanService
     private readonly ILoanRepository _borrowRepository;
     private readonly IMapper _mapper;
 
+    private readonly IBookRepository _bookRepository;
+
     private readonly ILibraryInventoryAcl _inventoryAcl;
     private readonly ILibraryIdentityAcl _IdentityAcl;
     private readonly IHttpContextAccessor _contextAccessor;
 
 
     public LoanService(ILoanRepository borrowRepository, IMapper mapper, ILibraryInventoryAcl inventoryAcl,
-        IHttpContextAccessor contextAccessor, ILibraryIdentityAcl identityAcl)
+        IHttpContextAccessor contextAccessor, ILibraryIdentityAcl identityAcl, IBookRepository bookRepository)
     {
         _borrowRepository = borrowRepository;
         _mapper = mapper;
@@ -28,13 +31,14 @@ public class LoanService : ILoanService
         _inventoryAcl = inventoryAcl;
         _contextAccessor = contextAccessor;
         _IdentityAcl = identityAcl;
+        _bookRepository = bookRepository;
     }
 
     #region Create
     public async Task<OperationResult> Lending(LoanDto model)
     {
         OperationResult operationResult = new();
-        if (model.BookId == 0 || model.MemberId == null)
+        if (model.BookId == null || model.MemberId == null)
             return operationResult.Failed(ApplicationMessages.ModelIsNull);
         Borrow borrow = new(
             model.BookId,
@@ -70,95 +74,78 @@ public class LoanService : ILoanService
     #region Read
     public List<LoanDto> GetAll()
     {
-        //var loans = _borrowRepository.GetAll()
-        //            .Where(x => !x.IsDeleted)
-        //            .Select(lend => new LoanDto
-        //            {
-        //                Id = lend.Id,
-        //                BookId = lend.BookId,
-        //                MemberId = lend.MemberID,
-        //                EmployeeId = lend.EmployeeId,
-        //                CreationDate = lend.CreationDate,
-        //                IdealReturnDate = lend.IdealReturnDate,
-        //                ReturnEmployeeId = lend.ReturnEmployeeID,
-        //                ReturnDate = lend.ReturnDate,
-        //                Description = lend.Description,
-        //            }).ToList();
-        //return loans;
         var loans = _borrowRepository.GetAll().ToList();
         return _mapper.Map<List<LoanDto>>(loans);
     }
 
     public async Task<List<LoanDto>> GetPendingLoans()
     {
-        var result = await _borrowRepository.GetAll()
-            .Where(x => !x.IsDeleted && x.IsApproved == false)
-                    .Select(lend => new LoanDto
-                    {
-                        Id = lend.Id,
-                        BookId = lend.BookId,
-                        MemberId = lend.MemberID,
-                        EmployeeId = lend.EmployeeId,
-                        CreationDate = lend.CreationDate,
-                        IdealReturnDate = lend.IdealReturnDate,
-                        ReturnEmployeeId = lend.ReturnEmployeeID,
-                        ReturnDate = lend.ReturnDate,
-                        Description = lend.Description,
-                    }).ToListAsync();
+        var loans = await _borrowRepository.GetAll().Where(x => !x.IsDeleted && !x.IsApproved).ToListAsync();
+
+        var result = loans.Select(lend => new LoanDto
+        {
+            Id = lend.Id,
+            BookId = lend.BookId,
+            BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
+            MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
+            EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
+            CreationDate = lend.CreationDate,
+            IdealReturnDate = lend.IdealReturnDate,
+            Description = lend.Description,
+        }).ToList();
+
         return result;
     }
 
     public List<LoanDto> GetApprovedLoans()
     {
-        var result = _borrowRepository.GetAll()
-            .Where(x => !x.IsDeleted && x.IsApproved && !x.IsReturned)
-                    .Select(lend => new LoanDto
-                    {
-                        Id = lend.Id,
-                        BookId = lend.BookId,
-                        MemberId = lend.MemberID,
-                        EmployeeId = lend.EmployeeId,
-                        CreationDate = lend.CreationDate,
-                        IdealReturnDate = lend.IdealReturnDate,
-                        ReturnEmployeeId = lend.ReturnEmployeeID,
-                        ReturnDate = lend.ReturnDate,
-                        Description = lend.Description,
-                    }).ToList();
+        var loans = _borrowRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && !x.IsReturned).ToList();
+        var result = loans.Select(lend => new LoanDto
+        {
+            Id = lend.Id,
+            BookId = lend.BookId,
+            BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
+            MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
+            EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
+            CreationDate = lend.CreationDate,
+            IdealReturnDate = lend.IdealReturnDate,
+            Description = lend.Description
+        }).ToList();
         return result;
     }
 
     public List<LoanDto> GetReturnedLoans()
     {
-        var result = _borrowRepository.GetAll()
-            .Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned)
-                    .Select(lend => new LoanDto
-                    {
-                        Id = lend.Id,
-                        BookId = lend.BookId,
-                        MemberId = lend.MemberID,
-                        EmployeeId = lend.EmployeeId,
-                        CreationDate = lend.CreationDate,
-                        IdealReturnDate = lend.IdealReturnDate,
-                        ReturnEmployeeId = lend.ReturnEmployeeID,
-                        ReturnDate = lend.ReturnDate,
-                        Description = lend.Description,
-                    }).ToList();
+        var loans = _borrowRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned).ToList();
+        var result = loans.Select(lend => new LoanDto
+        {
+            Id = lend.Id,
+            BookId = lend.BookId,
+            BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
+            MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
+            EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
+            CreationDate = lend.CreationDate,
+            IdealReturnDate = lend.IdealReturnDate,
+            ReturnEmployeeId = _IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result,
+            ReturnDate = lend.ReturnDate,
+            Description = lend.Description,
+        }).ToList();
         return result;
     }
 
     public List<LoanDto> GetDeletedLoans()
     {
-        var result = _borrowRepository.GetAll()
-            .Where(x => x.IsDeleted)
-                    .Select(lend => new LoanDto
+        var loans = _borrowRepository.GetAll().Where(x => x.IsDeleted).ToList();
+        var result = loans.Select(lend => new LoanDto
                     {
                         Id = lend.Id,
                         BookId = lend.BookId,
-                        MemberId = lend.MemberID,
-                        EmployeeId = lend.EmployeeId,
+                        BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
+                        MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
+                        EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
                         CreationDate = lend.CreationDate,
                         IdealReturnDate = lend.IdealReturnDate,
-                        ReturnEmployeeId = lend.ReturnEmployeeID,
+                        ReturnEmployeeId = _IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result,
                         ReturnDate = lend.ReturnDate,
                         Description = lend.Description,
                     }).ToList();
@@ -178,10 +165,13 @@ public class LoanService : ILoanService
     public async Task<LoanDto> GetLoanById(int borrowId)
     {
         Borrow borrow = await _borrowRepository.GetByIdAsync(borrowId);
+        var book = await _bookRepository.GetByIdAsync(borrow.BookId);
+
         LoanDto dto = new()
         {
             Id = borrow.Id,
             BookId = borrow.BookId,
+            BookTitle = book.Title,
             MemberId = await _IdentityAcl.GetUserName(borrow.MemberID),
             EmployeeId = await _IdentityAcl.GetUserName(borrow.EmployeeId),
             CreationDate = borrow.CreationDate,

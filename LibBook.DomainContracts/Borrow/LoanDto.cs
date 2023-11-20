@@ -5,8 +5,9 @@ namespace LibBook.DomainContracts.Borrow;
 public class LoanDto
 {
     public int Id { get; set; }
-    [Required(ErrorMessage = "Book Name field cannot be empty!")]
     public int BookId { get; set; }
+    [Required(ErrorMessage = "Book Name field cannot be empty!")]
+    public string BookTitle { get; set; }
     [Required(ErrorMessage = "Username field cannot be empty!")]
     public string MemberId { get; set; }
     public string EmployeeId { get; set; }

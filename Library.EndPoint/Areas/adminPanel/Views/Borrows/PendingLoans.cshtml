@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-sm-12">
         <p class="pull-left">
-            <a class="btn btn-primary btn-lg" asp-action="Lending">Lending</a>
+            <a class="btn btn-primary btn-lg" asp-action="Lending">Add Book Loan</a>
         </p>
     </div>
 </div>
@@ -28,13 +28,11 @@
                                 <tr>
                                     <th>#</th>
 
-                                    <th>Book ID</th>
-                                    <th>Member ID</th>
-                                    <th>Employee ID</th>
+                                    <th>Book Title</th>
+                                    <th>Member</th>
+                                    <th>Employee</th>
                                     <th>Borrow Date</th>
                                     <th>Ideal Return Date</th>
-                                    <th>Return Employee ID</th>
-                                    <th>Return Date</th>
                                     <th>Description</th>
                                     <th>Operations</th>
                                 </tr>
@@ -45,13 +43,11 @@
                                     <tr>
                                         <td>@item.Id</td>
 
-                                        <td>@item.BookId</td>
+                                        <td>@item.BookTitle</td>
                                         <td>@item.MemberId</td>
                                         <td>@item.EmployeeId</td>
                                         <td>@item.CreationDate</td>
                                         <td>@item.IdealReturnDate</td>
-                                        <td>@item.ReturnEmployeeId</td>
-                                        <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
 

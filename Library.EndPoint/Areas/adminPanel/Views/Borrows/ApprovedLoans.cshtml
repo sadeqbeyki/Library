@@ -17,13 +17,11 @@
                                 <tr>
                                     <th>#</th>
 
-                                    <th>Book ID</th>
-                                    <th>Member ID</th>
-                                    <th>Employee ID</th>
+                                    <th>Book Title</th>
+                                    <th>Member</th>
+                                    <th>Employee</th>
                                     <th>Borrow Date</th>
                                     <th>Ideal Return Date</th>
-                                    <th>Return Employee ID</th>
-                                    <th>Return Date</th>
                                     <th>Description</th>
                                     <th>Operations</th>
                                 </tr>
@@ -34,13 +32,11 @@
                                     <tr>
                                         <td>@item.Id</td>
 
-                                        <td>@item.BookId</td>
+                                        <td>@item.BookTitle</td>
                                         <td>@item.MemberId</td>
                                         <td>@item.EmployeeId</td>
                                         <td>@item.CreationDate</td>
                                         <td>@item.IdealReturnDate</td>
-                                        <td>@item.ReturnEmployeeId</td>
-                                        <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
                                             <a class="btn btn-warning" asp-action="Return" asp-route-id="@item.Id">
