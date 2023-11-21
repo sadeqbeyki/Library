@@ -5,7 +5,6 @@
     ViewData["Title"] = "Create Translator";
 }
 
-<h1 class="bg-info text-white">@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-6">
 
@@ -24,8 +23,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label asp-for="Description" class="control-label">Description</label>
-                                <textarea class="form-control autogrow" asp-for="Description"
-                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;"required></textarea>
+                                <textarea class="form-control autogrow" asp-for="Description" rows="3"
+                                          style="overflow: hidden; resize:none;" required></textarea>
                                 <span asp-validation-for="Description" class="error"></span>
                             </div>
                         </div>
