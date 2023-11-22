@@ -1,7 +1,5 @@
 ﻿using LibBook.DomainContracts.Borrow;
-using Library.EndPoint.Areas.adminPanel.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library.EndPoint.Areas.adminPanel.ViewComponents;
 [ViewComponent(Name = "OverdueCount")]

@@ -137,18 +137,18 @@ public class LoanService : ILoanService
     {
         var loans = _borrowRepository.GetAll().Where(x => x.IsDeleted).ToList();
         var result = loans.Select(lend => new LoanDto
-                    {
-                        Id = lend.Id,
-                        BookId = lend.BookId,
-                        BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
-                        MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
-                        EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
-                        CreationDate = lend.CreationDate,
-                        IdealReturnDate = lend.IdealReturnDate,
-                        ReturnEmployeeId = _IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result,
-                        ReturnDate = lend.ReturnDate,
-                        Description = lend.Description,
-                    }).ToList();
+        {
+            Id = lend.Id,
+            BookId = lend.BookId,
+            BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
+            MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
+            EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
+            CreationDate = lend.CreationDate,
+            IdealReturnDate = lend.IdealReturnDate,
+            ReturnEmployeeId = _IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result,
+            ReturnDate = lend.ReturnDate,
+            Description = lend.Description,
+        }).ToList();
         return result;
     }
 
@@ -185,7 +185,19 @@ public class LoanService : ILoanService
 
     public async Task<List<LoanDto>> GetOverdueLones()
     {
-        return await _borrowRepository.GetOverdueLones();
+        //return await _borrowRepository.GetOverdueLones();
+        var loans = _borrowRepository.GetAll()
+            .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToList();
+        var result = loans.Select(lend => new LoanDto
+        {
+            Id = lend.Id,
+            BookId = lend.BookId,
+            BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
+            MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
+            EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
+            Description = lend.Description
+        }).ToList();
+        return result;
     }
     #endregion
 
