@@ -49,24 +49,24 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         return result;
     }
 
-    public async Task<List<LoanDto>> GetOverdueLones()
-    {
-        var loans = await _bookDbContext.Borrows
-            .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();
+    //public async Task<List<LoanDto>> GetOverdueLones()
+    //{
+    //    var loans = await _bookDbContext.Borrows
+    //        .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();
 
-        List<LoanDto> result = loans.Select(b => new LoanDto
-        {
-            Id = b.Id,
-            BookId = b.BookId,
-            BookTitle = _bookDbContext.Books.Find(b.BookId).Title ?? string.Empty,
-            MemberId = b.MemberID,
-            EmployeeId = b.EmployeeId,
-            CreationDate = b.CreationDate,
-            IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
-            ReturnDate = b.ReturnDate,
-            Description = b.Description
-        }).ToList();
-        return result;
-    }
+    //    List<LoanDto> result = loans.Select(b => new LoanDto
+    //    {
+    //        Id = b.Id,
+    //        BookId = b.BookId,
+    //        BookTitle = _bookDbContext.Books.Find(b.BookId).Title ?? string.Empty,
+    //        MemberId = b.MemberID,
+    //        EmployeeId = b.EmployeeId,
+    //        CreationDate = b.CreationDate,
+    //        IdealReturnDate = b.IdealReturnDate,
+    //        ReturnEmployeeId = b.ReturnEmployeeID,
+    //        ReturnDate = b.ReturnDate,
+    //        Description = b.Description
+    //    }).ToList();
+    //    return result;
+    //}
 }

@@ -1,7 +1,5 @@
 ﻿@model List<LibBook.DomainContracts.Borrow.LoanDto>
 
-
-
 <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <i class="fas fa-bell fa-fw"></i>
@@ -19,19 +17,23 @@
         <a asp-controller="Borrows" asp-action="Details" asp-route-id="@item.Id"
            class="dropdown-item d-flex align-items-center">
             <div class="mr-3">
-@*                 <div class="icon-circle bg-primary">
-                    <i class="fas fa-file-alt text-white"></i>
-                </div> *@
+                @*                 <div class="icon-circle bg-primary">
+            <i class="fas fa-file-alt text-white"></i>
+            </div> *@
                 <div class="icon-circle bg-warning">
                     <i class="fas fa-exclamation-triangle text-white"></i>
                 </div>
-@*                 <div class="icon-circle bg-success">
-                    <i class="fas fa-donate text-white"></i>
-                </div> *@
+                @*                 <div class="icon-circle bg-success">
+            <i class="fas fa-donate text-white"></i>
+            </div> *@
             </div>
+            @{
+                TimeSpan timeDifference = DateTime.Now - @item.IdealReturnDate;
+                int daysOverdue = (int)timeDifference.TotalDays;
+            }
             <div>
-                <div class="small text-gray-500">@item.IdealReturnDate</div>
-                <span class="font-weight-bold">@item.BookId</span>
+                <div class="small text-gray-500">Delay in returning the loan</div>
+                <span><b>@item.MemberId</b> has not returned the <b>@item.BookTitle</b> book for @daysOverdue days.</span>
             </div>
         </a>
     }
