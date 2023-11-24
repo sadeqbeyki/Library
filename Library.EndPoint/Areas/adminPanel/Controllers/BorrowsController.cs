@@ -162,7 +162,7 @@ public class BorrowsController : Controller
     {
         var result = _borrowService.Returning(model.Borrow);
         if (result.IsSucceeded)
-            return RedirectToAction("Index", result);
+            return RedirectToAction("ApprovedLoans", result);
         return RedirectToAction("Return", model);
     }
     #endregion

@@ -9,6 +9,8 @@ public class Inventory : BaseEntity
     public bool InStock { get; private set; }
     public bool IsLoaned { get; set; }
     public List<InventoryOperation> Operations { get; private set; }
+    private long _maxCount;
+
 
     public Inventory(int bookId, double unitPrice)
     {
@@ -28,9 +30,17 @@ public class Inventory : BaseEntity
         var minus = Operations.Where(x => !x.Operation).Sum(x => x.Count);
         return plus - minus;
     }
+
+    public long GetMaxCount()
+    {
+        return _maxCount;
+    }
+
     public void Increase(long count, string operatorId, string description)
     {
         var currentCount = CalculateCurrentCount() + count;
+        _maxCount = Math.Max(_maxCount, currentCount);
+
         var operation = new InventoryOperation(true, count, operatorId, currentCount, description, 0, Id);
         Operations.Add(operation);
         InStock = currentCount > 0;

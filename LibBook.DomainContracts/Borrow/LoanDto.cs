@@ -10,7 +10,9 @@ public class LoanDto
     public string BookTitle { get; set; }
     [Required(ErrorMessage = "Username field cannot be empty!")]
     public string MemberId { get; set; }
+    public string MemberName { get; set; }
     public string EmployeeId { get; set; }
+    public string EmployeeName { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime IdealReturnDate { get; set; }
     public string ReturnEmployeeId { get; set; }

@@ -119,7 +119,7 @@ namespace LibInventory.ApplicationServices
             if (inventory == null)
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            if (inventory.IsLoaned == false)
+            if (inventory.IsLoaned == false && inventory.CalculateCurrentCount() < inventory.GetMaxCount())
                 return operationResult.Failed(ApplicationMessages.BookWasAlreadyReturned);
 
             //inventory.Return(command.Count, GetCurrentOperatorId(), command.Description, command.LendId);
@@ -158,7 +158,8 @@ namespace LibInventory.ApplicationServices
             if (inventory == null)
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            if (inventory.IsLoaned == true)
+            //if (inventory.IsLoaned == true)
+            if (inventory.IsLoaned == true && inventory.CalculateCurrentCount() <= 0)
                 return operationResult.Failed(ApplicationMessages.BookIsLoaned);
 
             //inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
