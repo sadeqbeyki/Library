@@ -90,7 +90,7 @@ public class BorrowsController : Controller
         var result = await _borrowService.Lending(model);
         if (!result.IsSucceeded)
             return RedirectToAction("Lending", model);
-        return RedirectToAction("Index", result);
+        return RedirectToAction("PendingLoans", result);
     }
 
     public async Task<ActionResult> SubmitLend(int id)
@@ -98,9 +98,9 @@ public class BorrowsController : Controller
         var result = await _borrowService.SubmitLend(id);
         if (result.IsSucceeded)
         {
-            return RedirectToAction("Index");
+            return RedirectToAction("PendingLoans");
         }
-        return RedirectToAction("Index");
+        return RedirectToAction("PendingLoans");
     }
     #endregion
 

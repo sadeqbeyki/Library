@@ -57,9 +57,20 @@ public class LoanService : ILoanService
     public async Task<OperationResult> SubmitLend(int lendId)
     {
         OperationResult operationResult = new();
+
         Borrow lend = await _borrowRepository.GetByIdAsync(lendId);
         if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
+        //borrow duplicate book check
+        var memberDuplicateLoans = await _borrowRepository.GetDuplicatedLoans(lend.MemberID, lend.BookId);
+        if (memberDuplicateLoans.Count > 0)
+            return operationResult.Failed(ApplicationMessages.DuplicateLendByMember);
+
+        //Member Overdue Loans
+        var memberOverdueLoans = await _borrowRepository.GetMemberOverdueLoans(lend.MemberID);
+        if (memberOverdueLoans.Count > 0)
+            return operationResult.Failed(ApplicationMessages.MemberDidntReturnedTheBook);
 
         if (_inventoryAcl.LoanFromInventory(lend) == true)
         {
@@ -244,16 +255,7 @@ public class LoanService : ILoanService
         if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        lend.Edit(
-            dto.BookId,
-            dto.MemberId,
-            dto.EmployeeId,
-            dto.IdealReturnDate,
-            GetCurrentOperatorId(),
-            DateTime.Now,
-            dto.Description
-            );
-
+        lend.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, GetCurrentOperatorId(), DateTime.Now, dto.Description);
 
         if (ReturnLoan(dto.Id).IsSucceeded)
         {

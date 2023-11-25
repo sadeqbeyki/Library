@@ -119,10 +119,9 @@ namespace LibInventory.ApplicationServices
             if (inventory == null)
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            if (inventory.IsLoaned == false && inventory.CalculateCurrentCount() < inventory.GetMaxCount())
-                return operationResult.Failed(ApplicationMessages.BookWasAlreadyReturned);
+            //if (inventory.IsLoaned == false)
+            //    return operationResult.Failed(ApplicationMessages.BookWasAlreadyReturned);
 
-            //inventory.Return(command.Count, GetCurrentOperatorId(), command.Description, command.LendId);
             var returnResult = ReturnToInventory(inventory, command.Count, command.Description, command.LendId);
             if (returnResult.IsSucceeded)
             {
@@ -158,11 +157,9 @@ namespace LibInventory.ApplicationServices
             if (inventory == null)
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            //if (inventory.IsLoaned == true)
             if (inventory.IsLoaned == true && inventory.CalculateCurrentCount() <= 0)
                 return operationResult.Failed(ApplicationMessages.BookIsLoaned);
 
-            //inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
             var lendResult = LoanFromInventory(inventory, command.Count, command.Description, command.LendId);
 
             if (lendResult.IsSucceeded)

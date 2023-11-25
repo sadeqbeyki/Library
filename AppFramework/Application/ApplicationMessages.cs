@@ -16,5 +16,7 @@
         public const string ReturnFailed = "مشکل در بازپس دادن کتاب";
         public const string LendFailed = "مشکل در امانت گرفتن کتاب";
         public const string ModelIsNull = "فیلد های الزامی را پر کنید";
+        public const string DuplicateLendByMember = "کاربر قبلا این کتاب را به امانت گرفته و بازگشت نداده است";
+        public const string MemberDidntReturnedTheBook = "تا کنون کاربر نتوانسته است کتاب ها را به موقع به کتابخانه برگرداند ";
     }
 }

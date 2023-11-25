@@ -49,6 +49,46 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         return result;
     }
 
+    public async Task<List<LoanDto>> GetDuplicatedLoans(string memberId, int bookId)
+    {
+        var loans = await _bookDbContext.Borrows
+            .Where(b => b.MemberID == memberId && b.BookId == bookId && b.IsApproved && !b.IsReturned && !b.IsDeleted).ToListAsync();
+
+        List<LoanDto> result = loans.Select(b => new LoanDto
+        {
+            Id = b.Id,
+            BookId = b.BookId,
+            MemberId = b.MemberID,
+            EmployeeId = b.EmployeeId,
+            CreationDate = b.CreationDate,
+            IdealReturnDate = b.IdealReturnDate,
+            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnDate = b.ReturnDate,
+            Description = b.Description
+        }).ToList();
+        return result;
+    }
+
+    public async Task<List<LoanDto>> GetMemberOverdueLoans(string memberId)
+    {
+        var loans = await _bookDbContext.Borrows
+            .Where(b => b.MemberID == memberId && b.IsApproved && b.IdealReturnDate < DateTime.Now && !b.IsReturned && !b.IsDeleted).ToListAsync();
+
+        List<LoanDto> result = loans.Select(b => new LoanDto
+        {
+            Id = b.Id,
+            BookId = b.BookId,
+            MemberId = b.MemberID,
+            EmployeeId = b.EmployeeId,
+            CreationDate = b.CreationDate,
+            IdealReturnDate = b.IdealReturnDate,
+            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnDate = b.ReturnDate,
+            Description = b.Description
+        }).ToList();
+        return result;
+    }
+
     //public async Task<List<LoanDto>> GetOverdueLones()
     //{
     //    var loans = await _bookDbContext.Borrows
