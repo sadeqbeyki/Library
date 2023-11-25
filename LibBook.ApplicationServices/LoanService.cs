@@ -38,7 +38,7 @@ public class LoanService : ILoanService
     public async Task<OperationResult> Lending(LoanDto model)
     {
         OperationResult operationResult = new();
-        if (model.BookId == null || model.MemberId == null)
+        if (model.BookId <= 0 || model.MemberId == null)
             return operationResult.Failed(ApplicationMessages.ModelIsNull);
         Borrow borrow = new(
             model.BookId,
@@ -204,7 +204,7 @@ public class LoanService : ILoanService
     {
         //return await _borrowRepository.GetOverdueLones();
         var loans = _borrowRepository.GetAll()
-            .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToList();
+            .Where(b => b.IsApproved && b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToList();
         var result = loans.Select(lend => new LoanDto
         {
             Id = lend.Id,

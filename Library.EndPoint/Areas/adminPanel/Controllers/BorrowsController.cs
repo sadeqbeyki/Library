@@ -24,10 +24,15 @@ public class BorrowsController : Controller
     }
 
     #region Read
-    public ActionResult<List<LoanDto>> Index()
+    public ActionResult<List<LoanDto>> Index(int? page)
     {
         List<LoanDto> loans = _borrowService.GetAll();
-        return View("Index", loans);
+
+        int pageNumber = page ?? 1;
+        int pageSize = 6;
+        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+
+        return View("Index", pagedLog);
     }
     public async Task<ActionResult<List<LoanDto>>> PendingLoans(int? page)
     {
@@ -37,15 +42,25 @@ public class BorrowsController : Controller
         var pagedLog = loans.ToPagedList(pageNumber, pageSize);
         return View("PendingLoans", pagedLog);
     }
-    public ActionResult<List<LoanDto>> ApprovedLoans()
+    public ActionResult<List<LoanDto>> ApprovedLoans(int? page)
     {
         List<LoanDto> loans = _borrowService.GetApprovedLoans();
-        return View("ApprovedLoans", loans);
+
+        int pageNumber = page ?? 1;
+        int pageSize = 6;
+        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+
+        return View("ApprovedLoans", pagedLog);
     }
-    public ActionResult<List<LoanDto>> ReturnedLoans()
+    public ActionResult<List<LoanDto>> ReturnedLoans(int? page)
     {
         List<LoanDto> loans = _borrowService.GetReturnedLoans();
-        return View("ReturnedLoans", loans);
+
+        int pageNumber = page ?? 1;
+        int pageSize = 6;
+        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+
+        return View("ReturnedLoans", pagedLog);
     }
     public async Task<ActionResult<List<LoanDto>>> OverdueLoans(int? page)
     {
@@ -57,10 +72,15 @@ public class BorrowsController : Controller
 
         return View("OverdueLoans", pagedLog);
     }
-    public ActionResult<List<LoanDto>> DeletedLoans()
+    public ActionResult<List<LoanDto>> DeletedLoans(int? page)
     {
         List<LoanDto> loans = _borrowService.GetDeletedLoans();
-        return View("DeletedLoans", loans);
+
+        int pageNumber = page ?? 1;
+        int pageSize = 6;
+        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+
+        return View("DeletedLoans", pagedLog);
     }
 
     [HttpGet]

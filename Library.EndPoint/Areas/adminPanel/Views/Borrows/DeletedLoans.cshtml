@@ -1,5 +1,9 @@
 ﻿@using LibBook.DomainContracts.Borrow;
-@model List<LoanDto>
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@model IPagedList<LoanDto>
 
 @{
     ViewData["Title"] = "Deleted Loans";
@@ -49,6 +53,16 @@
                                 }
                             </tbody>
                         </table>
+                        Page : @Html.PagedListPager(Model, page => Url.Action("DeletedLoans", new { page = page }),
+                        new PagedListRenderOptions {
+
+                        DisplayLinkToIndividualPages = true,
+                        DisplayPageCountAndCurrentLocation = false,
+                        MaximumPageNumbersToDisplay = 7,
+
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" }
+                        })
                     </div>
                 </div>
             </div>
