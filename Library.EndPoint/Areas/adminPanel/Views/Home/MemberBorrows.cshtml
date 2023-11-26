@@ -1,5 +1,9 @@
 ﻿@using LibBook.DomainContracts.Borrow;
-@model List<LoanDto>
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@model IPagedList<LoanDto>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -9,7 +13,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title pull-right">@ViewData["Title"] - Loans Issued to Member ! </h3>
+                <h3 class="panel-title pull-right"> The books you have borrowed so far ! </h3>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -19,12 +23,12 @@
                                 <tr>
                                     <th>#</th>
 
-                                    <th>Book ID</th>
-                                    <th>Member ID</th>
-                                    <th>Employee ID</th>
+                                    <th>Book</th>
+                                    <th>Employee</th>
+
                                     <th>Borrow Date</th>
                                     <th>Ideal Return Date</th>
-                                    <th>Return Employee ID</th>
+                                    <th>Return Employee</th>
                                     <th>Return Date</th>
                                     <th>Description</th>
                                     <th>Operations</th>
@@ -36,9 +40,9 @@
                                     <tr>
                                         <td>@item.Id</td>
 
-                                        <td>@item.BookId</td>
-                                        <td>@item.MemberId</td>
-                                        <td>@item.EmployeeId</td>
+                                        <td>@item.BookTitle</td>
+                                        <td>@item.EmployeeName</td>
+
                                         <td>@item.CreationDate</td>
                                         <td>@item.IdealReturnDate</td>
                                         <td>@item.ReturnEmployeeId</td>
@@ -54,6 +58,16 @@
                                 }
                             </tbody>
                         </table>
+                        Page : @Html.PagedListPager(Model, page => Url.Action("MemberBorrows", new { page = page }),
+                        new PagedListRenderOptions {
+
+                        DisplayLinkToIndividualPages = true,
+                        DisplayPageCountAndCurrentLocation = false,
+                        MaximumPageNumbersToDisplay = 7,
+
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" }
+                        })
                     </div>
                 </div>
             </div>

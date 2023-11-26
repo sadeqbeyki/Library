@@ -9,5 +9,4 @@ public interface ILoanRepository : IRepository<Borrow, int>
     Task<List<LoanDto>> GetMemberOverdueLoans(string memberId);
     Task<List<LoanDto>> GetDuplicatedLoans(string memberId, int bookId);
     Task<List<LoanDto>> GetBorrowsByEmployeeId(string EmployeeId);
-    //Task<List<LoanDto>> GetOverdueLones();
 }

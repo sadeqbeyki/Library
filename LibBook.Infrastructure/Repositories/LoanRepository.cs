@@ -1,16 +1,24 @@
 ﻿using AppFramework.Domain;
+using AutoMapper.Execution;
+using LibBook.Domain.BookAgg;
 using LibBook.Domain.BorrowAgg;
+using LibBook.Domain.Services;
 using LibBook.DomainContracts.Borrow;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace LibBook.Infrastructure.Repositories;
 
 public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
 {
     private readonly BookDbContext _bookDbContext;
-    public LoanRepository(BookDbContext dbContext) : base(dbContext)
+    private readonly ILibraryIdentityAcl _IdentityAcl;
+    private readonly IBookRepository _bookRepository;
+    public LoanRepository(BookDbContext dbContext, ILibraryIdentityAcl identityAcl, IBookRepository bookRepository) : base(dbContext)
     {
         _bookDbContext = dbContext;
+        _IdentityAcl = identityAcl;
+        _bookRepository = bookRepository;
     }
 
     public async Task<List<LoanDto>> GetBorrowsByEmployeeId(string employeeId)
@@ -20,11 +28,13 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         {
             Id = b.Id,
             BookId = b.BookId,
+            BookTitle = _bookRepository.GetByIdAsync(b.BookId).Result.Title,
             MemberId = b.MemberID,
+            MemberName = _IdentityAcl.GetUserName(b.MemberID).Result,
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnEmployeeId = _IdentityAcl.GetUserName(b.ReturnEmployeeID).Result,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -33,16 +43,20 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
 
     public async Task<List<LoanDto>> GetBorrowsByMemberId(string memberId)
     {
-        var borrows = await _bookDbContext.Borrows.Where(x => x.MemberID == memberId).ToListAsync();
-        List<LoanDto> result = borrows.Select(b => new LoanDto
+        var loans = await _bookDbContext.Borrows
+            .Where(x => x.MemberID == memberId)
+            .ToListAsync();
+        List<LoanDto> result = loans.Select(b => new LoanDto
         {
             Id = b.Id,
             BookId = b.BookId,
+            BookTitle = _bookRepository.GetByIdAsync(b.BookId).Result.Title,
             MemberId = b.MemberID,
             EmployeeId = b.EmployeeId,
+            EmployeeName = _IdentityAcl.GetUserName(b.EmployeeId).Result,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnEmployeeId = _IdentityAcl.GetUserName(b.ReturnEmployeeID).Result,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();

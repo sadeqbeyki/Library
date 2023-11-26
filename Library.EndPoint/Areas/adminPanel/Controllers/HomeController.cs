@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Versioning;
+using Org.BouncyCastle.Utilities;
+using X.PagedList;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
@@ -27,7 +29,7 @@ public class HomeController : Controller
         return View();
     }
     [HttpGet]
-    public async Task<IActionResult> EmployeeBorrows()
+    public async Task<IActionResult> EmployeeBorrows(int? page)
     {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
@@ -35,17 +37,25 @@ public class HomeController : Controller
             return RedirectToAction("Login", "Account", "adminPanel");
         }
 
-        var result = await _loanService.GetBorrowsByEmployeeId(user.Id.ToString());
-        return View("EmployeeBorrows", result);
+        var loans = await _loanService.GetBorrowsByEmployeeId(user.Id.ToString());
+
+        int pageNumber = page ?? 1;
+        int pageSize = 6;
+        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+
+        return View("EmployeeBorrows", pagedLog);
     }
     [HttpGet]
-    public async Task<IActionResult> MemberBorrows(string memberId)
+    public async Task<IActionResult> MemberBorrows(string memberId, int? page)
     {
-        var result = await _loanService.GetBorrowsByMemberId(memberId);
-        return View("MemberBorrows", result);
+        var loans = await _loanService.GetBorrowsByMemberId(memberId);
+
+        int pageNumber = page ?? 1;
+        int pageSize = 6;
+        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+
+        return View("MemberBorrows", pagedLog);
     }
-
-
     public async Task<int> GetOverdueLoansCount()
     {
         if (User.Identity.IsAuthenticated)

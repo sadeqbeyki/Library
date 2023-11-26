@@ -202,9 +202,8 @@ public class LoanService : ILoanService
 
     public async Task<List<LoanDto>> GetOverdueLones()
     {
-        //return await _borrowRepository.GetOverdueLones();
-        var loans = _borrowRepository.GetAll()
-            .Where(b => b.IsApproved && b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToList();
+        var loans = await _borrowRepository.GetAll()
+            .Where(b => b.IsApproved && b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();
         var result = loans.Select(lend => new LoanDto
         {
             Id = lend.Id,
@@ -216,7 +215,7 @@ public class LoanService : ILoanService
             EmployeeName = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
             CreationDate = lend.CreationDate,
             IdealReturnDate = lend.IdealReturnDate,
-            Description = lend.Description
+            Description = lend.Description ?? string.Empty,
         }).ToList();
         return result;
     }
