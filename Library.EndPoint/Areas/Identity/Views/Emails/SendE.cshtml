@@ -2,13 +2,12 @@
 @model EmailModel
 
 @{
-    ViewData["Title"] = "Send E";
+    ViewData["Title"] = "Send Email";
     Layout = "_Layout";
 }
 
 <div class="row">
     <div class="col-md-6">
-        <h1 class="bg-info text-white">@ViewData["Title"]</h1>
 
         <form asp-controller="Emails" asp-action="SendE" method="post">
             <span class="alert-danger">@ViewBag.Message</span>
