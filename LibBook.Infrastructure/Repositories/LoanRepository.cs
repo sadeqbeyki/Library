@@ -1,5 +1,4 @@
 ﻿using AppFramework.Domain;
-using AutoMapper.Execution;
 using LibBook.Domain.BookAgg;
 using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
@@ -101,6 +100,23 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             Description = b.Description
         }).ToList();
         return result;
+    }
+
+    public async Task<List<LoanDto>> Search(LoanSearchModel searchModel)
+    {
+        string bookTitle =  _bookRepository.GetByIdAsync(searchModel.BookId).Result.Title;
+        var query = _bookDbContext.Borrows
+        .Select(x => new LoanDto
+        {
+            Id = x.Id,
+            BookId = x.BookId,
+            BookTitle = bookTitle,
+        });
+
+        if (!string.IsNullOrWhiteSpace(searchModel.BookTitle))
+            query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle));
+
+        return query.OrderByDescending(x => x.Id).ToList();
     }
 
     //public async Task<List<LoanDto>> GetOverdueLones()

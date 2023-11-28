@@ -4,6 +4,7 @@ using LibIdentity.DomainContracts.UserContracts;
 using Library.EndPoint.Areas.adminPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using X.PagedList;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
@@ -11,32 +12,43 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Authorize(Roles = "admin, manager")]
 public class BorrowsController : Controller
 {
-    private readonly ILoanService _borrowService;
+    private readonly ILoanService _loanService;
     private readonly IBookService _bookService;
     private readonly IUserService _userService;
 
 
     public BorrowsController(ILoanService borrowService, IBookService bookService, IUserService userService)
     {
-        _borrowService = borrowService;
+        _loanService = borrowService;
         _bookService = bookService;
         _userService = userService;
     }
 
     #region Read
-    public ActionResult<List<LoanDto>> Index(int? page)
+    public async Task<ActionResult<List<LoanDto>>> Index(LoanSearchModel searchModel/*, int? page*/)
     {
-        List<LoanDto> loans = _borrowService.GetAll();
+        //List<LoanDto> loans = _loanService.GetAll();
+        LendViewModel model = new()
+        {
+            Loans = await _loanService.Search(searchModel),
+            SearchModel = searchModel,
+        };
 
-        int pageNumber = page ?? 1;
-        int pageSize = 6;
-        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+        //int pageNumber = page ?? 1;
+        //int pageSize = 6;
+        //var pagedLog = model.ToPagedList(pageNumber, pageSize);
 
-        return View("Index", pagedLog);
+        return View(model);
+
+        //return View("Index", pagedLog);
+
+
+
+
     }
     public async Task<ActionResult<List<LoanDto>>> PendingLoans(int? page)
     {
-        List<LoanDto> loans = await _borrowService.GetPendingLoans();
+        List<LoanDto> loans = await _loanService.GetPendingLoans();
         int pageNumber = page ?? 1;
         int pageSize = 6;
         var pagedLog = loans.ToPagedList(pageNumber, pageSize);
@@ -44,7 +56,7 @@ public class BorrowsController : Controller
     }
     public ActionResult<List<LoanDto>> ApprovedLoans(int? page)
     {
-        List<LoanDto> loans = _borrowService.GetApprovedLoans();
+        List<LoanDto> loans = _loanService.GetApprovedLoans();
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -54,7 +66,7 @@ public class BorrowsController : Controller
     }
     public ActionResult<List<LoanDto>> ReturnedLoans(int? page)
     {
-        List<LoanDto> loans = _borrowService.GetReturnedLoans();
+        List<LoanDto> loans = _loanService.GetReturnedLoans();
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -64,7 +76,7 @@ public class BorrowsController : Controller
     }
     public async Task<ActionResult<List<LoanDto>>> OverdueLoans(int? page)
     {
-        List<LoanDto> loans = await _borrowService.GetOverdueLones();
+        List<LoanDto> loans = await _loanService.GetOverdueLones();
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -74,7 +86,7 @@ public class BorrowsController : Controller
     }
     public ActionResult<List<LoanDto>> DeletedLoans(int? page)
     {
-        List<LoanDto> loans = _borrowService.GetDeletedLoans();
+        List<LoanDto> loans = _loanService.GetDeletedLoans();
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -86,7 +98,7 @@ public class BorrowsController : Controller
     [HttpGet]
     public async Task<ActionResult<LoanDto>> Details(int id)
     {
-        var result = await _borrowService.GetLoanById(id);
+        var result = await _loanService.GetLoanById(id);
         if (result == null)
             return NotFound();
         return View(result);
@@ -107,7 +119,7 @@ public class BorrowsController : Controller
     [HttpPost]
     public async Task<ActionResult> Lending(LoanDto model)
     {
-        var result = await _borrowService.Lending(model);
+        var result = await _loanService.Lending(model);
         if (!result.IsSucceeded)
             return RedirectToAction("Lending", model);
         return RedirectToAction("PendingLoans", result);
@@ -115,7 +127,7 @@ public class BorrowsController : Controller
 
     public async Task<ActionResult> SubmitLend(int id)
     {
-        var result = await _borrowService.SubmitLend(id);
+        var result = await _loanService.SubmitLend(id);
         if (result.IsSucceeded)
         {
             return RedirectToAction("PendingLoans");
@@ -130,7 +142,7 @@ public class BorrowsController : Controller
     {
         var model = new UpdateBorrowViewModel
         {
-            Borrow = await _borrowService.GetLoanById(id),
+            Borrow = await _loanService.GetLoanById(id),
             Members = await _userService.GetUsers(),
             Books = await _bookService.GetAll(),
         };
@@ -140,7 +152,7 @@ public class BorrowsController : Controller
     [HttpPut, HttpPost]
     public IActionResult Update(UpdateBorrowViewModel model)
     {
-        var result = _borrowService.Update(model.Borrow);
+        var result = _loanService.Update(model.Borrow);
         if (result.IsSucceeded)
             return RedirectToAction("Index", result);
         return RedirectToAction("Update", model);
@@ -159,7 +171,7 @@ public class BorrowsController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult SoftDelete(LoanDto model)
     {
-        _borrowService.SoftDelete(model);
+        _loanService.SoftDelete(model);
         return RedirectToAction("Index");
     }
     #endregion
@@ -170,7 +182,7 @@ public class BorrowsController : Controller
     {
         var model = new UpdateBorrowViewModel
         {
-            Borrow = await _borrowService.GetLoanById(id),
+            Borrow = await _loanService.GetLoanById(id),
             Members = await _userService.GetUsers(),
             Books = await _bookService.GetAll(),
         };
@@ -180,7 +192,7 @@ public class BorrowsController : Controller
     [HttpPut, HttpPost]
     public IActionResult Return(UpdateBorrowViewModel model)
     {
-        var result = _borrowService.Returning(model.Borrow);
+        var result = _loanService.Returning(model.Borrow);
         if (result.IsSucceeded)
             return RedirectToAction("ApprovedLoans", result);
         return RedirectToAction("Return", model);

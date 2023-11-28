@@ -12,7 +12,7 @@ namespace LibBook.ApplicationServices;
 
 public class LoanService : ILoanService
 {
-    private readonly ILoanRepository _borrowRepository;
+    private readonly ILoanRepository _loanRepository;
     private readonly IMapper _mapper;
 
     private readonly IBookRepository _bookRepository;
@@ -22,10 +22,10 @@ public class LoanService : ILoanService
     private readonly IHttpContextAccessor _contextAccessor;
 
 
-    public LoanService(ILoanRepository borrowRepository, IMapper mapper, ILibraryInventoryAcl inventoryAcl,
+    public LoanService(ILoanRepository loanRepository, IMapper mapper, ILibraryInventoryAcl inventoryAcl,
         IHttpContextAccessor contextAccessor, ILibraryIdentityAcl identityAcl, IBookRepository bookRepository)
     {
-        _borrowRepository = borrowRepository;
+        _loanRepository = loanRepository;
         _mapper = mapper;
 
         _inventoryAcl = inventoryAcl;
@@ -50,7 +50,7 @@ public class LoanService : ILoanService
             model.Description
             );
 
-        var result = await _borrowRepository.CreateAsync(borrow);
+        var result = await _loanRepository.CreateAsync(borrow);
         return operationResult.Succeeded();
     }
 
@@ -58,24 +58,24 @@ public class LoanService : ILoanService
     {
         OperationResult operationResult = new();
 
-        Borrow lend = await _borrowRepository.GetByIdAsync(lendId);
+        Borrow lend = await _loanRepository.GetByIdAsync(lendId);
         if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
         //borrow duplicate book check
-        var memberDuplicateLoans = await _borrowRepository.GetDuplicatedLoans(lend.MemberID, lend.BookId);
+        var memberDuplicateLoans = await _loanRepository.GetDuplicatedLoans(lend.MemberID, lend.BookId);
         if (memberDuplicateLoans.Count > 0)
             return operationResult.Failed(ApplicationMessages.DuplicateLendByMember);
 
         //Member Overdue Loans
-        var memberOverdueLoans = await _borrowRepository.GetMemberOverdueLoans(lend.MemberID);
+        var memberOverdueLoans = await _loanRepository.GetMemberOverdueLoans(lend.MemberID);
         if (memberOverdueLoans.Count > 0)
             return operationResult.Failed(ApplicationMessages.MemberDidntReturnedTheBook);
 
         if (_inventoryAcl.LoanFromInventory(lend) == true)
         {
             lend.IsApproved = true;
-            _borrowRepository.SaveChanges();
+            _loanRepository.SaveChanges();
             return operationResult.Succeeded();
         }
         return operationResult.Failed();
@@ -85,13 +85,17 @@ public class LoanService : ILoanService
     #region Read
     public List<LoanDto> GetAll()
     {
-        var loans = _borrowRepository.GetAll().ToList();
+        var loans = _loanRepository.GetAll().ToList();
         return _mapper.Map<List<LoanDto>>(loans);
+    }
+    public Task<List<LoanDto>> Search(LoanSearchModel searchModel)
+    {
+        return _loanRepository.Search(searchModel);
     }
 
     public async Task<List<LoanDto>> GetPendingLoans()
     {
-        var loans = await _borrowRepository.GetAll().Where(x => !x.IsDeleted && !x.IsApproved).ToListAsync();
+        var loans = await _loanRepository.GetAll().Where(x => !x.IsDeleted && !x.IsApproved).ToListAsync();
 
         var result = loans.Select(lend => new LoanDto
         {
@@ -112,7 +116,7 @@ public class LoanService : ILoanService
 
     public List<LoanDto> GetApprovedLoans()
     {
-        var loans = _borrowRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && !x.IsReturned).ToList();
+        var loans = _loanRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && !x.IsReturned).ToList();
         var result = loans.Select(lend => new LoanDto
         {
             Id = lend.Id,
@@ -131,7 +135,7 @@ public class LoanService : ILoanService
 
     public List<LoanDto> GetReturnedLoans()
     {
-        var loans = _borrowRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned).ToList();
+        var loans = _loanRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned).ToList();
         var result = loans.Select(lend => new LoanDto
         {
             Id = lend.Id,
@@ -150,7 +154,7 @@ public class LoanService : ILoanService
 
     public List<LoanDto> GetDeletedLoans()
     {
-        var loans = _borrowRepository.GetAll().Where(x => x.IsDeleted).ToList();
+        var loans = _loanRepository.GetAll().Where(x => x.IsDeleted).ToList();
         var result = loans.Select(lend => new LoanDto
         {
             Id = lend.Id,
@@ -169,17 +173,17 @@ public class LoanService : ILoanService
 
     public async Task<List<LoanDto>> GetBorrowsByEmployeeId(string employeeId)
     {
-        return await _borrowRepository.GetBorrowsByEmployeeId(employeeId);
+        return await _loanRepository.GetBorrowsByEmployeeId(employeeId);
     }
 
     public async Task<List<LoanDto>> GetBorrowsByMemberId(string memberId)
     {
-        return await _borrowRepository.GetBorrowsByMemberId(memberId);
+        return await _loanRepository.GetBorrowsByMemberId(memberId);
     }
 
     public async Task<LoanDto> GetLoanById(int borrowId)
     {
-        Borrow borrow = await _borrowRepository.GetByIdAsync(borrowId);
+        Borrow borrow = await _loanRepository.GetByIdAsync(borrowId);
         var book = await _bookRepository.GetByIdAsync(borrow.BookId);
 
         LoanDto dto = new()
@@ -202,7 +206,7 @@ public class LoanService : ILoanService
 
     public async Task<List<LoanDto>> GetOverdueLones()
     {
-        var loans = await _borrowRepository.GetAll()
+        var loans = await _loanRepository.GetAll()
             .Where(b => b.IsApproved && b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();
         var result = loans.Select(lend => new LoanDto
         {
@@ -226,7 +230,7 @@ public class LoanService : ILoanService
     {
         OperationResult operationResult = new();
 
-        var borrow = _borrowRepository.GetByIdAsync(dto.Id).Result;
+        var borrow = _loanRepository.GetByIdAsync(dto.Id).Result;
         if (borrow == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
@@ -239,7 +243,7 @@ public class LoanService : ILoanService
             dto.ReturnDate,
             dto.Description);
 
-        _borrowRepository.UpdateAsync(borrow);
+        _loanRepository.UpdateAsync(borrow);
         return operationResult.Succeeded();
     }
 
@@ -250,7 +254,7 @@ public class LoanService : ILoanService
     {
         OperationResult operationResult = new();
 
-        var lend = _borrowRepository.GetByIdAsync(dto.Id).Result;
+        var lend = _loanRepository.GetByIdAsync(dto.Id).Result;
         if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
@@ -258,7 +262,7 @@ public class LoanService : ILoanService
 
         if (ReturnLoan(dto.Id).IsSucceeded)
         {
-            _borrowRepository.UpdateAsync(lend);
+            _loanRepository.UpdateAsync(lend);
             return operationResult.Succeeded();
         }
         else
@@ -270,13 +274,13 @@ public class LoanService : ILoanService
     private OperationResult ReturnLoan(int lendId)
     {
         OperationResult operationResult = new();
-        Borrow lend = _borrowRepository.GetByIdAsync(lendId).Result;
+        Borrow lend = _loanRepository.GetByIdAsync(lendId).Result;
         if (lend == null)
             operationResult.Failed(ApplicationMessages.RecordNotFound);
         if (_inventoryAcl.ReturnToInventory(lend) == true)
         {
             lend.IsReturned = true;
-            _borrowRepository.SaveChanges();
+            _loanRepository.SaveChanges();
             return operationResult.Succeeded();
         }
         return operationResult.Failed();
@@ -286,14 +290,14 @@ public class LoanService : ILoanService
     #region Delete
     public async Task Delete(int lendId)
     {
-        var borrow = await _borrowRepository.GetByIdAsync(lendId);
-        await _borrowRepository.DeleteAsync(borrow);
+        var borrow = await _loanRepository.GetByIdAsync(lendId);
+        await _loanRepository.DeleteAsync(borrow);
     }
 
     public void SoftDelete(LoanDto model)
     {
-        Borrow borrow = _borrowRepository.GetByIdAsync(model.Id).Result;
-        _borrowRepository.SoftDelete(borrow);
+        Borrow borrow = _loanRepository.GetByIdAsync(model.Id).Result;
+        _loanRepository.SoftDelete(borrow);
     }
     #endregion
 
@@ -301,4 +305,6 @@ public class LoanService : ILoanService
     {
         return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
+
+
 }
