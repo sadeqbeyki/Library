@@ -30,8 +30,9 @@ public class BorrowsController : Controller
         //List<LoanDto> loans = _loanService.GetAll();
         LendViewModel model = new()
         {
-            Loans = await _loanService.Search(searchModel),
+            Loans = _loanService.Search(searchModel),
             SearchModel = searchModel,
+            Books = new SelectList(await _bookService.GetBooks(), "Id", "Title").ToList(),
         };
 
         //int pageNumber = page ?? 1;
@@ -41,10 +42,6 @@ public class BorrowsController : Controller
         return View(model);
 
         //return View("Index", pagedLog);
-
-
-
-
     }
     public async Task<ActionResult<List<LoanDto>>> PendingLoans(int? page)
     {

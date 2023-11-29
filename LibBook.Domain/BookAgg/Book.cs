@@ -11,7 +11,7 @@ public class Book : BaseEntity
     public string Description { get; set; }
 
     public int CategoryId { get; set; }
-    public BookCategory Category { get; private set; }
+    public BookCategory Category { get; private set; } = new BookCategory();
 
 
     public List<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();

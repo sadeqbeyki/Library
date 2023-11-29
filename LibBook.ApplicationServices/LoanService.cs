@@ -88,7 +88,7 @@ public class LoanService : ILoanService
         var loans = _loanRepository.GetAll().ToList();
         return _mapper.Map<List<LoanDto>>(loans);
     }
-    public Task<List<LoanDto>> Search(LoanSearchModel searchModel)
+    public List<LoanDto> Search(LoanSearchModel searchModel)
     {
         return _loanRepository.Search(searchModel);
     }

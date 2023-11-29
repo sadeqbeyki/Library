@@ -102,19 +102,29 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         return result;
     }
 
-    public async Task<List<LoanDto>> Search(LoanSearchModel searchModel)
+
+
+    public List<LoanDto> Search(LoanSearchModel searchModel)
     {
-        string bookTitle =  _bookRepository.GetByIdAsync(searchModel.BookId).Result.Title;
         var query = _bookDbContext.Borrows
-        .Select(x => new LoanDto
+        .Select( x => new LoanDto
         {
             Id = x.Id,
             BookId = x.BookId,
-            BookTitle = bookTitle,
+            //BookTitle = _bookRepository.GetByIdAsync(searchModel.BookId).Result.Title,
+            MemberId = x.MemberID,
+            EmployeeId = x.EmployeeId,
+            CreationDate = x.CreationDate,
+            IdealReturnDate = x.IdealReturnDate,
+            ReturnEmployeeId = x.ReturnEmployeeID,
+            ReturnDate= x.ReturnDate,
         });
 
-        if (!string.IsNullOrWhiteSpace(searchModel.BookTitle))
-            query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle));
+        //if (!string.IsNullOrWhiteSpace(searchModel.BookTitle))
+        //    query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle));
+
+        if (searchModel.BookId != 0)
+            query = query.Where(x => x.BookId == searchModel.BookId);
 
         return query.OrderByDescending(x => x.Id).ToList();
     }
