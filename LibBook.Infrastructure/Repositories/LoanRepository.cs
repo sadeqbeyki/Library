@@ -106,22 +106,23 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
 
     public List<LoanDto> Search(LoanSearchModel searchModel)
     {
-        var query = _bookDbContext.Borrows
-        .Select( x => new LoanDto
+        var borrows = _bookDbContext.Borrows.Where(x => !x.IsDeleted).ToList();
+        var query = borrows
+        .Select(x => new LoanDto
         {
             Id = x.Id,
             BookId = x.BookId,
-            //BookTitle = _bookRepository.GetByIdAsync(searchModel.BookId).Result.Title,
-            MemberId = x.MemberID,
-            EmployeeId = x.EmployeeId,
+            BookTitle = _bookRepository.GetByIdAsync(x.BookId).Result.Title,
+            MemberId = _IdentityAcl.GetUserName(x.MemberID).Result,
+            EmployeeId = _IdentityAcl.GetUserName(x.EmployeeId).Result,
             CreationDate = x.CreationDate,
             IdealReturnDate = x.IdealReturnDate,
-            ReturnEmployeeId = x.ReturnEmployeeID,
-            ReturnDate= x.ReturnDate,
+            ReturnEmployeeId = _IdentityAcl.GetUserName(x.ReturnEmployeeID).Result,
+            ReturnDate = x.ReturnDate,
         });
 
-        //if (!string.IsNullOrWhiteSpace(searchModel.BookTitle))
-        //    query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle));
+        if (!string.IsNullOrWhiteSpace(searchModel.BookTitle))
+            query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle)); /*|| x.MemberName.Contains(searchModel.BookTitle)*/
 
         if (searchModel.BookId != 0)
             query = query.Where(x => x.BookId == searchModel.BookId);
