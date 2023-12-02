@@ -24,32 +24,72 @@ public class BorrowsController : Controller
         _userService = userService;
     }
 
-    #region Read
-    public async Task<ActionResult<List<LoanDto>>> Index(LoanSearchModel searchModel/*, int? page*/)
+    #region Search
+    public async Task<ActionResult<List<LoanDto>>> Index(LoanSearchModel searchModel, int? page)
     {
         //List<LoanDto> loans = _loanService.GetAll();
+        const int pageSize = 7;
+
+        var loans = _loanService.Search(searchModel);
+
+        var paginatedLoans = PaginatedList<LoanDto>.Create(loans, page ?? 1, pageSize);
+
         LendViewModel model = new()
         {
-            Loans = _loanService.Search(searchModel),
+            Loans = paginatedLoans,
             SearchModel = searchModel,
             Books = new SelectList(await _bookService.GetBooks(), "Id", "Title").ToList(),
         };
 
-        //int pageNumber = page ?? 1;
-        //int pageSize = 6;
-        //var pagedLog = model.ToPagedList(pageNumber, pageSize);
-
         return View(model);
-
-        //return View("Index", pagedLog);
     }
+
+    public class PaginatedList<T>
+    {
+        public int PageIndex { get; private set; }
+        public int TotalPages { get; private set; }
+        public int TotalCount { get; private set; }
+        public List<T> Items { get; private set; }
+
+        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+        {
+            PageIndex = pageIndex;
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalCount = count;
+            Items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public bool HasPreviousPage
+        {
+            get { return PageIndex > 1; }
+        }
+
+        public bool HasNextPage
+        {
+            get { return PageIndex < TotalPages; }
+        }
+
+        public static PaginatedList<T> Create(List<T> source, int pageIndex, int pageSize)
+        {
+            int count = source.Count;
+            return new PaginatedList<T>(source, count, pageIndex, pageSize);
+        }
+    }
+
+    #endregion
+    #region Read
+
     public async Task<ActionResult<List<LoanDto>>> PendingLoans(int? page)
     {
         List<LoanDto> loans = await _loanService.GetPendingLoans();
-        int pageNumber = page ?? 1;
-        int pageSize = 6;
-        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
-        return View("PendingLoans", pagedLog);
+
+        const int pageSize = 7;
+        var paginatedLoans = PaginatedList<LoanDto>.Create(loans, page ?? 1, pageSize);
+        //int pageNumber = page ?? 1;
+        //int pageSize = 6;
+        //var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+        //return View("PendingLoans", pagedLog);
+        return View("PendingLoans", paginatedLoans);
     }
     public ActionResult<List<LoanDto>> ApprovedLoans(int? page)
     {

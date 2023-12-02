@@ -124,33 +124,15 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             ReturnDate = x.ReturnDate,
         });
 
-        if (!string.IsNullOrWhiteSpace(searchModel.BookTitle))
-            query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle) || x.MemberName.Contains(searchModel.BookTitle)); /**/
+        if (!string.IsNullOrWhiteSpace(searchModel.MemberName))
+            query = query.Where(x => x.MemberName.Contains(searchModel.MemberName)); /*x.BookTitle.Contains(searchModel.BookTitle) ||*/
+
+        if (!string.IsNullOrEmpty(searchModel.EmployeeName))
+            query = query.Where(x => x.EmployeeName.Contains(searchModel.EmployeeName));
 
         if (searchModel.BookId != 0)
             query = query.Where(x => x.BookId == searchModel.BookId);
 
         return query.OrderByDescending(x => x.Id).ToList();
     }
-
-    //public async Task<List<LoanDto>> GetOverdueLones()
-    //{
-    //    var loans = await _bookDbContext.Borrows
-    //        .Where(b => b.ReturnDate == null && b.IdealReturnDate < DateTime.Now).ToListAsync();
-
-    //    List<LoanDto> result = loans.Select(b => new LoanDto
-    //    {
-    //        Id = b.Id,
-    //        BookId = b.BookId,
-    //        BookTitle = _bookDbContext.Books.Find(b.BookId).Title ?? string.Empty,
-    //        MemberId = b.MemberID,
-    //        EmployeeId = b.EmployeeId,
-    //        CreationDate = b.CreationDate,
-    //        IdealReturnDate = b.IdealReturnDate,
-    //        ReturnEmployeeId = b.ReturnEmployeeID,
-    //        ReturnDate = b.ReturnDate,
-    //        Description = b.Description
-    //    }).ToList();
-    //    return result;
-    //}
 }
