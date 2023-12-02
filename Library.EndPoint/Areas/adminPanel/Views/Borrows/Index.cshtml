@@ -19,16 +19,16 @@
                         <label class="sr-only" asp-for="SearchModel.BookTitle"></label>
                         <input class="form-control" asp-for="SearchModel.BookTitle" placeholder="Book Name">
                     </div>
-@*                     <div class="form-group">
-                        <label class="sr-only" asp-for="SearchModel.Code"></label>
-                        <input class="form-control" asp-for="SearchModel.Code" placeholder="Code">
+                    @*                     <div class="form-group">
+                    <label class="sr-only" asp-for="SearchModel.Code"></label>
+                    <input class="form-control" asp-for="SearchModel.Code" placeholder="Code">
                     </div>*@
                     <div class="form-group">
                         <label class="sr-only" asp-for="SearchModel.BookId"></label>
                         <select class="form-control" asp-for="SearchModel.BookId" asp-items="Model.Books">
                             <option value="0">Book</option>
                         </select>
-                    </div> 
+                    </div>
                     <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">Search</button>
                     <a class="btn btn-primary waves-effect waves-light m-l-10" asp-action="Index">Show All</a>
                 </form>
@@ -67,11 +67,11 @@
                                         <td>@item.Id</td>
 
                                         <td>@item.BookTitle</td>
-                                        <td>@item.MemberId</td>
-                                        <td>@item.EmployeeId</td>
+                                        <td>@item.MemberName</td>
+                                        <td>@item.EmployeeName</td>
                                         <td>@item.CreationDate</td>
                                         <td>@item.IdealReturnDate</td>
-                                        <td>@item.ReturnEmployeeId</td>
+                                        <td>@item.ReturnEmployeeName</td>
                                         <td>@item.ReturnDate</td>
                                         <td>@item.Description</td>
                                         <td>
@@ -82,9 +82,15 @@
                                         </td>
                                     </tr>
                                 }
+                                <tr>
+                                    <div class="card">
+
+                                        <span class="card-body bg-secondary text-white">Total Count: <b>@Model.Loans.Count</b></span>
+                                    </div>
+                                </tr>
                             </tbody>
                         </table>
-@*                         Page : @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+                        @*                         Page : @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
                         new PagedListRenderOptions {
 
                         DisplayLinkToIndividualPages = true,

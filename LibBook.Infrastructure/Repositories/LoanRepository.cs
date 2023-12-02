@@ -113,16 +113,19 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             Id = x.Id,
             BookId = x.BookId,
             BookTitle = _bookRepository.GetByIdAsync(x.BookId).Result.Title,
-            MemberId = _IdentityAcl.GetUserName(x.MemberID).Result,
-            EmployeeId = _IdentityAcl.GetUserName(x.EmployeeId).Result,
+            MemberId = x.MemberID,
+            MemberName = _IdentityAcl.GetUserName(x.MemberID).Result,
+            EmployeeId = x.EmployeeId,
+            EmployeeName = _IdentityAcl.GetUserName(x.EmployeeId).Result,
             CreationDate = x.CreationDate,
             IdealReturnDate = x.IdealReturnDate,
-            ReturnEmployeeId = _IdentityAcl.GetUserName(x.ReturnEmployeeID).Result,
+            ReturnEmployeeId = x.ReturnEmployeeID,
+            ReturnEmployeeName = _IdentityAcl.GetUserName(x.ReturnEmployeeID).Result,
             ReturnDate = x.ReturnDate,
         });
 
         if (!string.IsNullOrWhiteSpace(searchModel.BookTitle))
-            query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle)); /*|| x.MemberName.Contains(searchModel.BookTitle)*/
+            query = query.Where(x => x.BookTitle.Contains(searchModel.BookTitle) || x.MemberName.Contains(searchModel.BookTitle)); /**/
 
         if (searchModel.BookId != 0)
             query = query.Where(x => x.BookId == searchModel.BookId);
