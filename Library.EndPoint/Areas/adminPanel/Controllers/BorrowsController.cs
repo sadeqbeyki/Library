@@ -104,12 +104,14 @@ public class BorrowsController : Controller
     public ActionResult<List<LoanDto>> ReturnedLoans(int? page)
     {
         List<LoanDto> loans = _loanService.GetReturnedLoans();
+        const int pageSize = 7;
+        var paginatedLoans = PaginatedList<LoanDto>.Create(loans, page ?? 1, pageSize);
+        //int pageNumber = page ?? 1;
+        //int pageSize = 6;
+        //var pagedLog = loans.ToPagedList(pageNumber, pageSize);
+        //return View("ReturnedLoans", pagedLog);
 
-        int pageNumber = page ?? 1;
-        int pageSize = 6;
-        var pagedLog = loans.ToPagedList(pageNumber, pageSize);
-
-        return View("ReturnedLoans", pagedLog);
+        return View("ReturnedLoans", paginatedLoans);
     }
     public async Task<ActionResult<List<LoanDto>>> OverdueLoans(int? page)
     {

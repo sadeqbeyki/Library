@@ -1,10 +1,12 @@
 ﻿@using LibBook.DomainContracts.Borrow;
+@using static Library.EndPoint.Areas.adminPanel.Controllers.BorrowsController;
+@model PaginatedList<LoanDto>
 
-@using X.PagedList
+@* @using X.PagedList
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
 @model IPagedList<LoanDto>
-
+ *@
 @{
     ViewData["Title"] = "Returned Loans";
 }
@@ -33,7 +35,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.Items)
                                 {
                                     <tr>
                                         <td>@item.Id</td>
@@ -54,8 +56,42 @@
                                     </tr>
                                 }
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <div class="card">
+                                        <span class="card-body bg-secondary text-white">Total Count: <b>@Model.TotalCount</b></span>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <td colspan="10">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+                                                @if (Model.HasPreviousPage)
+                                                {
+                                                    <li class="page-item">
+                                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-SearchModel="@Model">Previous</a>
+                                                    </li>
+                                                }
+                                                @for (int i = 1; i <= Model.TotalPages; i++)
+                                                {
+                                                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                                                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-SearchModel="@Model">@i</a>
+                                                    </li>
+                                                }
+                                                @if (Model.HasNextPage)
+                                                {
+                                                    <li class="page-item">
+                                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-SearchModel="@Model">Next</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </nav>
+                                    </td>
+                                </tr>
+
+                            </tfoot>
                         </table>
-                        Page : @Html.PagedListPager(Model, page => Url.Action("ReturnedLoans", new { page = page }),
+@*                         Page : @Html.PagedListPager(Model, page => Url.Action("ReturnedLoans", new { page = page }),
                         new PagedListRenderOptions {
 
                         DisplayLinkToIndividualPages = true,
@@ -64,7 +100,7 @@
 
                         LiElementClasses = new string[] { "page-item" },
                         PageClasses = new string[] { "page-link" }
-                        })
+                        }) *@
                     </div>
                 </div>
             </div>
