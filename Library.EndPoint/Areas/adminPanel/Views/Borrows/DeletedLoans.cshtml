@@ -9,63 +9,63 @@
     ViewData["Title"] = "Deleted Loans";
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
+<div class="card border-primary">
+    <div class="card-body">
+        <h5 class="card-title"> Deleted loans </h5>
+        <div class="card-text">all deleted loans visable to show</div>
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
 
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <table id="datatable" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
+                    <th>Book Title</th>
+                    <th>Member</th>
+                    <th>Employee</th>
+                    <th>Borrow Date</th>
+                    <th>Ideal Return Date</th>
+                    <th>Return Employee</th>
+                    <th>Return Date</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
 
-                                    <th>Book Title</th>
-                                    <th>Member</th>
-                                    <th>Employee</th>
-                                    <th>Borrow Date</th>
-                                    <th>Ideal Return Date</th>
-                                    <th>Return Employee</th>
-                                    <th>Return Date</th>
-                                    <th>Description</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.Id</td>
+                        <td>@item.BookTitle</td>
+                        <td>@item.MemberId</td>
+                        <td>@item.EmployeeId</td>
+                        <td>@item.CreationDate</td>
+                        <td>@item.IdealReturnDate</td>
+                        <td>@item.ReturnEmployeeId</td>
+                        <td>@item.ReturnDate</td>
+                        <td>@item.Description</td>
+                        <td>
+                            <b class="text-danger">Deleted</b>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    Page : @Html.PagedListPager(Model, page => Url.Action("DeletedLoans", new { page = page }),
+                    new PagedListRenderOptions {
 
-                                        <td>@item.BookTitle</td>
-                                        <td>@item.MemberId</td>
-                                        <td>@item.EmployeeId</td>
-                                        <td>@item.CreationDate</td>
-                                        <td>@item.IdealReturnDate</td>
-                                        <td>@item.ReturnEmployeeId</td>
-                                        <td>@item.ReturnDate</td>
-                                        <td>@item.Description</td>
-                                        <td>
-                                            <b class="text-danger">Deleted</b>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        Page : @Html.PagedListPager(Model, page => Url.Action("DeletedLoans", new { page = page }),
-                        new PagedListRenderOptions {
+                    DisplayLinkToIndividualPages = true,
+                    DisplayPageCountAndCurrentLocation = false,
+                    MaximumPageNumbersToDisplay = 7,
 
-                        DisplayLinkToIndividualPages = true,
-                        DisplayPageCountAndCurrentLocation = false,
-                        MaximumPageNumbersToDisplay = 7,
-
-                        LiElementClasses = new string[] { "page-item" },
-                        PageClasses = new string[] { "page-link" }
-                        })
-                    </div>
-                </div>
-            </div>
-        </div>
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                    })
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="card-footer">
+        <span class="card-text">Total Count: <b>@Model.Count</b></span>
     </div>
 </div>
