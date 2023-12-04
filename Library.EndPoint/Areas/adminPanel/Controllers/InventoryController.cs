@@ -5,13 +5,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList;
+using LibBook.DomainContracts.Borrow;
+using Library.EndPoint.Tools;
+using Org.BouncyCastle.Utilities;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
-[Authorize(Roles ="admin, manager")]
+[Authorize(Roles = "admin, manager")]
 [Area("adminPanel")]
 public class InventoryController : Controller
 {
-    public List<InventoryViewModel> Inventory = new();
+    //public List<InventoryViewModel> Inventory = new();
 
     private readonly IBookService _bookService;
     private readonly IInventoryService _inventoryService;
@@ -22,13 +25,14 @@ public class InventoryController : Controller
         _inventoryService = inventoryService;
     }
 
-    public async Task<IActionResult> Index(InventorySearchModel searchModel)
+    public async Task<IActionResult> Index(InventorySearchModel searchModel, int? page)
     {
-        Inventory = _inventoryService.Search(searchModel);
-
+        const int pageSize = 4;
+        var inventory = _inventoryService.Search(searchModel);
+        var paginatedLoans = PaginatedList<InventoryViewModel>.Create(inventory, page ?? 1, pageSize);
         var model = new InventoryViewModelWithSearchModel
         {
-            Inventory = Inventory,
+            Inventory = paginatedLoans,
             SearchModel = searchModel,
             Books = new SelectList(await _bookService.GetBooks(), "Id", "Title").ToList(),
         };

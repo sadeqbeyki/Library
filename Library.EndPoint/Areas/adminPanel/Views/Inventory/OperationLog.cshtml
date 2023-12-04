@@ -10,63 +10,66 @@
     ViewData["Title"] = "Operation Log";
 }
 
-<div class="panel-body">
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Number</th>
-                        <th>Date</th>
-                        <th>Operations</th>
-                        <th>Current Balance</th>
-                        <th>Operator</th>
-                        <th>Description</th>
+<div class="card border-primary">
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Number</th>
+                    <th>Date</th>
+                    <th>Operations</th>
+                    <th>Current Balance</th>
+                    <th>Operator</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-white @(item.Operation ? "bg-success" : "bg-danger")">
+                        <td>@item.Id</td>
+                        <td>@item.Count</td>
+                        <td>@item.OperationDate</td>
+                        <td>
+                            @if (item.Operation)
+                            {
+                                <span>Increase</span>
+                            }
+                            else
+                            {
+                                <span>Decrease</span>
+                            }
+                        </td>
+                        <td>@item.CurrentCount</td>
+                        <td>@item.Operator</td>
+                        <td>@item.Description</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="text-white @(item.Operation ? "bg-success" : "bg-danger")">
-                            <td>@item.Id</td>
-                            <td>@item.Count</td>
-                            <td>@item.OperationDate</td>
-                            <td>
-                                @if (item.Operation)
-                                {
-                                    <span>Increase</span>
-                                }
-                                else
-                                {
-                                    <span>Decrease</span>
-                                }
-                            </td>
-                            <td>@item.CurrentCount</td>
-                            <td>@item.Operator</td>
-                            <td>@item.Description</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            Page : @Html.PagedListPager(Model, page => Url.Action("OperationLog", new { page = page }),
-            new PagedListRenderOptions {
-            ClassToApplyToFirstListItemInPager = null,
-            ClassToApplyToLastListItemInPager = null,
-            ContainerDivClasses = new [] { "pagination-container" },
-            UlElementClasses = new[] { "pagination" },
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    Page : @Html.PagedListPager(Model, page => Url.Action("OperationLog", new { page = page }),
+                    new PagedListRenderOptions {
+                    ClassToApplyToFirstListItemInPager = null,
+                    ClassToApplyToLastListItemInPager = null,
+                    ContainerDivClasses = new [] { "pagination-container" },
+                    UlElementClasses = new[] { "pagination" },
 
-            DisplayLinkToIndividualPages = true,
-            DisplayPageCountAndCurrentLocation = false,
-            MaximumPageNumbersToDisplay = 7,
+                    DisplayLinkToIndividualPages = true,
+                    DisplayPageCountAndCurrentLocation = false,
+                    MaximumPageNumbersToDisplay = 7,
 
-            LiElementClasses = new string[] { "page-item" },
-            PageClasses = new string[] { "page-link" }
-            })
-        </div>
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                    })
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
-        <div>
-            <a class="btn btn-secondary" asp-controller="Inventory" asp-action="Index">Back to list</a>
-        </div>
+    <div>
+        <a class="btn btn-secondary" asp-controller="Inventory" asp-action="Index">Back to list</a>
     </div>
 </div>
+

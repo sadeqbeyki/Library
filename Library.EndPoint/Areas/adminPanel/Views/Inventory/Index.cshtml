@@ -34,7 +34,7 @@
 
 <div class="card border-primary">
     <div class="card-body">
-        <h5 class="card-title"> Warehouse list (@Model.Inventory.Count)</h5>
+        <h5 class="card-title"> Amount on this page (@Model.Inventory.Items.Count)</h5>
         <p class="card-text">You can add inventory of every book and see log of that</p>
         <a class="btn btn-primary mb-3" asp-controller="Inventory" asp-action="Create">
             Create New
@@ -44,14 +44,14 @@
                 <tr>
                     <th>#</th>
                     <th>Book Name</th>
-                    <th>Borrow fee</th>
+                    <th>Unit Price</th>
                     <th>Amount in stock</th>
                     <th>Creation Date</th>
                     <th>Operstions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Inventory)
+                @foreach (var item in Model.Inventory.Items)
                 {
                     <tr>
                         <td>@item.Id</td>
@@ -84,7 +84,38 @@
                     </tr>
                 }
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="10">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                @if (Model.Inventory.HasPreviousPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.Inventory.PageIndex - 1)">Previous</a>
+                                    </li>
+                                }
+                                @for (int i = 1; i <= Model.Inventory.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == Model.Inventory.PageIndex ? "active" : "")">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                                    </li>
+                                }
+                                @if (Model.Inventory.HasNextPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.Inventory.PageIndex + 1)">Next</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
+    </div>
+    <div class="card-footer bg-transparent border-info">
+        <span>Total Count: <b>@Model.Inventory.TotalCount</b></span>
     </div>
 </div>
 
