@@ -1,35 +1,26 @@
 ﻿@using LibInventory.DomainContracts.Inventory;
 @model DecreaseInventory
 @{
-    ViewData["Title"] = "Decrease Inventory Item";
+    ViewData["Title"] = "Decrease";
 }
 
-<div class="row">
-    <div class="col-md-6">
-
+<div class="card border-primary">
+    <div class="card-body">
+        <h5 class="card-title">Decrease Item</h5>
+        <div class="card-text m-2">The number of copies you want to decrease from the book inventory</div>
         <form asp-controller="Inventory" asp-action="Decrease" method="post">
-            <div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="Count" class="control-label">Number</label>
-                            <input class="form-control" asp-for="Count"/>
-                            <span asp-validation-for="Count" class="error"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="Description" class="control-label">Description</label>
-                            <textarea type="text" class="form-control" asp-for="Description" required></textarea>
-                            <span asp-validation-for="Description" class="error"></span>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" asp-for="InventoryId" value="@Model.InventoryId" />
+            <div class="form-group">
+                <label asp-for="Count" class="control-label">Count</label>
+                <input class="form-control" asp-for="Count" />
+                <span asp-validation-for="Count" class="error"></span>
             </div>
-            <div>
+            <div class="form-group">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea type="text" class="form-control" asp-for="Description" required></textarea>
+                <span asp-validation-for="Description" class="error"></span>
+            </div>
+            <input type="hidden" asp-for="InventoryId" value="@Model.InventoryId" />
+            <div class="accordion-button">
                 <a class="btn btn-secondary waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
                 <button type="submit" class="btn btn-info waves-effect waves-light">Decrease</button>
             </div>

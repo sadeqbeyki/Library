@@ -5,12 +5,11 @@
     ViewData["Title"] = "Update";
 }
 
-<div class="row">
-    <div class="col-md-6">
+<div class="card border-primary">
+    <div class="card-body">
+        <h5 class="card-title">Update inventory Item</h5>
+        <div class="card-text m-2">update inventory of book.</div>
         <form asp-controller="Inventory" asp-action="Update" method="post">
-
-            <div class="row">
-                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="BookId" class="control-label">Choose a Book</label>
                         <select class="form-control" asp-for="BookId"
@@ -19,17 +18,12 @@
                         </select>
                         <span asp-validation-for="BookId" class="error"></span>
                     </div>
-                </div>
-                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="UnitPrice" class="control-label">Borrow fee</label>
                         <input type="text" class="form-control" asp-for="UnitPrice" required>
                         <span asp-validation-for="UnitPrice" class="error"></span>
                     </div>
-                </div>
-            </div>
             <input type="hidden" asp-for="Id" value="@Model.Id" />
-
             <div>
                 <a class="btn btn-secondary waves-effect" asp-controller="Inventory" asp-action="Index">Back</a>
                 <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
