@@ -12,11 +12,13 @@
 
 <div class="card border-primary">
     <div class="card-body">
+        <h5 class="card-title"> Circulation of book warehouse entities </h5>
+        <p class="card-text">Here you can see the log of the number of books that have been added or subtracted to the warehouse, as well as the borrowed books.</p>
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Number</th>
+                    <th>Count</th>
                     <th>Date</th>
                     <th>Operations</th>
                     <th>Current Balance</th>
@@ -49,7 +51,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    Page : @Html.PagedListPager(Model, page => Url.Action("OperationLog", new { page = page }),
+                    Pages : @Html.PagedListPager(Model, page => Url.Action("OperationLog", new { page = page }),
                     new PagedListRenderOptions {
                     ClassToApplyToFirstListItemInPager = null,
                     ClassToApplyToLastListItemInPager = null,
@@ -68,7 +70,7 @@
         </table>
     </div>
 
-    <div>
+    <div class="card-footer">
         <a class="btn btn-secondary" asp-controller="Inventory" asp-action="Index">Back to list</a>
     </div>
 </div>

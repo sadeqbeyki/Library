@@ -103,9 +103,8 @@ public class InventoryController : Controller
     {
         var log = _inventoryService.GetOperationLog(id);
 
-        int pageNumber = page ?? 1;
         int pageSize = 6;
-        var pagedLog = log.ToPagedList(pageNumber, pageSize);
+        var pagedLog = log.ToPagedList(page ?? 1, pageSize);
 
         return View("OperationLog", pagedLog);
     }
