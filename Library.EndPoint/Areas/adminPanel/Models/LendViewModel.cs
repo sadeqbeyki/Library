@@ -1,6 +1,6 @@
 ﻿using LibBook.DomainContracts.Borrow;
+using Library.EndPoint.Tools;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using static Library.EndPoint.Areas.adminPanel.Controllers.BorrowsController;
 
 namespace Library.EndPoint.Areas.adminPanel.Models;
 

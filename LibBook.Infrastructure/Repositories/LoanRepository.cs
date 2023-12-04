@@ -102,8 +102,6 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         return result;
     }
 
-
-
     public List<LoanDto> Search(LoanSearchModel searchModel)
     {
         var borrows = _bookDbContext.Borrows.Where(x => !x.IsDeleted).ToList();
@@ -125,7 +123,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         });
 
         if (!string.IsNullOrWhiteSpace(searchModel.MemberName))
-            query = query.Where(x => x.MemberName.Contains(searchModel.MemberName)); /*x.BookTitle.Contains(searchModel.BookTitle) ||*/
+            query = query.Where(x => x.MemberName.Contains(searchModel.MemberName)); 
 
         if (!string.IsNullOrEmpty(searchModel.EmployeeName))
             query = query.Where(x => x.EmployeeName.Contains(searchModel.EmployeeName));

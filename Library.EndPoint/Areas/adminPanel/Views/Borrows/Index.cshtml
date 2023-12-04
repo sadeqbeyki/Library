@@ -96,19 +96,19 @@
                                                 @if (Model.Loans.HasPreviousPage)
                                                 {
                                                     <li class="page-item">
-                                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.Loans.PageIndex - 1)" asp-route-SearchModel="@Model.SearchModel">Previous</a>
+                                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.Loans.PageIndex - 1)">Previous</a>
                                                     </li>
                                                 }
                                                 @for (int i = 1; i <= Model.Loans.TotalPages; i++)
                                                 {
                                                     <li class="page-item @(i == Model.Loans.PageIndex ? "active" : "")">
-                                                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-SearchModel="@Model.SearchModel">@i</a>
+                                                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
                                                     </li>
                                                 }
                                                 @if (Model.Loans.HasNextPage)
                                                 {
                                                     <li class="page-item">
-                                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.Loans.PageIndex + 1)" asp-route-SearchModel="@Model.SearchModel">Next</a>
+                                                        <a class="page-link" asp-action="Index" asp-route-page="@(Model.Loans.PageIndex + 1)">Next</a>
                                                     </li>
                                                 }
                                             </ul>
