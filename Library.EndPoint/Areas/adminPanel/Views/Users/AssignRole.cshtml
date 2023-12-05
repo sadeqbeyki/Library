@@ -4,50 +4,55 @@
 @model UserRoleViewModel
 @inject RoleManager<RoleIdentity> _roleManager
 @{
-    ViewData["Title"] = "Assign Role To User";
+    ViewData["Title"] = "Assign Role";
 }
 
 <div class="row">
-
-    <div class="col-md-6">
-        <form asp-action="AssignRole" method="post">
-            <div>
-                <div class="text-danger">@ViewBag.RoleExistError</div>
-                <div class="text-success">@ViewBag.RoleAssigned</div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="UserId" class="control-label">Choose a Member</label>
-                            <select class="form-control" asp-for="UserId"
-                                    asp-items='new SelectList(Model.Users, "Id", "UserName")'>
-                                <option value="">Choose a Member</option>
-                            </select>
-                            <span asp-validation-for="UserId" class="error"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="RoleId" class="control-label">Choose a Role</label>
-                            <select class="form-control" asp-for="RoleId"
-                                    asp-items='new SelectList(Model.Roles, "Id", "Name")'>
-                                <option value="">Choose a Role</option>
-                            </select>
-                            <span asp-validation-for="RoleId" class="error"></span>
-                        </div>
+    <div class="col-6">
+        <div class="card border-dark">
+            <div class="row">
+                <div class="col-md-4 bg-dark rounded-left">
+                        <h5 class="card-title m-3">Assign Role To Member</h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <form asp-action="AssignRole" method="post">
+                            <div class="text-danger">@ViewBag.RoleExistError</div>
+                            <div class="text-success">@ViewBag.RoleAssigned</div>
+                            <div class="form-group">
+                                <label asp-for="UserId" class="control-label">Choose a Member</label>
+                                <select class="form-control" asp-for="UserId"
+                                        asp-items='new SelectList(Model.Users, "Id", "UserName")'>
+                                    <option value="">Choose a Member</option>
+                                </select>
+                                <span asp-validation-for="UserId" class="error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="RoleId" class="control-label">Choose a Role</label>
+                                <select class="form-control" asp-for="RoleId"
+                                        asp-items='new SelectList(Model.Roles, "Id", "Name")'>
+                                    <option value="">Choose a Role</option>
+                                </select>
+                                <span asp-validation-for="RoleId" class="error"></span>
+                            </div>
+                            <div>
+                                <a class="btn btn-secondary waves-effect" asp-action="Index">Back to list</a>
+                                <button type="submit" class="btn btn-info waves-effect waves-light">Assign</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div>
-                <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
-                <button type="submit" class="btn btn-info waves-effect waves-light">Assign</button>
-            </div>
-        </form>
+        </div>
     </div>
-    <div class="col-md-6">
-        <h1 class="bg-info text-white">User Roles List</h1>
-        <div class="row mt-5">
-            <div class="col-md-12">
-                <table class="table">
+    <div class="col-6">
+        <div class="card border-dark">
+            <div class="card-header">
+
+                <h5 class="card-title m-3">User Roles List</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>User</th>
@@ -71,10 +76,10 @@
                                                     if (role != null)
                                                     {
                                                         <li class="d-flex align-items-center">
-                                                            <span class="badge badge-info mr-2">@roleName</span>
+                                                            <span class="badge badge-light mr-2">@roleName</span>
                                                             <form asp-controller="Users" asp-action="RemoveUserFromRole"
                                                                   asp-route-userId="@user.Id" asp-route-roleId="@role.Id">
-                                                                <button type="submit" class="btn btn-outline-danger badge badge-danger">x</button>
+                                                                <button type="button" class="btn-close bg-danger" aria-label="Close">x</button>
                                                             </form>
                                                         </li>
                                                     }

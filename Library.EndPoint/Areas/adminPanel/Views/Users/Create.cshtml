@@ -5,61 +5,46 @@
     ViewData["Title"] = "Create";
 }
 
-<h1 class="bg-info text-white">Create User</h1>
-<div class="row">
-    <div class="col-md-6">
+
+<div class="card border-primary">
+    <div class="card-body">
+        <h5 class="card-title m-3">Create User</h5>
         <form asp-controller="Users" asp-action="Create" asp-area="adminPanel" id="profile-form" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="FirstName" class="form-label"></label>
-                        <input asp-for="FirstName" class="form-text" required maxlength="50" />
-                        <span asp-validation-for=FirstName></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="LastName" class="form-label"></label>
-                        <input asp-for="LastName" class="form-text" required maxlength="50" />
-                        <span asp-validation-for=LastName></span>
-                    </div>
-                </div>
+            <div class="input-group">
+                <span class="input-group-text">First and last name</span>
+                <input asp-for="FirstName" type="text" aria-label="First name" class="form-control" required maxlength="50">
+                <input asp-for="LastName" type="text" aria-label="Last name" class="form-control" required maxlength="50">
+                <span asp-validation-for=FirstName></span>
+                <span asp-validation-for=LastName></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3 mb-3">
                 <label asp-for="BirthDate" class="form-label"></label>
-                <input asp-for="BirthDate" class="form-text" class="form-control" maxlength="50" />
+                <input asp-for="BirthDate" type="date" class="form-control" />
                 <span asp-validation-for=BirthDate></span>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-floating">
-                        <label asp-for="UserName" class="form-label"></label>
-                        <input asp-for="UserName" class="form-text" required maxlength="50" />
-                        <span asp-validation-for=UserName></span>
 
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Password" class="form-label">Password</label>
-                        <input type="text" asp-for="Password" class="form-text" maxlength="500" required>
-                        <span asp-validation-for=Password></span>
-                    </div>
-                </div>
+            <div class="input-group flex-nowrap mb-3">
+                <span class="input-group-text" id="addon-wrapping">@@</span>
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" asp-for="UserName" required maxlength="50">
+                <span asp-validation-for=UserName></span>
             </div>
-            <div class="form-floating">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-text" required />
+            <div class="form-group mt-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input type="text" asp-for="Password" class="form-control" maxlength="100" required>
+                <span asp-validation-for=Password></span>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" asp-for="Email" class="form-label"></label>
+                <input type="email" asp-for="Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required />
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <br />
             <div>
                 <a asp-action="Index" class="btn btn-secondary">Back</a>
                 <button type="submit" class="btn btn-success">Save</button>
             </div>
-
         </form>
     </div>
 </div>

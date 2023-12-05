@@ -2,29 +2,31 @@
 @model List<RoleDto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Roles";
 }
-<div>
-    <a asp-controller="Roles" asp-action="Create" class="btn btn-primary">
-        Add Role <i class="fa fa-plus"></i>
-    </a>
-</div>
-<br />
 
-<table class="table table-bordered table-striped">
-    <tr>
-        <th>Role Name</th>
-        <th>Details</th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Name</td>
-            <td>
-                <a asp-controller="Roles" asp-action="Update" asp-route-id="@item.Id">Edit</a>
-                |
-                <a asp-controller="Roles" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-    }
-</table>
+<div class="card border-primary">
+    <div class="card-body">
+        <h5 class="card-title m-3">Roles list</h5>
+        <a asp-controller="Roles" asp-action="Create" class="btn btn-primary mb-3">
+            Add Role <i class="fa fa-plus"></i>
+        </a>
+        <table class="table table-striped">
+            <tr>
+                <th>Role Name</th>
+                <th>Details</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        <a class="btn btn-success" asp-controller="Roles" asp-action="Update" asp-route-id="@item.Id">Update</a>
+                        
+                        <a class="btn btn-warning" asp-controller="Roles" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

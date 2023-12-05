@@ -3,15 +3,18 @@
 @{
     ViewData["Title"] = "Update";
 }
-
-<form asp-action="Update" asp-controller="Roles" method="post">
-    <div asp-validation-summary="All"></div>
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label">Name</label>
-        <input type="text" asp-for="Name" class="form-control" maxlength="50" required>
-        <span asp-validation-for=Name></span>
+<div class="card border-primary">
+    <div class="card-body">
+        <form asp-action="Update" asp-controller="Roles" method="post">
+            <div asp-validation-summary="All"></div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name</label>
+                <input type="text" asp-for="Name" class="form-control" maxlength="50" required>
+                <span asp-validation-for=Name></span>
+            </div>
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
     </div>
-    <input type="hidden" asp-for="Id" value="@Model.Id" />
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+</div>
 
