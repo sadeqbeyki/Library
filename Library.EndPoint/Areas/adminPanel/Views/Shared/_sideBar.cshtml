@@ -1,174 +1,305 @@
 ﻿@using LibIdentity.Domain.UserAgg;
 @using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+
 @inject SignInManager<UserIdentity> SignInManager
 @inject UserManager<UserIdentity> UserManager
-<!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">Library <sup>I</sup></div>
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<!--bootstrap 5.2-->
+<style>
+    /*recodeeeee*/
+    .sidebar {
+        background-color: #3498DB;
+        color: white;
+        height: 100vh; /* Set height to 100% of the viewport height */
+        overflow-y: auto; /* Add a scrollbar if the content overflows */
+    }
+
+        /* Add styles for the links inside the sidebar */
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar button {
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar button  {
+            color: white;
+            text-decoration: none;
+        }
+
+    /* Style for the dropdown menu */
+    .dropdown-menu {
+        background-color: #2C3E50;
+        color: white;
+    }
+
+        .dropdown-menu a {
+            color: white;
+            text-decoration: none;
+        }
+
+            .dropdown-menu a:hover {
+                background-color: #343a40; 
+            }
+
+    /*recodeeeee*/
+
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+    }
+
+    .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+    }
+
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+    }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+</style>
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="bootstrap" viewBox="0 0 118 94">
+        <title>Bootstrap</title>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
+    </symbol>
+</svg>
+
+<div class="flex-shrink-0 p-3 sidebar" style="width: 280px;">
+    <a asp-controller="Home" asp-action="Index"
+       class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+        <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap" /></svg>
+        <span class="fs-5 fw-semibold">Library II</span>
     </a>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider my-0">
-
-    <!-- Nav Item - Dashboard -->
-    @if (User.IsInRole("admin") || User.IsInRole("manager"))
-    {
-        <li class="nav-item">
-            <a asp-controller="Books" asp-action="Index" class="nav-link collapsed" data-toggle="collapse"
-               data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Library Management:</h6>
-                    <a class="collapse-item" asp-controller="BookCategories" asp-action="Index">Book Categories</a>
-                    <a class="collapse-item" asp-controller="Books" asp-action="Index">Books</a>
-                    <hr class="hr hr-blurry" />
-                    <a class="collapse-item" asp-controller="Authors" asp-action="Index">
-                        <i class="bi bi-file-earmark-word"></i><span>Author</span>
-                    </a>
-                    <a class="collapse-item" asp-controller="Publishers" asp-action="Index">
-                        <i class="bi bi-file-earmark-ppt"></i>Publisher
-                    </a>
-                    <a class="collapse-item" asp-controller="Translators" asp-action="Index">
-                        <i class="bi bi-file-earmark-font"></i>Translator
-                    </a>
+    <ul class="list-unstyled ps-0">
+        @if (User.IsInRole("admin") || User.IsInRole("manager"))
+        {
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    Book
+                </button>
+                <div class="collapse" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li>
+                            <a asp-controller="BookCategories" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Categories</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Books" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Books</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Authors" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Author</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Publishers" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Publisher</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Translators" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Translator</a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Interface
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true">
+                    Inventory
+                </button>
+                <div class="collapse" id="dashboard-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li>
+                            <a asp-controller="Inventory" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Inventory</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Inventory" asp-action="Create"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Add New Inventory</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="true">
+                    Loans
+                </button>
+                <div class="collapse" id="orders-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li>
+                            <a asp-controller="Borrows" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Loans</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Borrows" asp-action="Lending"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Add New Lend</a>
+                        </li>
+                        <li>
+                            <a hasp-controller="Borrows" asp-action="PendingLoans"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Pending Loans</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Borrows" asp-action="ApprovedLoans"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Approved Loans</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Borrows" asp-action="ReturnedLoans"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Returned Loans</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Borrows" asp-action="OverdueLoans"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Overdue Loans</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Borrows" asp-action="DeletedLoans"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Deleted Loans</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        }
+        @if (User.IsInRole("admin"))
+        {
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                    Members
+                </button>
+                <div class="collapse" id="account-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li>
+                            <a asp-controller="Users" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Members</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Users" asp-action="Create"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Add New Member</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Roles" asp-action="Index"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Roles</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Roles" asp-action="Create"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Add New Roles</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Users" asp-action="AssignRole"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Assign Role</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        }
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    Welcome !
+                </button>
+                <div class="collapse show" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li>
+                            <a asp-area="default" asp-controller="Account" asp-action="Login" asp-route-returnUrl=@Context.Request.Path
+                               class="link-dark d-inline-flex text-decoration-none rounded">Sign in</a>
+                        </li>
+                        <li>
+                            <a asp-area="default" asp-controller="Account" asp-action="Register"
+                               class="link-dark d-inline-flex text-decoration-none rounded">Sign up</a>
+                        </li>
+                        <li>
+                            <a asp-area="default" asp-controller="Account" asp-action="ForgotPassword"
+                               class="link-dark d-inline-flex text-decoration-none rounded btn disabled">Forget Password</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        }
+    </ul>
+    <hr>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="~/APTheme/img/undraw_profile.svg" alt="" width="32" height="32" class="rounded-circle me-2">
+                Hello<strong>&nbsp;@User.Identity.Name!&nbsp</strong>
+            </a>
+            <cite title="Source Title" class="ml-4">(@string.Join(", ", await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User))))</cite>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li>
+                    <a href="javascript:void(0);" onclick="GoToMemberBorrowsPage('@userId')" class="dropdown-item">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Member Borrows
+                    </a>
+                </li>
+                @if (User.IsInRole("admin") || User.IsInRole("manager"))
+                {
+                    <li>
+                        <a asp-area="adminPanel" asp-controller="Home" asp-action="EmployeeBorrows" class="dropdown-item">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Employee Borrows
+                        </a>
+                    </li>
+                }
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
         </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
-               aria-expanded="true" aria-controls="collapseThree">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Inventory</span>
-            </a>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Inventory Management:</h6>
-                    <a class="collapse-item" asp-controller="Inventory" asp-action="Index">Inventory</a>
-                    <a class="collapse-item text-success" asp-controller="Inventory" asp-action="Create">Add Inventory</a>
-                </div>
-            </div>
-        </li>
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
-               aria-expanded="true" aria-controls="collapseFour">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Lendings</span>
-            </a>
-            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Loan Management:</h6>
-                    <a class="collapse-item" asp-controller="Borrows" asp-action="Index">All Loans</a>
-                    <a class="collapse-item text-success" asp-controller="Borrows" asp-action="Lending">Add Book Loan</a>
-                    <hr class="hr hr-blurry" />
-                    <a class="collapse-item" asp-controller="Borrows" asp-action="PendingLoans">Pending Loans</a>
-                    <a class="collapse-item" asp-controller="Borrows" asp-action="ApprovedLoans">Approved Loans</a>
-                    <a class="collapse-item" asp-controller="Borrows" asp-action="ReturnedLoans">Returned Loans</a>
-                    <hr class="hr hr-blurry" />
-                    <a class="collapse-item" asp-controller="Borrows" asp-action="OverdueLoans">Overdue Loans</a>
-                    <a class="collapse-item text-secondary" asp-controller="Borrows" asp-action="DeletedLoans">Deleted Loans</a>
-                </div>
-            </div>
-        </li>
-
-        @*        <!-- Nav Item - Charts -->
-    <li class="nav-item">
-    <a class="nav-link" href="charts.html">
-    <i class="fas fa-fw fa-chart-area"></i>
-    <span>Charts</span>
-    </a>
-    </li>*@
     }
-    @if (User.IsInRole("admin"))
-    {
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
+</div>
 
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-               aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>Members</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Utilities:</h6>
-                    <a class="collapse-item" asp-controller="Users" asp-action="Index">All Members</a>
-                    <a class="collapse-item" asp-controller="Users" asp-action="Create">Add Member</a>
-                    <hr class="hr hr-blurry" />
-                    <a class="collapse-item" asp-controller="Roles" asp-action="Index">Member Roles</a>
-                    <a class="collapse-item" asp-controller="Roles" asp-action="Create">Add Role</a>
-                    <hr class="hr hr-blurry" />
-                    <a class="collapse-item" asp-controller="Users" asp-action="AssignRole">Assign Role</a>
-                </div>
-            </div>
-        </li>
+<script>
+    function GoToMemberBorrowsPage(userId) {
+        window.location.href = '/adminPanel/Home/MemberBorrows?memberId=' + userId;
     }
-
-
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-
-    @if (!SignInManager.IsSignedIn(User))
-    {
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Addons
-        </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item active">
-            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-               aria-controls="collapsePages">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Pages</span>
-            </a>
-            <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Login Screens:</h6>
-                    <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="Login" asp-route-returnUrl=@Context.Request.Path>Login</a>
-                    <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="Register">Register</a>
-                    <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="ForgotPassword">Forgot Password</a>
-                    <div class="collapse-divider"></div>
-                    <h6 class="collapse-header">Other Pages:</h6>
-                    <a class="collapse-item" asp-area="default" asp-controller="Account" asp-action="AccessDenied">404 Page</a>
-                    <a class="collapse-item active" asp-area="default" asp-controller="Account" asp-action="BlankPage">Blank Page</a>
-                </div>
-            </div>
-        </li>
-    }
-
-
-
-    <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-</ul>
-<!-- End of Sidebar -->
+</script>
