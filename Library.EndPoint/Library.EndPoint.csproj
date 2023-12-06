@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <None Include="Views\Account\AccessDenied.cshtml" />
-    <None Include="Views\Account\Login.cshtml" />
+    <None Include="Views\Account\olLogin.cshtml" />
     <None Include="Views\Account\Register.cshtml" />
   </ItemGroup>
 
