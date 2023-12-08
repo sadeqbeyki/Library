@@ -29,7 +29,7 @@ public class BorrowsController : Controller
     public async Task<ActionResult<List<LoanDto>>> Index(LoanSearchModel searchModel, int? page)
     {
         //List<LoanDto> loans = _loanService.GetAll();
-        const int pageSize = 7;
+        const int pageSize = 5;
 
         var loans = _loanService.Search(searchModel);
 
@@ -51,7 +51,7 @@ public class BorrowsController : Controller
     {
         List<LoanDto> loans = await _loanService.GetPendingLoans();
 
-        const int pageSize = 7;
+        const int pageSize = 5;
         var paginatedLoans = PaginatedList<LoanDto>.Create(loans, page ?? 1, pageSize);
         return View("PendingLoans", paginatedLoans);
     }
@@ -59,7 +59,7 @@ public class BorrowsController : Controller
     {
         List<LoanDto> loans = _loanService.GetApprovedLoans();
 
-        const int pageSize = 7;
+        const int pageSize = 5;
         var paginatedLoans = PaginatedList<LoanDto>.Create(loans, page ?? 1, pageSize);
         return View("ApprovedLoans", paginatedLoans);
     }
@@ -67,7 +67,7 @@ public class BorrowsController : Controller
     {
         List<LoanDto> loans = _loanService.GetReturnedLoans();
 
-        const int pageSize = 7;
+        const int pageSize = 5;
         var paginatedLoans = PaginatedList<LoanDto>.Create(loans, page ?? 1, pageSize);
         return View("ReturnedLoans", paginatedLoans);
     }
@@ -75,7 +75,7 @@ public class BorrowsController : Controller
     {
         List<LoanDto> loans = await _loanService.GetOverdueLones();
 
-        int pageSize = 6;
+        int pageSize = 5;
         var pagedLog = loans.ToPagedList(page ?? 1, pageSize);
 
         return View("OverdueLoans", pagedLog);
@@ -85,7 +85,7 @@ public class BorrowsController : Controller
         List<LoanDto> loans = _loanService.GetDeletedLoans();
 
         int pageNumber = page ?? 1;
-        int pageSize = 6;
+        int pageSize = 5;
         var pagedLog = loans.ToPagedList(pageNumber, pageSize);
 
         return View("DeletedLoans", pagedLog);

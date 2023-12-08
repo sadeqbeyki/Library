@@ -11,8 +11,8 @@
     </div>
     <div class="card-body">
         <div class="card-text mb-3">For a more detailed search, fill in all fields.</div>
-        <form asp-controller="Borrows" asp-action="Index" class="form-inline" role="form" method="post">
-            <div class="form-group">
+        <form asp-controller="Borrows" asp-action="Index" class="form-inline col-auto" role="form" method="post">
+            <div class="form-group col">
                 <label class="sr-only" asp-for="SearchModel.MemberName"></label>
                 <input class="form-control" asp-for="SearchModel.MemberName" placeholder="Member Name">
             </div>

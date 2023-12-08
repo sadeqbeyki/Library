@@ -1,42 +1,41 @@
 ﻿@model List<LibBook.DomainContracts.Borrow.LoanDto>
 
-<a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <i class="fas fa-bell fa-fw"></i>
-    <!-- Counter - Alerts -->
-    <span class="badge badge-danger badge-counter">@Model.Count</span>
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="warnNotif" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z" />
+        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" />
+    </symbol>
+</svg>
+
+<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
+    <i class="fas fa-bell fa-fw"></i> notification
+    <span class="badge badge-danger badge-counter text-dark">@Model.Count</span>
 </a>
-<!-- Dropdown - Alerts -->
-<div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-     aria-labelledby="alertsDropdown">
-    <h6 class="dropdown-header">
+
+<div class="dropdown-menu">
+    <h6 class="dropdown-header bg-dark text-white">
         Alerts Center
     </h6>
+    <div class="dropdown-divider"></div>
     @foreach (var item in Model)
     {
         <a asp-controller="Borrows" asp-action="Details" asp-route-id="@item.Id"
            class="dropdown-item d-flex align-items-center">
-            <div class="mr-3">
-                @*                 <div class="icon-circle bg-primary">
-            <i class="fas fa-file-alt text-white"></i>
-            </div> *@
-                <div class="icon-circle bg-warning">
-                    <i class="fas fa-exclamation-triangle text-white"></i>
-                </div>
-                @*                 <div class="icon-circle bg-success">
-            <i class="fas fa-donate text-white"></i>
-            </div> *@
-            </div>
+
             @{
                 TimeSpan timeDifference = DateTime.Now - @item.IdealReturnDate;
                 int daysOverdue = (int)timeDifference.TotalDays;
             }
-            <div>
-                <div class="small text-gray-500">Delay in returning the loan</div>
-                <span><b>@item.MemberName</b> has not returned the <b>@item.BookTitle</b> book for @daysOverdue days.</span>
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#warnNotif" /></svg>
+                <div>
+                    Delay in returning the loan.<br/>
+                    <span><b>@item.MemberName</b> has not returned the <b>@item.BookTitle</b> book for @daysOverdue days.</span>
+                </div>
             </div>
         </a>
     }
+    <div class="dropdown-divider"></div>
     <a asp-controller="Borrows" asp-action="OverdueLoans"
        class="dropdown-item text-center small text-gray-500">Show All Alerts</a>
 </div>
