@@ -3,113 +3,110 @@
 @{
     Layout = null;
 }
+<!doctype html>
 <html lang="en">
 <head>
+    <script src="/APTheme/vendor/dist/js/color-modes.js"></script>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="sadeq">
 
     <title>Register</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="APTheme/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/checkout/">
 
-    <!-- Custom styles for this template-->
-    <link href="~/APTheme/css/sb-admin-2.css" rel="stylesheet">
+    @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"> *@
 
+    <link href="/APTheme/vendor/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/register.css" rel="stylesheet">
 </head>
 
-<body class="bg-gradient-primary">
+<body class=" bg-body-tertiary">
     <div class="container">
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-                            </div>
-                            <form asp-controller="Account" asp-action="Register" method="post" class="user">
-                                @*<div class="text-danger" asp-validation-summary="All"></div>*@
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input asp-for="FirstName" type="text" class="form-control form-control-user" id="exampleFirstName"
-                                               placeholder="First Name">
-                                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input asp-for="LastName" type="text" class="form-control form-control-user" id="exampleLastName"
-                                               placeholder="Last Name">
-                                        <span asp-validation-for="LastName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 mb-3 mb-sm-0">
-                                        <input asp-for="BirthDate" type="text" class="form-control form-control-user"
-                                               id="exampleInputBirthDate" placeholder="Enter Birth Date...">
-                                        <span asp-validation-for="BirthDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input asp-for="UserName" type="text" class="form-control form-control-user"
-                                               id="exampleInputUserName" placeholder="Enter user name...">
-                                        <span asp-validation-for="UserName" class="text-danger"></span>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input asp-for="Email" type="email" class="form-control form-control-user"
-                                               id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email Address">
-                                        <span asp-validation-for="Email" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input asp-for="Password" type="password" class="form-control form-control-user"
-                                               id="exampleInputPassword" placeholder="Password">
-                                        <span asp-validation-for="Password" class="text-danger"></span>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input asp-for="ConfirmPassword" type="password" class="form-control form-control-user"
-                                               id="exampleRepeatPassword" placeholder="Repeat Password" required>
-                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary btn-user btn-block" type="submit">Register Account</button>
+        <main>
+            <div class="py-4 text-center">
+                <img class="d-block mx-auto mb-4" src="/APTheme/img/logo.png" alt="" width="72" height="57">
+                <h2>Register to Library</h2>
+                <p class="lead">Hello. To use the library facilities, you must register here to be authenticated. We want you to be aware that this validation is to ensure the return of our books.</p>
+            </div>
 
-                                <hr>
-                                <a href="#" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Register with Google
-                                </a>
-                                <a href="#" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                                </a>
-                            </form>
-                            <hr>
-                            <div class="text-center">
-                                <a class="small" href="#">Forgot Password?</a>
-                            </div>
-                            <div class="text-center">
-                                <a class="small" asp-controller="Account" asp-action="Login">Login to Account!</a>
+            <div class="row g-4">
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label asp-for="FirstName" class="form-label">First name</label>
+                            <input asp-for="FirstName" type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label asp-for="LastName" class="form-label">Last name</label>
+                            <input asp-for="LastName" type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label asp-for="UserName" class="form-label">Username</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text">@@</span>
+                                <input asp-for="UserName" type="text" class="form-control" id="username" placeholder="Username" required>
+                                <span asp-validation-for="UserName" class="text-danger"></span>
                             </div>
                         </div>
+
+                        <div class="col-sm-6">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                            <span asp-validation-for="Email" class="text-bg-danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label asp-for="Password">Password</label>
+                            <input asp-for="Password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+                        </div>
+                        <div class="col-sm-6">
+                            <label asp-for="ConfirmPassword">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" id="confirmInputPassword" placeholder="Confirm Password">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="BirthDate" class="form-label">Birthdate</label>
+                            <input asp-for="BirthDate" type="text" class="form-control" id="birthdate" placeholder="" required>
+                            <span asp-validation-for="BirthDate" class="text-bg-danger"></span>
+                        </div>
+                        <hr class="my-4">
                     </div>
+
+                    <div class="form-group">
+                        <input class="form-check-input" type="checkbox" name="remember-me" id="remember-me" />
+                        <label for="remember-me" class="form-check-label">Remember me !</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="agreeTerms">
+                        <label class="form-check-label" for="agreeTerms">Agree to terms and conditions.</label>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button asp-controller="Account" asp-action="Login" class="w-100 btn btn-primary btn-lg" type="submit">Register to library</button>
+                </form>
+                <div class="text-center mt-1">
+                    <a asp-controller="Account" asp-action="Login" class="small">I am already member</a>
+                    &nbsp; | &nbsp;<a class="small" href="#">Forgot Password?</a>
                 </div>
             </div>
-        </div>
+        </main>
+
+        <footer class="pt-5 text-body-secondary text-center text-small">
+            <p class="mb-1">&copy; 2023 Library II</p>
+        </footer>
     </div>
     <!-- Bootstrap core JavaScript-->
-    <script src="~/APTheme/vendor/jquery/jquery.min.js"></script>
-    <script src="~/APTheme/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="~/APTheme/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="~/APTheme/js/sb-admin-2.min.js"></script>
+    <script src="/APTheme/vendor/jquery/jquery-3.7.1.min.js"></script>
+    <script src="/APTheme/vendor/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
