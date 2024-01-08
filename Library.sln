@@ -71,6 +71,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibBook.DomainContracts", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibBook.ApplicationServices", "LibBook.ApplicationServices\LibBook.ApplicationServices.csproj", "{32502D81-79CC-44FE-B76C-73D0EAB53DE0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8378B1D5-3D01-4D3F-AF79-880B003C2C2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Test", "Library.Test\Library.Test.csproj", "{6763C484-AB79-49D6-8B13-1BEC09374160}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +157,10 @@ Global
 		{32502D81-79CC-44FE-B76C-73D0EAB53DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32502D81-79CC-44FE-B76C-73D0EAB53DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32502D81-79CC-44FE-B76C-73D0EAB53DE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6763C484-AB79-49D6-8B13-1BEC09374160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6763C484-AB79-49D6-8B13-1BEC09374160}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6763C484-AB79-49D6-8B13-1BEC09374160}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6763C484-AB79-49D6-8B13-1BEC09374160}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -190,6 +198,7 @@ Global
 		{B042BD7B-ED00-4C6F-9994-C3E961D871BF} = {88BE7990-FDFE-43E2-BF67-71C3ABD7E57D}
 		{3D4025E1-3547-4C05-83CE-506EA3968004} = {88BE7990-FDFE-43E2-BF67-71C3ABD7E57D}
 		{32502D81-79CC-44FE-B76C-73D0EAB53DE0} = {85B86C10-DE63-4FCA-97A2-2A7C5ED4F6D4}
+		{6763C484-AB79-49D6-8B13-1BEC09374160} = {8378B1D5-3D01-4D3F-AF79-880B003C2C2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA85AEB7-276E-4896-9EA8-5FA32BD9BAB5}

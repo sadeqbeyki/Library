@@ -20,6 +20,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -67,7 +69,6 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: fals
 #region Email
 builder.Services.AddTransient<IEmailService, EmailService>();
 #endregion
-
 
 #region Book
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

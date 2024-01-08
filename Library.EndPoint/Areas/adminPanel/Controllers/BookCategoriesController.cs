@@ -10,10 +10,13 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers
     public class BookCategoriesController : Controller
     {
         private readonly IBookCategoryService _bookCategoryService;
+        private readonly ILogger _logger;
 
-        public BookCategoriesController(IBookCategoryService bookCategoryService)
+        public BookCategoriesController(IBookCategoryService bookCategoryService, 
+            ILogger<BookCategoriesController> logger)
         {
             _bookCategoryService = bookCategoryService;
+            _logger = logger;
         }
 
         public async Task<ActionResult<List<BookCategoryDto>>> Index()
