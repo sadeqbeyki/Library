@@ -74,6 +74,8 @@
     <ProjectReference Include="..\LibBook.DomainContracts\LibBook.DomainContracts.csproj" />
     <ProjectReference Include="..\LibId.ApplicationServices\LibIdentity.ApplicationServices.csproj" />
     <ProjectReference Include="..\LibId.DomainContracts\LibIdentity.DomainContracts.csproj" />
+    <ProjectReference Include="..\LibId.Infrastructure\LibIdentity.Infrastructure.csproj" />
+    <ProjectReference Include="..\LibIdentityConfiguration\LibIdentityConfiguration.csproj" />
     <ProjectReference Include="..\LibInv.Configuration\LibInventory.Configuration.csproj" />
     <ProjectReference Include="..\LibInv.DomainContracts\LibInventory.DomainContracts.csproj" />
   </ItemGroup>

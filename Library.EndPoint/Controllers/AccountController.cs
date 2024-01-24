@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using AppFramework.Application.Email;
 using LibIdentity.DomainContracts.Auth;
-using LibIdentity.ApplicationServices;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Library.EndPoint.Controllers;
 
@@ -164,7 +162,6 @@ public class AccountController : Controller
     {
         return View();
     }
-
     public async Task<RedirectResult> Logout(string returnUrl = "/")
     {
         await _signInManager.SignOutAsync();

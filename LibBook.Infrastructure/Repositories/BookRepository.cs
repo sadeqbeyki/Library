@@ -8,7 +8,7 @@ namespace LibBook.Infrastructure.Repositories;
 public class BookRepository : Repository<Book, int>, IBookRepository
 {
     private readonly BookDbContext _bookDbContext;
-    public BookRepository(BookDbContext dbContext, BookDbContext bookDbContext) : base(dbContext)
+    public BookRepository(BookDbContext bookDbContext) : base(bookDbContext)
     {
         _bookDbContext = bookDbContext;
     }
