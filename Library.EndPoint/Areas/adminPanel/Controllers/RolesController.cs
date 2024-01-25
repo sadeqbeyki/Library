@@ -1,5 +1,7 @@
-﻿using AppFramework.Infrastructure;
-using LibIdentity.DomainContracts.RoleContracts;
+﻿using Identity.Application.DTOs.Role;
+using Identity.Application.Features.Command.Role;
+using Identity.Application.Features.Query.Role;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,22 +10,22 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Authorize(Roles = "admin")]
 public class RolesController : Controller
 {
-    private readonly IRoleService _roleService;
+    private readonly IMediator _mediator;
 
-    public RolesController(IRoleService roleService)
+    public RolesController(IMediator mediator)
     {
-        _roleService = roleService;
+        _mediator = mediator;
     }
 
-    public async Task<ActionResult<List<RoleDto>>> Index()
+    public async Task<IActionResult> Index()
     {
-        var roles = await _roleService.GetRoles();
-        return View(roles);
+        await _mediator.Send(new GetRolesQuery());
+        return View();
     }
-    public async Task<ActionResult<RoleDto>> Details(int id)
+    public async Task<IActionResult> Details(string id)
     {
-        var role = await _roleService.GetRole(id);
-        return View(role);
+        await _mediator.Send(new GetRoleByIdQuery(id));
+        return View();
     }
     #region Create
     [HttpGet]
@@ -32,31 +34,17 @@ public class RolesController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Create(RoleDto model)
+    public async Task<IActionResult> Create(CreateRoleCommand command)
     {
-        if (ModelState.IsValid)
-        {
-            var result = await _roleService.CreateRole(model);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError(item.Code, item.Description);
-                }
-            }
-        }
-        return View(model);
+        var result = await _mediator.Send(command);
+        return RedirectToAction("Index");
     }
     #endregion
 
     #region Update
-    public async Task<ActionResult> Update(int id)
+    public async Task<ActionResult> Update(string id)
     {
-        var role = await _roleService.GetRole(id);
+        var role = await _mediator.Send(new GetRoleByIdQuery(id));
         if (role != null)
         {
             return View(role);
@@ -64,50 +52,22 @@ public class RolesController : Controller
         return RedirectToAction("Index");
     }
     [HttpPost]
-    public async Task<ActionResult<RoleDto>> Update(int id, RoleDto model)
+    public async Task<ActionResult<RoleDto>> Update(RoleDto model)
     {
-        var role = await _roleService.GetRole(id);
-        if (role != null)
+        if (!ModelState.IsValid)
         {
-            var result = await _roleService.UpdateRole(model);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError(item.Code, item.Description);
-                }
-            }
             return View(model);
         }
-        return NotFound();
+        var result = await _mediator.Send(new UpdateRoleCommand(model));
+        return RedirectToAction("Index", result);
     }
     #endregion
 
     #region Delete
-    public async Task<ActionResult> Delete(RoleDto dto)
+    public async Task<ActionResult> Delete(string id)
     {
-        var role = await _roleService.GetRole(dto.Id);
-        if (role != null)
-        {
-            var result = await _roleService.DeleteRole(role);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError(item.Code, item.Description);
-                }
-            }
-            return RedirectToAction("Index");
-        }
-        return RedirectToAction("Index");
+        var result = await _mediator.Send(new DeleteRoleCommand(id));
+        return RedirectToAction("Index", result);
     }
     #endregion
 }

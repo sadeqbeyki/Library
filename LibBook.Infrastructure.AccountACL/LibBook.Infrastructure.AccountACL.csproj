@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
     <ProjectReference Include="..\LibBook.Domain\LibBook.Domain.csproj" />
-    <ProjectReference Include="..\LibId.DomainContracts\LibIdentity.DomainContracts.csproj" />
   </ItemGroup>
 
 </Project>

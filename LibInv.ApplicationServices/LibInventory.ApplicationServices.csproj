@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibId.DomainContracts\LibIdentity.DomainContracts.csproj" />
     <ProjectReference Include="..\LibInv.DomainContracts\LibInventory.DomainContracts.csproj" />
     <ProjectReference Include="..\LibInv.Domain\LibInventory.Domain.csproj" />
   </ItemGroup>

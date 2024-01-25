@@ -1,6 +1,6 @@
-﻿using LibBook.DomainContracts.Book;
+﻿using Identity.Application.Interfaces;
+using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.Borrow;
-using LibIdentity.DomainContracts.UserContracts;
 using Library.EndPoint.Areas.adminPanel.Models;
 using Library.EndPoint.Tools;
 using Microsoft.AspNetCore.Authorization;
@@ -107,7 +107,7 @@ public class BorrowsController : Controller
     {
         var command = new CreateBorrowViewModel
         {
-            Members = await _userService.GetUsers(),
+            Members = await _userService.GetAllUsersAsync(),
             Books = await _bookService.GetAll(),
         };
         return View("Lending", command);
@@ -139,7 +139,7 @@ public class BorrowsController : Controller
         var model = new UpdateBorrowViewModel
         {
             Borrow = await _loanService.GetLoanById(id),
-            Members = await _userService.GetUsers(),
+            Members = await _userService.GetAllUsersAsync(),
             Books = await _bookService.GetAll(),
         };
 
@@ -179,7 +179,7 @@ public class BorrowsController : Controller
         var model = new UpdateBorrowViewModel
         {
             Borrow = await _loanService.GetLoanById(id),
-            Members = await _userService.GetUsers(),
+            Members = await _userService.GetAllUsersAsync(),
             Books = await _bookService.GetAll(),
         };
 

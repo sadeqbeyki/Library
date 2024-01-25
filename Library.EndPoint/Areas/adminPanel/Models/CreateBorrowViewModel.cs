@@ -1,6 +1,6 @@
-﻿using LibBook.DomainContracts.Book;
+﻿using Identity.Application.DTOs.User;
+using LibBook.DomainContracts.Book;
 using LibBook.DomainContracts.Borrow;
-using LibIdentity.DomainContracts.UserContracts;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.EndPoint.Areas.adminPanel.Models;
@@ -17,14 +17,14 @@ public class CreateBorrowViewModel
     public string ReturnEmployeeId { get; set; }
     public DateTime? ReturnDate { get; set; }
     public string Description { get; set; }
-    public List<UpdateUserViewModel> Members { get; set; }
+    public List<UserDetailsDto> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }
 
 public class UpdateBorrowViewModel
 {
     public LoanDto Borrow { get; set; }
-    public List<UpdateUserViewModel> Members { get; set; }
+    public List<UserDetailsDto> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }
 

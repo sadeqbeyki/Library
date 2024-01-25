@@ -1,9 +1,8 @@
 using AppFramework.Application.Email;
 using LibBook.Domain;
 using LibBook.Configurations;
-using LibIdentityConfiguration;
 using LibInventory.Configuration;
-using System.Configuration;
+using Identity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,5 +84,11 @@ app.UseEndpoints(endpoints =>
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 });
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 
 app.Run();

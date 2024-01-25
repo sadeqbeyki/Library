@@ -1,6 +1,6 @@
-﻿@using LibIdentity.Domain.UserAgg;
+﻿@using Identity.Domain.Entities.User
 @using Microsoft.AspNetCore.Identity;
-@inject SignInManager<UserIdentity> SignInManager
+@inject SignInManager<ApplicationUser> SignInManager
 @{
     ViewData["Title"] = "Confirm Email";
 }

@@ -12,8 +12,4 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LibId.Domain\LibIdentity.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

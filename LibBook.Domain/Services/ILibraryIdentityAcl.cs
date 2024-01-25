@@ -2,6 +2,6 @@
 
 public interface ILibraryIdentityAcl
 {
-    (string name, string email) GetAccountBy(int id);
+    Task<(string name, string email)> GetAccountBy(string id, CancellationToken cancellationToken);
     Task<string> GetUserName(string id);
 }

@@ -1,12 +1,12 @@
-﻿using LibIdentity.ApplicationServices;
-using LibIdentity.Domain.RoleAgg;
-using LibIdentity.Domain.UserAgg;
-using LibIdentity.DomainContracts.RoleContracts;
-using LibIdentity.DomainContracts.UserContracts;
+﻿using AppFramework.Infrastructure;
+using Identity.Application.Features.Command.User;
+using Identity.Application.Features.Command.UserRole;
+using Identity.Application.Features.Query.Role;
+using Identity.Application.Features.Query.User;
+using Identity.Application.Features.User.Queries;
 using Library.EndPoint.Areas.adminPanel.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
@@ -15,31 +15,23 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
 public class UsersController : Controller
 {
-    private readonly IUserService _userService;
-    private readonly IRoleService _roleService;
+    private readonly IMediator _mediator;
 
-    private readonly UserManager<UserIdentity> _userManager;
-    private readonly RoleManager<RoleIdentity> _roleManager;
-
-    public UsersController(IUserService userService, IRoleService roleService,
-        RoleManager<RoleIdentity> roleManager, UserManager<UserIdentity> userManager)
+    public UsersController(IMediator mediator)
     {
-        _userService = userService;
-        _roleService = roleService;
-        _roleManager = roleManager;
-        _userManager = userManager;
+        _mediator = mediator;
     }
 
-    public async Task<ActionResult<List<UserRolesViewModel>>> Index()
+    public async Task<ActionResult> Index()
     {
-        var users = await _userService.GetAllUsers();
+        var users = await _mediator.Send(new GetAllUsersQuery());
         return View(users);
     }
 
     [HttpGet]
-    public async Task<ActionResult<UpdateUserViewModel>> Details(int id)
+    public async Task<ActionResult> Details(string id)
     {
-        var user = await _userService.GetUser(id);
+        var user = await _mediator.Send(new GetUserDetailsQuery(id));
         return View(user);
     }
 
@@ -47,8 +39,9 @@ public class UsersController : Controller
     {
         return View();
     }
+
     [HttpPost]
-    public async Task<IActionResult> Create(CreateUserViewModel model)
+    public async Task<IActionResult> Create(CreateUserCommand command)
     {
         if (!ModelState.IsValid)
         {
@@ -58,59 +51,56 @@ public class UsersController : Controller
                 var exception = error.Exception;
             }
         }
-        var result = await _userService.CreateUser(model);
+        var result = await _mediator.Send(command);
 
-        if (!result.Succeeded)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return View(model);
-        }
-        return RedirectToAction("Index");
+        //if (!result.Succeeded)
+        //{
+        //    foreach (var error in result.Errors)
+        //    {
+        //        ModelState.AddModelError(string.Empty, error.Description);
+        //    }
+        //    return View(model);
+        //}
+        return RedirectToAction("Index", result);
     }
 
-    public async Task<ActionResult> Update(int id)
+    public async Task<ActionResult> Update(string id)
     {
-        var user = await _userService.GetUser(id);
+        var user = await _mediator.Send(new GetUserDetailsQuery(id));
         if (user == null)
         {
-            return View("Error");
+            return View();
         }
         return View(user);
     }
 
     [HttpPost]
-    public async Task<ActionResult<UpdateUserViewModel>> Update(UpdateUserViewModel user)
+    public async Task<ActionResult> Update(UpdateUserCommand command)
     {
         if (!ModelState.IsValid)
-        {
-            return View(user);
-        }
+            return View(command);
 
-        await _userService.Update(user);
-        return RedirectToAction("Index");
+        var user = await _mediator.Send(command);
+        return RedirectToAction("Index", user);
     }
 
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> Delete(string id)
     {
-        var user = await _userService.GetUser(id);
-        if (id == 0 || user == null)
+        var user = await _mediator.Send(new GetUserDetailsQuery(id));
+        if (id == null || user == null)
         {
-            return NotFound();
+            return View();
         }
-
         return View(user);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteConfirmed(string id)
     {
         if (ModelState.IsValid)
         {
-            await _userService.DeleteUser(id);
+            var result = await _mediator.Send(new DeleteUserCommand(id));
             return RedirectToAction(nameof(Index));
         }
         return BadRequest();
@@ -120,30 +110,30 @@ public class UsersController : Controller
     {
         var command = new UserRoleViewModel
         {
-            Users = await _userService.GetAllUsers(),
-            Roles = await _roleService.GetRoles(),
+            Users = await _mediator.Send(new GetAllUsersQuery()),
+            Roles = await _mediator.Send(new GetRolesQuery()),
         };
         return View("AssignRole", command);
     }
     [HttpPost]
     public async Task<IActionResult> AssignRole(UserRoleViewModel model)
     {
-        var user = await _userManager.FindByIdAsync(model.UserId.ToString());
-        var role = await _roleManager.FindByIdAsync(model.RoleId.ToString());
+        var user = await _mediator.Send(new GetUserDetailsQuery(model.UserId));
+        var role = await _mediator.Send(new GetRoleByIdQuery(model.RoleId));
         if (user == null || role == null)
         {
             return BadRequest();
         }
 
-        if (await _userManager.IsInRoleAsync(user, role.Name))
+        var isInRole = await _mediator.Send(new IsInRoleCommand(user.UserId, role.Id));
+        if (isInRole)
         {
             ViewBag.RoleExistError = "User is already in the selected role.";
-            //return RedirectToAction("AssignRole");
         }
         else
         {
-            var result = await _userManager.AddToRoleAsync(user, role.ToString());
-            if (result.Succeeded)
+            var result = await _mediator.Send(new AssignUserToRoleCommand());
+            if (result)
             {
                 ViewBag.RoleAssigned = "Role assigned to User";
                 return RedirectToAction("AssignRole");
@@ -153,23 +143,24 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> RemoveUserFromRole(int userId, string roleId)
+    public async Task<IActionResult> RemoveUserFromRole(string userId, string roleId)
     {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-        var role = await _roleManager.FindByIdAsync(roleId);
+        var user = await _mediator.Send(new GetUserDetailsQuery(userId));
+        var role = await _mediator.Send(new GetRoleByIdQuery(roleId));
 
         if (user == null || role == null)
         {
             return BadRequest();
         }
 
-        var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+        var result = await _mediator.Send(new UpdateUserRolesCommand());
 
-        if (result.Succeeded)
+        if (result == 1)
         {
-            return RedirectToAction("AssignRole");
+            ViewBag.RoleAssigned = "Update user roles succeded!";
+            //return RedirectToAction("AssignRole");
         }
-
+        ViewBag.RoleExistError = "unsuccessfull!!";
         return RedirectToAction("AssignRole");
     }
 }

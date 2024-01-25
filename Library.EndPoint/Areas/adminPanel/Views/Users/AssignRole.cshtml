@@ -1,8 +1,8 @@
-﻿@using LibIdentity.Domain.RoleAgg;
+﻿@using Identity.Domain.Entities.Role
 @using Library.EndPoint.Areas.adminPanel.Models;
 @using Microsoft.AspNetCore.Identity;
 @model UserRoleViewModel
-@inject RoleManager<RoleIdentity> _roleManager
+@inject RoleManager<ApplicationRole> _roleManager
 @{
     ViewData["Title"] = "Assign Role";
 }
@@ -60,7 +60,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in Model.Users)
+                        @foreach (var user in Model.UserRoles)
                         {
                             @if (!user.RoleName.Contains("member") || user.RoleName.Count > 1)
                             {

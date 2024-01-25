@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Identity.Persistance\Identity.Persistance.csproj" />
     <ProjectReference Include="..\LibBook.Infrastructure\LibBook.Infrastructure.csproj" />
     <ProjectReference Include="..\LibInv.Domain\LibInventory.Domain.csproj" />
   </ItemGroup>

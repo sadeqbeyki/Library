@@ -1,7 +1,7 @@
 ﻿using AppFramework.Application;
 using AppFramework.Domain;
+using Identity.Persistance;
 using LibBook.Infrastructure;
-using LibIdentity.Infrastructure;
 using LibInventory.Domain.InventoryAgg;
 using LibInventory.DomainContracts.Inventory;
 
@@ -11,9 +11,9 @@ namespace LibInventory.Infrastructure.Repositories
     {
         private readonly InventoryDbContext _inventoryDbContext;
         private readonly BookDbContext _bookDbContext;
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppIdentityDbContext _identityDbContext;
 
-        public InventoryRepository(InventoryDbContext inventoryDbContext, BookDbContext bookDbContext, IdentityDbContext identityDbContext) : base(inventoryDbContext)
+        public InventoryRepository(InventoryDbContext inventoryDbContext, BookDbContext bookDbContext, AppIdentityDbContext identityDbContext) : base(inventoryDbContext)
         {
             _inventoryDbContext = inventoryDbContext;
             _bookDbContext = bookDbContext;

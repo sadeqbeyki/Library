@@ -1,5 +1,5 @@
-﻿using LibBook.Domain.Services;
-using LibIdentity.DomainContracts.UserContracts;
+﻿using Identity.Application.Interfaces;
+using LibBook.Domain.Services;
 
 namespace LibBook.Infrastructure.AccountACL;
 
@@ -12,14 +12,14 @@ public class LibraryIdentityAcl : ILibraryIdentityAcl
         _userService = userService;
     }
 
-    public (string name, string email) GetAccountBy(int id)
+    public async Task<(string name, string email)> GetAccountBy(string id, CancellationToken cancellationToken)
     {
-        var account = _userService.GetAccountBy(id);
+        var account = await _userService.GetUserByIdAsync(id, cancellationToken);
         return (account.FirstName, account.Email);
     }
     public async Task<string> GetUserName(string id)
     {
-        var userName = await _userService.GetUserNameByIdAsync(id);
+        var userName = await _userService.GetUserNameAsync(id);
         return userName;
     }
 }

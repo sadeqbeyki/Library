@@ -1,11 +1,7 @@
-﻿using AutoMapper.Execution;
+﻿using Identity.Domain.Entities.User;
 using LibBook.DomainContracts.Borrow;
-using LibIdentity.Domain.UserAgg;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Versioning;
-using Org.BouncyCastle.Utilities;
 using X.PagedList;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
@@ -14,11 +10,11 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 public class HomeController : Controller
 {
     private readonly ILoanService _loanService;
-    private readonly UserManager<UserIdentity> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    private readonly SignInManager<UserIdentity> _signInManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
     public HomeController(ILoanService loanService,
-        UserManager<UserIdentity> userManager)
+        UserManager<ApplicationUser> userManager)
     {
         _loanService = loanService;
         _userManager = userManager;

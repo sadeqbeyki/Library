@@ -1,6 +1,4 @@
 ﻿using AppFramework.Application;
-using LibIdentity.Domain.UserAgg;
-using LibIdentity.DomainContracts.Auth;
 using LibInventory.Domain.InventoryAgg;
 using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Http;
@@ -64,7 +62,7 @@ namespace LibInventory.ApplicationServices
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
             //string operatorId = _authHelper.CurrentAccountId();
-            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var operatorId = GetCurrentOperatorId();
             inventory.Increase(command.Count, operatorId, command.Description);
             _inventoryRepository.SaveChanges();
             return operationResult.Succeeded();
@@ -80,7 +78,7 @@ namespace LibInventory.ApplicationServices
 
             try
             {
-                var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var operatorId = GetCurrentOperatorId();
                 inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
 
                 _inventoryRepository.SaveChanges();
@@ -96,7 +94,7 @@ namespace LibInventory.ApplicationServices
         public OperationResult Decrease(List<DecreaseInventory> command)
         {
             var operation = new OperationResult();
-            var operatorId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var operatorId = GetCurrentOperatorId();
             foreach (var item in command)
             {
                 var inventory = _inventoryRepository.GetBy(item.BookId);
@@ -191,7 +189,9 @@ namespace LibInventory.ApplicationServices
 
         private string GetCurrentOperatorId()
         {
-            return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            //return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

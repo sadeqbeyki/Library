@@ -14,4 +14,10 @@
     <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PasswordAgg\" />
+    <Folder Include="RoleAgg\" />
+    <Folder Include="UserAgg\" />
+  </ItemGroup>
+
 </Project>

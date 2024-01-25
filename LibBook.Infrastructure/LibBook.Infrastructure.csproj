@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibBook.Domain\LibBook.Domain.csproj" />
-    <ProjectReference Include="..\LibId.Infrastructure\LibIdentity.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

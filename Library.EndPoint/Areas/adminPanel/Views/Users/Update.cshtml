@@ -1,5 +1,5 @@
-﻿@using LibIdentity.DomainContracts.UserContracts;
-@model UpdateUserViewModel
+﻿@using Identity.Application.DTOs.User
+@model UpdateUserDto
 
 @{
     ViewData["Title"] = "Update";
@@ -34,9 +34,9 @@
             <div class="input-group mt-3">
                 <span class="input-group-text">Password and Confirm</span>
                 <input type="password" asp-for="Password" class="form-control" placeholder="Password" maxlength="100" required>
-                <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" maxlength="100" required>
+                <input type="password" asp-for="ConfirmationPassword" class="form-control" placeholder="Confirm Password" maxlength="100" required>
                 <span asp-validation-for="Password" class="text-danger"></span>
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                <span asp-validation-for="ConfirmationPassword" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" asp-for="Email" class="form-label"></label>

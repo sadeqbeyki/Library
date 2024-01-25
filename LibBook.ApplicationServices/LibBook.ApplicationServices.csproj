@@ -16,7 +16,6 @@
     <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
     <ProjectReference Include="..\LibBook.DomainContracts\LibBook.DomainContracts.csproj" />
     <ProjectReference Include="..\LibBook.Domain\LibBook.Domain.csproj" />
-    <ProjectReference Include="..\LibId.DomainContracts\LibIdentity.DomainContracts.csproj" />
   </ItemGroup>
 
 </Project>

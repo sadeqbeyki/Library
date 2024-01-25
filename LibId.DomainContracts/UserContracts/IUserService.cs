@@ -1,5 +1,4 @@
-﻿using LibIdentity.Domain.UserAgg;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace LibIdentity.DomainContracts.UserContracts
 {

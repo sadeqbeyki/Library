@@ -56,7 +56,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -70,12 +70,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
+    <ProjectReference Include="..\Identity.Services\Identity.Services.csproj" />
     <ProjectReference Include="..\LibBook.Configurations\LibBook.Configurations.csproj" />
     <ProjectReference Include="..\LibBook.DomainContracts\LibBook.DomainContracts.csproj" />
-    <ProjectReference Include="..\LibId.ApplicationServices\LibIdentity.ApplicationServices.csproj" />
-    <ProjectReference Include="..\LibId.DomainContracts\LibIdentity.DomainContracts.csproj" />
-    <ProjectReference Include="..\LibId.Infrastructure\LibIdentity.Infrastructure.csproj" />
-    <ProjectReference Include="..\LibIdentityConfiguration\LibIdentityConfiguration.csproj" />
     <ProjectReference Include="..\LibInv.Configuration\LibInventory.Configuration.csproj" />
     <ProjectReference Include="..\LibInv.DomainContracts\LibInventory.DomainContracts.csproj" />
   </ItemGroup>

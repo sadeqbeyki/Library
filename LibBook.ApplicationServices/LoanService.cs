@@ -303,7 +303,7 @@ public class LoanService : ILoanService
 
     private string GetCurrentOperatorId()
     {
-        return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier).Value;
     }
 
 
