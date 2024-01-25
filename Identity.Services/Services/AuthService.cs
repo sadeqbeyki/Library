@@ -10,7 +10,6 @@ using Identity.Application.Common.Exceptions;
 using Identity.Application.DTOs.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Policy;
 
 namespace Identity.Services.Services;
 
@@ -128,6 +127,11 @@ public class AuthService : IAuthService
         return jwtToken ?? response.ToString();
     }
 
+    public async Task<string> LogOutAsync(string returnUrl)
+    {
+        await _signInManager.SignOutAsync();
+        return returnUrl;
+    }
 
     /// <summary>
     /// Generate JWT token for user

@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Query\Auth\" />
-  </ItemGroup>
-
 </Project>

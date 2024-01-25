@@ -12,5 +12,7 @@ public interface IAuthService
     //--
     Task<JwtTokenDto> SigninUserAsync(LoginUserDto request);
     Task<string> Login(LoginUserDto model);
+    Task<string> LogOutAsync(string returnUrl);
+
     Task<JwtTokenDto> GetJwtSecurityTokenAsync(ApplicationUser user);
 }

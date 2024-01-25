@@ -276,5 +276,7 @@ public class UserService : IUserService
         var result = await _userManager.ConfirmEmailAsync(user, token);
         return result.Succeeded ? nameof(ConfirmEmail) : "Error";
     }
+
+
     #endregion
 }
