@@ -169,7 +169,7 @@
         <span class="fs-5 fw-semibold">Library II</span>
     </a>
     <ul class="list-unstyled ps-0">
-        @if (User.IsInRole("admin") || User.IsInRole("manager"))
+        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
         {
             <li class="mb-1">
                 <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
@@ -261,7 +261,7 @@
                 </div>
             </li>
         }
-        @if (User.IsInRole("admin"))
+        @if (User.IsInRole("Admin"))
         {
             <li class="border-top my-3"></li>
             <li class="mb-1">
@@ -340,7 +340,7 @@
                         Member Borrows
                     </a>
                 </li>
-                @if (User.IsInRole("admin") || User.IsInRole("manager"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
                     <li>
                         <a asp-area="adminPanel" asp-controller="Home" asp-action="EmployeeBorrows"

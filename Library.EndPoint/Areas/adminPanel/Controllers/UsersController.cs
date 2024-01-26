@@ -1,4 +1,5 @@
 ﻿using AppFramework.Infrastructure;
+using Identity.Application.DTOs.User;
 using Identity.Application.Features.Command.User;
 using Identity.Application.Features.Command.UserRole;
 using Identity.Application.Features.Query.Role;
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
-[Authorize(Roles = "admin")]
+[Authorize(Roles = "Admin")]
 
 public class UsersController : Controller
 {
@@ -25,7 +26,7 @@ public class UsersController : Controller
     public async Task<ActionResult> Index()
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
-        return View(users);
+        return View();
     }
 
     [HttpGet]
@@ -35,32 +36,16 @@ public class UsersController : Controller
         return View(user);
     }
 
-    public IActionResult Create()
+    public IActionResult Create(string returnUrl)
     {
-        return View();
+        return View(new CreateUserDto { ReturnUrl = returnUrl });
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateUserCommand command)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateUser(CreateUserDto model)
     {
-        if (!ModelState.IsValid)
-        {
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                var errorMessage = error.ErrorMessage;
-                var exception = error.Exception;
-            }
-        }
-        var result = await _mediator.Send(command);
-
-        //if (!result.Succeeded)
-        //{
-        //    foreach (var error in result.Errors)
-        //    {
-        //        ModelState.AddModelError(string.Empty, error.Description);
-        //    }
-        //    return View(model);
-        //}
+        var result = await _mediator.Send(new CreateUserCommand(model));
         return RedirectToAction("Index", result);
     }
 
@@ -125,7 +110,7 @@ public class UsersController : Controller
             return BadRequest();
         }
 
-        var isInRole = await _mediator.Send(new IsInRoleCommand(user.UserId, role.Id));
+        var isInRole = await _mediator.Send(new IsInRoleCommand(user.Id, role.Id));
         if (isInRole)
         {
             ViewBag.RoleExistError = "User is already in the selected role.";

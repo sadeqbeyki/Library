@@ -62,7 +62,7 @@
                     <tbody>
                         @foreach (var user in Model.UserRoles)
                         {
-                            @if (!user.RoleName.Contains("member") || user.RoleName.Count > 1)
+                            @if (!user.RoleName.Contains("Member") || user.RoleName.Count > 1)
                             {
                                 <tr>
                                     <td>@user.UserName</td>

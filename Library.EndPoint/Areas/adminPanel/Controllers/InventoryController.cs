@@ -10,7 +10,7 @@ using Library.EndPoint.Tools;
 using Org.BouncyCastle.Utilities;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
-[Authorize(Roles = "admin, manager")]
+[Authorize(Roles = "Admin, Manager")]
 [Area("adminPanel")]
 public class InventoryController : Controller
 {

@@ -16,20 +16,23 @@ public class LoanService : ILoanService
     private readonly IMapper _mapper;
 
     private readonly IBookRepository _bookRepository;
-
     private readonly ILibraryInventoryAcl _inventoryAcl;
     private readonly ILibraryIdentityAcl _IdentityAcl;
-    private readonly IHttpContextAccessor _contextAccessor;
 
 
-    public LoanService(ILoanRepository loanRepository, IMapper mapper, ILibraryInventoryAcl inventoryAcl,
-        IHttpContextAccessor contextAccessor, ILibraryIdentityAcl identityAcl, IBookRepository bookRepository)
+
+    public LoanService(
+         ILoanRepository loanRepository,
+         IMapper mapper,
+
+         ILibraryInventoryAcl inventoryAcl,
+         ILibraryIdentityAcl identityAcl,
+         IBookRepository bookRepository)
     {
         _loanRepository = loanRepository;
         _mapper = mapper;
 
         _inventoryAcl = inventoryAcl;
-        _contextAccessor = contextAccessor;
         _IdentityAcl = identityAcl;
         _bookRepository = bookRepository;
     }
@@ -40,10 +43,11 @@ public class LoanService : ILoanService
         OperationResult operationResult = new();
         if (model.BookId <= 0 || model.MemberId == null)
             return operationResult.Failed(ApplicationMessages.ModelIsNull);
+
         Borrow borrow = new(
             model.BookId,
             model.MemberId,
-            GetCurrentOperatorId(),
+            _IdentityAcl.GetCurrentUserId(),
             model.IdealReturnDate,
             model.ReturnEmployeeId,
             model.ReturnDate,
@@ -258,7 +262,7 @@ public class LoanService : ILoanService
         if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-        lend.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, GetCurrentOperatorId(), DateTime.Now, dto.Description);
+        lend.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, _IdentityAcl.GetCurrentUserId(), DateTime.Now, dto.Description);
 
         if (ReturnLoan(dto.Id).IsSucceeded)
         {
@@ -300,11 +304,4 @@ public class LoanService : ILoanService
         _loanRepository.SoftDelete(borrow);
     }
     #endregion
-
-    private string GetCurrentOperatorId()
-    {
-        return _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-    }
-
-
 }

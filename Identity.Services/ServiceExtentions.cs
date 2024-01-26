@@ -8,10 +8,12 @@ using LibIdentity.DomainContracts.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 namespace Identity.Services;
@@ -47,12 +49,13 @@ public static class ServiceExtentions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
+        
 
+        //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
         services.AddDbContext<AppIdentityDbContext>(c =>
             c.UseSqlServer(configuration.GetConnectionString("AAA")));
 
-        //services.AddScoped<IIdentityService, IdentityService>();
     }
 
     public static void AddJwtAuth(this IServiceCollection services, IConfiguration configuration)

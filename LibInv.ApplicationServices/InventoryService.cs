@@ -1,4 +1,5 @@
 ﻿using AppFramework.Application;
+using LibBook.Domain.Services;
 using LibInventory.Domain.InventoryAgg;
 using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Http;
@@ -9,12 +10,11 @@ namespace LibInventory.ApplicationServices
     public class InventoryService : IInventoryService
     {
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IHttpContextAccessor _contextAccessor;
-
-        public InventoryService(IInventoryRepository inventoryRepository, IHttpContextAccessor contextAccessor)
+        private readonly ILibraryIdentityAcl _identityAcl;
+        public InventoryService(IInventoryRepository inventoryRepository, ILibraryIdentityAcl identityAcl)
         {
             _inventoryRepository = inventoryRepository;
-            _contextAccessor = contextAccessor;
+            _identityAcl = identityAcl;
         }
 
         public async Task<OperationResult> Create(CreateInventory command)
@@ -61,8 +61,7 @@ namespace LibInventory.ApplicationServices
             if (inventory == null)
                 return operationResult.Failed(ApplicationMessages.RecordNotFound);
 
-            //string operatorId = _authHelper.CurrentAccountId();
-            var operatorId = GetCurrentOperatorId();
+            var operatorId = _identityAcl.GetCurrentUserId();
             inventory.Increase(command.Count, operatorId, command.Description);
             _inventoryRepository.SaveChanges();
             return operationResult.Succeeded();
@@ -78,7 +77,7 @@ namespace LibInventory.ApplicationServices
 
             try
             {
-                var operatorId = GetCurrentOperatorId();
+                var operatorId = _identityAcl.GetCurrentUserId();
                 inventory.Decrease(command.Count, operatorId, command.Description, command.LendId);
 
                 _inventoryRepository.SaveChanges();
@@ -94,7 +93,7 @@ namespace LibInventory.ApplicationServices
         public OperationResult Decrease(List<DecreaseInventory> command)
         {
             var operation = new OperationResult();
-            var operatorId = GetCurrentOperatorId();
+            var operatorId = _identityAcl.GetCurrentUserId();
             foreach (var item in command)
             {
                 var inventory = _inventoryRepository.GetBy(item.BookId);
@@ -138,7 +137,7 @@ namespace LibInventory.ApplicationServices
             try
             {
                 inventory.IsLoaned = false;
-                inventory.Return(count, GetCurrentOperatorId(), description, lendId);
+                inventory.Return(count, _identityAcl.GetCurrentUserId(), description, lendId);
                 return operation.Succeeded();
             }
             catch
@@ -178,20 +177,13 @@ namespace LibInventory.ApplicationServices
             try
             {
                 inventory.IsLoaned = true;
-                inventory.Decrease(count, GetCurrentOperatorId(), description, lendId);
+                inventory.Decrease(count, _identityAcl.GetCurrentUserId(), description, lendId);
                 return operation.Succeeded();
             }
             catch /*(InvalidOperationException ex)*/
             {
                 return operation.Failed(ApplicationMessages.TheBookIsNotInStock);
             }
-        }
-
-        private string GetCurrentOperatorId()
-        {
-            return _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            //return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

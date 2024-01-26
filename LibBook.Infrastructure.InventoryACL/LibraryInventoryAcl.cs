@@ -1,4 +1,5 @@
-﻿using LibBook.Domain.BorrowAgg;
+﻿using Identity.Application.Interfaces;
+using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
 using LibInventory.DomainContracts.Inventory;
 
@@ -7,17 +8,17 @@ namespace LibBook.Infrastructure.InventoryACL;
 public class LibraryInventoryAcl : ILibraryInventoryAcl
 {
     private readonly IInventoryService _inventoryService;
-    private readonly ILibraryIdentityAcl _IdentityAcl;
+    private readonly IUserService _userService;
 
-    public LibraryInventoryAcl(IInventoryService inventoryService, ILibraryIdentityAcl identityAcl)
+    public LibraryInventoryAcl(IInventoryService inventoryService, IUserService userService)
     {
         _inventoryService = inventoryService;
-        _IdentityAcl = identityAcl;
+        _userService = userService;
     }
 
     public bool LoanFromInventory(Borrow lend)
     {
-        string member = _IdentityAcl.GetUserName(lend.MemberID).Result;
+        string member = _userService.GetUserNameAsync(lend.MemberID).Result;
         var item = new DecreaseInventory(lend.BookId, 1, $"Loaned by '{member}'. " + lend.Description, lend.Id);
         if (_inventoryService.Lending(item).IsSucceeded == true)
         {
@@ -27,7 +28,7 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
     }
     public bool ReturnToInventory(Borrow lend)
     {
-        string member = _IdentityAcl.GetUserName(lend.MemberID).Result;
+        string member = _userService.GetUserNameAsync(lend.MemberID).Result;
         var item = new ReturnBook(lend.BookId, 1, $"Returned by '{member}'. " + lend.Description, lend.Id);
         if (_inventoryService.Returning(item).IsSucceeded == true)
         {

@@ -1,6 +1,7 @@
 ﻿using Identity.Application.DTOs.User;
 using Identity.Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Command.User;
 
@@ -19,3 +20,4 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
         return result.isSucceed ? 1 : 0;
     }
 }
+

@@ -6,9 +6,9 @@ using LibBook.DomainContracts.Borrow;
 
 namespace LibBook.Domain;
 
-public class MappingProfile : Profile
+public class BookMapProfile : Profile
 {
-    public MappingProfile()
+    public BookMapProfile()
     {
         CreateMap<BookCategoryDto, BookCategory>().ReverseMap();
 

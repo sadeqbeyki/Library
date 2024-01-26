@@ -22,4 +22,10 @@ public class LibraryIdentityAcl : ILibraryIdentityAcl
         var userName = await _userService.GetUserNameAsync(id);
         return userName;
     }
+
+    public string GetCurrentUserId()
+    {
+        var userId = _userService.GetCurrentUserId();
+        return userId;
+    }
 }

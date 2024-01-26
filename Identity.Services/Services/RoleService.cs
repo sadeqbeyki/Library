@@ -72,7 +72,7 @@ public class RoleService : IRoleService
         var role = await _roleManager.FindByIdAsync(id)
             ?? throw new NotFoundException("Role not found");
 
-        if (role.Name == "admin")
+        if (role.Name == "Admin")
         {
             throw new BadRequestException("You can not delete Administrator Role");
         }

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
-[Authorize(Roles = "admin, manager")]
+[Authorize(Roles = "Admin, Manager")]
 public class BooksController : Controller
 {
     public List<BookViewModel> Books = new();

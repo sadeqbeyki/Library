@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
-[Authorize(Roles = "admin, manager")]
+[Authorize(Roles = "Admin, Manager")]
 public class TranslatorsController : Controller
 {
     private readonly ITranslatorService _translatorService;

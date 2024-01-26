@@ -1,5 +1,4 @@
 ﻿using System.Text;
-
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
@@ -16,16 +15,15 @@ namespace Identity.Services.Services;
 public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
-    private readonly IAuthService _authService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
 
-    public AuthService(IConfiguration configuration, IAuthService authService,
-        UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public AuthService(IConfiguration configuration, 
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager)
     {
         _configuration = configuration;
-        _authService = authService;
         _userManager = userManager;
         _signInManager = signInManager;
     }
@@ -120,8 +118,8 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
             throw new BadRequestException("Login failed");
 
-        var jwtToken = _authService.GenerateJWTAuthetication(user);
-        var validateToken = _authService.ValidateToken(jwtToken);
+        var jwtToken = GenerateJWTAuthetication(user);
+        var validateToken = ValidateToken(jwtToken);
 
         var response = new UnauthorizedResult();
         return jwtToken ?? response.ToString();
@@ -179,7 +177,7 @@ public class AuthService : IAuthService
                 new(ClaimTypes.Role, rolesOfUser.FirstOrDefault() ?? "Member"),
                 new(ClaimTypes.Name, user.PhoneNumber)
 
-                //new Claim("user_role", "admin")
+                //new Claim("user_role", "Admin")
             };
 
 

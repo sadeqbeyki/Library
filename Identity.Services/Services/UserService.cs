@@ -9,28 +9,32 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
-using LibIdentity.DomainContracts.Auth;
+
 
 namespace Identity.Services.Services;
 
-public class UserService : IUserService
+public class UserService : ServiceBase<UserService>, IUserService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IAuthService _authService;
+    private new readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
-    private readonly IEmailService _email;
     private readonly IConfiguration _configuration;
-
     private readonly IDistributedCache _distributedCache;
+    private readonly IEmailService _emailService;
 
-    public UserService(UserManager<ApplicationUser> userManager, IMapper mapper, IEmailService email, IDistributedCache distributedCache, IConfiguration configuration, IAuthService authService)
+
+    public UserService(
+        UserManager<ApplicationUser> userManager,
+        IMapper mapper,
+        IDistributedCache distributedCache,
+        IConfiguration configuration,
+        IServiceProvider serviceProvider,
+        IEmailService emailService) : base(serviceProvider)
     {
         _userManager = userManager;
         _mapper = mapper;
-        _email = email;
         _distributedCache = distributedCache;
         _configuration = configuration;
-        _authService = authService;
+        _emailService = emailService;
     }
     #region Get
     public async Task<UserDetailsDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
@@ -125,7 +129,8 @@ public class UserService : IUserService
 
     public async Task<IdentityResult> Register(CreateUserDto model)
     {
-        var existingUser = await _userManager.FindByEmailAsync(model.Email);
+        var existingUser = await _userManager.FindByEmailAsync(model.Email)
+            ?? await _userManager.FindByNameAsync(model.UserName);
         if (existingUser != null)
         {
             var error = new IdentityError
@@ -138,44 +143,10 @@ public class UserService : IUserService
         //hash token
         //string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
+        //create user
         var userMap = _mapper.Map<ApplicationUser>(model);
+        userMap.Id = Guid.NewGuid().ToString();
         var result = await _userManager.CreateAsync(userMap, model.Password);
-
-        //add to role
-        await _userManager.AddToRoleAsync(userMap, "member");
-
-        //confirmation email 
-        var emailConfirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(userMap);
-        var confirmationLink = (nameof(ConfirmEmail), "Account", new { emailConfirmToken, email = userMap.Email });
-
-        EmailModel message = new()
-        {
-            FromName = "Library Manager",
-            FromAddress = "info@library.com",
-            ToName = userMap.UserName,
-            ToAddress = userMap.Email,
-            Subject = "Confirm Your Registration",
-            Content = "Please click the following link to confirm your registration: <a href=\"" + confirmationLink + "\">Confirm</a>"
-        };
-        _email.Send(message);
-
-
-        #region jwt 
-        // Generate JWT token
-        var token = _authService.GenerateJWTAuthetication(userMap);
-        var validUserName = _authService.ValidateToken(token);
-        // Set JWT token in the response
-        //Response.Headers.Add("Authorization", "Bearer " + token);
-        #endregion
-
-        return result;
-    }
-
-    public async Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserDto userDto)
-    {
-        var user = _mapper.Map<ApplicationUser>(userDto);
-
-        var result = await _userManager.CreateAsync(user, userDto.Password);
 
         if (!result.Succeeded)
         {
@@ -183,13 +154,67 @@ public class UserService : IUserService
             //throw new ValidationException(string.Join("\n", errors));
         }
 
-        if (userDto.Roles == null
-            || !userDto.Roles.Any()
-            || userDto.Roles.All(string.IsNullOrWhiteSpace)
-            || userDto.Roles.Contains("string"))
-            userDto.Roles = new List<string> { "Member" };
+        //add to role
+        if (model.Roles == null
+            || !model.Roles.Any()
+            || model.Roles.All(string.IsNullOrWhiteSpace)
+            || model.Roles.Contains("string"))
+            model.Roles = new List<string> { "Member"};
 
-        var addUserRole = await _userManager.AddToRolesAsync(user, userDto.Roles);
+        var addUserRole = await _userManager.AddToRolesAsync(userMap, model.Roles);
+        if (!addUserRole.Succeeded)
+        {
+            var errors = addUserRole.Errors.Select(e => e.Description);
+            //throw new ValidationException(string.Join("\n", errors));
+        }
+
+        //confirmation email 
+        bool sendConfirmMail = SendConfirmationLink(userMap);
+
+        #region jwt 
+        // Generate JWT token
+        //var token = _authService.GenerateJWTAuthetication(userMap);
+        //var validUserName = _authService.ValidateToken(token);
+        // Set JWT token in the response
+        //Response.Headers.Add("Authorization", "Bearer " + token);
+        #endregion
+
+        return result;
+    }
+
+    public async Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserDto model)
+    {
+        var existingUser = await _userManager.FindByEmailAsync(model.Email)
+            ?? await _userManager.FindByNameAsync(model.UserName);
+        if (existingUser != null)
+        {
+            var error = new IdentityError
+            {
+                Code = "Duplicate Email",
+                Description = "This email already exists on the website."
+            };
+            return (isSucceed: false, userId: existingUser.Id);
+        }
+        var user = _mapper.Map<ApplicationUser>(model);
+        user.Id = Guid.NewGuid().ToString();
+        var result = await _userManager.CreateAsync(user, model.Password);
+
+        if (!result.Succeeded)
+        {
+            var errors = result.Errors.Select(e => e.Description);
+            //throw new ValidationException(string.Join("\n", errors));
+        }
+
+        //confirm user
+        user.EmailConfirmed = true;
+
+        if (model.Roles == null
+            || !model.Roles.Any()
+            || model.Roles.All(string.IsNullOrWhiteSpace)
+            || model.Roles.Contains("string"))
+            model.Roles = new List<string> { "Member"};
+
+        var addUserRole = await _userManager.AddToRolesAsync(user, model.Roles);
         if (!addUserRole.Succeeded)
         {
             var errors = addUserRole.Errors.Select(e => e.Description);
@@ -221,7 +246,7 @@ public class UserService : IUserService
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
             ?? throw new NotFoundException("User not found");
 
-        var isUserAdmin = await _userManager.IsInRoleAsync(user, "admin");
+        var isUserAdmin = await _userManager.IsInRoleAsync(user, "Admin");
         if (isUserAdmin)
         {
             throw new BadRequestException("You can not delete system or admin user");
@@ -268,6 +293,26 @@ public class UserService : IUserService
     #endregion
 
     #region extention method
+    private bool SendConfirmationLink(ApplicationUser user)
+    {
+        var emailConfirmToken = _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var scheme = _httpContextAccessor.HttpContext?.Request.Scheme ?? "https";
+        var confirmationLink = /*Url.Action*/(nameof(ConfirmEmail), "Account", new { emailConfirmToken, email = user.Email }, scheme);
+
+        EmailModel message = new()
+        {
+            FromName = "Library Manager",
+            FromAddress = "info@library.com",
+            ToName = user.UserName,
+            ToAddress = user.Email,
+            Subject = "Confirm Your Registration",
+            Content = "Please click the following link to confirm your registration: <a href=\"" + confirmationLink + "\">Confirm</a>"
+        };
+        _emailService.Send(message);
+        return true;
+    }
+
     private async Task<string> ConfirmEmail(string token, string email)
     {
         var user = await _userManager.FindByEmailAsync(email)
@@ -276,7 +321,5 @@ public class UserService : IUserService
         var result = await _userManager.ConfirmEmailAsync(user, token);
         return result.Succeeded ? nameof(ConfirmEmail) : "Error";
     }
-
-
     #endregion
 }

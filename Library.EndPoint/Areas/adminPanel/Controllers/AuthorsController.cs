@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
-[Authorize(Roles = "admin, manager")]
+[Authorize(Roles = "Admin, Manager")]
 public class AuthorsController : Controller
 {
     private readonly IAuthorService _authorService;

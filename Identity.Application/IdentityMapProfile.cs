@@ -4,12 +4,13 @@ using Identity.Application.DTOs.User;
 using Identity.Domain.Entities.Role;
 using Identity.Domain.Entities.User;
 
-namespace LibIdentity.DomainContracts;
+namespace Identity.Application;
 
-public class MappingProfile : Profile
+public class IdentityMapProfile : Profile
 {
-    public MappingProfile()
+    public IdentityMapProfile()
     {
+        CreateMap<UserDetailsDto, ApplicationUser>().ReverseMap();
         CreateMap<CreateUserDto, ApplicationUser>().ReverseMap();
         CreateMap<UpdateUserDto, ApplicationUser>().ReverseMap();
         CreateMap<UserRolesDto, ApplicationUser>().ReverseMap();

@@ -48,6 +48,7 @@ public class AccountController : Controller
         }
         return response;
     }
+    [HttpGet]
     public IActionResult Register(string returnUrl)
     {
         return View(new CreateUserDto { ReturnUrl = returnUrl });
@@ -56,13 +57,12 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(CreateUserDto model)
     {
-        if (!ModelState.IsValid)
-        {
-            return Redirect(model?.ReturnUrl ?? "/");
-        }
+        //if (!ModelState.IsValid)
+        //{
+        //    return Redirect(model?.ReturnUrl ?? "/");
+        //}
 
-        CreateUserCommand command = new(model);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new RegisterUserCommand(model));
         return RedirectToAction(nameof(SuccessRegistration));
     }
 
@@ -84,4 +84,5 @@ public class AccountController : Controller
     {
         return View();
     }
+
 }

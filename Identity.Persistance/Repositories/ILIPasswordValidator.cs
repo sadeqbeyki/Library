@@ -6,7 +6,7 @@ namespace Identity.Persistance.Repositories
     //Interface  Password Validator
     public class ILIPasswordValidator : IPasswordValidator<ApplicationUser>
     {
-        public Task<IdentityResult> ValidateAsync(UserManager<ApplicationUser> manager, ApplicationUser user, string password)
+        public Task<IdentityResult> ValidateAsync(UserManager<ApplicationUser> userManager, ApplicationUser user, string password)
         {
             List<IdentityError> errors = new();
             if (user.UserName == password || user.UserName.Contains(password))

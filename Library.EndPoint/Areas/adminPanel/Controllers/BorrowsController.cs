@@ -10,7 +10,7 @@ using X.PagedList;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
-[Authorize(Roles = "admin, manager")]
+[Authorize(Roles = "Admin, Manager")]
 public class BorrowsController : Controller
 {
     private readonly ILoanService _loanService;

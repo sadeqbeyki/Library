@@ -1,10 +1,11 @@
 ﻿using Identity.Application.DTOs.User;
+using Identity.Application.Interfaces.Base;
 using Identity.Domain.Entities.User;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Interfaces;
 
-public interface IUserService
+public interface IUserService : IServiceBase
 {
     //User
     Task<IdentityResult> Register(CreateUserDto model);

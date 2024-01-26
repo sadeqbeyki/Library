@@ -8,20 +8,20 @@ public record GetAllUsersQuery : IRequest<List<UserDetailsDto>>;
 
 public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<UserDetailsDto>>
 {
-    private readonly IUserService _iUserService;
+    private readonly IUserService _userService;
 
     public GetAllUsersQueryHandler(IUserService iUserService)
     {
-        _iUserService = iUserService;
+        _userService = iUserService;
     }
 
     public async Task<List<UserDetailsDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _iUserService.GetAllUsersAsync();
+        List<UserDetailsDto> users = await _userService.GetAllUsersAsync();
 
         foreach (var user in users)
         {
-            user.Roles = await _iUserService.GetUserRolesAsync(user.UserId);
+            user.Roles = await _userService.GetUserRolesAsync(user.Id);
         }
         return users;
     }

@@ -1,13 +1,13 @@
 using AppFramework.Application.Email;
-using LibBook.Domain;
 using LibBook.Configurations;
 using LibInventory.Configuration;
 using Identity.Services;
+using Identity.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(IdentityMapProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //builder.Services.AddControllersWithViews();
@@ -29,16 +29,18 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: fals
 //Jwt configuration ends here
 #endregion end token
 
-#region Email
-builder.Services.AddTransient<IEmailService, EmailService>();
-#endregion
-
 
 #region DependencyInjection
 
-builder.Services.AddInventoryInfrastructure(builder.Configuration);
+
+builder.Services.AddTransient<IEmailService, EmailService>();
+
+builder.Services.AddIdentityApplication();
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
+
+builder.Services.AddInventoryInfrastructure(builder.Configuration);
 builder.Services.AddBookInfrastructure(builder.Configuration);
+
 
 #endregion
 

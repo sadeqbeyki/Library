@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
-[Authorize(Roles = "admin")]
+[Authorize(Roles = "Admin")]
 public class RolesController : Controller
 {
     private readonly IMediator _mediator;

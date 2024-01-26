@@ -1,20 +1,17 @@
-﻿using Identity.Application.Common.Const;
+﻿using AppFramework.Application.Email;
+using Identity.Application.Common.Const;
 using Identity.Application.Common.Exceptions;
 using Identity.Application.Interfaces.Base;
 using Identity.Domain.Entities.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Identity.Services.Services;
 
-/// <summary>
-///   Base class for Business Logic
-/// </summary>
 public class ServiceBase<TService> : IServiceBase where TService : class
 {
-    #region Fields & Ctor
-
     protected readonly IHttpContextAccessor _httpContextAccessor;
     protected readonly UserManager<ApplicationUser> _userManager;
 
@@ -23,18 +20,20 @@ public class ServiceBase<TService> : IServiceBase where TService : class
     {
         _httpContextAccessor = (IHttpContextAccessor)serviceProvider.GetService(typeof(IHttpContextAccessor));
         _userManager = (UserManager<ApplicationUser>)serviceProvider.GetService(typeof(UserManager<ApplicationUser>));
+
     }
 
-    #endregion
-
-    #region Current User related
 
     public string GetCurrentUserId()
     {
         ClaimsIdentity identity = _httpContextAccessor?.HttpContext?.User?.Identity as ClaimsIdentity;
         string userId = identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return userId ?? string.Empty;
+
+    //    return _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+    //    //return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
+
 
     public async Task<ApplicationUser> GetCurrentUser()
     {
@@ -63,5 +62,6 @@ public class ServiceBase<TService> : IServiceBase where TService : class
         }
         throw new NotFoundException("not found");
     }
-    #endregion
+
+ 
 }
