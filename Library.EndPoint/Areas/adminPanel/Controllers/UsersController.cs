@@ -122,11 +122,16 @@ public class UsersController : Controller
         }
         else
         {
-            var result = await _mediator.Send(new AssignUserToRoleCommand());
+            AssignRoleDto assignRoleDto = new()
+            {
+                Username = user.UserName,
+                Roles = new List<string> { role.Name }
+            };
+            var result = await _mediator.Send(new AssignUserToRoleCommand(assignRoleDto));
             if (result)
             {
                 ViewBag.RoleAssigned = "Role assigned to User";
-                return RedirectToAction("AssignRole");
+                //return RedirectToAction("AssignRole");
             }
         }
         return RedirectToAction("AssignRole");
