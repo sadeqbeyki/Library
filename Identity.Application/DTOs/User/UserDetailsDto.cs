@@ -27,12 +27,16 @@ public class UserDetailsDto
     [StringLength(40, MinimumLength = 2, ErrorMessage = "StringMinMaxLength")]
     public string LastName { get; set; } = string.Empty;
 
+    [MaxLength(50)]
+    public string BirthDate { get; set; }
+
     [Required(ErrorMessage = "RequiredField", AllowEmptyStrings = false)]
     [EmailAddress(ErrorMessage = "InvalidMailId")]
     [Display(Name = "Email Address")]
     [DataType(DataType.EmailAddress)]
     [StringLength(128, MinimumLength = 8, ErrorMessage = "StringMinMaxLength")]
     public string Email { get; set; } = string.Empty;
+
 
     [Required(ErrorMessage = "RequiredField", AllowEmptyStrings = false)]
     [StringLength(20)]
@@ -53,7 +57,6 @@ public class UserDetailsDto
     [Required(ErrorMessage = "RequiredField", AllowEmptyStrings = false)]
     [DisplayName("Role")]
     public IList<string> Roles { get; set; } = new List<string>();
-    public string Role { get; set; } = string.Empty;
 
     public string ReturnUrl { get; set; } = "/";
 

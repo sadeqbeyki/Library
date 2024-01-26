@@ -6,8 +6,8 @@ namespace Library.EndPoint.Areas.adminPanel.Models;
 public class UserRoleViewModel
 {
     public List<UserDetailsDto> Users { get; set; }
-    public List<UserRolesDto> UserRoles { get; set; }
-    public IEnumerable<RoleDto> Roles { get; set; }
+    public List<RoleDto> Roles { get; set; }
+    //public List<UserRolesDto> UserRoles { get; set; } = new List<UserRolesDto>();
 
     public string UserId { get; set; }
     public string UserName { get; set; }

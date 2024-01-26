@@ -23,7 +23,8 @@ public class RoleService : IRoleService
     public async Task<RoleDto> GetRoleByIdAsync(string id)
     {
         var role = await _roleManager.FindByIdAsync(id);
-        return _mapper.Map<RoleDto>(role);
+        var roleMap = _mapper.Map<RoleDto>(role);
+        return roleMap;
     }
     #endregion
 
@@ -31,7 +32,8 @@ public class RoleService : IRoleService
     public async Task<List<RoleDto>> GetRolesAsync()
     {
         List<ApplicationRole> roles = await _roleManager.Roles.ToListAsync();
-        return _mapper.Map<List<RoleDto>>(roles);
+        var rolesMap =  _mapper.Map<List<RoleDto>>(roles);
+        return rolesMap;
     }
     #endregion
 
@@ -39,6 +41,7 @@ public class RoleService : IRoleService
     public async Task<IdentityResult> CreateRoleAsync(RoleDto model)
     {
         var roleMap = _mapper.Map<ApplicationRole>(model);
+        roleMap.Id = Guid.NewGuid().ToString();
         var result = await _roleManager.CreateAsync(roleMap);
         if (!result.Succeeded)
         {

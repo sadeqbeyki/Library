@@ -19,8 +19,8 @@ public class RolesController : Controller
 
     public async Task<IActionResult> Index()
     {
-        await _mediator.Send(new GetRolesQuery());
-        return View();
+        var roles = await _mediator.Send(new GetRolesQuery());
+        return View(roles);
     }
     public async Task<IActionResult> Details(string id)
     {
@@ -34,10 +34,10 @@ public class RolesController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Create(CreateRoleCommand command)
+    public async Task<IActionResult> Create(RoleDto dto)
     {
-        var result = await _mediator.Send(command);
-        return RedirectToAction("Index");
+        var result = await _mediator.Send(new CreateRoleCommand(dto));
+        return RedirectToAction("Index", result);
     }
     #endregion
 

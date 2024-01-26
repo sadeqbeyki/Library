@@ -1,4 +1,5 @@
 ﻿using AppFramework.Infrastructure;
+using AutoMapper;
 using Identity.Application.DTOs.User;
 using Identity.Application.Features.Command.User;
 using Identity.Application.Features.Command.UserRole;
@@ -17,16 +18,18 @@ namespace Library.EndPoint.Areas.adminPanel.Controllers;
 public class UsersController : Controller
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public UsersController(IMediator mediator)
+    public UsersController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     public async Task<ActionResult> Index()
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
-        return View();
+        return View(users);
     }
 
     [HttpGet]
@@ -36,6 +39,7 @@ public class UsersController : Controller
         return View(user);
     }
 
+    [HttpGet]
     public IActionResult Create(string returnUrl)
     {
         return View(new CreateUserDto { ReturnUrl = returnUrl });
@@ -43,12 +47,12 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateUser(CreateUserDto model)
+    public async Task<IActionResult> Create(CreateUserDto model)
     {
         var result = await _mediator.Send(new CreateUserCommand(model));
         return RedirectToAction("Index", result);
     }
-
+    [HttpGet]
     public async Task<ActionResult> Update(string id)
     {
         var user = await _mediator.Send(new GetUserDetailsQuery(id));
@@ -56,16 +60,17 @@ public class UsersController : Controller
         {
             return View();
         }
-        return View(user);
+        var userMap = _mapper.Map<UpdateUserDto>(user);
+        return View(userMap);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Update(UpdateUserCommand command)
+    public async Task<ActionResult> Update(UpdateUserDto dto)
     {
-        if (!ModelState.IsValid)
-            return View(command);
+        //if (!ModelState.IsValid)
+        //    return View(dto);
 
-        var user = await _mediator.Send(command);
+        var user = await _mediator.Send(new UpdateUserCommand(dto));
         return RedirectToAction("Index", user);
     }
 
@@ -107,7 +112,7 @@ public class UsersController : Controller
         var role = await _mediator.Send(new GetRoleByIdQuery(model.RoleId));
         if (user == null || role == null)
         {
-            return BadRequest();
+            ViewBag.CantBeNull = "Fileds can't be null.";
         }
 
         var isInRole = await _mediator.Send(new IsInRoleCommand(user.Id, role.Id));
