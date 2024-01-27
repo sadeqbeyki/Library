@@ -7,7 +7,8 @@ public class UserRoleViewModel
 {
     public List<UserDetailsDto> Users { get; set; }
     public List<RoleDto> Roles { get; set; }
-    //public List<UserRolesDto> UserRoles { get; set; } = new List<UserRolesDto>();
+
+    public AssignRoleDto Assign{ get; set; }
 
     public string UserId { get; set; }
     public string UserName { get; set; }

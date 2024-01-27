@@ -17,24 +17,23 @@
                 <div class="col-md-6">
                     <div class="card-body">
                         <form asp-action="AssignRole" method="post">
-                            <div class="text-danger">@ViewBag.RoleExistError</div>
-                            <div class="text-success">@ViewBag.RoleAssigned</div>
-                            <div class="text-warning">@ViewBag.CantBeNull</div>
+                            <div class="text-danger">@ViewBag.Error</div>
+                            <div class="text-success">@ViewBag.Success</div>
                             <div class="form-group">
-                                <label asp-for="UserId" class="control-label">Choose a Member</label>
-                                <select class="form-control" asp-for="UserId"
+                                <label asp-for="Assign.UserId" class="control-label">Choose a Member</label>
+                                <select class="form-control" asp-for="Assign.UserId"
                                         asp-items='new SelectList(Model.Users, "Id", "UserName")'>
                                     <option value="">Choose a Member</option>
                                 </select>
-                                <span asp-validation-for="UserId" class="error"></span>
+                                <span asp-validation-for="Assign.UserId" class="error"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="RoleId" class="control-label">Choose a Role</label>
-                                <select class="form-control" asp-for="RoleId"
+                                <label asp-for="Assign.RoleId" class="control-label">Choose a Role</label>
+                                <select class="form-control" asp-for="Assign.RoleId"
                                         asp-items='new SelectList(Model.Roles, "Id", "Name")'>
                                     <option value="">Choose a Role</option>
                                 </select>
-                                <span asp-validation-for="RoleId" class="error"></span>
+                                <span asp-validation-for="Assign.RoleId" class="error"></span>
                             </div>
                             <div>
                                 <a class="btn btn-secondary waves-effect" asp-action="Index">Back to list</a>

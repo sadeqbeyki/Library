@@ -28,4 +28,6 @@ public interface IUserService : IServiceBase
     Task<bool> AssignUserToRole(string userName, IList<string> roles);
     Task<bool> UpdateUsersRole(string userName, IList<string> usersRole);
     Task<List<string>> GetUserRolesAsync(string userId);
+
+    Task<string> AssignRoleAsync(string userId, string roles);
 }

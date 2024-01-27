@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
+using Identity.Domain.Entities.Role;
+using System.Linq;
 
 
 namespace Identity.Services.Services;
@@ -21,6 +23,8 @@ public class UserService : ServiceBase<UserService>, IUserService
     private readonly IDistributedCache _distributedCache;
     private readonly IEmailService _emailService;
 
+    private readonly RoleManager<ApplicationRole> _roleManager;
+
 
     public UserService(
         UserManager<ApplicationUser> userManager,
@@ -28,13 +32,17 @@ public class UserService : ServiceBase<UserService>, IUserService
         IDistributedCache distributedCache,
         IConfiguration configuration,
         IServiceProvider serviceProvider,
-        IEmailService emailService) : base(serviceProvider)
+        IEmailService emailService,
+
+        RoleManager<ApplicationRole> roleManager) : base(serviceProvider)
     {
         _userManager = userManager;
         _mapper = mapper;
         _distributedCache = distributedCache;
         _configuration = configuration;
         _emailService = emailService;
+
+        _roleManager = roleManager;
     }
     #region Get
     public async Task<UserDetailsDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
@@ -124,7 +132,6 @@ public class UserService : ServiceBase<UserService>, IUserService
 
     #endregion
 
-
     #region Create
 
     public async Task<IdentityResult> Register(CreateUserDto model)
@@ -159,7 +166,7 @@ public class UserService : ServiceBase<UserService>, IUserService
             || !model.Roles.Any()
             || model.Roles.All(string.IsNullOrWhiteSpace)
             || model.Roles.Contains("string"))
-            model.Roles = new List<string> { "Member"};
+            model.Roles = new List<string> { "Member" };
 
         var addUserRole = await _userManager.AddToRolesAsync(userMap, model.Roles);
         if (!addUserRole.Succeeded)
@@ -212,7 +219,7 @@ public class UserService : ServiceBase<UserService>, IUserService
             || !model.Roles.Any()
             || model.Roles.All(string.IsNullOrWhiteSpace)
             || model.Roles.Contains("string"))
-            model.Roles = new List<string> { "Member"};
+            model.Roles = new List<string> { "Member" };
 
         var addUserRole = await _userManager.AddToRolesAsync(user, model.Roles);
         if (!addUserRole.Succeeded)
@@ -257,6 +264,21 @@ public class UserService : ServiceBase<UserService>, IUserService
     #endregion
 
     #region UserRole
+    public async Task<string> AssignRoleAsync(string userId, string roleId)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
+                ?? throw new NotFoundException("User not found");
+
+        var role = await _roleManager.Roles.FirstOrDefaultAsync(r => r.Id == roleId)
+                ?? throw new NotFoundException("Role not found");
+
+        if (await _userManager.IsInRoleAsync(user, role.Name))
+            return "User is already in the selected role.";
+
+        if (await AssignUserToRole(user.UserName, new List<string> { role.Name }))
+            return "Role assigned to User";
+        return "There is a problem in assigning a role to a user";
+    }
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
@@ -277,7 +299,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName)
             ?? throw new NotFoundException("User not found");
 
-        var result = await _userManager.AddToRolesAsync(user, roles);
+        IdentityResult result = await _userManager.AddToRolesAsync(user, roles);
         return result.Succeeded;
     }
     public async Task<bool> UpdateUsersRole(string userName, IList<string> usersRole)

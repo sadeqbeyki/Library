@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Identity.Application.Features.Command.UserRole;
 
-public record AssignUserToRoleCommand(AssignRoleDto Dto) : IRequest<bool>;
+public record AssignUserToRoleCommand(AssignRoleDto Dto) : IRequest<string>;
 
-public sealed class AssignUserToRoleCommandHandler : IRequestHandler<AssignUserToRoleCommand, bool>
+public sealed class AssignUserToRoleCommandHandler : IRequestHandler<AssignUserToRoleCommand, string>
 {
     private readonly IUserService _userService;
 
@@ -15,9 +15,9 @@ public sealed class AssignUserToRoleCommandHandler : IRequestHandler<AssignUserT
         _userService = userService;
     }
 
-    public async Task<bool> Handle(AssignUserToRoleCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(AssignUserToRoleCommand request, CancellationToken cancellationToken)
     {
-        var result = await _userService.AssignUserToRole(request.Dto.Username, request.Dto.Roles);
+        var result = await _userService.AssignRoleAsync(request.Dto.UserId, request.Dto.RoleId);
         return result;
     }
 }

@@ -52,6 +52,7 @@ public class UsersController : Controller
         var result = await _mediator.Send(new CreateUserCommand(model));
         return RedirectToAction("Index", result);
     }
+
     [HttpGet]
     public async Task<ActionResult> Update(string id)
     {
@@ -108,34 +109,15 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> AssignRole(UserRoleViewModel model)
     {
-        var user = await _mediator.Send(new GetUserDetailsQuery(model.UserId));
-        var role = await _mediator.Send(new GetRoleByIdQuery(model.RoleId));
-        if (user == null || role == null)
-        {
-            ViewBag.CantBeNull = "Fileds can't be null.";
-        }
+        if (model.Assign.UserId is null || model.Assign.RoleId is null)
+            ViewBag.Error = "Fileds can't be null.";
 
-        var isInRole = await _mediator.Send(new IsInRoleCommand(user.Id, role.Id));
-        if (isInRole)
-        {
-            ViewBag.RoleExistError = "User is already in the selected role.";
-        }
-        else
-        {
-            AssignRoleDto assignRoleDto = new()
-            {
-                Username = user.UserName,
-                Roles = new List<string> { role.Name }
-            };
-            var result = await _mediator.Send(new AssignUserToRoleCommand(assignRoleDto));
-            if (result)
-            {
-                ViewBag.RoleAssigned = "Role assigned to User";
-                //return RedirectToAction("AssignRole");
-            }
-        }
+        var result = await _mediator.Send(new AssignUserToRoleCommand(model.Assign));
+        ViewBag.Error = result;
         return RedirectToAction("AssignRole");
     }
+
+
 
     [HttpPost]
     public async Task<IActionResult> RemoveUserFromRole(string userId, string roleId)
