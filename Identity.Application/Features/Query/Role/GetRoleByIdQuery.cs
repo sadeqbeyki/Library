@@ -21,3 +21,4 @@ public sealed class GetRoleQueryByIdHandler : IRequestHandler<GetRoleByIdQuery, 
         return role;
     }
 }
+

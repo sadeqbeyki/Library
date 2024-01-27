@@ -2,6 +2,7 @@
 using LibBook.Domain;
 using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
+using LibBook.Domain.BookCategoryAgg;
 using LibBook.Domain.PublisherAgg;
 using LibBook.Domain.TranslatorAgg;
 using LibBook.DomainContracts.Book;
@@ -15,14 +16,16 @@ public class BookService : IBookService
     private readonly IAuthorRepository _authorRepository;
     private readonly ITranslatorRepository _translatorRepository;
     private readonly IPublisherRepository _publisherRepository;
+    private readonly IBookCategoryRepository _bookCategoryRepository;
 
     public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository,
-        ITranslatorRepository translatorRepository, IPublisherRepository publisherRepository)
+        ITranslatorRepository translatorRepository, IPublisherRepository publisherRepository, IBookCategoryRepository bookCategoryRepository)
     {
         _bookRepository = bookRepository;
         _authorRepository = authorRepository;
         _translatorRepository = translatorRepository;
         _publisherRepository = publisherRepository;
+        _bookCategoryRepository = bookCategoryRepository;
     }
     #region Create
     public async Task<OperationResult> Create(BookDto model)
@@ -35,6 +38,7 @@ public class BookService : IBookService
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
         }
 
+        var bookCategory = _bookCategoryRepository.GetByIdAsync(model.CategoryId);
         // 2. add new book
         Book book = new(
             title: model.Title,
@@ -42,6 +46,7 @@ public class BookService : IBookService
             code: model.Code,
             description: model.Description,
             categoryId: model.CategoryId
+            //category: bookCategory
             );
 
         // 3. add Authors

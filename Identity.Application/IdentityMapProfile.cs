@@ -23,7 +23,9 @@ public class IdentityMapProfile : Profile
         CreateMap<UserDetailsDto, ApplicationUser>().ReverseMap();
         CreateMap<CreateUserDto, ApplicationUser>().ReverseMap();
         CreateMap<UpdateUserDto, ApplicationUser>().ReverseMap();
-        CreateMap<UserRolesDto, ApplicationUser>().ReverseMap();
+
+        CreateMap<UserRolesDto, ApplicationUser>().ReverseMap()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
 
         CreateMap<RoleDto, ApplicationRole>().ReverseMap();
     }

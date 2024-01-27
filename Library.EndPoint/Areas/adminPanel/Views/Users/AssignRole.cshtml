@@ -1,8 +1,7 @@
-﻿@using Identity.Domain.Entities.Role
+﻿@using Identity.Application.Interfaces
 @using Library.EndPoint.Areas.adminPanel.Models;
-@using Microsoft.AspNetCore.Identity;
 @model UserRoleViewModel
-@inject RoleManager<ApplicationRole> _roleManager
+@inject IRoleService _roleManager
 @{
     ViewData["Title"] = "Assign Role";
 }
@@ -45,65 +44,61 @@
             </div>
         </div>
     </div>
+  
     <div class="col-6">
-        <div class="card border-dark">
-            <div class="card-header">
+    <div class="card border-dark">
+        <div class="card-header">
 
-                <h5 class="card-title m-3">User Roles List</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
+            <h5 class="card-title m-3">User Roles List</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Roles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.UserRoles)
+                    {
                         <tr>
-                            <th>User</th>
-                            <th>Roles</th>
+                            <td>@user.UserName</td>
+                            <td>
+                                <ul>
+                                    @foreach (var roleName in user.Roles)
+                                    {
+                                        var role = await _roleManager.GetRoleByNameAsync(roleName);
+                                        if (role != null)
+                                        {
+                                            <li class="d-flex mb-1">
+                                                <form asp-controller="Users" asp-action="RemoveUserFromRole" asp-route-userId="@user.UserId" asp-route-roleId="@role.Id">
+                                                    <div class="input-group w-auto ">
+                                                        <div class="btn-group-toggle">
+                                                            <label class="btn btn-primary btn-sm" style="border-radius: 0;">
+                                                                @roleName
+                                                            </label>
+                                                        </div>
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-danger btn-sm" id="basic-addon1">&times;</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model.Users)
-                        {
-                            @if (!user.Roles.Contains("Member") || user.Roles.Count > 1)
-                            {
-                                <tr>
-                                    <td>@user.UserName</td>
-                                    <td>
-                                        @if (user.Roles.Count > 0)
-                                        {
-                                            <ul>
-                                                @foreach (var roleName in user.Roles)
-                                                {
-                                                    var role = await _roleManager.FindByNameAsync(roleName);
-                                                    if (role != null)
-                                                    {
-                                                        <li class="d-flex mb-1">
-                                                            <form asp-controller="Users" asp-action="RemoveUserFromRole" asp-route-userId="@user.Id" asp-route-roleId="@role.Id">
-                                                                <div class="input-group w-auto ">
-                                                                    <div class="btn-group-toggle" >
-                                                                        <label class="btn btn-primary btn-sm" style="border-radius: 0;">
-                                                                            @roleName
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="input-group-prepend">
-                                                                        <button class="btn btn-danger btn-sm" id="basic-addon1">&times;</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </li>
-                                                    }
-                                                }
-                                            </ul>
-                                        }
-                                        else
-                                        {
-                                            <span>No roles assigned</span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+</div>
+
+
+

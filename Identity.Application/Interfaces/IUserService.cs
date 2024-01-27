@@ -31,4 +31,5 @@ public interface IUserService : IServiceBase
 
     Task<string> AssignRoleAsync(string userId, string roles);
     Task<bool> RemoveUserRole(string userId, string roleId);
+    Task<List<UserRolesDto>> GetUserWithRoles();
 }

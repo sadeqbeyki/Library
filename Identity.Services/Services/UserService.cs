@@ -12,6 +12,8 @@ using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Identity.Application.DTOs.Role;
 
 
 namespace Identity.Services.Services;
@@ -54,6 +56,20 @@ public class UserService : ServiceBase<UserService>, IUserService
         var userMap = _mapper.Map<UserDetailsDto>(user);
         userMap.Roles = await _userManager.GetRolesAsync(user);
         return userMap;
+    }
+
+    public async Task<List<UserRolesDto>> GetUserWithRoles()
+    {
+        var users = await _userManager.Users.ToListAsync()
+            ?? throw new NotFoundException("User not found");
+
+        var usersMap = _mapper.Map<List<UserRolesDto>>(users);
+        foreach (var user in usersMap)
+        {
+            user.Roles = await GetUserRolesAsync(user.UserId);
+        }
+
+        return usersMap;
     }
 
     public async Task<string> GetUserNameAsync(string userId)
@@ -283,13 +299,15 @@ public class UserService : ServiceBase<UserService>, IUserService
 
     public async Task<bool> RemoveUserRole(string userId, string roleId)
     {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
+        var user = await _userManager.FindByIdAsync(userId);
         var role = await _roleManager.FindByIdAsync(roleId);
 
         if (user == null || role == null)
             throw new BadRequestException("cant find user or role!");
+
         if (role.Name == "Member")
             throw new BadRequestException("You cannot remove 'Member' role from users");
+
         var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
         if (!result.Succeeded)
             return false;

@@ -1,7 +1,10 @@
-﻿namespace Identity.Application.DTOs.User;
+﻿using Identity.Application.DTOs.Role;
 
-public class UserRolesDto : CreateUserDto
-{ 
-    public string Id { get; set; }
-    public List<string> RoleName { get; set; }
+namespace Identity.Application.DTOs.User;
+
+public class UserRolesDto
+{
+    public string UserId { get; set; }
+    public string UserName { get; set; }
+    public IList<string> Roles { get; set; } = new List<string>();
 }

@@ -90,5 +90,12 @@ public class RoleService : IRoleService
         return result;
 
     }
+
+    public async Task<RoleDto> GetRoleByNameAsync(string roleName)
+    {
+        ApplicationRole role = await _roleManager.FindByNameAsync(roleName)
+            ?? throw new NotFoundException("not found role");
+        return _mapper.Map<RoleDto>(role);
+    }
     #endregion
 }

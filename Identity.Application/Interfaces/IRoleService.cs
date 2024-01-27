@@ -10,5 +10,7 @@ namespace Identity.Application.Interfaces
         Task<RoleDto> GetRoleByIdAsync(string id);
         Task<List<RoleDto>> GetRolesAsync();
         Task<IdentityResult> UpdateRoleAsync(RoleDto user);
+
+        Task<RoleDto> GetRoleByNameAsync(string roleName);
     }
 }

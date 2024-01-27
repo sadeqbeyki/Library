@@ -103,6 +103,7 @@ public class UsersController : Controller
         {
             Users = await _mediator.Send(new GetAllUsersQuery()),
             Roles = await _mediator.Send(new GetRolesQuery()),
+            UserRoles = await _mediator.Send(new GetUserWithRolesQuery())
         };
         return View("AssignRole", command);
     }
@@ -110,14 +111,11 @@ public class UsersController : Controller
     public async Task<IActionResult> AssignRole(UserRoleViewModel model)
     {
         if (model.Assign.UserId is null || model.Assign.RoleId is null)
-            ViewBag.Error = "Fileds can't be null.";
+            return View(ViewBag.Error = "Fileds can't be null.");
 
         var result = await _mediator.Send(new AssignUserToRoleCommand(model.Assign));
-        ViewBag.Error = result;
-        return RedirectToAction("AssignRole");
+        return RedirectToAction("AssignRole", ViewBag.Success = result);
     }
-
-
 
     [HttpPost]
     public async Task<IActionResult> RemoveUserFromRole(string userId, string roleId)
