@@ -1,0 +1,26 @@
+﻿using Identity.Application.Interfaces;
+using MediatR;
+
+namespace Identity.Application.Features.Command.UserRole;
+
+public class RemoveUserRoleCommand : IRequest<bool>
+{
+    public string UserId { get; set; }
+    public string RoleId { get; set; }
+}
+
+public sealed class RemoveUserRoleCommandHandler : IRequestHandler<RemoveUserRoleCommand, bool>
+{
+    private readonly IUserService _userService;
+
+    public RemoveUserRoleCommandHandler(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    public async Task<bool> Handle(RemoveUserRoleCommand request, CancellationToken cancellationToken)
+    {
+        var result = await _userService.RemoveUserRole(request.UserId, request.RoleId);
+        return result;
+    }
+}

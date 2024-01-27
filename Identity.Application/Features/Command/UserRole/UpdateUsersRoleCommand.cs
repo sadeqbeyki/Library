@@ -25,3 +25,4 @@ public sealed class UpdateUsersRoleCommandHandler : IRequestHandler<UpdateUsersR
         return result;
     }
 }
+

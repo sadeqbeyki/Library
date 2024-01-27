@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Identity.Services.Services;
@@ -279,6 +280,23 @@ public class UserService : ServiceBase<UserService>, IUserService
             return "Role assigned to User";
         return "There is a problem in assigning a role to a user";
     }
+
+    public async Task<bool> RemoveUserRole(string userId, string roleId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        var role = await _roleManager.FindByIdAsync(roleId);
+
+        if (user == null || role == null)
+            throw new BadRequestException("cant find user or role!");
+        if (role.Name == "Member")
+            throw new BadRequestException("You cannot remove 'Member' role from users");
+        var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+        if (!result.Succeeded)
+            return false;
+        return true;
+    }
+
+
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)

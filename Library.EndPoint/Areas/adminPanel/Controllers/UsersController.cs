@@ -122,22 +122,17 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> RemoveUserFromRole(string userId, string roleId)
     {
-        var user = await _mediator.Send(new GetUserDetailsQuery(userId));
-        var role = await _mediator.Send(new GetRoleByIdQuery(roleId));
-
-        if (user == null || role == null)
-        {
+        if (userId == null || roleId == null)
             return BadRequest();
-        }
 
-        var result = await _mediator.Send(new UpdateUserRolesCommand());
-
-        if (result == 1)
+        var result = await _mediator.Send(new RemoveUserRoleCommand()
         {
-            ViewBag.RoleAssigned = "Update user roles succeded!";
-            //return RedirectToAction("AssignRole");
-        }
-        ViewBag.RoleExistError = "unsuccessfull!!";
-        return RedirectToAction("AssignRole");
+            UserId = userId,
+            RoleId = roleId
+        });
+
+        if (result)
+            return RedirectToAction("AssignRole", ViewBag.Success = "Update user roles succeded!");
+        return RedirectToAction("AssignRole", ViewBag.Error = "unsuccessfull!!");
     }
 }
