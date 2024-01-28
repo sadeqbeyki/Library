@@ -9,6 +9,10 @@ using Identity.Application.Common.Exceptions;
 using Identity.Application.DTOs.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Identity.Services.Authorization.Const;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Identity.Services.Services;
 
@@ -108,15 +112,25 @@ public class AuthService : IAuthService
     {
         ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
             ?? await _userManager.FindByEmailAsync(model.Username)
-            ?? throw new Exception("Fill in the blank fields!");
+            ?? throw new Exception($"No user found with this name: '{model.Username}'.");
 
 
         if (user == null && !await _userManager.CheckPasswordAsync(user, model.Password))
             throw new BadRequestException("نام کاربری یا پسورد اشتباه است");
 
+        //var userClaims = GetClaimsIdentity();
+        //await _signInManager.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+        //                                    new ClaimsPrincipal(userClaims),
+        //                                    new AuthenticationProperties
+        //                                    {
+        //                                        AllowRefresh = true,
+        //                                        IsPersistent = true,
+        //                                        ExpiresUtc = GetExpireDateTime(model.RememberMe)
+        //                                    });
         var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
         if (!result.Succeeded)
             throw new BadRequestException("Login failed");
+
 
         var jwtToken = GenerateJWTAuthetication(user);
         var validateToken = ValidateToken(jwtToken);
@@ -125,11 +139,28 @@ public class AuthService : IAuthService
         return jwtToken ?? response.ToString();
     }
 
+    private static DateTime GetExpireDateTime(bool rememberMe)
+    {
+        return rememberMe 
+            ? DateTime.UtcNow.AddDays(30) 
+            : DateTime.UtcNow.AddDays(1);
+    }
+
+    private static ClaimsIdentity GetClaimsIdentity()
+    {
+        return new ClaimsIdentity(new List<Claim>
+        {
+            new Claim(WebAuthorizeConst.UserAccess, "1,2,3,4,5")
+        }, CookieAuthenticationDefaults.AuthenticationScheme);
+    }
+
     public async Task<string> LogOutAsync(string returnUrl)
     {
         await _signInManager.SignOutAsync();
         return returnUrl;
     }
+
+
 
     /// <summary>
     /// Generate JWT token for user

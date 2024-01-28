@@ -114,7 +114,8 @@ public class UsersController : Controller
             return View(ViewBag.Error = "Fileds can't be null.");
 
         var result = await _mediator.Send(new AssignUserToRoleCommand(model.Assign));
-        return RedirectToAction("AssignRole", ViewBag.Success = result);
+        ViewBag.Success = result;
+        return RedirectToAction("AssignRole");
     }
 
     [HttpPost]
@@ -130,7 +131,9 @@ public class UsersController : Controller
         });
 
         if (result)
-            return RedirectToAction("AssignRole", ViewBag.Success = "Update user roles succeded!");
-        return RedirectToAction("AssignRole", ViewBag.Error = "unsuccessfull!!");
+            //ViewBag.Success = "Update user roles succeded!";
+            return RedirectToAction("AssignRole");
+        ViewBag.Error = "unsuccessfull!!";
+        return RedirectToAction("AssignRole");
     }
 }

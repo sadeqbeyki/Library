@@ -5,6 +5,10 @@ using MediatR;
 using Identity.Application.Features.Command.User;
 using Identity.Application.Features.Command.Auth;
 using Identity.Application.Features.Query.Auth;
+using Library.EndPoint.Helper;
+using Library.EndPoint.Helper.Authhorizations;
+using Identity.Services.Authorization;
+using Identity.Services.Authorization.Const;
 
 namespace Library.EndPoint.Controllers;
 
@@ -18,7 +22,7 @@ public class AccountController : Controller
         _mediator = mediator;
     }
 
- 
+    [WebAuthorize(ActionAccessConsts.CreateAuthor)]
     public IActionResult Index()
     {
         return View();
@@ -38,7 +42,7 @@ public class AccountController : Controller
 
         if (!ModelState.IsValid)
         {
-            ModelState.AddModelError(string.Empty,"modelstate invalid");
+            ModelState.AddModelError(string.Empty, "modelstate invalid");
         }
 
         var result = await _mediator.Send(new LoginCommand(model));
@@ -47,6 +51,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Home", new { token = result });
         }
         return response;
+
     }
     [HttpGet]
     public IActionResult Register(string returnUrl)
