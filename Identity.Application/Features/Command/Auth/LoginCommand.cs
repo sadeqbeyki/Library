@@ -18,7 +18,7 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, string
 
     public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var result = await _authService.Login(request.dto);
+        var result = await _authService.LoginAsync(request.dto);
 
         return result == null ? 
             throw new BadRequestException("Invalid username or password") 

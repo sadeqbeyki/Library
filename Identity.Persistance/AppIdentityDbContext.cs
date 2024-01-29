@@ -1,6 +1,6 @@
-﻿using Identity.Domain.Entities.Role;
+﻿using Identity.Domain.Entities.AuthAgg;
+using Identity.Domain.Entities.Role;
 using Identity.Domain.Entities.User;
-using LibIdentity.Domain.PasswordAgg;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

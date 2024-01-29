@@ -7,5 +7,6 @@ namespace Identity.Application.Interfaces.Base
         string GetCurrentUserId();
         Task<ApplicationUser> GetCurrentUser();
         Task<IList<string>> GetCurrentUserRoles();
+        bool IsAuthenticated();
     }
 }

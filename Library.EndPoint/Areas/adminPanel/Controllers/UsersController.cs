@@ -6,6 +6,8 @@ using Identity.Application.Features.Command.UserRole;
 using Identity.Application.Features.Query.Role;
 using Identity.Application.Features.Query.User;
 using Identity.Application.Features.User.Queries;
+using Identity.Services.Authorization;
+using Identity.Services.Authorization.Const;
 using Library.EndPoint.Areas.adminPanel.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +28,7 @@ public class UsersController : Controller
         _mapper = mapper;
     }
 
+    [PermissionAuthorize(AuthorizePermissionConsts.User.GetAllUser)]
     public async Task<ActionResult> Index()
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
@@ -33,6 +36,7 @@ public class UsersController : Controller
     }
 
     [HttpGet]
+    [PermissionAuthorize(AuthorizePermissionConsts.User.GetUser)]
     public async Task<ActionResult> Details(string id)
     {
         var user = await _mediator.Send(new GetUserDetailsQuery(id));
@@ -40,6 +44,7 @@ public class UsersController : Controller
     }
 
     [HttpGet]
+    //[WebAuthorize(ActionAccessConsts.CreateAuthor)]
     public IActionResult Create(string returnUrl)
     {
         return View(new CreateUserDto { ReturnUrl = returnUrl });

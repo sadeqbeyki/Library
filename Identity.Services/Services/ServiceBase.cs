@@ -30,8 +30,8 @@ public class ServiceBase<TService> : IServiceBase where TService : class
         string userId = identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return userId ?? string.Empty;
 
-    //    return _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-    //    //return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    return _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        //    //return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 
 
@@ -63,5 +63,9 @@ public class ServiceBase<TService> : IServiceBase where TService : class
         throw new NotFoundException("not found");
     }
 
- 
+    public bool IsAuthenticated()
+    {
+        var claims = _httpContextAccessor.HttpContext?.User?.Claims.ToList();
+        return claims.Count > 0; 
+    }
 }

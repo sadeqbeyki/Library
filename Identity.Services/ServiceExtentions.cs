@@ -3,9 +3,11 @@ using Identity.Domain.Entities.Role;
 using Identity.Domain.Entities.User;
 using Identity.Persistance;
 using Identity.Persistance.Repositories;
+using Identity.Services.Authorization;
 using Identity.Services.Services;
 using LibIdentity.DomainContracts.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -45,13 +47,11 @@ public static class ServiceExtentions
 
         services.AddScoped<IPasswordValidator<ApplicationUser>, LIPasswordValidator>();
         services.AddScoped<IUserValidator<ApplicationUser>, LIUserValidator>();
-        //services.AddScoped<IServiceBase, ServiceBase>();
+
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
         
-
-        //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
         services.AddDbContext<AppIdentityDbContext>(c =>
             c.UseSqlServer(configuration.GetConnectionString("AAA")));
@@ -62,24 +62,33 @@ public static class ServiceExtentions
     {
         //Jwt configuration starts here
         services.AddAuthentication(x =>
-        {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(x =>
-        {
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidIssuer = configuration["Jwt:Issuer"],
-                ValidAudience = configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = false,
-                ValidateIssuerSigningKey = true
-            };
-        });
-        services.AddAuthorization();
+                    {
+                        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                        x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
+                .AddJwtBearer(x =>
+                    {
+                        x.RequireHttpsMetadata = false;
+                        x.SaveToken = true;
+                        x.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidIssuer = configuration["Jwt:Issuer"],
+                            ValidAudience = configuration["Jwt:Audience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = false,
+                            ValidateIssuerSigningKey = true
+                        };
+                    });
+        services.AddAuthorization();//options =>
+        //{
+        //    options.AddPolicy("GetAllUser",
+        //        policy => policy.RequireClaim("AccessAllUser", "True"));
+        //}
+
+        services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
     }
 
     public static void CreateIdentityDatabase(this IApplicationBuilder app)

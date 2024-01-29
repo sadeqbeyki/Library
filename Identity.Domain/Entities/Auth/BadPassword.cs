@@ -1,4 +1,4 @@
-﻿namespace LibIdentity.Domain.PasswordAgg;
+﻿namespace Identity.Domain.Entities.AuthAgg;
 
 public class BadPassword
 {

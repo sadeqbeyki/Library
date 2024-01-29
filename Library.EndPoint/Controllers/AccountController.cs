@@ -5,8 +5,6 @@ using MediatR;
 using Identity.Application.Features.Command.User;
 using Identity.Application.Features.Command.Auth;
 using Identity.Application.Features.Query.Auth;
-using Library.EndPoint.Helper;
-using Library.EndPoint.Helper.Authhorizations;
 using Identity.Services.Authorization;
 using Identity.Services.Authorization.Const;
 
@@ -22,7 +20,6 @@ public class AccountController : Controller
         _mediator = mediator;
     }
 
-    [WebAuthorize(ActionAccessConsts.CreateAuthor)]
     public IActionResult Index()
     {
         return View();

@@ -23,10 +23,7 @@ builder.Services.AddHttpContextAccessor();
 
 #region token
 builder.Services.AddJwtAuth(builder.Configuration);
-// Add configuration from appsettings.json
-builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
-    .AddEnvironmentVariables();
-//Jwt configuration ends here
+builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true).AddEnvironmentVariables();
 #endregion end token
 
 

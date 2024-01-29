@@ -11,35 +11,64 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Identity.Services.Authorization.Const;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication;
+using Identity.Domain.Entities.Auth;
 
 namespace Identity.Services.Services;
 
-public class AuthService : IAuthService
+public class AuthService : ServiceBase<AuthService>, IAuthService
 {
     private readonly IConfiguration _configuration;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
 
-    public AuthService(IConfiguration configuration, 
+    public AuthService(IConfiguration configuration,
         UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager, IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _configuration = configuration;
         _userManager = userManager;
         _signInManager = signInManager;
     }
 
+    public async Task<string> Login(LoginUserDto model)
+    {
+        ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
+            ?? await _userManager.FindByEmailAsync(model.Username)
+            ?? throw new Exception($"No user found with this name: '{model.Username}'.");
+
+
+        if (user == null && !await _userManager.CheckPasswordAsync(user, model.Password))
+            throw new BadRequestException("نام کاربری یا پسورد اشتباه است");
+
+        var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+        if (!result.Succeeded)
+            throw new BadRequestException("Login failed");
+
+
+        var jwtToken = GenerateJWTAuthetication(user);
+        var validateToken = ValidateToken(jwtToken);
+
+        var response = new UnauthorizedResult();
+        return jwtToken ?? response.ToString();
+    }
+
+    public async Task<string> LogOutAsync(string returnUrl)
+    {
+        await _signInManager.SignOutAsync();
+        return returnUrl;
+    }
+
     public string GenerateJWTAuthetication(ApplicationUser user)
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtHeaderParameterNames.Jku, user.UserName),
-            new Claim(JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email)
+            new (JwtHeaderParameterNames.Jku, user.UserName),
+            new (JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Email, user.Email),
+            //new ("AccessAllUser", user.AccessAllUser.ToString())
+            //new (ClaimTypes.Role),
+            //new (ClaimTypes.NameIdentifier, user.UserName),
         };
 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -55,6 +84,7 @@ public class AuthService : IAuthService
         );
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
     public string ValidateToken(string token)
     {
         if (token == null)
@@ -88,7 +118,7 @@ public class AuthService : IAuthService
         }
     }
 
-    //--
+    //-----------------------------------------------------
 
     public async Task<JwtTokenDto> SigninUserAsync(LoginUserDto request)
     {
@@ -108,60 +138,6 @@ public class AuthService : IAuthService
         throw new BadRequestException("User Not Found!");
     }
 
-    public async Task<string> Login(LoginUserDto model)
-    {
-        ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
-            ?? await _userManager.FindByEmailAsync(model.Username)
-            ?? throw new Exception($"No user found with this name: '{model.Username}'.");
-
-
-        if (user == null && !await _userManager.CheckPasswordAsync(user, model.Password))
-            throw new BadRequestException("نام کاربری یا پسورد اشتباه است");
-
-        //var userClaims = GetClaimsIdentity();
-        //await _signInManager.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-        //                                    new ClaimsPrincipal(userClaims),
-        //                                    new AuthenticationProperties
-        //                                    {
-        //                                        AllowRefresh = true,
-        //                                        IsPersistent = true,
-        //                                        ExpiresUtc = GetExpireDateTime(model.RememberMe)
-        //                                    });
-        var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
-        if (!result.Succeeded)
-            throw new BadRequestException("Login failed");
-
-
-        var jwtToken = GenerateJWTAuthetication(user);
-        var validateToken = ValidateToken(jwtToken);
-
-        var response = new UnauthorizedResult();
-        return jwtToken ?? response.ToString();
-    }
-
-    private static DateTime GetExpireDateTime(bool rememberMe)
-    {
-        return rememberMe 
-            ? DateTime.UtcNow.AddDays(30) 
-            : DateTime.UtcNow.AddDays(1);
-    }
-
-    private static ClaimsIdentity GetClaimsIdentity()
-    {
-        return new ClaimsIdentity(new List<Claim>
-        {
-            new Claim(WebAuthorizeConst.UserAccess, "1,2,3,4,5")
-        }, CookieAuthenticationDefaults.AuthenticationScheme);
-    }
-
-    public async Task<string> LogOutAsync(string returnUrl)
-    {
-        await _signInManager.SignOutAsync();
-        return returnUrl;
-    }
-
-
-
     /// <summary>
     /// Generate JWT token for user
     /// </summary>
@@ -172,7 +148,7 @@ public class AuthService : IAuthService
         // Obtain existing claims, Here we will obtain last 4 JTI claims only
         // As We only maintain login for 5 maximum sessions, So need to remove other from that
         var allClaims = await _userManager.GetClaimsAsync(user);
-        var toRemoveClaims = new List<Claim>();
+        List<Claim> toRemoveClaims = new();
         var allJtiClaims = allClaims.Where(claim => claim.Type.Equals(JwtRegisteredClaimNames.Jti)).ToList();
         if (allJtiClaims.Count > 4)
         {
@@ -182,8 +158,7 @@ public class AuthService : IAuthService
 
         var secretKey = _configuration["JwtIssuerOptions:SecretKey"];
 
-        SigningCredentials credentials = new(new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(secretKey)), SecurityAlgorithms.HmacSha256);
+        SigningCredentials credentials = new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)), SecurityAlgorithms.HmacSha256);
 
         DateTime tokenExpireOn = DateTime.Now.AddHours(3);
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?
@@ -193,13 +168,12 @@ public class AuthService : IAuthService
             tokenExpireOn = DateTime.Now.AddYears(3);
         }
 
-        string roles = string.Join("; ", await _userManager.GetRolesAsync(user));
+        //string roles = string.Join("; ", await _userManager.GetRolesAsync(user));
 
         // Obtain Role of User
         IList<string> rolesOfUser = await _userManager.GetRolesAsync(user);
 
         // Add new claims
-        string userName = user.UserName ?? throw new NotFoundException("cant find user");
         List<Claim> tokenClaims = new()
             {
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
@@ -212,19 +186,6 @@ public class AuthService : IAuthService
             };
 
 
-        //adedd-------------------------------------------------------------------------
-
-        //var resultB = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-        //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, resultB.Principal);
-        //bool resultA =ClaimsPrincipal.Current.Identity.IsAuthenticated;
-        //var claim = new Claim(user.UserName, user.PasswordHash);
-        //var identity = new ClaimsIdentity(new[] { claim }, "BasicAuthentication"); // this uses basic auth
-        //var principal = new ClaimsPrincipal(identity);
-        //bool resultB = ClaimsPrincipal.Current.Identity.IsAuthenticated;
-        //adedd-------------------------------------------------------------------------
-
-
         // Make JWT token
         JwtSecurityToken token = new(
             issuer: _configuration["JwtIssuerOptions:Issuer"],
@@ -234,24 +195,101 @@ public class AuthService : IAuthService
             signingCredentials: credentials
         );
 
-        // Set current user details for busines & common library
-        string userEmail = user.Email ?? throw new NotFoundException("The email value cannot be empty");
-        var currentUser = await _userManager.FindByEmailAsync(user.Email) ?? throw new NotFoundException("No user found with this email");
 
         // Update claim details
-        await _userManager.RemoveClaimsAsync(currentUser, toRemoveClaims);
-        /*var claims =*/
-        await _userManager.AddClaimsAsync(currentUser, tokenClaims);
+        await _userManager.RemoveClaimsAsync(user, toRemoveClaims);
+        await _userManager.AddClaimsAsync(user, tokenClaims);
 
         // Return it
         JwtTokenDto generatedToken = new()
         {
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             ExpireOn = tokenExpireOn,
-            User = currentUser
+            User = user
         };
 
         return generatedToken;
+    }
+
+
+    public async Task<string> LoginAsync(LoginUserDto model)
+    {
+        ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
+            ?? await _userManager.FindByEmailAsync(model.Username)
+            ?? throw new Exception($"No user found with this name: '{model.Username}'.");
+
+        if (user == null && !await _userManager.CheckPasswordAsync(user, model.Password))
+            throw new BadRequestException("نام کاربری یا پسورد اشتباه است");
+
+
+        var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+        if (!result.Succeeded)
+            throw new BadRequestException("Login failed");
+
+
+        var jwtToken = GenerateJWTAuth(model.RememberMe, user);
+        var validateToken = ValidateToken(jwtToken);
+
+        var response = new UnauthorizedResult();
+        return jwtToken ?? response.ToString();
+    }
+    private string GenerateJWTAuth(bool isRememberMe, ApplicationUser user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature);
+        var claimsIdentity = new List<Claim>
+            {
+            new (ClaimTypes.NameIdentifier, user.Id),
+            new (JwtHeaderParameterNames.Jku, user.UserName),
+            new (JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Email, user.Email),
+            };
+
+        JwtSecurityToken jwtToken = new(
+        
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
+            claims: claimsIdentity,
+            expires: GetExpireDateTime(isRememberMe),
+            signingCredentials: signingCredentials
+        );
+        var token =  tokenHandler.WriteToken(jwtToken);
+        user.Tokens = new List<Token>()
+        {
+            new Token
+            {
+                UserId = user.Id,
+                Name = user.UserName,
+                Value = token
+            }
+        };
+        //user.PasswordHash = null;
+        //AuthenticationProperties authProperties = new() { ExpiresUtc = GetExpireDateTime(isRememberMe) };
+        //_httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+        //    new ClaimsPrincipal(claimsIdentity)
+        //    ,authProperties);
+        return token;
+
+    }
+
+    private static DateTime GetExpireDateTime(bool rememberMe)
+    {
+        return rememberMe
+            ? DateTime.UtcNow.AddDays(30)
+            : DateTime.UtcNow.AddDays(1);
+    }
+
+    private static ClaimsIdentity GetClaimsIdentity(ApplicationUser user)
+    {
+        List<Claim> claims = new()
+        {
+            new (JwtHeaderParameterNames.Jku, user.UserName),
+            new (JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Email, user.Email),
+            new (AuthorizePermissionConsts.User.UserAccess, "1,2,3,4,5")
+        };
+        return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
 }

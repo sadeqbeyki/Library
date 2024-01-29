@@ -35,15 +35,15 @@ namespace Identity.Services.Authorization
             return context.User != null
                         && context.User.Identity.IsAuthenticated;
         }
+        public static string GetUserClaim(HttpContext context)
+        {
+            return context.User.Claims.FirstOrDefault(p => p.Type == AuthorizePermissionConsts.User.UserAccess)?.Value;
+        }
 
         private static IEnumerable<int> GetUserClaims(HttpContext context)
         {
             var userClaims = GetUserClaim(context);
             return userClaims.Split(",").ToList().ConvertAll(int.Parse);
-        }
-        public static string GetUserClaim(HttpContext context)
-        {
-            return context.User.Claims.FirstOrDefault(p => p.Type == WebAuthorizeConst.UserAccess)?.Value;
         }
     }
 }
