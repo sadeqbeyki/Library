@@ -63,9 +63,6 @@ public class ServiceBase<TService> : IServiceBase where TService : class
         throw new NotFoundException("not found");
     }
 
-    public bool IsAuthenticated()
-    {
-        var claims = _httpContextAccessor.HttpContext?.User?.Claims.ToList();
-        return claims.Count > 0; 
-    }
+
+
 }

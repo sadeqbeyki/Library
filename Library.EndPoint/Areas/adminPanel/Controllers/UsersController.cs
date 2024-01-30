@@ -28,7 +28,7 @@ public class UsersController : Controller
         _mapper = mapper;
     }
 
-    [PermissionAuthorize(AuthorizePermissionConsts.User.GetAllUser)]
+    //[PermissionAuthorize(AuthorizePermissionConsts.User.GetAllUser)]
     public async Task<ActionResult> Index()
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
@@ -36,7 +36,7 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    [PermissionAuthorize(AuthorizePermissionConsts.User.GetUser)]
+    //[PermissionAuthorize(AuthorizePermissionConsts.User.GetUser)]
     public async Task<ActionResult> Details(string id)
     {
         var user = await _mediator.Send(new GetUserDetailsQuery(id));

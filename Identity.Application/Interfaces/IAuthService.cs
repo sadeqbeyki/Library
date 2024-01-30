@@ -1,6 +1,7 @@
 ﻿
 using Identity.Application.DTOs.User;
 using Identity.Domain.Entities.User;
+using System.Security.Claims;
 
 namespace LibIdentity.DomainContracts.Auth;
 
@@ -16,4 +17,5 @@ public interface IAuthService
 
     Task<JwtTokenDto> GetJwtSecurityTokenAsync(ApplicationUser user);
     Task<string> LoginAsync(LoginUserDto model);
+    bool IsAuthenticated(ClaimsPrincipal user);
 }

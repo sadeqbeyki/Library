@@ -1,8 +1,5 @@
-﻿@using Identity.Domain.Entities.User
-@using Microsoft.AspNetCore.Identity;
-@using System.Security.Claims;
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+﻿@* @using System.Security.Claims; *@
+@inject LibIdentity.DomainContracts.Auth.IAuthService _authService
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -11,7 +8,7 @@
 <div class="container text-center mt-5">
     <h1 class="display-4">Welcome to the Library System</h1>
     <p class="lead">Explore and manage your library resources.</p>
-    @if (!SignInManager.IsSignedIn(User))
+    @if (!_authService.IsAuthenticated(User))
     {
         <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="btn btn-primary">Login</a>
     }

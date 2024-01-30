@@ -18,7 +18,7 @@ namespace Identity.Services.Services;
 public class AuthService : ServiceBase<AuthService>, IAuthService
 {
     private readonly IConfiguration _configuration;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private new readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
 
@@ -118,6 +118,13 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         }
     }
 
+    public bool IsAuthenticated(ClaimsPrincipal user)
+    {
+        return _signInManager.IsSignedIn(user);
+        //    var claims = _httpContextAccessor.HttpContext?.User?.Claims.ToList();
+        //    return claims.Count > 0; 
+    }
+
     //-----------------------------------------------------
 
     public async Task<JwtTokenDto> SigninUserAsync(LoginUserDto request)
@@ -211,7 +218,6 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         return generatedToken;
     }
 
-
     public async Task<string> LoginAsync(LoginUserDto model)
     {
         ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
@@ -233,44 +239,38 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         var response = new UnauthorizedResult();
         return jwtToken ?? response.ToString();
     }
+
     private string GenerateJWTAuth(bool isRememberMe, ApplicationUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature);
-        var claimsIdentity = new List<Claim>
+        var claims = new List<Claim>
             {
             new (ClaimTypes.NameIdentifier, user.Id),
             new (JwtHeaderParameterNames.Jku, user.UserName),
             new (JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
             new (JwtRegisteredClaimNames.Email, user.Email),
             };
-
         JwtSecurityToken jwtToken = new(
         
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
-            claims: claimsIdentity,
+            claims: claims,
             expires: GetExpireDateTime(isRememberMe),
             signingCredentials: signingCredentials
         );
         var token =  tokenHandler.WriteToken(jwtToken);
         user.Tokens = new List<Token>()
         {
-            new Token
+            new() 
             {
                 UserId = user.Id,
                 Name = user.UserName,
                 Value = token
             }
         };
-        //user.PasswordHash = null;
-        //AuthenticationProperties authProperties = new() { ExpiresUtc = GetExpireDateTime(isRememberMe) };
-        //_httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-        //    new ClaimsPrincipal(claimsIdentity)
-        //    ,authProperties);
         return token;
-
     }
 
     private static DateTime GetExpireDateTime(bool rememberMe)

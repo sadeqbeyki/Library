@@ -10,10 +10,6 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using Identity.Application.DTOs.Role;
 
 
 namespace Identity.Services.Services;
