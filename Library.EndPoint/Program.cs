@@ -29,7 +29,6 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: fals
 
 #region DependencyInjection
 
-
 builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddIdentityApplication();
@@ -37,7 +36,6 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
 builder.Services.AddInventoryInfrastructure(builder.Configuration);
 builder.Services.AddBookInfrastructure(builder.Configuration);
-
 
 #endregion
 
@@ -69,6 +67,7 @@ app.UseRouting();
 app.UseSession();
 
 app.UseAuthorization();
+
 //IConfiguration configuration = app.Configuration;
 //IWebHostEnvironment environment = app.Environment;
 
@@ -87,7 +86,6 @@ app.UseEndpoints(endpoints =>
 //app.MapControllerRoute(
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 
 app.Run();

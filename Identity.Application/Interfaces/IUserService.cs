@@ -25,6 +25,7 @@ public interface IUserService : IServiceBase
 
     //User Roles
     Task<bool> IsInRoleAsync(string userId, string role);
+    Task<bool> IsInRoles(string userId, List<string> roles);
     Task<bool> AssignUserToRole(string userName, IList<string> roles);
     Task<bool> UpdateUsersRole(string userName, IList<string> usersRole);
     Task<List<string>> GetUserRolesAsync(string userId);
@@ -32,4 +33,7 @@ public interface IUserService : IServiceBase
     Task<string> AssignRoleAsync(string userId, string roles);
     Task<bool> RemoveUserRole(string userId, string roleId);
     Task<List<UserRolesDto>> GetUserWithRoles();
+
+    //email
+    Task<string> GetConfirmEmailToken(string userId);
 }

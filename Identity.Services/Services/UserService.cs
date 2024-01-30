@@ -10,6 +10,8 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
+using System.Security.Claims;
+using System.Security.Policy;
 
 
 namespace Identity.Services.Services;
@@ -153,51 +155,20 @@ public class UserService : ServiceBase<UserService>, IUserService
             ?? await _userManager.FindByNameAsync(model.UserName);
         if (existingUser != null)
         {
-            var error = new IdentityError
-            {
-                Code = "Duplicate Email",
-                Description = "This email already exists on the website."
-            };
-            return IdentityResult.Failed(error);
+            throw new BadRequestException($"Your chosen '{existingUser}' is already registered on the site");
         }
-        //hash token
-        //string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
         //create user
         var userMap = _mapper.Map<ApplicationUser>(model);
         userMap.Id = Guid.NewGuid().ToString();
-        var result = await _userManager.CreateAsync(userMap, model.Password);
+        var result = await _userManager.CreateAsync(userMap, model.Password)
+            ?? throw new BadRequestException("cant add new user");
 
-        if (!result.Succeeded)
-        {
-            var errors = result.Errors.Select(e => e.Description);
-            //throw new ValidationException(string.Join("\n", errors));
-        }
-
-        //add to role
-        if (model.Roles == null
-            || !model.Roles.Any()
-            || model.Roles.All(string.IsNullOrWhiteSpace)
-            || model.Roles.Contains("string"))
-            model.Roles = new List<string> { "Member" };
-
-        var addUserRole = await _userManager.AddToRolesAsync(userMap, model.Roles);
-        if (!addUserRole.Succeeded)
-        {
-            var errors = addUserRole.Errors.Select(e => e.Description);
-            //throw new ValidationException(string.Join("\n", errors));
-        }
+        var addUserRole = await _userManager.AddToRolesAsync(userMap, new List<string> { "Member" })
+            ?? throw new BadRequestException("cant add user to roles");
 
         //confirmation email 
         bool sendConfirmMail = SendConfirmationLink(userMap);
-
-        #region jwt 
-        // Generate JWT token
-        //var token = _authService.GenerateJWTAuthetication(userMap);
-        //var validUserName = _authService.ValidateToken(token);
-        // Set JWT token in the response
-        //Response.Headers.Add("Authorization", "Bearer " + token);
-        #endregion
 
         return result;
     }
@@ -319,6 +290,19 @@ public class UserService : ServiceBase<UserService>, IUserService
         var result = await _userManager.IsInRoleAsync(user, role);
         return result;
     }
+    public async Task<bool> IsInRoles(string userId, List<string> roles)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
+            ?? throw new NotFoundException("User not found");
+
+        bool isIn = false;
+        foreach (var role in roles)
+        {
+            isIn = await _userManager.IsInRoleAsync(user, role);
+        }
+        return isIn;
+    }
+
     public async Task<List<string>> GetUserRolesAsync(string userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
@@ -374,6 +358,13 @@ public class UserService : ServiceBase<UserService>, IUserService
 
         var result = await _userManager.ConfirmEmailAsync(user, token);
         return result.Succeeded ? nameof(ConfirmEmail) : "Error";
+    }
+
+    public async Task<string> GetConfirmEmailToken(string userId)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        var emailConfirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        return emailConfirmToken;
     }
     #endregion
 }

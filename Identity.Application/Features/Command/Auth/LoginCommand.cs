@@ -1,6 +1,6 @@
 ﻿using Identity.Application.Common.Exceptions;
 using Identity.Application.DTOs.User;
-using LibIdentity.DomainContracts.Auth;
+using Identity.Application.Interfaces;
 using MediatR;
 
 namespace Identity.Application.Features.Command.Auth;
@@ -20,8 +20,6 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, string
     {
         var result = await _authService.LoginAsync(request.dto);
 
-        return result == null ? 
-            throw new BadRequestException("Invalid username or password") 
-            : result;
+        return result ?? throw new BadRequestException("Invalid username or password");
     }
 }

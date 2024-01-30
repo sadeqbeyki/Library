@@ -2,16 +2,14 @@
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using LibIdentity.DomainContracts.Auth;
 using Microsoft.Extensions.Configuration;
 using Identity.Domain.Entities.User;
 using Identity.Application.Common.Exceptions;
 using Identity.Application.DTOs.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Identity.Services.Authorization.Const;
 using Identity.Domain.Entities.Auth;
+using Identity.Application.Interfaces;
 
 namespace Identity.Services.Services;
 
@@ -31,101 +29,6 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         _signInManager = signInManager;
     }
 
-    public async Task<string> Login(LoginUserDto model)
-    {
-        ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
-            ?? await _userManager.FindByEmailAsync(model.Username)
-            ?? throw new Exception($"No user found with this name: '{model.Username}'.");
-
-
-        if (user == null && !await _userManager.CheckPasswordAsync(user, model.Password))
-            throw new BadRequestException("نام کاربری یا پسورد اشتباه است");
-
-        var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
-        if (!result.Succeeded)
-            throw new BadRequestException("Login failed");
-
-
-        var jwtToken = GenerateJWTAuthetication(user);
-        var validateToken = ValidateToken(jwtToken);
-
-        var response = new UnauthorizedResult();
-        return jwtToken ?? response.ToString();
-    }
-
-    public async Task<string> LogOutAsync(string returnUrl)
-    {
-        await _signInManager.SignOutAsync();
-        return returnUrl;
-    }
-
-    public string GenerateJWTAuthetication(ApplicationUser user)
-    {
-        var claims = new List<Claim>
-        {
-            new (JwtHeaderParameterNames.Jku, user.UserName),
-            new (JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
-            new (JwtRegisteredClaimNames.Email, user.Email),
-            //new ("AccessAllUser", user.AccessAllUser.ToString())
-            //new (ClaimTypes.Role),
-            //new (ClaimTypes.NameIdentifier, user.UserName),
-        };
-
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature);
-        var expires = DateTime.Now.AddMinutes(2);
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims,
-            expires: expires,
-            signingCredentials: signingCredentials
-        );
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    public string ValidateToken(string token)
-    {
-        if (token == null)
-            return "Invalid token: Token is null.";
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")));
-
-        try
-        {
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = key,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
-
-            }, out SecurityToken validatedToken);
-
-            // Corrected access to the validatedToken
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            var jku = jwtToken.Claims.First(claim => claim.Type == "jku").Value;
-            var kid = jwtToken.Claims.First(claim => claim.Type == "kid").Value;
-
-            return kid;
-        }
-        catch (Exception ex)
-        {
-            return $"Invalid token: {ex.Message}";
-        }
-    }
-
-    public bool IsAuthenticated(ClaimsPrincipal user)
-    {
-        return _signInManager.IsSignedIn(user);
-        //    var claims = _httpContextAccessor.HttpContext?.User?.Claims.ToList();
-        //    return claims.Count > 0; 
-    }
-
-    //-----------------------------------------------------
 
     public async Task<JwtTokenDto> SigninUserAsync(LoginUserDto request)
     {
@@ -218,6 +121,7 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         return generatedToken;
     }
 
+    //-----------------------------------------------------
     public async Task<string> LoginAsync(LoginUserDto model)
     {
         ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
@@ -233,43 +137,86 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
             throw new BadRequestException("Login failed");
 
 
-        var jwtToken = GenerateJWTAuth(model.RememberMe, user);
+        var jwtToken = await GenerateJWTAuthetication(model.RememberMe, user);
         var validateToken = ValidateToken(jwtToken);
 
         var response = new UnauthorizedResult();
         return jwtToken ?? response.ToString();
     }
 
-    private string GenerateJWTAuth(bool isRememberMe, ApplicationUser user)
+    public string ValidateToken(string token)
+    {
+        if (token == null)
+            return "Invalid token: Token is null.";
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")));
+
+        try
+        {
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = key,
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+
+            }, out SecurityToken validatedToken);
+
+            // Corrected access to the validatedToken
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            var jku = jwtToken.Claims.First(claim => claim.Type == "jku").Value;
+            var kid = jwtToken.Claims.First(claim => claim.Type == "kid").Value;
+
+            return kid;
+        }
+        catch (Exception ex)
+        {
+            return $"Invalid token: {ex.Message}";
+        }
+    }
+
+    public bool IsAuthenticated(ClaimsPrincipal user)
+    {
+        return _signInManager.IsSignedIn(user);
+        //    var claims = _httpContextAccessor.HttpContext?.User?.Claims.ToList();
+        //    return claims.Count > 0; 
+    }
+
+    public string CurrentUserRole(ClaimsPrincipal user)
+    {
+        if (IsAuthenticated(user))
+            return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+        return null;
+    }
+
+    public async Task<string> LogOutAsync(string returnUrl)
+    {
+        await _signInManager.SignOutAsync();
+        return returnUrl;
+    }
+
+
+    private async Task<string> GenerateJWTAuthetication(bool isRememberMe, ApplicationUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature);
-        var claims = new List<Claim>
-            {
-            new (ClaimTypes.NameIdentifier, user.Id),
-            new (JwtHeaderParameterNames.Jku, user.UserName),
-            new (JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
-            new (JwtRegisteredClaimNames.Email, user.Email),
-            };
+
+        var claims = await GetClaimsIdentity(user);
         JwtSecurityToken jwtToken = new(
-        
+
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
             expires: GetExpireDateTime(isRememberMe),
             signingCredentials: signingCredentials
         );
-        var token =  tokenHandler.WriteToken(jwtToken);
-        user.Tokens = new List<Token>()
-        {
-            new() 
-            {
-                UserId = user.Id,
-                Name = user.UserName,
-                Value = token
-            }
-        };
+        var token = tokenHandler.WriteToken(jwtToken);
+
+        SaveToken(user, token);
+
         return token;
     }
 
@@ -280,16 +227,36 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
             : DateTime.UtcNow.AddDays(1);
     }
 
-    private static ClaimsIdentity GetClaimsIdentity(ApplicationUser user)
+    private async Task<List<Claim>> GetClaimsIdentity(ApplicationUser user)
     {
-        List<Claim> claims = new()
+        IList<string> rolesOfUser = await _userManager.GetRolesAsync(user);
+
+        var claims = new List<Claim>();
+        foreach (var role in rolesOfUser)
         {
-            new (JwtHeaderParameterNames.Jku, user.UserName),
-            new (JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()),
-            new (JwtRegisteredClaimNames.Email, user.Email),
-            new (AuthorizePermissionConsts.User.UserAccess, "1,2,3,4,5")
-        };
-        return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+        }
+        claims.Add(new(ClaimTypes.NameIdentifier, user.Id));
+        claims.Add(new(JwtHeaderParameterNames.Jku, user.UserName));
+        claims.Add(new(JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()));
+        claims.Add(new(JwtRegisteredClaimNames.Email, user.Email));
+        //claims.Add(new(AuthorizePermissionConsts.User.UserAccess, "1,2,3,4,5"));
+
+        return claims;
+        //return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
+    private void SaveToken(ApplicationUser user, string token)
+    {
+        user.Tokens = new List<Token>()
+        {
+            new()
+            {
+                UserId = user.Id,
+                Name = user.UserName,
+                Value = token
+            }
+        };
+        _userManager.UpdateAsync(user);
+    }
 }

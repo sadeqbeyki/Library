@@ -2,8 +2,9 @@
 @using Microsoft.AspNetCore.Identity;
 @using System.Security.Claims;
 
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject Identity.Application.Interfaces.IAuthService _authService
+@inject Identity.Application.Interfaces.IUserService _userService
+@inject UserManager<ApplicationUser> _userManager
 
 @{
     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -169,7 +170,8 @@
         <span class="fs-5 fw-semibold">Library II</span>
     </a>
     <ul class="list-unstyled ps-0">
-        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+        @if (await _userService.IsInRoles(userId, new List<string>{"Admin", "Manager"}))
+        @* @if (await _userService.IsInRoleAsync(userId, "Admin") || await _userService.IsInRoleAsync(userId, "Manager")) *@
         {
             <li class="mb-1">
                 <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
@@ -261,7 +263,8 @@
                 </div>
             </li>
         }
-        @if (User.IsInRole("Admin"))
+        @* @if (User.IsInRole("Admin")) *@
+        @if (await _userService.IsInRoleAsync(userId, "Admin"))
         {
             <li class="border-top my-3"></li>
             <li class="mb-1">
@@ -295,7 +298,7 @@
                 </div>
             </li>
         }
-        @if (!SignInManager.IsSignedIn(User))
+        @if (!_authService.IsAuthenticated(User))
         {
             <li class="mb-1">
                 <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
@@ -321,7 +324,7 @@
         }
     </ul>
     <hr>
-    @if (SignInManager.IsSignedIn(User))
+    @if (_authService.IsAuthenticated(User))
     {
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -329,7 +332,7 @@
                 &nbspHello<strong>&nbsp;@User.Identity.Name!&nbsp</strong>
             </a>
             <cite title="Source Title" class="ml-4">
-                (@string.Join(", ", await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User))))
+                (@string.Join(", ", await _userManager.GetRolesAsync(await _userManager.GetUserAsync(User))))
             </cite>
 
             <ul class="dropdown-menu p-2 gap-1 mx-4 rounded-3 animated--grow-in">
@@ -340,7 +343,7 @@
                         Member Borrows
                     </a>
                 </li>
-                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                @if (await _userService.IsInRoles(userId, new List<string> { "Admin", "Manager" }))
                 {
                     <li>
                         <a asp-area="adminPanel" asp-controller="Home" asp-action="EmployeeBorrows"

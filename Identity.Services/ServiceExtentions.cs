@@ -3,12 +3,12 @@ using Identity.Domain.Entities.Role;
 using Identity.Domain.Entities.User;
 using Identity.Persistance;
 using Identity.Persistance.Repositories;
-using Identity.Services.Authorization;
 using Identity.Services.Services;
-using LibIdentity.DomainContracts.Auth;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +51,7 @@ public static class ServiceExtentions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
-        
+
 
         services.AddDbContext<AppIdentityDbContext>(c =>
             c.UseSqlServer(configuration.GetConnectionString("AAA")));
@@ -67,6 +67,13 @@ public static class ServiceExtentions
                         x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                         x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     })
+                //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+                //    c =>
+                //    {
+                //        c.LoginPath = new PathString("");
+                //        c.LogoutPath = new PathString("");
+                //        c.AccessDeniedPath = new PathString("");
+                //    })
                 .AddJwtBearer(x =>
                     {
                         x.RequireHttpsMetadata = false;
@@ -82,13 +89,21 @@ public static class ServiceExtentions
                             ValidateIssuerSigningKey = true
                         };
                     });
-        services.AddAuthorization();//options =>
+        services.AddAuthorization();
+        //services.AddAuthorization(options =>
         //{
         //    options.AddPolicy("GetAllUser",
-        //        policy => policy.RequireClaim("AccessAllUser", "True"));
-        //}
+        //        policy => policy.RequireClaim("AccessAllUser", "True")) ;
+        //});
 
-        services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+        //services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+    }
+
+    public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAuthorization(options => 
+        options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"))
+        );
     }
 
     public static void CreateIdentityDatabase(this IApplicationBuilder app)

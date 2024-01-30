@@ -1,5 +1,5 @@
-﻿@* @using System.Security.Claims; *@
-@inject LibIdentity.DomainContracts.Auth.IAuthService _authService
+﻿@using Identity.Application.Interfaces
+@inject IAuthService _authService
 @{
     ViewData["Title"] = "Home Page";
 }

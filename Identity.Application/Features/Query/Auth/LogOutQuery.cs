@@ -1,4 +1,4 @@
-﻿using LibIdentity.DomainContracts.Auth;
+﻿using Identity.Application.Interfaces;
 using MediatR;
 
 namespace Identity.Application.Features.Query.Auth;

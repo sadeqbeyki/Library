@@ -1,6 +1,6 @@
 ﻿using Identity.Application.Common.Exceptions;
 using Identity.Application.DTOs.User;
-using LibIdentity.DomainContracts.Auth;
+using Identity.Application.Interfaces;
 using MediatR;
 
 namespace Identity.Application.Features.Command.Auth;
