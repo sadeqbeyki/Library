@@ -12,6 +12,7 @@ using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
 using System.Security.Claims;
 using System.Security.Policy;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace Identity.Services.Services;
@@ -299,6 +300,8 @@ public class UserService : ServiceBase<UserService>, IUserService
         foreach (var role in roles)
         {
             isIn = await _userManager.IsInRoleAsync(user, role);
+            if(isIn)
+                break;
         }
         return isIn;
     }

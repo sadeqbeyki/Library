@@ -50,7 +50,7 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
 
         var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
         if (!result.Succeeded)
-            throw new BadRequestException("Login failed");
+            throw new BadRequestException("user or password is incurrect!");
 
 
         var claims = await GetClaimsIdentity(user);
@@ -132,10 +132,10 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         //return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
-    private void SaveToken(string id, string userName, string accessToken, string refreshToken)
+    private void SaveToken(string userId, string userName, string accessToken, string refreshToken)
     {
-        Token token = new(id, userName, accessToken, refreshToken, DateTime.Now.AddDays(7));
-        _appIdentityDbContext.Set<Token>().AddAsync(token);
+        Token token = new(userId, userName, accessToken, refreshToken, DateTime.Now.AddDays(7));
+        _appIdentityDbContext.UserTokens.AddAsync(token);
         _appIdentityDbContext.SaveChanges();
     }
 

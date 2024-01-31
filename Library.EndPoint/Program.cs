@@ -43,9 +43,9 @@ builder.Services.AddBookInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 #region CreateDbWhenDosentExist
-app.CreateBookDatabase();
-app.CreateInventoryDatabase();
-app.CreateIdentityDatabase();
+//app.CreateBookDatabase();
+//app.CreateInventoryDatabase();
+//app.CreateIdentityDatabase();
 #endregion
 
 // Configure the HTTP request pipeline.

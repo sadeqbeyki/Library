@@ -170,7 +170,7 @@
         <span class="fs-5 fw-semibold">Library II</span>
     </a>
     <ul class="list-unstyled ps-0">
-        @if (await _userService.IsInRoles(userId, new List<string>{"Admin", "Manager"}))
+        @if (_authService.IsAuthenticated(User) && await _userService.IsInRoles(userId, new List<string> { "Admin", "Manager" }))
         @* @if (await _userService.IsInRoleAsync(userId, "Admin") || await _userService.IsInRoleAsync(userId, "Manager")) *@
         {
             <li class="mb-1">
@@ -264,7 +264,7 @@
             </li>
         }
         @* @if (User.IsInRole("Admin")) *@
-        @if (await _userService.IsInRoleAsync(userId, "Admin"))
+        @if (_authService.IsAuthenticated(User) && await _userService.IsInRoleAsync(userId, "Admin"))
         {
             <li class="border-top my-3"></li>
             <li class="mb-1">
