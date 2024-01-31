@@ -9,8 +9,6 @@ public class ApplicationUser : IdentityUser<string>
     public string LastName { get; set; }
     public DateTime? BirthDate { get; set; }
 
-    //public string Token { get; set; }
-
     [AllowNull]
     public List<Token> Tokens { get; set; }
 

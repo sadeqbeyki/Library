@@ -13,6 +13,6 @@
     </p>
     @if (!SignInManager.IsSignedIn(User))
     {
-        <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.Path })" class="btn btn-primary">Login</a>
+        <a href="@Url.Action("Login", "Auth", new { returnUrl = Context.Request.Path })" class="btn btn-primary">Login</a>
     }
 </div>

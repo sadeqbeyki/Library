@@ -5,11 +5,7 @@ using MediatR;
 using Identity.Application.Features.Command.User;
 using Identity.Application.Features.Command.Auth;
 using Identity.Application.Features.Query.Auth;
-using Identity.Application.Common.Exceptions;
-using Identity.Domain.Entities.User;
-using Microsoft.AspNetCore.Identity;
 using AppFramework.Application.Email;
-using Identity.Application.Features.Query.Email;
 
 namespace Library.EndPoint.Controllers;
 
@@ -46,7 +42,7 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, "modelstate invalid");
         }
 
-        var result = await _mediator.Send(new LoginCommand(model));
+        var result = await _mediator.Send(new AuthCommand(model));
         if (result != null)
         {
             return RedirectToAction("Index", "Home", new { token = result });
@@ -92,36 +88,5 @@ public class AccountController : Controller
         return View();
     }
 
-    #region extention method
-    //private bool SendConfirmationLink(CreateUserDto user)
-    //{
-    //    var emailConfirmToken = _mediator.Send(new GetConfirmEmailTokenQuery(user.));
-
-    //    var scheme = HttpContext?.Request.Scheme ?? "https";
-    //    var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { emailConfirmToken, email = user.Email }, scheme);
-
-    //    EmailModel message = new()
-    //    {
-    //        FromName = "Library Manager",
-    //        FromAddress = "info@library.com",
-    //        ToName = user.UserName,
-    //        ToAddress = user.Email,
-    //        Subject = "Confirm Your Registration",
-    //        Content = "Please click the following link to confirm your registration: <a href=\"" + confirmationLink + "\">Confirm</a>"
-    //    };
-    //    _emailService.Send(message);
-    //    return true;
-    //}
-    //[HttpGet]
-    //public async Task<IActionResult> ConfirmEmail(string token, string email)
-    //{
-    //    var user = await _userManager.FindByEmailAsync(email);
-    //    if (user == null)
-    //        return View("Error");
-
-    //    var result = await _userManager.ConfirmEmailAsync(user, token);
-    //    return View(result.Succeeded ? nameof(ConfirmEmail) : "Error");
-    //}
-
-    #endregion
+ 
 }

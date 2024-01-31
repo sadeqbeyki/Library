@@ -3,6 +3,7 @@ using Identity.Application.Common.Const;
 using Identity.Application.Common.Exceptions;
 using Identity.Application.Interfaces.Base;
 using Identity.Domain.Entities.User;
+using Identity.Persistance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,10 @@ public class ServiceBase<TService> : IServiceBase where TService : class
     protected readonly IHttpContextAccessor _httpContextAccessor;
     protected readonly UserManager<ApplicationUser> _userManager;
 
-
     protected ServiceBase(IServiceProvider serviceProvider)
     {
         _httpContextAccessor = (IHttpContextAccessor)serviceProvider.GetService(typeof(IHttpContextAccessor));
         _userManager = (UserManager<ApplicationUser>)serviceProvider.GetService(typeof(UserManager<ApplicationUser>));
-
     }
 
 

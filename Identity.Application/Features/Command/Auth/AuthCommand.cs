@@ -1,13 +1,14 @@
 ﻿using Identity.Application.Common.Exceptions;
+using Identity.Application.DTOs.Auth;
 using Identity.Application.DTOs.User;
 using Identity.Application.Interfaces;
 using MediatR;
 
 namespace Identity.Application.Features.Command.Auth;
 
-public record AuthCommand(LoginUserDto dto) : IRequest<JwtTokenDto>;
+public record AuthCommand(LoginUserDto dto) : IRequest<AuthenticatedResponse>;
 
-internal sealed class AuthCommandHandler : IRequestHandler<AuthCommand, JwtTokenDto>
+internal sealed class AuthCommandHandler : IRequestHandler<AuthCommand, AuthenticatedResponse>
 {
     private readonly IAuthService _authService;
 
@@ -16,10 +17,9 @@ internal sealed class AuthCommandHandler : IRequestHandler<AuthCommand, JwtToken
         _authService = authService;
     }
 
-    public async Task<JwtTokenDto> Handle(AuthCommand request, CancellationToken cancellationToken)
+    public async Task<AuthenticatedResponse> Handle(AuthCommand request, CancellationToken cancellationToken)
     {
-        var result = await _authService.SigninUserAsync(request.dto);
-
-        return result == null ? throw new BadRequestException("Invalid username or password") : result;
+        var result = await _authService.LoginAsync(request.dto);
+        return result ?? throw new BadRequestException("Invalid username or password");
     }
 }

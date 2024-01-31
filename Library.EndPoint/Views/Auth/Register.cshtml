@@ -36,7 +36,7 @@
             </div>
 
             <div class="row g-4">
-                <form asp-controller="Account" asp-action="Register" method="post">
+                <form asp-controller="Auth" asp-action="Register" method="post">
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label asp-for="FirstName" class="form-label">First name</label>
@@ -92,10 +92,10 @@
 
                     <hr class="my-4">
 
-                    <button asp-controller="Account" asp-action="Register" class="w-100 btn btn-primary btn-lg" type="submit">Register to library</button>
+                    <button asp-controller="Auth" asp-action="Register" class="w-100 btn btn-primary btn-lg" type="submit">Register to library</button>
                 </form>
                 <div class="text-center mt-1">
-                    <a asp-controller="Account" asp-action="Login" class="small">I am already member</a>
+                    <a asp-controller="Auth" asp-action="Login" class="small">I am already member</a>
                     &nbsp; | &nbsp;<a class="small" href="#">Forgot Password?</a>
                 </div>
             </div>

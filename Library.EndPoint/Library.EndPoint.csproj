@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Account\AccessDenied.cshtml" />
-    <None Include="Views\Account\Register.cshtml" />
+    <None Include="Views\Auth\AccessDenied.cshtml" />
+    <None Include="Views\Auth\Register.cshtml" />
     <None Include="wwwroot\APTheme\vendor\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\APTheme\vendor\dist\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\APTheme\vendor\dist\css\bootstrap-grid.rtl.css.map" />
@@ -80,6 +80,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Models\" />
+    <Folder Include="Models\Auths\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -87,7 +88,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="Views\Account\Index.cshtml">
+    <Content Update="Views\Auth\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

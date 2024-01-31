@@ -307,15 +307,15 @@
                 <div class="collapse show" id="home-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li>
-                            <a asp-area="default" asp-controller="Account" asp-action="Login" asp-route-returnUrl=@Context.Request.Path
+                            <a asp-area="default" asp-controller="Auth" asp-action="Login" asp-route-returnUrl=@Context.Request.Path
                                class="link-dark d-inline-flex text-decoration-none rounded">Sign in</a>
                         </li>
                         <li>
-                            <a asp-area="default" asp-controller="Account" asp-action="Register"
+                            <a asp-area="default" asp-controller="Auth" asp-action="Register"
                                class="link-dark d-inline-flex text-decoration-none rounded">Sign up</a>
                         </li>
                         <li>
-                            <a asp-area="default" asp-controller="Account" asp-action="ForgotPassword"
+                            <a asp-area="default" asp-controller="Auth" asp-action="ForgotPassword"
                                class="link-dark d-inline-flex text-decoration-none rounded btn disabled">Forget Password</a>
                         </li>
                     </ul>

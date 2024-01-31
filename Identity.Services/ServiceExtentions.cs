@@ -52,7 +52,6 @@ public static class ServiceExtentions
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
 
-
         services.AddDbContext<AppIdentityDbContext>(c =>
             c.UseSqlServer(configuration.GetConnectionString("AAA")));
 
@@ -60,7 +59,7 @@ public static class ServiceExtentions
 
     public static void AddJwtAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        //Jwt configuration starts here
+
         services.AddAuthentication(x =>
                     {
                         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

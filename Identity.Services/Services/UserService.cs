@@ -336,7 +336,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         var emailConfirmToken = _userManager.GenerateEmailConfirmationTokenAsync(user);
 
         var scheme = _httpContextAccessor.HttpContext?.Request.Scheme ?? "https";
-        var confirmationLink = /*Url.Action*/(nameof(ConfirmEmail), "Account", new { emailConfirmToken, email = user.Email }, scheme);
+        var confirmationLink = /*Url.Action*/(nameof(ConfirmEmail), "Auth", new { emailConfirmToken, email = user.Email }, scheme);
 
         EmailModel message = new()
         {

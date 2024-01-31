@@ -30,7 +30,7 @@ public class HomeController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
-            return RedirectToAction("Login", "Account", "adminPanel");
+            return RedirectToAction("Login", "Auth", "adminPanel");
         }
 
         var loans = await _loanService.GetBorrowsByEmployeeId(user.Id.ToString());

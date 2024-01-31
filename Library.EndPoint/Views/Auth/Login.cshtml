@@ -74,7 +74,7 @@
 <body class="text-center">
 
     <main class="form-signin w-100 m-auto">
-        <form asp-controller="Account" asp-action="Login" method="post" class="user">
+        <form asp-controller="Auth" asp-action="Login" method="post" class="user">
             <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
             <div class="text-danger" asp-validation-summary="All"></div>
             <img class="mb-4" src="/APTheme/img/logo.png" alt="" width="208" height="142">
@@ -106,7 +106,7 @@
             <a class="small" href="#">Forgot Password?</a>
         </div>
         <div class="text-center">
-            <a asp-controller="Account" asp-action="Register" class="small">Sign up !</a>
+            <a asp-controller="Auth" asp-action="Register" class="small">Sign up !</a>
         </div>
 
         <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
