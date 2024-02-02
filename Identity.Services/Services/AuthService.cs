@@ -7,15 +7,10 @@ using Identity.Domain.Entities.User;
 using Identity.Application.Common.Exceptions;
 using Identity.Application.DTOs.User;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Identity.Domain.Entities.Auth;
 using Identity.Application.Interfaces;
 using System.Security.Cryptography;
 using Identity.Application.DTOs.Auth;
-using Azure.Core;
 using Identity.Persistance;
-using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Services.Services;
@@ -39,7 +34,7 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         _signInManager = signInManager;
         _appIdentityDbContext = appIdentityDbContext;
     }
-    public async Task<AuthenticatedResponse> LoginAsync(LoginUserDto model)
+    public async Task<TokenAuthResponse> LoginAsync(LoginUserDto model)
     {
         ApplicationUser user = await _userManager.FindByNameAsync(model.Username)
             ?? await _userManager.FindByEmailAsync(model.Username)
@@ -54,13 +49,15 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
 
 
         var claims = await GetClaimsIdentity(user);
-        AuthenticatedResponse response = new()
+        TokenAuthResponse response = new()
         {
             AccessToken = await GenerateAccessToken(model.RememberMe, claims),
             RefreshToken = GenerateRefreshToken()
         };
 
-        SaveToken(user.Id, user.UserName, response.AccessToken, response.RefreshToken);
+        user.RefreshToken = response.RefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+        await _appIdentityDbContext.SaveChangesAsync();
 
         return response;
     }
@@ -132,12 +129,15 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         //return new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
-    private void SaveToken(string userId, string userName, string accessToken, string refreshToken)
-    {
-        Token token = new(userId, userName, accessToken, refreshToken, DateTime.Now.AddDays(7));
-        _appIdentityDbContext.UserTokens.AddAsync(token);
-        _appIdentityDbContext.SaveChanges();
-    }
+    //private async Task<bool> SaveToken(string userId, string userName, string accessToken, string refreshToken)
+    //{
+
+    //    Token token = new(userId, userName, accessToken, refreshToken, DateTime.Now.AddDays(7));
+    //    var result = await _appIdentityDbContext.UserTokens.AddAsync(token);
+    //    if (result != null)
+    //        _appIdentityDbContext.SaveChanges();
+    //    return false;
+    //}
 
     //refresh token
     private string GenerateRefreshToken()
@@ -150,19 +150,22 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         }
     }
 
-    public async Task<AuthenticatedResponse> Refresh(TokenDto model)
+    public async Task<TokenAuthResponse> Refresh(TokenAuthRequest model)
     {
         bool isRmemberMe = true;
         var principal = GetPrincipalFromExpiredToken(model.AccessToken);
         var username = principal.Identity.Name; //this is mapped to the Name claim by default
-        var userToken = _appIdentityDbContext.UserTokens.SingleOrDefault(u => u.Name == username);
-        if (userToken is null || userToken.RefreshToken != model.RefreshToken || userToken.RefreshTokenExpiryTime <= DateTime.Now)
+        var user = _appIdentityDbContext.Users.SingleOrDefault(u => u.UserName == username);
+        if (user is null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             throw new BadRequestException("Invalid client request");
 
         var newAccessToken = await GenerateAccessToken(isRmemberMe, principal.Claims);
         var newRefreshToken = GenerateRefreshToken();
-        SaveToken(userToken.UserId, username, newAccessToken, newRefreshToken);
-        AuthenticatedResponse response = new()
+
+        user.RefreshToken = newRefreshToken;
+        await _appIdentityDbContext.SaveChangesAsync();
+
+        TokenAuthResponse response = new()
         {
             AccessToken = newAccessToken,
             RefreshToken = newRefreshToken,
@@ -172,10 +175,10 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
 
     public async Task<bool> Revoke(string Username)
     {
-        var userToken = await _appIdentityDbContext.UserTokens.SingleOrDefaultAsync(u => u.Name == Username)
+        var user = await _appIdentityDbContext.Users.SingleOrDefaultAsync(u => u.UserName == Username)
             ?? throw new Exception("cant find user");
-        userToken.RefreshToken = null;
-        _appIdentityDbContext.SaveChanges();
+        user.RefreshToken = null;
+        await _appIdentityDbContext.SaveChangesAsync();
         return true;
     }
 

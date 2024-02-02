@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Identity.Application.Features.Command.Auth;
 
-public record AuthCommand(LoginUserDto dto) : IRequest<AuthenticatedResponse>;
+public record AuthCommand(LoginUserDto dto) : IRequest<TokenAuthResponse>;
 
-internal sealed class AuthCommandHandler : IRequestHandler<AuthCommand, AuthenticatedResponse>
+internal sealed class AuthCommandHandler : IRequestHandler<AuthCommand, TokenAuthResponse>
 {
     private readonly IAuthService _authService;
 
@@ -17,7 +17,7 @@ internal sealed class AuthCommandHandler : IRequestHandler<AuthCommand, Authenti
         _authService = authService;
     }
 
-    public async Task<AuthenticatedResponse> Handle(AuthCommand request, CancellationToken cancellationToken)
+    public async Task<TokenAuthResponse> Handle(AuthCommand request, CancellationToken cancellationToken)
     {
         var result = await _authService.LoginAsync(request.dto);
         return result ?? throw new BadRequestException("Invalid username or password");

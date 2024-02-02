@@ -93,7 +93,7 @@ public class AuthController : Controller
 
 
     [HttpPost]
-    public async Task<ActionResult<AuthenticatedResponse>> Refresh(TokenDto model)
+    public async Task<ActionResult<TokenAuthResponse>> Refresh(TokenAuthRequest model)
     {
         if (model is null)
             return BadRequest("Invalid client request");

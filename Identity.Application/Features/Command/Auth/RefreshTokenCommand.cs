@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Identity.Application.Features.Command.Auth;
 
-public record RefreshTokenCommand(TokenDto dto) : IRequest<AuthenticatedResponse>;
+public record RefreshTokenCommand(TokenAuthRequest dto) : IRequest<TokenAuthResponse>;
 
-internal sealed class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, AuthenticatedResponse>
+internal sealed class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, TokenAuthResponse>
 {
     private readonly IAuthService _authService;
 
@@ -15,7 +15,7 @@ internal sealed class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenC
         _authService = authService;
     }
 
-    public async Task<AuthenticatedResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<TokenAuthResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
         var result = await _authService.Refresh(request.dto);
 

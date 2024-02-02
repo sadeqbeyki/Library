@@ -10,9 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
-using System.Security.Claims;
-using System.Security.Policy;
-using System.Reflection.Metadata.Ecma335;
+using FluentValidation.Results;
 
 
 namespace Identity.Services.Services;
@@ -199,18 +197,13 @@ public class UserService : ServiceBase<UserService>, IUserService
 
         //confirm user
         user.EmailConfirmed = true;
-
-        if (model.Roles == null
-            || !model.Roles.Any()
-            || model.Roles.All(string.IsNullOrWhiteSpace)
-            || model.Roles.Contains("string"))
-            model.Roles = new List<string> { "Member" };
+        model.Roles = new List<string> { "Member" };
 
         var addUserRole = await _userManager.AddToRolesAsync(user, model.Roles);
         if (!addUserRole.Succeeded)
         {
-            var errors = addUserRole.Errors.Select(e => e.Description);
-            //throw new ValidationException(string.Join("\n", errors));
+            var validationFailures = addUserRole.Errors.Select(e => new ValidationFailure("", e.Description));
+            throw new ValidationException(validationFailures);
         }
         return (result.Succeeded, user.Id);
     }
@@ -300,7 +293,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         foreach (var role in roles)
         {
             isIn = await _userManager.IsInRoleAsync(user, role);
-            if(isIn)
+            if (isIn)
                 break;
         }
         return isIn;
@@ -370,4 +363,5 @@ public class UserService : ServiceBase<UserService>, IUserService
         return emailConfirmToken;
     }
     #endregion
+
 }
