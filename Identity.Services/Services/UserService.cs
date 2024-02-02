@@ -13,6 +13,7 @@ using Identity.Domain.Entities.Role;
 using FluentValidation.Results;
 using System.Security;
 using System;
+using Microsoft.AspNetCore.SignalR;
 
 
 namespace Identity.Services.Services;
@@ -165,13 +166,39 @@ public class UserService : ServiceBase<UserService>, IUserService
         var result = await _userManager.CreateAsync(userMap, model.Password)
             ?? throw new BadRequestException("cant add new user");
 
-        var addUserRole = await _userManager.AddToRolesAsync(userMap, new List<string> { "Member" })
-            ?? throw new BadRequestException("cant add user to roles");
+        await AssignRoleToUser(userMap);
 
         //confirmation email 
-        bool sendConfirmMail = SendConfirmationLink(userMap);
+        SendConfirmationLink(userMap);
 
         return result;
+    }
+
+    private async Task<bool> AssignRoleToUser(ApplicationUser user)
+    {
+        //if (_roleManager.Roles.ToList().Count <= 0)
+        if (!await _roleManager.RoleExistsAsync("Member"))
+        {
+            List<ApplicationRole> applicationRoles = new(){
+                new(){Name = "Member"},
+                new(){Name = "Manager"},
+                new(){Name = "Employee"},
+                new(){Name = "Admin"}
+            };
+            foreach (var role in applicationRoles)
+            {
+                await _roleManager.CreateAsync(role);
+            }
+            await _userManager.AddToRolesAsync(user, new List<string> { "Member", "Admin" });
+            user.EmailConfirmed = true;
+            return true;
+        }
+        else
+        {
+            var addUserRole = await _userManager.AddToRolesAsync(user, new List<string> { "Member" })
+                ?? throw new BadRequestException("cant add user to roles");
+            return true;
+        }
     }
 
     public async Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserDto model)
