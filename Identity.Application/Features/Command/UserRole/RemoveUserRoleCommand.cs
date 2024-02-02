@@ -5,8 +5,8 @@ namespace Identity.Application.Features.Command.UserRole;
 
 public class RemoveUserRoleCommand : IRequest<bool>
 {
-    public string UserId { get; set; }
-    public string RoleId { get; set; }
+    public Guid UserId { get; set; }
+    public Guid RoleId { get; set; }
 }
 
 public sealed class RemoveUserRoleCommandHandler : IRequestHandler<RemoveUserRoleCommand, bool>

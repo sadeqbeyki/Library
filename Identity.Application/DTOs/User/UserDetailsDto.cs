@@ -10,7 +10,7 @@ public class UserDetailsDto
     #region Basic user details
     [Required(ErrorMessage = "RequiredField", AllowEmptyStrings = false)]
     [ValidateGuid]
-    public string Id { get; set; } = string.Empty;
+    public Guid Id { get; set; }
 
     [Required(ErrorMessage = "RequiredField", AllowEmptyStrings = false)]
     [DisplayName("User Name")]

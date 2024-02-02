@@ -2,6 +2,7 @@
 
 namespace Identity.Domain.Entities.Role;
 
-public class ApplicationRole : IdentityRole<string>
+public class ApplicationRole : IdentityRole<Guid>
 {
+    public string Name { get; set; }
 }

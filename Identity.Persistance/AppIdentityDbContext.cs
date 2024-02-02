@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Persistance;
 
-public class AppIdentityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+public class AppIdentityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
     public DbSet<BadPassword> BadPasswords { get; set; }
     public DbSet<ApplicationUser> Users { get; set; }

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
 using FluentValidation.Results;
+using System.Security;
 
 
 namespace Identity.Services.Services;
@@ -45,7 +46,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         _roleManager = roleManager;
     }
     #region Get
-    public async Task<UserDetailsDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
+    public async Task<UserDetailsDto> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
             ?? throw new NotFoundException("User not found");
@@ -69,7 +70,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         return usersMap;
     }
 
-    public async Task<string> GetUserNameAsync(string userId)
+    public async Task<string> GetUserNameAsync(Guid userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
         return user == null
@@ -116,14 +117,14 @@ public class UserService : ServiceBase<UserService>, IUserService
         return await _userManager.FindByNameAsync(userName) == null;
     }
 
-    public async Task<ApplicationUser?> GetMember(string id, CancellationToken cancellationToken)
+    public async Task<ApplicationUser?> GetMember(Guid id, CancellationToken cancellationToken)
     {
         string key = $"member-{id}";
         ApplicationUser? member = await _distributedCache.GetObjectAsync<ApplicationUser>(key, cancellationToken);
 
         if (member is null)
         {
-            member = await _userManager.FindByIdAsync(id);
+            member = await _userManager.FindByIdAsync(id.ToString());
 
             if (member is not null)
             {
@@ -159,7 +160,7 @@ public class UserService : ServiceBase<UserService>, IUserService
 
         //create user
         var userMap = _mapper.Map<ApplicationUser>(model);
-        userMap.Id = Guid.NewGuid().ToString();
+        userMap.SecurityStamp = Guid.NewGuid().ToString();
         var result = await _userManager.CreateAsync(userMap, model.Password)
             ?? throw new BadRequestException("cant add new user");
 
@@ -172,7 +173,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         return result;
     }
 
-    public async Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserDto model)
+    public async Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserDto model)
     {
         var existingUser = await _userManager.FindByEmailAsync(model.Email)
             ?? await _userManager.FindByNameAsync(model.UserName);
@@ -186,7 +187,6 @@ public class UserService : ServiceBase<UserService>, IUserService
             return (isSucceed: false, userId: existingUser.Id);
         }
         var user = _mapper.Map<ApplicationUser>(model);
-        user.Id = Guid.NewGuid().ToString();
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (!result.Succeeded)
@@ -226,7 +226,7 @@ public class UserService : ServiceBase<UserService>, IUserService
     #endregion
 
     #region Delete
-    public async Task<bool> DeleteUserAsync(string userId)
+    public async Task<bool> DeleteUserAsync(Guid userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
             ?? throw new NotFoundException("User not found");
@@ -242,7 +242,7 @@ public class UserService : ServiceBase<UserService>, IUserService
     #endregion
 
     #region UserRole
-    public async Task<string> AssignRoleAsync(string userId, string roleId)
+    public async Task<string> AssignRoleAsync(Guid userId, Guid roleId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
                 ?? throw new NotFoundException("User not found");
@@ -258,10 +258,10 @@ public class UserService : ServiceBase<UserService>, IUserService
         return "There is a problem in assigning a role to a user";
     }
 
-    public async Task<bool> RemoveUserRole(string userId, string roleId)
+    public async Task<bool> RemoveUserRole(Guid userId, Guid roleId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-        var role = await _roleManager.FindByIdAsync(roleId);
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        var role = await _roleManager.FindByIdAsync(roleId.ToString());
 
         if (user == null || role == null)
             throw new BadRequestException("cant find user or role!");
@@ -276,17 +276,19 @@ public class UserService : ServiceBase<UserService>, IUserService
     }
 
 
-    public async Task<bool> IsInRoleAsync(string userId, string role)
+    public async Task<bool> IsInRoleAsync(string userId, string roleName)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
+        Guid id = new Guid(userId);
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new NotFoundException("User not found");
 
-        var result = await _userManager.IsInRoleAsync(user, role);
+        var result = await _userManager.IsInRoleAsync(user, roleName);
         return result;
     }
     public async Task<bool> IsInRoles(string userId, List<string> roles)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
+        Guid id = new Guid(userId);
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new NotFoundException("User not found");
 
         bool isIn = false;
@@ -299,7 +301,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         return isIn;
     }
 
-    public async Task<List<string>> GetUserRolesAsync(string userId)
+    public async Task<List<string>> GetUserRolesAsync(Guid userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId)
             ?? throw new NotFoundException("User not found");
@@ -356,7 +358,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         return result.Succeeded ? nameof(ConfirmEmail) : "Error";
     }
 
-    public async Task<string> GetConfirmEmailToken(string userId)
+    public async Task<string> GetConfirmEmailToken(Guid userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
         var emailConfirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);

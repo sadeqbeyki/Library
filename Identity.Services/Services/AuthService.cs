@@ -117,9 +117,9 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         var claims = new List<Claim>();
         foreach (var role in rolesOfUser)
         {
-            claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+            claims.Add(new Claim(ClaimTypes.Role, role));
         }
-        claims.Add(new(ClaimTypes.NameIdentifier, user.Id));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
         claims.Add(new(JwtHeaderParameterNames.Jku, user.UserName));
         claims.Add(new(JwtHeaderParameterNames.Kid, Guid.NewGuid().ToString()));
         claims.Add(new(JwtRegisteredClaimNames.Email, user.Email));

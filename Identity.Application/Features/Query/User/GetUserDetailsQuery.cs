@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Identity.Application.Features.User.Queries;
 
-public record GetUserDetailsQuery(string UserId) : IRequest<UserDetailsDto>;
+public record GetUserDetailsQuery(Guid UserId) : IRequest<UserDetailsDto>;
 
 public sealed class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserDetailsDto>
 {

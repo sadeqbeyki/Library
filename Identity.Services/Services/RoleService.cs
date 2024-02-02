@@ -20,9 +20,9 @@ public class RoleService : IRoleService
         _mapper = mapper;
     }
     #region Get
-    public async Task<RoleDto> GetRoleByIdAsync(string id)
+    public async Task<RoleDto> GetRoleByIdAsync(Guid id)
     {
-        var role = await _roleManager.FindByIdAsync(id);
+        var role = await _roleManager.FindByIdAsync(id.ToString());
         var roleMap = _mapper.Map<RoleDto>(role);
         return roleMap;
     }
@@ -41,7 +41,6 @@ public class RoleService : IRoleService
     public async Task<IdentityResult> CreateRoleAsync(RoleDto model)
     {
         var roleMap = _mapper.Map<ApplicationRole>(model);
-        roleMap.Id = Guid.NewGuid().ToString();
         var result = await _roleManager.CreateAsync(roleMap);
         if (!result.Succeeded)
         {
@@ -70,9 +69,9 @@ public class RoleService : IRoleService
     #endregion
 
     #region Delete
-    public async Task<IdentityResult> DeleteRoleAsync(string id)
+    public async Task<IdentityResult> DeleteRoleAsync(Guid id)
     {
-        var role = await _roleManager.FindByIdAsync(id)
+        var role = await _roleManager.FindByIdAsync(id.ToString())
             ?? throw new NotFoundException("Role not found");
 
         if (role.Name == "Admin")

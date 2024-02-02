@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Identity.Application.Features.Command.Role;
 
-public record DeleteRoleCommand(string id) : IRequest<int>;
+public record DeleteRoleCommand(Guid id) : IRequest<int>;
 
 
 internal sealed class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, int>

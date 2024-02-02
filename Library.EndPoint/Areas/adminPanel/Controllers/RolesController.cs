@@ -22,7 +22,7 @@ public class RolesController : Controller
         var roles = await _mediator.Send(new GetRolesQuery());
         return View(roles);
     }
-    public async Task<IActionResult> Details(string id)
+    public async Task<IActionResult> Details(Guid id)
     {
         await _mediator.Send(new GetRoleByIdQuery(id));
         return View();
@@ -42,7 +42,7 @@ public class RolesController : Controller
     #endregion
 
     #region Update
-    public async Task<ActionResult> Update(string id)
+    public async Task<ActionResult> Update(Guid id)
     {
         var role = await _mediator.Send(new GetRoleByIdQuery(id));
         if (role != null)
@@ -64,7 +64,7 @@ public class RolesController : Controller
     #endregion
 
     #region Delete
-    public async Task<ActionResult> Delete(string id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         var result = await _mediator.Send(new DeleteRoleCommand(id));
         return RedirectToAction("Index", result);

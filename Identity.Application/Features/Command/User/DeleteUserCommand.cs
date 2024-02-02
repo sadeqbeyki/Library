@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Identity.Application.Features.Command.User;
 
-public record DeleteUserCommand(string Id) : IRequest<int>;
+public record DeleteUserCommand(Guid Id) : IRequest<int>;
 
 public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, int>
 {

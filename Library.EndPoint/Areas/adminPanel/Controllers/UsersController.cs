@@ -32,7 +32,7 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult> Details(string id)
+    public async Task<ActionResult> Details(Guid id)
     {
         var user = await _mediator.Send(new GetUserDetailsQuery(id));
         return View(user);
@@ -53,7 +53,7 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult> Update(string id)
+    public async Task<ActionResult> Update(Guid id)
     {
         var user = await _mediator.Send(new GetUserDetailsQuery(id));
         if (user == null)
@@ -74,7 +74,7 @@ public class UsersController : Controller
         return RedirectToAction("Index", user);
     }
 
-    public async Task<ActionResult> Delete(string id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         var user = await _mediator.Send(new GetUserDetailsQuery(id));
         if (id == null || user == null)
@@ -86,7 +86,7 @@ public class UsersController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string id)
+    public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
         if (ModelState.IsValid)
         {
@@ -109,7 +109,7 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> AssignRole(UserRoleViewModel model)
     {
-        if (model.Assign.UserId is null || model.Assign.RoleId is null)
+        if (model.Assign.UserId == Guid.Empty || model.Assign.RoleId ==Guid.Empty)
             return View(ViewBag.Error = "Fileds can't be null.");
 
         var result = await _mediator.Send(new AssignUserToRoleCommand(model.Assign));
@@ -118,7 +118,7 @@ public class UsersController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> RemoveUserFromRole(string userId, string roleId)
+    public async Task<IActionResult> RemoveUserFromRole(Guid userId, Guid roleId)
     {
         if (userId == null || roleId == null)
             return BadRequest();

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Identity.Application.Features.Query.Email;
 
-public record GetConfirmEmailTokenQuery(string Id) : IRequest<string>;
+public record GetConfirmEmailTokenQuery(Guid Id) : IRequest<string>;
 public sealed class GetConfirmEmailTokenQueryHandler : IRequestHandler<GetConfirmEmailTokenQuery, string>
 {
     private readonly IUserService _userService;
