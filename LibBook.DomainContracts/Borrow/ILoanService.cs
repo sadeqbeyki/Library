@@ -13,8 +13,8 @@ public interface ILoanService
     List<LoanDto> GetDeletedLoans();
 
     Task<LoanDto> GetLoanById(int borrowId);
-    Task<List<LoanDto>> GetBorrowsByMemberId(string memberId);
-    Task<List<LoanDto>> GetBorrowsByEmployeeId(string EmployeeId);
+    Task<List<LoanDto>> GetBorrowsByMemberId(Guid memberId);
+    Task<List<LoanDto>> GetBorrowsByEmployeeId(Guid EmployeeId);
 
     Task<List<LoanDto>> GetOverdueLones();
 

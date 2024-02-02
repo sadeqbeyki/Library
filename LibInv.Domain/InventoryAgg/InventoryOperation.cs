@@ -5,7 +5,7 @@ public class InventoryOperation
     public long Id { get; private set; }
     public bool Operation { get; private set; }
     public long Count { get; private set; }
-    public string OperatorId { get; private set; }
+    public Guid OperatorId { get; private set; }
     public DateTime OperationDate { get; private set; }
     public long CurrentCount { get; private set; }
     public string Description { get; set; }
@@ -14,7 +14,7 @@ public class InventoryOperation
     public Inventory Inventory { get; private set; }
     protected InventoryOperation() { }
 
-    public InventoryOperation(bool operation, long count, string operationId,
+    public InventoryOperation(bool operation, long count, Guid operationId,
         long currentCount, string description, long lendId, int inventoryId)
     {
         Operation = operation;

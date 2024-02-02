@@ -23,7 +23,7 @@ public class LibraryIdentityAcl : ILibraryIdentityAcl
         return userName;
     }
 
-    public string GetCurrentUserId()
+    public Guid GetCurrentUserId()
     {
         var userId = _userService.GetCurrentUserId();
         return userId;

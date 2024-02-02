@@ -23,11 +23,12 @@ public class ServiceBase<TService> : IServiceBase where TService : class
     }
 
 
-    public string GetCurrentUserId()
+    public Guid GetCurrentUserId()
     {
         ClaimsIdentity identity = _httpContextAccessor?.HttpContext?.User?.Identity as ClaimsIdentity;
-        string userId = identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        return userId ?? string.Empty;
+        Guid userId = Guid.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+        return userId;
 
         //    return _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
         //    //return _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);

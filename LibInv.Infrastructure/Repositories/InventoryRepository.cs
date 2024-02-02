@@ -53,7 +53,7 @@ namespace LibInventory.Infrastructure.Repositories
 
             foreach (var operation in operations)
             {
-                operation.Operator = accounts.FirstOrDefault(x => x.Id.ToString() == operation.OperatorId)?.FullName;
+                operation.Operator = accounts.FirstOrDefault(x => x.Id == operation.OperatorId)?.FullName;
             }
             return operations;
         }

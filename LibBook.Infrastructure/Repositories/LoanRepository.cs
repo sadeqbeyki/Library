@@ -20,7 +20,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         _bookRepository = bookRepository;
     }
 
-    public async Task<List<LoanDto>> GetBorrowsByEmployeeId(string employeeId)
+    public async Task<List<LoanDto>> GetBorrowsByEmployeeId(Guid employeeId)
     {
         var borrows = await _bookDbContext.Borrows.Where(x => x.EmployeeId == employeeId).ToListAsync();
         List<LoanDto> result = borrows.Select(b => new LoanDto
@@ -33,14 +33,14 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = _IdentityAcl.GetUserName(b.ReturnEmployeeID).Result,
+            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(b.ReturnEmployeeID).Result),
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
         return result;
     }
 
-    public async Task<List<LoanDto>> GetBorrowsByMemberId(string memberId)
+    public async Task<List<LoanDto>> GetBorrowsByMemberId(Guid memberId)
     {
         var loans = await _bookDbContext.Borrows
             .Where(x => x.MemberID == memberId)
@@ -55,14 +55,14 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeName = _IdentityAcl.GetUserName(b.EmployeeId).Result,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = _IdentityAcl.GetUserName(b.ReturnEmployeeID).Result,
+            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(b.ReturnEmployeeID).Result),
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
         return result;
     }
 
-    public async Task<List<LoanDto>> GetDuplicatedLoans(string memberId, int bookId)
+    public async Task<List<LoanDto>> GetDuplicatedLoans(Guid memberId, int bookId)
     {
         var loans = await _bookDbContext.Borrows
             .Where(b => b.MemberID == memberId && b.BookId == bookId && b.IsApproved && !b.IsReturned && !b.IsDeleted).ToListAsync();
@@ -82,7 +82,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         return result;
     }
 
-    public async Task<List<LoanDto>> GetMemberOverdueLoans(string memberId)
+    public async Task<List<LoanDto>> GetMemberOverdueLoans(Guid memberId)
     {
         var loans = await _bookDbContext.Borrows
             .Where(b => b.MemberID == memberId && b.IsApproved && b.IdealReturnDate < DateTime.Now && !b.IsReturned && !b.IsDeleted).ToListAsync();
@@ -123,7 +123,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
         });
 
         if (!string.IsNullOrWhiteSpace(searchModel.MemberName))
-            query = query.Where(x => x.MemberName.Contains(searchModel.MemberName)); 
+            query = query.Where(x => x.MemberName.Contains(searchModel.MemberName));
 
         if (!string.IsNullOrEmpty(searchModel.EmployeeName))
             query = query.Where(x => x.EmployeeName.Contains(searchModel.EmployeeName));

@@ -30,7 +30,7 @@ public class Inventory : BaseEntity
         return plus - minus;
     }
 
-    public void Increase(long count, string operatorId, string description)
+    public void Increase(long count, Guid operatorId, string description)
     {
         var currentCount = CalculateCurrentCount() + count;
 
@@ -46,7 +46,7 @@ public class Inventory : BaseEntity
     //    InStock = currentCount > 0;
     //}
 
-    public void Decrease(long count, string operatorId, string description, int lendId)
+    public void Decrease(long count, Guid operatorId, string description, int lendId)
     {
         var currentCount = CalculateCurrentCount();
 
@@ -60,7 +60,7 @@ public class Inventory : BaseEntity
         InStock = (currentCount - count) > 0;
     }
 
-    public void Return(long count, string operatorId, string description, long lendId)
+    public void Return(long count, Guid operatorId, string description, long lendId)
     {
         var currentCount = CalculateCurrentCount() + count;
         var operation = new InventoryOperation(true, count, operatorId, currentCount, description, lendId, Id);

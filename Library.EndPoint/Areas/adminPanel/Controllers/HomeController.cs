@@ -33,7 +33,7 @@ public class HomeController : Controller
             return RedirectToAction("Login", "Auth", "adminPanel");
         }
 
-        var loans = await _loanService.GetBorrowsByEmployeeId(user.Id.ToString());
+        var loans = await _loanService.GetBorrowsByEmployeeId(user.Id);
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -42,7 +42,7 @@ public class HomeController : Controller
         return View("EmployeeBorrows", pagedLog);
     }
     [HttpGet]
-    public async Task<IActionResult> MemberBorrows(string memberId, int? page)
+    public async Task<IActionResult> MemberBorrows(Guid memberId, int? page)
     {
         var loans = await _loanService.GetBorrowsByMemberId(memberId);
 

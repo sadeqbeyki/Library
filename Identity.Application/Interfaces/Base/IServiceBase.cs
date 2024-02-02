@@ -4,7 +4,7 @@ namespace Identity.Application.Interfaces.Base
 {
     public interface IServiceBase
     {
-        string GetCurrentUserId();
+        Guid GetCurrentUserId();
         Task<ApplicationUser> GetCurrentUser();
         Task<IList<string>> GetCurrentUserRoles();
     }

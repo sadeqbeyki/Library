@@ -4,9 +4,7 @@ using LibBook.Domain.BookAgg;
 using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
 using LibBook.DomainContracts.Borrow;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace LibBook.ApplicationServices;
 
@@ -145,11 +143,11 @@ public class LoanService : ILoanService
             Id = lend.Id,
             BookId = lend.BookId,
             BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
-            MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
-            EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
+            MemberId = Guid.Parse(_IdentityAcl.GetUserName(lend.MemberID).Result),
+            EmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.EmployeeId).Result),
             CreationDate = lend.CreationDate,
             IdealReturnDate = lend.IdealReturnDate,
-            ReturnEmployeeId = _IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result,
+            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result),
             ReturnDate = lend.ReturnDate,
             Description = lend.Description,
         }).ToList();
@@ -164,23 +162,23 @@ public class LoanService : ILoanService
             Id = lend.Id,
             BookId = lend.BookId,
             BookTitle = _bookRepository.GetByIdAsync(lend.BookId).Result.Title,
-            MemberId = _IdentityAcl.GetUserName(lend.MemberID).Result,
-            EmployeeId = _IdentityAcl.GetUserName(lend.EmployeeId).Result,
+            MemberId = Guid.Parse(_IdentityAcl.GetUserName(lend.MemberID).Result),
+            EmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.EmployeeId).Result),
             CreationDate = lend.CreationDate,
             IdealReturnDate = lend.IdealReturnDate,
-            ReturnEmployeeId = _IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result,
+            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result),
             ReturnDate = lend.ReturnDate,
             Description = lend.Description,
         }).ToList();
         return result;
     }
 
-    public async Task<List<LoanDto>> GetBorrowsByEmployeeId(string employeeId)
+    public async Task<List<LoanDto>> GetBorrowsByEmployeeId(Guid employeeId)
     {
         return await _loanRepository.GetBorrowsByEmployeeId(employeeId);
     }
 
-    public async Task<List<LoanDto>> GetBorrowsByMemberId(string memberId)
+    public async Task<List<LoanDto>> GetBorrowsByMemberId(Guid memberId)
     {
         return await _loanRepository.GetBorrowsByMemberId(memberId);
     }
@@ -202,7 +200,7 @@ public class LoanService : ILoanService
             CreationDate = borrow.CreationDate,
             IdealReturnDate = borrow.IdealReturnDate,
             ReturnDate = borrow.ReturnDate,
-            ReturnEmployeeId = await _IdentityAcl.GetUserName(borrow.ReturnEmployeeID),
+            ReturnEmployeeId = Guid.Parse(await _IdentityAcl.GetUserName(borrow.ReturnEmployeeID)),
             Description = borrow.Description,
         };
         return dto;
