@@ -15,7 +15,7 @@ public class BookMapProfile : Profile
         CreateMap<Borrow, LoanDto>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => DateTime.Now))
-            .ForMember(dest => dest.ReturnEmployeeId, opt => opt.MapFrom(src => src.ReturnEmployeeID))
+            .ForMember(dest => dest.ReturnEmployeeID, opt => opt.MapFrom(src => src.ReturnEmployeeID))
             .ReverseMap();
 
         CreateMap<Borrow, LoanDto>().ReverseMap();

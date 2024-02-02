@@ -15,7 +15,7 @@ public class LoanDto
     public string EmployeeName { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime IdealReturnDate { get; set; }
-    public Guid ReturnEmployeeId { get; set; }
+    public string? ReturnEmployeeID { get; set; }
     public string ReturnEmployeeName { get; set; }
     public DateTime? ReturnDate { get; set; }
     public string Description { get; set; }

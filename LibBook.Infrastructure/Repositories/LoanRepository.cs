@@ -33,7 +33,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(b.ReturnEmployeeID).Result),
+            ReturnEmployeeID = _IdentityAcl.GetUserName(Guid.Parse(b.ReturnEmployeeID)).Result,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -55,7 +55,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeName = _IdentityAcl.GetUserName(b.EmployeeId).Result,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(b.ReturnEmployeeID).Result),
+            ReturnEmployeeID = _IdentityAcl.GetUserName(Guid.Parse(b.ReturnEmployeeID)).Result,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -75,7 +75,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnEmployeeID = b.ReturnEmployeeID,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -95,7 +95,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnEmployeeID = b.ReturnEmployeeID,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -117,8 +117,8 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeName = _IdentityAcl.GetUserName(x.EmployeeId).Result,
             CreationDate = x.CreationDate,
             IdealReturnDate = x.IdealReturnDate,
-            ReturnEmployeeId = x.ReturnEmployeeID,
-            ReturnEmployeeName = _IdentityAcl.GetUserName(x.ReturnEmployeeID).Result,
+            ReturnEmployeeID = x.ReturnEmployeeID,
+            ReturnEmployeeName = _IdentityAcl.GetUserName(Guid.Parse(x.ReturnEmployeeID)).Result,
             ReturnDate = x.ReturnDate,
         });
 

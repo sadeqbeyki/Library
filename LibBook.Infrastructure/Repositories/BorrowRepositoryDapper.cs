@@ -32,7 +32,7 @@ public class BorrowRepositoryDapper
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnEmployeeID = b.ReturnEmployeeID,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -57,7 +57,7 @@ public class BorrowRepositoryDapper
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnEmployeeID = b.ReturnEmployeeID,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -79,7 +79,7 @@ public class BorrowRepositoryDapper
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeId = b.ReturnEmployeeID,
+            ReturnEmployeeID = b.ReturnEmployeeID,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();

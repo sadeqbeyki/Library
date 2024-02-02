@@ -47,7 +47,7 @@ public class LoanService : ILoanService
             model.MemberId,
             _IdentityAcl.GetCurrentUserId(),
             model.IdealReturnDate,
-            model.ReturnEmployeeId,
+            model.ReturnEmployeeID,
             model.ReturnDate,
             model.Description
             );
@@ -147,7 +147,7 @@ public class LoanService : ILoanService
             EmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.EmployeeId).Result),
             CreationDate = lend.CreationDate,
             IdealReturnDate = lend.IdealReturnDate,
-            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result),
+            ReturnEmployeeID = _IdentityAcl.GetUserName(Guid.Parse(lend.ReturnEmployeeID)).Result,
             ReturnDate = lend.ReturnDate,
             Description = lend.Description,
         }).ToList();
@@ -166,7 +166,7 @@ public class LoanService : ILoanService
             EmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.EmployeeId).Result),
             CreationDate = lend.CreationDate,
             IdealReturnDate = lend.IdealReturnDate,
-            ReturnEmployeeId = Guid.Parse(_IdentityAcl.GetUserName(lend.ReturnEmployeeID).Result),
+            ReturnEmployeeID = _IdentityAcl.GetUserName(Guid.Parse(lend.ReturnEmployeeID)).Result,
             ReturnDate = lend.ReturnDate,
             Description = lend.Description,
         }).ToList();
@@ -200,7 +200,7 @@ public class LoanService : ILoanService
             CreationDate = borrow.CreationDate,
             IdealReturnDate = borrow.IdealReturnDate,
             ReturnDate = borrow.ReturnDate,
-            ReturnEmployeeId = Guid.Parse(await _IdentityAcl.GetUserName(borrow.ReturnEmployeeID)),
+            ReturnEmployeeID = await _IdentityAcl.GetUserName(Guid.Parse(borrow.ReturnEmployeeID)),
             Description = borrow.Description,
         };
         return dto;
@@ -241,7 +241,7 @@ public class LoanService : ILoanService
             dto.MemberId,
             dto.EmployeeId,
             dto.IdealReturnDate,
-            dto.ReturnEmployeeId,
+            dto.ReturnEmployeeID,
             dto.ReturnDate,
             dto.Description);
 
@@ -259,8 +259,8 @@ public class LoanService : ILoanService
         var lend = _loanRepository.GetByIdAsync(dto.Id).Result;
         if (lend == null)
             return operationResult.Failed(ApplicationMessages.RecordNotFound);
-
-        lend.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, _IdentityAcl.GetCurrentUserId(), DateTime.Now, dto.Description);
+        var returnEmployeeID = _IdentityAcl.GetCurrentUserId().ToString();
+        lend.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, returnEmployeeID, DateTime.Now, dto.Description);
 
         if (ReturnLoan(dto.Id).IsSucceeded)
         {
