@@ -8,7 +8,7 @@ namespace Identity.Application.Interfaces;
 public interface IUserService : IServiceBase
 {
     //User
-    Task<IdentityResult> Register(CreateUserDto model);
+    Task<(Guid userId, string emailConfirmToken)> Register(CreateUserDto model);
     Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserDto userDto);
     Task<bool> UpdateUserAsync(UpdateUserDto userDto);
     Task<bool> DeleteUserAsync(Guid userId);
@@ -35,5 +35,5 @@ public interface IUserService : IServiceBase
     Task<List<UserRolesDto>> GetUserWithRoles();
 
     //email
-    Task<string> GetConfirmEmailToken(Guid userId);
+    Task<IdentityResult> ConfirmEmail(string token, string email);
 }

@@ -1,9 +1,11 @@
 ﻿using AppFramework.Application.Email;
+using Identity.Application.Common.Exceptions;
 using Identity.Application.DTOs.Auth;
 using Identity.Application.DTOs.User;
 using Identity.Application.Features.Command.Auth;
 using Identity.Application.Features.Command.User;
 using Identity.Application.Features.Query.Auth;
+using Identity.Application.Features.Query.Email;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +70,7 @@ public class AuthController : Controller
         //}
 
         var result = await _mediator.Send(new RegisterUserCommand(model));
-        //SendConfirmationLink();
+        SendConfirmationLink(model.UserName, model.Email, result.confirmEmailToken);
         return RedirectToAction(nameof(SuccessRegistration));
     }
 
@@ -109,36 +111,32 @@ public class AuthController : Controller
         return View(result);
     }
 
-    #region extention method
-    //private bool SendConfirmationLink(CreateUserDto user)
-    //{
-    //    var emailConfirmToken = _mediator.Send(new GetConfirmEmailTokenQuery(user.));
+    #region Confirm Mail
+    private void SendConfirmationLink(string userName, string userMail, string confirmEmailToken)
+    {
+        //var scheme = HttpContext?.Request.Scheme ?? "https";
+        var confirmationLink = Url.Action(nameof(ConfirmEmail), "Auth", new { confirmEmailToken, email = userMail }, Request.Scheme);
 
-    //    var scheme = HttpContext?.Request.Scheme ?? "https";
-    //    var confirmationLink = Url.Action(nameof(ConfirmEmail), "Auth", new { emailConfirmToken, email = user.Email }, scheme);
+        EmailModel message = new()
+        {
+            FromName = "Library Manager",
+            FromAddress = "info@library.com",
+            ToName = userName,
+            ToAddress = userMail,
+            Subject = "Confirm Your Registration",
+            Content = "Please click the following link to confirm your registration: <a href=\"" + confirmationLink + "\">Confirm</a>"
+        };
+        _emailService.Send(message);
+    }
 
-    //    EmailModel message = new()
-    //    {
-    //        FromName = "Library Manager",
-    //        FromAddress = "info@library.com",
-    //        ToName = user.UserName,
-    //        ToAddress = user.Email,
-    //        Subject = "Confirm Your Registration",
-    //        Content = "Please click the following link to confirm your registration: <a href=\"" + confirmationLink + "\">Confirm</a>"
-    //    };
-    //    _emailService.Send(message);
-    //    return true;
-    //}
-    //[HttpGet]
-    //public async Task<IActionResult> ConfirmEmail(string token, string email)
-    //{
-    //    var user = await _userManager.FindByEmailAsync(email);
-    //    if (user == null)
-    //        return View("Error");
-
-    //    var result = await _userManager.ConfirmEmailAsync(user, token);
-    //    return View(result.Succeeded ? nameof(ConfirmEmail) : "Error");
-    //}
+    [HttpGet]
+    public async Task<IActionResult> ConfirmEmail(string token, string email)
+    {
+        var result = await _mediator.Send(new ConfirmEmailQuery(token, email));
+        if (result.Succeeded)
+            return View(nameof(ConfirmEmail));
+        throw new BadRequestException("confirm link is expired!");
+    }
 
     #endregion
 }

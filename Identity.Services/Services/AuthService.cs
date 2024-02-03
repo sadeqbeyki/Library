@@ -43,6 +43,9 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
         if (user == null && !await _userManager.CheckPasswordAsync(user, model.Password))
             throw new BadRequestException("Check password failed!");
 
+        if (!user.EmailConfirmed)
+            throw new Exception("");
+
         var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
         if (!result.Succeeded)
             throw new BadRequestException("user or password is incurrect!");

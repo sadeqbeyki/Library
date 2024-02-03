@@ -109,7 +109,7 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> AssignRole(UserRoleViewModel model)
     {
-        if (model.Assign.UserId == Guid.Empty || model.Assign.RoleId ==Guid.Empty)
+        if (model.Assign.UserId == Guid.Empty || model.Assign.RoleId == Guid.Empty)
             return View(ViewBag.Error = "Fileds can't be null.");
 
         var result = await _mediator.Send(new AssignUserToRoleCommand(model.Assign));
@@ -135,4 +135,6 @@ public class UsersController : Controller
         ViewBag.Error = "unsuccessfull!!";
         return RedirectToAction("AssignRole");
     }
+
+   
 }

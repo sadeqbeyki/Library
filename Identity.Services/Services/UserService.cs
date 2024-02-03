@@ -11,9 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
 using FluentValidation.Results;
-using System.Security;
-using System;
-using Microsoft.AspNetCore.SignalR;
 
 
 namespace Identity.Services.Services;
@@ -151,7 +148,7 @@ public class UserService : ServiceBase<UserService>, IUserService
 
     #region Create
 
-    public async Task<IdentityResult> Register(CreateUserDto model)
+    public async Task<(Guid userId, string emailConfirmToken)> Register(CreateUserDto model)
     {
         var existingUser = await _userManager.FindByEmailAsync(model.Email)
             ?? await _userManager.FindByNameAsync(model.UserName);
@@ -161,17 +158,16 @@ public class UserService : ServiceBase<UserService>, IUserService
         }
 
         //create user
-        var userMap = _mapper.Map<ApplicationUser>(model);
-        userMap.SecurityStamp = Guid.NewGuid().ToString();
-        var result = await _userManager.CreateAsync(userMap, model.Password)
+        var user = _mapper.Map<ApplicationUser>(model);
+        user.SecurityStamp = Guid.NewGuid().ToString();
+        var result = await _userManager.CreateAsync(user, model.Password)
             ?? throw new BadRequestException("cant add new user");
 
-        await AssignRoleToUser(userMap);
+        await AssignRoleToUser(user);
 
-        //confirmation email 
-        SendConfirmationLink(userMap);
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-        return result;
+        return (user.Id, token);
     }
 
     private async Task<bool> AssignRoleToUser(ApplicationUser user)
@@ -356,41 +352,14 @@ public class UserService : ServiceBase<UserService>, IUserService
     }
     #endregion
 
-    #region extention method
-    private bool SendConfirmationLink(ApplicationUser user)
-    {
-        var emailConfirmToken = _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-        var scheme = _httpContextAccessor.HttpContext?.Request.Scheme ?? "https";
-        var confirmationLink = /*Url.Action*/(nameof(ConfirmEmail), "Auth", new { emailConfirmToken, email = user.Email }, scheme);
-
-        EmailModel message = new()
-        {
-            FromName = "Library Manager",
-            FromAddress = "info@library.com",
-            ToName = user.UserName,
-            ToAddress = user.Email,
-            Subject = "Confirm Your Registration",
-            Content = "Please click the following link to confirm your registration: <a href=\"" + confirmationLink + "\">Confirm</a>"
-        };
-        _emailService.Send(message);
-        return true;
-    }
-
-    private async Task<string> ConfirmEmail(string token, string email)
+    #region Email Confirmation
+    public async Task<IdentityResult> ConfirmEmail(string token, string email)
     {
         var user = await _userManager.FindByEmailAsync(email)
             ?? throw new NotFoundException("User not found.");
 
         var result = await _userManager.ConfirmEmailAsync(user, token);
-        return result.Succeeded ? nameof(ConfirmEmail) : "Error";
-    }
-
-    public async Task<string> GetConfirmEmailToken(Guid userId)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
-        var emailConfirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        return emailConfirmToken;
+        return result;
     }
     #endregion
 

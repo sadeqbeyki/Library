@@ -28,7 +28,6 @@ public class EmailService : IEmailService
         emailClient.Send(message);
 
         emailClient.Disconnect(true);
-
     }
 }
 

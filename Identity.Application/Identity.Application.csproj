@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Command\Email\" />
+  </ItemGroup>
+
 </Project>
