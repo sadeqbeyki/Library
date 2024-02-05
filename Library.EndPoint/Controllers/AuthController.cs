@@ -64,11 +64,6 @@ public class AuthController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(CreateUserDto model)
     {
-        //if (!ModelState.IsValid)
-        //{
-        //    return Redirect(model?.ReturnUrl ?? "/");
-        //}
-
         var result = await _mediator.Send(new RegisterUserCommand(model));
         SendConfirmationLink(model.UserName, model.Email, result.confirmEmailToken);
         return RedirectToAction(nameof(SuccessRegistration));
@@ -132,6 +127,8 @@ public class AuthController : Controller
     [HttpGet]
     public async Task<IActionResult> ConfirmEmail(string token, string email)
     {
+        if (token == null || email == null)
+            throw new BadRequestException("Inputs cant be null!");
         var result = await _mediator.Send(new ConfirmEmailQuery(token, email));
         if (result.Succeeded)
             return View(nameof(ConfirmEmail));

@@ -4,18 +4,13 @@ using Identity.Domain.Entities.User;
 using Identity.Persistance;
 using Identity.Persistance.Repositories;
 using Identity.Services.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
 using System.Text;
 
 namespace Identity.Services;
@@ -29,6 +24,7 @@ public static class ServiceExtentions
             i.SignIn.RequireConfirmedAccount = false;
             i.SignIn.RequireConfirmedEmail = true;
             i.SignIn.RequireConfirmedPhoneNumber = false;
+            //i.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
 
             i.User.RequireUniqueEmail = true;
 

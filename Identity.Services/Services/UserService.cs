@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
 using FluentValidation.Results;
+using System.Text;
+using System.Text.Json;
 
 
 namespace Identity.Services.Services;
@@ -121,22 +123,41 @@ public class UserService : ServiceBase<UserService>, IUserService
         string key = $"member-{id}";
         ApplicationUser? member = await _distributedCache.GetObjectAsync<ApplicationUser>(key, cancellationToken);
 
-        if (member is null)
+        if (member is not null)
         {
-            member = await _userManager.FindByIdAsync(id.ToString());
-
-            if (member is not null)
-            {
-                await _distributedCache.SetObjectAsync(key, member, _configuration, cancellationToken);
-            }
+            return member;
         }
 
+        member = await _userManager.FindByIdAsync(id.ToString());
+        await _distributedCache.SetObjectAsync(key, member, _configuration, cancellationToken);
         return member;
     }
 
     #endregion
 
     #region GetAll
+    public async Task<List<UserDetailsDto>> GetAllAsync(/*bool enableCache,*/CancellationToken cancellationToken)
+    {
+        var cacheKey = (nameof(GetAllAsync));// "GetAllMembers";
+
+        List<UserDetailsDto> result = new();
+
+        result = await _distributedCache.GetObjectAsync<List<UserDetailsDto>>(cacheKey, cancellationToken);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            List<ApplicationUser> users = await _userManager.Users.ToListAsync();
+            var members = _mapper.Map<List<UserDetailsDto>>(users);
+            result = members;
+
+            await _distributedCache.SetObjectAsync(cacheKey, members, _configuration, cancellationToken);
+        }
+        return result;
+
+    }
     public async Task<List<UserDetailsDto>> GetAllUsersAsync()
     {
         List<ApplicationUser> users = await _userManager.Users.ToListAsync();

@@ -1,6 +1,7 @@
 ﻿using Identity.Domain.Entities.AuthAgg;
 using Identity.Domain.Entities.Role;
 using Identity.Domain.Entities.User;
+using Identity.Persistance.DatabaseMappings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ public class AppIdentityDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     //protected override void OnModelCreating(ModelBuilder builder)
     //{
-    //    var assembly = typeof(TokenMapping).Assembly;
+    //    var assembly = typeof(RolesConfig).Assembly;
     //    builder.ApplyConfigurationsFromAssembly(assembly);
     //    base.OnModelCreating(builder);
     //}

@@ -21,6 +21,7 @@ public interface IUserService : IServiceBase
     Task<string> GetUserIdAsync(string userName);
     Task<bool> IsUniqueUserName(string userName);
     Task<ApplicationUser?> GetMember(Guid id, CancellationToken cancellationToken);
+    Task<List<UserDetailsDto>> GetAllAsync(CancellationToken cancellationToken);
     Task<List<UserDetailsDto>> GetAllUsersAsync();
 
     //User Roles

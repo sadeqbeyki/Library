@@ -7,12 +7,8 @@ using Identity.Application;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAutoMapper(typeof(IdentityMapProfile));
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-//builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews()
-     //need for component
+     //need for component (OverdueCountViewComponent.cshtml)
      .AddRazorOptions(options =>
      {
          options.ViewLocationFormats.Add("/{0}.cshtml");
@@ -21,13 +17,25 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
+#region Caching
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisCacheUrl");
+    options.InstanceName = "RedisInstance_";
+});
+#endregion
+
+
 #region token
 builder.Services.AddJwtAuth(builder.Configuration);
 builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true).AddEnvironmentVariables();
 #endregion end token
 
 
+
 #region DependencyInjection
+builder.Services.AddAutoMapper(typeof(IdentityMapProfile));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 

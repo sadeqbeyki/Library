@@ -12,12 +12,15 @@ namespace Identity.Persistance.DatabaseMappings;
 //        builder.ToTable("Roles");
 
 //        List<ApplicationRole> applicationRoles = new(){
-//                new(){Name = "Member"},
-//                new(){Name = "Manager"},
-//                new(){Name = "Employee"},
-//                new(){Name = "Admin"}
+//                new(){Id = Guid.NewGuid(),Name = "Member",NormalizedName="MEMBER"},
+//                new(){Id = Guid.NewGuid(),Name = "Manager",NormalizedName="MANAGER"},
+//                new(){Id = Guid.NewGuid(),Name = "Employee",NormalizedName="EMPLOYEE"},
+//                new(){Id = Guid.NewGuid(),Name = "Admin",NormalizedName = "ADMIN"}
 //            };
 
-//        builder.HasData(applicationRoles);
+//        builder.HasData(new ApplicationRole { Id = Guid.NewGuid(), Name = "Member", NormalizedName = "MEMBER" });
+//        builder.HasData(new ApplicationRole { Id = Guid.NewGuid(), Name = "Manager", NormalizedName = "MANAGER" });
+//        builder.HasData(new ApplicationRole { Id = Guid.NewGuid(), Name = "Employee", NormalizedName = "EMPLOYEE" });
+//        builder.HasData(new ApplicationRole { Id = Guid.NewGuid(), Name = "Admin", NormalizedName = "ADMIN" });
 //    }
 //}
