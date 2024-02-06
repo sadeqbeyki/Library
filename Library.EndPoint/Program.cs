@@ -3,8 +3,16 @@ using LibBook.Configurations;
 using LibInventory.Configuration;
 using Identity.Services;
 using Identity.Application;
+using Logging.Persistance.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Logging
+
+builder.Logging.AddDbLogger(options =>
+{
+    builder.Configuration.GetSection("Logging").GetSection("Database").GetSection("Options").Bind(options);
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()

@@ -76,6 +76,7 @@
     <ProjectReference Include="..\LibBook.DomainContracts\LibBook.DomainContracts.csproj" />
     <ProjectReference Include="..\LibInv.Configuration\LibInventory.Configuration.csproj" />
     <ProjectReference Include="..\LibInv.DomainContracts\LibInventory.DomainContracts.csproj" />
+    <ProjectReference Include="..\Logging.Persistance\Logging.Persistance.csproj" />
   </ItemGroup>
 
   <ItemGroup>
