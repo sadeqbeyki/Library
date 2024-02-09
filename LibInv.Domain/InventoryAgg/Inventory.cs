@@ -50,14 +50,20 @@ public class Inventory : BaseEntity
     {
         var currentCount = CalculateCurrentCount();
 
-        if (currentCount < count)
+        object locker = new object();
+        if (currentCount > count)
         {
-            throw new InvalidOperationException("Count to decrease is greater than the current inventory count.");
+            //borrower 2 waiting to end thred 1
+            lock (locker)
+            {
+                var operation = new InventoryOperation(false, count, operatorId, currentCount - count, description, lendId, Id);
+                Operations.Add(operation);
+                InStock = (currentCount - count) > 0;
+            }
         }
+        throw new InvalidOperationException("Count to decrease is greater than the current inventory count.");
 
-        var operation = new InventoryOperation(false, count, operatorId, currentCount - count, description, lendId, Id);
-        Operations.Add(operation);
-        InStock = (currentCount - count) > 0;
+
     }
 
     public void Return(long count, Guid operatorId, string description, long lendId)
