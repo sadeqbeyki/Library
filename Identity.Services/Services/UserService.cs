@@ -323,7 +323,11 @@ public class UserService : ServiceBase<UserService>, IUserService
 
     public async Task<bool> IsInRoleAsync(string userId, string roleName)
     {
-        Guid id = new Guid(userId);
+        if (!Guid.TryParse(userId, out Guid id))
+        {
+            // Handle invalid Guid
+            throw new ArgumentException("Invalid userId format");
+        }
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new NotFoundException("User not found");
 
@@ -332,7 +336,12 @@ public class UserService : ServiceBase<UserService>, IUserService
     }
     public async Task<bool> IsInRoles(string userId, List<string> roles)
     {
-        Guid id = new Guid(userId);
+        if (!Guid.TryParse(userId, out Guid id))
+        {
+            // Handle invalid Guid
+            throw new ArgumentException("Invalid userId format");
+        }
+        
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new NotFoundException("User not found");
 

@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Intrinsics.X86;
+using System.Security.Principal;
 
 namespace Logging.Persistance.Persistance;
 
@@ -176,7 +178,16 @@ public class DbLogger : ILogger
             connection.Close();
         }
     }
-
-
-
 }
+
+//CREATE DATABASE LibraryLogger
+//GO
+//USE LibraryLogger;
+//GO
+//CREATE TABLE dbo.Error
+//(
+//    Id INT IDENTITY(1,1) PRIMARY KEY,
+//    Created DATETIMEOFFSET,
+//	[Values]
+//NVARCHAR(MAX)
+//);
