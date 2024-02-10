@@ -180,7 +180,7 @@ public class UserService : ServiceBase<UserService>, IUserService
 
         //create user
         var user = _mapper.Map<ApplicationUser>(model);
-        user.SecurityStamp = Guid.NewGuid().ToString();
+        //user.SecurityStamp = Guid.NewGuid().ToString();
         var result = await _userManager.CreateAsync(user, model.Password)
             ?? throw new BadRequestException("cant add new user");
 
@@ -323,12 +323,12 @@ public class UserService : ServiceBase<UserService>, IUserService
 
     public async Task<bool> IsInRoleAsync(string userId, string roleName)
     {
-        if (!Guid.TryParse(userId, out Guid id))
-        {
-            // Handle invalid Guid
-            throw new ArgumentException("Invalid userId format");
-        }
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id)
+        //if (!Guid.TryParse(userId, out Guid id))
+        //{
+        //    // Handle invalid Guid
+        //    throw new ArgumentException("Invalid userId format");
+        //}
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(userId))
             ?? throw new NotFoundException("User not found");
 
         var result = await _userManager.IsInRoleAsync(user, roleName);
@@ -336,13 +336,7 @@ public class UserService : ServiceBase<UserService>, IUserService
     }
     public async Task<bool> IsInRoles(string userId, List<string> roles)
     {
-        if (!Guid.TryParse(userId, out Guid id))
-        {
-            // Handle invalid Guid
-            throw new ArgumentException("Invalid userId format");
-        }
-        
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id)
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(userId))
             ?? throw new NotFoundException("User not found");
 
         bool isIn = false;

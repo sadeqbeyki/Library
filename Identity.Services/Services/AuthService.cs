@@ -44,7 +44,7 @@ public class AuthService : ServiceBase<AuthService>, IAuthService
             throw new BadRequestException("Check password failed!");
 
         if (!user.EmailConfirmed)
-            throw new Exception("");
+            throw new Exception("Email is not confirmed!");
 
         var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
         if (!result.Succeeded)
