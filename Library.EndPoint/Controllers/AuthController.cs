@@ -49,7 +49,7 @@ public class AuthController : Controller
         var result = await _mediator.Send(new AuthCommand(model));
         if (result != null)
         {
-            return RedirectToAction("Index", "Home", new { token = result });
+            return RedirectToAction("Index", "Home", new { token = result.AccessToken });
         }
         return response;
 
