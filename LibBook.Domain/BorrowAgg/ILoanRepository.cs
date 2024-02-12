@@ -10,4 +10,5 @@ public interface ILoanRepository : IRepository<Borrow, int>
     Task<List<LoanDto>> GetDuplicatedLoans(Guid memberId, int bookId);
     Task<List<LoanDto>> GetBorrowsByEmployeeId(Guid EmployeeId);
     List<LoanDto> Search(LoanSearchModel searchModel);
+    Task<string> GetReturnEmployeeName(Guid? id);
 }

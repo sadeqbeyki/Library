@@ -17,11 +17,12 @@ public class LibraryIdentityAcl : ILibraryIdentityAcl
         var account = await _userService.GetUserByIdAsync(id, cancellationToken);
         return (account.FirstName, account.Email);
     }
-    public async Task<string> GetUserName(Guid id)
+    public async Task<string> GetUserName(Guid? id)
     {
         var userName = await _userService.GetUserNameAsync(id);
         return userName;
     }
+
 
     public Guid GetCurrentUserId()
     {

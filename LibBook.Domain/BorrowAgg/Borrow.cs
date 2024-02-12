@@ -10,7 +10,7 @@ public class Borrow : BaseEntity
     public Guid EmployeeId { get; set; }
     public DateTime IdealReturnDate { get; set; }
 
-    public string? ReturnEmployeeID { get; set; }
+    public Guid? ReturnEmployeeID { get; set; }
     public DateTime? ReturnDate { get; set; }
     public string? Description { get; set; }
 
@@ -18,7 +18,7 @@ public class Borrow : BaseEntity
     public bool IsReturned { get; set; }
 
 
-    public Borrow(int bookId, Guid memberID, Guid employeeId, DateTime idealReturnDate, string? returnEmployeeID, DateTime? returnDate, string? description)
+    public Borrow(int bookId, Guid memberID, Guid employeeId, DateTime idealReturnDate, Guid? returnEmployeeID, DateTime? returnDate, string? description)
     {
         BookId = bookId;
         MemberID = memberID;
@@ -30,7 +30,7 @@ public class Borrow : BaseEntity
         IsApproved = false; 
         IsReturned = false;
     }
-    public void Edit(int bookId, Guid memberID, Guid employeeId, DateTime idealReturnDate, string? returnEmployeeID, DateTime? returnDate, string? description)
+    public void Edit(int bookId, Guid memberID, Guid employeeId, DateTime idealReturnDate, Guid? returnEmployeeID, DateTime? returnDate, string? description)
     {
         BookId = bookId;
         MemberID = memberID;

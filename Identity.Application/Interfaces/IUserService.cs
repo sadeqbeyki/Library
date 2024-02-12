@@ -15,7 +15,7 @@ public interface IUserService : IServiceBase
 
     //Get
     Task<UserDetailsDto> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken);
-    Task<string> GetUserNameAsync(Guid userId);
+    Task<string> GetUserNameAsync(Guid? userId);
     Task<ApplicationUser> GetUserByNameAsync(string userName);
     Task<UserDetailsDto> GetUserByUserNameAsync(string userName);
     Task<string> GetUserIdAsync(string userName);

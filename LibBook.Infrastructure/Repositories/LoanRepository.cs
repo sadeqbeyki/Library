@@ -33,7 +33,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeId = b.EmployeeId,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeID = _IdentityAcl.GetUserName(Guid.Parse(b.ReturnEmployeeID)).Result,
+            ReturnEmployeeName = GetReturnEmployeeName(b.ReturnEmployeeID).Result,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -55,7 +55,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             EmployeeName = _IdentityAcl.GetUserName(b.EmployeeId).Result,
             CreationDate = b.CreationDate,
             IdealReturnDate = b.IdealReturnDate,
-            ReturnEmployeeID = _IdentityAcl.GetUserName(Guid.Parse(b.ReturnEmployeeID)).Result,
+            ReturnEmployeeName = GetReturnEmployeeName(b.ReturnEmployeeID).Result,
             ReturnDate = b.ReturnDate,
             Description = b.Description
         }).ToList();
@@ -118,7 +118,7 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             CreationDate = x.CreationDate,
             IdealReturnDate = x.IdealReturnDate,
             ReturnEmployeeID = x.ReturnEmployeeID,
-            ReturnEmployeeName = _IdentityAcl.GetUserName(Guid.Parse(x.ReturnEmployeeID)).Result,
+            ReturnEmployeeName = GetReturnEmployeeName(x.ReturnEmployeeID).Result,
             ReturnDate = x.ReturnDate,
         });
 
@@ -132,5 +132,12 @@ public partial class LoanRepository : Repository<Borrow, int>, ILoanRepository
             query = query.Where(x => x.BookId == searchModel.BookId);
 
         return query.OrderByDescending(x => x.Id).ToList();
+    }
+
+    public async Task<string> GetReturnEmployeeName(Guid? id)
+    {
+        if (id == null)
+            return "";
+        return await _IdentityAcl.GetUserName(id);
     }
 }

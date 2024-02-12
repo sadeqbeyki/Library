@@ -69,7 +69,7 @@ public class UserService : ServiceBase<UserService>, IUserService
         return usersMap;
     }
 
-    public async Task<string> GetUserNameAsync(Guid userId)
+    public async Task<string> GetUserNameAsync(Guid? userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
         return user == null
