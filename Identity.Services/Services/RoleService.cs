@@ -44,8 +44,9 @@ public class RoleService : IRoleService
         var result = await _roleManager.CreateAsync(roleMap);
         if (!result.Succeeded)
         {
-            var errors = result.Errors.Select(e => e.Description);
-            throw new ValidationException();
+            //var errors = result.Errors.Select(e => e.Description);
+            //throw new ValidationException(result.Errors);
+            throw new Exception("The chosen role has already been registered on the application");
         }
         return result;
     }

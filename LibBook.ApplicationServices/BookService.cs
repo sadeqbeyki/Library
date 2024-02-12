@@ -5,6 +5,7 @@ using LibBook.Domain.BookAgg;
 using LibBook.Domain.BookCategoryAgg;
 using LibBook.Domain.PublisherAgg;
 using LibBook.Domain.TranslatorAgg;
+using LibBook.DomainContracts.Author;
 using LibBook.DomainContracts.Book;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,31 +29,22 @@ public class BookService : IBookService
         _bookCategoryRepository = bookCategoryRepository;
     }
     #region Create
-    public async Task<OperationResult> Create(BookDto model)
+    public async Task<OperationResult> Create(BookDto inputModel)
     {
         OperationResult operationResult = new();
 
         // chk duplicate
-        if (_bookRepository.Exists(x => x.Title == model.Title))
-        {
+        if (_bookRepository.Exists(x => x.Title == inputModel.Title))
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
-        }
 
-        var bookCategory = _bookCategoryRepository.GetByIdAsync(model.CategoryId);
+        //var bookCategory = _bookCategoryRepository.GetByIdAsync(model.CategoryId);
         // 2. add new book
-        Book book = new(
-            title: model.Title,
-            iSBN: model.ISBN,
-            code: model.Code,
-            description: model.Description,
-            categoryId: model.CategoryId
-            //category: bookCategory
-            );
+        Book book = new(inputModel.Title, inputModel.ISBN, inputModel.Code, inputModel.Description, inputModel.CategoryId);
 
         // 3. add Authors
-        if (model.Authors != null && model.Authors.Any())
+        if (inputModel.Authors != null && inputModel.Authors.Any())
         {
-            foreach (var authorName in model.Authors)
+            foreach (var authorName in inputModel.Authors)
             {
                 var author = await _authorRepository.GetByName(authorName);
                 if (author != null)
@@ -70,9 +62,9 @@ public class BookService : IBookService
             }
         }
         // 4. add Publishers
-        if (model.Publishers != null && model.Publishers.Any())
+        if (inputModel.Publishers != null && inputModel.Publishers.Any())
         {
-            foreach (var publisherName in model.Publishers)
+            foreach (var publisherName in inputModel.Publishers)
             {
                 var publisher = await _publisherRepository.GetByName(publisherName);
                 if (publisher != null)
@@ -90,9 +82,9 @@ public class BookService : IBookService
             }
         }
         // 5. add Translators
-        if (model.Translators != null && model.Translators.Any())
+        if (inputModel.Translators != null && inputModel.Translators.Any())
         {
-            foreach (var translatorName in model.Translators)
+            foreach (var translatorName in inputModel.Translators)
             {
                 var translator = await _translatorRepository.GetByName(translatorName);
                 if (translator != null)
@@ -120,6 +112,28 @@ public class BookService : IBookService
 
         return operationResult.Succeeded();
     }
+    //private async Task<AuthorDto> AddAuthors(BookDto model, Book book)
+    //{
+    //    if (model.Authors != null && model.Authors.Any())
+    //    {
+    //        foreach (var authorName in model.Authors)
+    //        {
+    //            var author = await _authorRepository.GetByName(authorName);
+    //            if (author != null)
+    //            {
+    //                var bookAuthor = new BookAuthor
+    //                {
+    //                    AuthorBookId = book.Id,
+    //                    Book = book,
+    //                    AuthorId = author.Id,
+    //                    Author = author,
+    //                };
+    //                book.BookAuthors.Add(bookAuthor);
+    //            }
+    //            //else
+    //        }
+    //    }
+    //}
 
     #endregion
 

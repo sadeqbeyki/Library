@@ -11,8 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Identity.Application.Helper;
 using Identity.Domain.Entities.Role;
 using FluentValidation.Results;
-using System.Text;
-using System.Text.Json;
 
 
 namespace Identity.Services.Services;

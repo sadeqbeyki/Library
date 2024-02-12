@@ -11,14 +11,18 @@ public class Book : BaseEntity
     public string Description { get; set; }
 
     public int CategoryId { get; set; }
-    public BookCategory Category { get; private set; } = new BookCategory();
+    public BookCategory Category { get; private set; }
 
 
     public List<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
     public List<BookPublisher> BookPublishers { get; set; } = new List<BookPublisher>();
     public List<BookTranslator> BookTranslators { get; set; } = new List<BookTranslator>();
 
-    public Book(string title, string iSBN, string code, string description, int categoryId)
+    public Book(string title,
+                string iSBN,
+                string code,
+                string description,
+                int categoryId)
     {
         Title = title;
         ISBN = iSBN;
