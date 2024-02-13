@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibBook.Infrastructure.Repositories;
 
-public class BookRepository : Repository<Book, int>, IBookRepository
+public class BookRepository : Repository<Book, int>, IBookRepository, IDisposable
 {
     private readonly BookDbContext _bookDbContext;
     public BookRepository(BookDbContext bookDbContext) : base(bookDbContext)

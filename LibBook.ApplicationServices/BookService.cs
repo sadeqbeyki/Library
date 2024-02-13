@@ -5,7 +5,6 @@ using LibBook.Domain.BookAgg;
 using LibBook.Domain.BookCategoryAgg;
 using LibBook.Domain.PublisherAgg;
 using LibBook.Domain.TranslatorAgg;
-using LibBook.DomainContracts.Author;
 using LibBook.DomainContracts.Book;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,16 +16,16 @@ public class BookService : IBookService
     private readonly IAuthorRepository _authorRepository;
     private readonly ITranslatorRepository _translatorRepository;
     private readonly IPublisherRepository _publisherRepository;
-    private readonly IBookCategoryRepository _bookCategoryRepository;
 
-    public BookService(IBookRepository bookRepository, IAuthorRepository authorRepository,
-        ITranslatorRepository translatorRepository, IPublisherRepository publisherRepository, IBookCategoryRepository bookCategoryRepository)
+    public BookService(IBookRepository bookRepository,
+        IAuthorRepository authorRepository,
+        ITranslatorRepository translatorRepository,
+        IPublisherRepository publisherRepository)
     {
         _bookRepository = bookRepository;
         _authorRepository = authorRepository;
         _translatorRepository = translatorRepository;
         _publisherRepository = publisherRepository;
-        _bookCategoryRepository = bookCategoryRepository;
     }
     #region Create
     public async Task<OperationResult> Create(BookDto model)
@@ -42,8 +41,8 @@ public class BookService : IBookService
         await AddTranslators(model, book);
 
         var result = await _bookRepository.CreateAsync(book);
-        return result == null 
-            ? operationResult.Failed(ApplicationMessages.ProblemFound) 
+        return result == null
+            ? operationResult.Failed(ApplicationMessages.ProblemFound)
             : operationResult.Succeeded();
     }
     private async Task AddAuthors(BookDto model, Book book)
@@ -171,96 +170,27 @@ public class BookService : IBookService
     public async Task<OperationResult> Update(BookViewModel model)
     {
         OperationResult operationResult = new();
-
-        // 1. Check if the book exists
         var book = await _bookRepository.GetByIdAsync(model.Id);
-        if (book == null)
-        {
-            return operationResult.Failed(ApplicationMessages.RecordNotFound);
-        }
 
-        // 1.1. Check if duplicate found
+        if (book == null) return operationResult.Failed(ApplicationMessages.RecordNotFound);
+
         if (_bookRepository.Exists(x => x.Title == model.Title && x.Id != model.Id))
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        // 2. Update the book properties
         book.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, model.Picture);
 
-        // 3. Clear the existing relationships with authors, publishers, and translators
         book.BookAuthors.Clear();
         book.BookPublishers.Clear();
         book.BookTranslators.Clear();
 
-        // 4. Add Authors
-        if (model.Authors != null && model.Authors.Any())
-        {
-            foreach (var authorName in model.Authors)
-            {
-                var author = await _authorRepository.GetByName(authorName);
-                if (author != null)
-                {
-                    var bookAuthor = new BookAuthor
-                    {
-                        AuthorBookId = book.Id,
-                        Book = book,
-                        AuthorId = author.Id,
-                        Author = author,
-                    };
-                    book.BookAuthors.Add(bookAuthor);
-                }
-            }
-        }
+        await AddAuthors(model, book);
+        await AddPublishers(model, book);
+        await AddTranslators(model, book);
 
-        // 5. Add Publishers
-        if (model.Publishers != null && model.Publishers.Any())
-        {
-            foreach (var publisherName in model.Publishers)
-            {
-                var publisher = await _publisherRepository.GetByName(publisherName);
-                if (publisher != null)
-                {
-                    var bookPublisher = new BookPublisher
-                    {
-                        PublisherBookId = book.Id,
-                        Book = book,
-                        PublisherId = publisher.Id,
-                        Publisher = publisher
-                    };
-                    book.BookPublishers.Add(bookPublisher);
-                }
-            }
-        }
-
-        // 6. Add Translators
-        if (model.Translators != null && model.Translators.Any())
-        {
-            foreach (var translatorName in model.Translators)
-            {
-                var translator = await _translatorRepository.GetByName(translatorName);
-                if (translator != null)
-                {
-                    var bookTranslator = new BookTranslator
-                    {
-                        TranslatorBookId = book.Id,
-                        Book = book,
-                        TranslatorId = translator.Id,
-                        Translator = translator
-                    };
-                    book.BookTranslators.Add(bookTranslator);
-                }
-            }
-        }
-
-        // 7. Update the book in the database
         var result = _bookRepository.UpdateAsync(book);
-        //tryyyyyyyyyyy cashhhhhhhhhhhhhhh
-
-        if (result == null)
-        {
-            return operationResult.Failed(ApplicationMessages.ProblemFound);
-        }
-
-        return operationResult.Succeeded();
+        return result == null
+                            ? operationResult.Failed(ApplicationMessages.ProblemFound)
+                            : operationResult.Succeeded();
     }
     #endregion
 
