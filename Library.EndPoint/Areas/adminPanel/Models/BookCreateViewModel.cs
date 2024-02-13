@@ -15,7 +15,8 @@ public class BookCreateViewModel
 
     [Required(ErrorMessage = "فیلد دسته بندی اجباری است.")]
     public int CategoryId { get; set; }
-    //public string Category { get; set; }
+    
+    public IFormFile Picture { get; set; }
 
     public List<BookCategoryDto> BookCategories { get; set; }
     //public List<string> Categories { get; set; }

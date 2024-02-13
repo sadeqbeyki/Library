@@ -39,7 +39,7 @@ public class BookService : IBookService
 
         //var bookCategory = _bookCategoryRepository.GetByIdAsync(model.CategoryId);
         // 2. add new book
-        Book book = new(inputModel.Title, inputModel.ISBN, inputModel.Code, inputModel.Description, inputModel.CategoryId);
+        Book book = new(inputModel.Title, inputModel.ISBN, inputModel.Code, inputModel.Description, inputModel.CategoryId, inputModel.Picture);
 
         // 3. add Authors
         if (inputModel.Authors != null && inputModel.Authors.Any())
@@ -176,6 +176,7 @@ public class BookService : IBookService
                 Code = book.Code,
                 Description = book.Description,
                 CategoryId = book.CategoryId,
+                Picture = book.Picture,
 
                 Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
                 Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
@@ -184,25 +185,6 @@ public class BookService : IBookService
             }).FirstOrDefaultAsync(b => b.Id == id);
 
         return result;
-
-        //var book = await _bookRepository.GetByIdAsync(id);
-        //BookViewModel result = new()
-        //{
-        //    Id = id,
-        //    Title = book.Title,
-        //    ISBN = book.ISBN,
-        //    Code = book.Code,
-        //    Description = book.Description,
-        //    CategoryId = book.CategoryId,
-        //    //Category = book.Category.Name,
-        //    Category = "salam",
-        //    Authors = book.BookAuthors.Select(ba => ba.Author.Name).ToList(),
-        //    Publishers = book.BookPublishers.Select(bp => bp.Publisher.Name).ToList(),
-        //    Translators = book.BookTranslators.Select(bt => bt.Translator.Name).ToList(),
-        //};
-        //return result;
-
-
     }
     #endregion
 
@@ -224,7 +206,7 @@ public class BookService : IBookService
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
         // 2. Update the book properties
-        existingBook.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId);
+        existingBook.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, model.Picture);
 
         // 3. Clear the existing relationships with authors, publishers, and translators
         existingBook.BookAuthors.Clear();

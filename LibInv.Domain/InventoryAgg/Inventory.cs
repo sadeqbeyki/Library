@@ -53,7 +53,7 @@ public class Inventory : BaseEntity
         if (currentCount < count)
             throw new InvalidOperationException("Count to decrease is greater than the current inventory count.");
 
-        object locker = new object();
+        object locker = new();
         //borrower 2 waiting to end thred 1
         lock (locker)
         {

@@ -19,7 +19,7 @@ public class LibraryInventoryAcl : ILibraryInventoryAcl
     public bool LoanFromInventory(Borrow lend)
     {
         string member = _userService.GetUserNameAsync(lend.MemberID).Result;
-        var item = new DecreaseInventory(lend.BookId, 1, $"Loaned by '{member}'. " + lend.Description, lend.Id);
+        var item = new DecreaseInventory(lend.BookId, 1, $"Borrowed by '{member}'. " + lend.Description, lend.Id);
         if (_inventoryService.Lending(item).IsSucceeded == true)
         {
             return true;

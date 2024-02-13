@@ -69,7 +69,7 @@ public class BooksController : Controller
         return View(model);
     }
     [HttpPost]
-    public async Task<ActionResult> Create(BookDto model)
+    public async Task<ActionResult> Create(BookDto model, IFormFile pictureFile)
     {
         var bookCategory = await _bookCategoryService.GetById(model.CategoryId);
 
@@ -83,6 +83,14 @@ public class BooksController : Controller
         model.Publishers = selectedPublishers.Split(',').ToList();
         model.Translators = selectedTranslators.Split(',').ToList();
 
+        if (pictureFile != null && pictureFile.Length > 0)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await pictureFile.CopyToAsync(memoryStream);
+                model.Picture = memoryStream.ToArray();
+            }
+        }
 
         ModelState.Clear();
         TryValidateModel(model);
@@ -126,7 +134,7 @@ public class BooksController : Controller
     }
 
     [HttpPut, HttpPost]
-    public async Task<IActionResult> Update(int id, EditBookViewModel model)
+    public async Task<IActionResult> Update(int id, EditBookViewModel model, IFormFile pictureFile)
     {
         if (id != model.Book.Id)
         {
@@ -144,6 +152,14 @@ public class BooksController : Controller
         model.Book.Publishers = selectedPublishers.Split(',').ToList();
         model.Book.Translators = selectedTranslators.Split(',').ToList();
 
+        if (pictureFile != null && pictureFile.Length > 0)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await pictureFile.CopyToAsync(memoryStream);
+                model.Book.Picture = memoryStream.ToArray();
+            }
+        }
         //ModelState.Clear();
         //TryValidateModel(model);
 

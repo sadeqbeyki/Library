@@ -13,6 +13,8 @@ public class Book : BaseEntity
     public int CategoryId { get; set; }
     public BookCategory Category { get; private set; }
 
+    public byte[]? Picture { get; private set; }
+
 
     public List<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
     public List<BookPublisher> BookPublishers { get; set; } = new List<BookPublisher>();
@@ -22,21 +24,35 @@ public class Book : BaseEntity
                 string iSBN,
                 string code,
                 string description,
-                int categoryId)
+                int categoryId,
+                byte[]? picture)
     {
         Title = title;
         ISBN = iSBN;
         Code = code;
         Description = description;
         CategoryId = categoryId;
+        Picture = picture;
     }
-    public void Edit(string title, string iSBN, string code, string description, int categoryId)
+    public void Edit(string title,
+        string iSBN,
+        string code,
+        string description,
+        int categoryId,
+        byte[]? picture)
     {
         Title = title;
         ISBN = iSBN;
         Code = code;
         Description = description;
         CategoryId = categoryId;
+        if (picture != null && picture.Length > 0)
+            Picture = picture;
     }
+
+    //~Book()
+    //{
+    //    BookAuthors.Clear();
+    //}
 }
 

@@ -75,18 +75,20 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+// app.UseCookiePolicy();
+
+app.UseRouting();
+// app.UseRateLimiter();
+// app.UseRequestLocalization();
+// app.UseCors();
 
 app.UseAuthentication();
 
-app.UseRouting();
-
-app.UseSession();
-
 app.UseAuthorization();
 
-//IConfiguration configuration = app.Configuration;
-//IWebHostEnvironment environment = app.Environment;
-
+app.UseSession();
+// app.UseResponseCompression();
+// app.UseResponseCaching();
 
 app.UseEndpoints(endpoints =>
 {
