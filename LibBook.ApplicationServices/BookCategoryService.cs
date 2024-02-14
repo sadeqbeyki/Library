@@ -10,12 +10,10 @@ namespace LibBook.ApplicationServices
     public class BookCategoryService : IBookCategoryService
     {
         private readonly IBookCategoryRepository _repository;
-        private readonly IMapper _mapper;
 
-        public BookCategoryService(IBookCategoryRepository repository, IMapper mapper)
+        public BookCategoryService(IBookCategoryRepository repository)
         {
             _repository = repository;
-            _mapper = mapper;
         }
 
         public async Task<OperationResult> Create(BookCategoryDto dto)

@@ -3,7 +3,7 @@ using LibBook.Domain.BookAgg;
 
 namespace LibBook.Domain.BookCategoryAgg;
 
-public class BookCategory : BaseEntity
+public class BookCategory : BaseEntity<int>
 {
     public string Name { get; private set; }
     public string Description { get; private set; }

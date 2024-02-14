@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace LibBook.Domain.BorrowAgg;
 
-public class Borrow : BaseEntity
+public class Borrow : BaseEntity<int>
 {
     public int BookId { get; set; }
     public Guid MemberID { get; set; }

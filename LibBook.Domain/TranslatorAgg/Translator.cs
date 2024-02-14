@@ -2,7 +2,7 @@
 
 namespace LibBook.Domain.TranslatorAgg;
 
-public class Translator : BaseEntity
+public class Translator : BaseEntity<int>
 {
     public string Name { get; set; }
     public string Description { get; set; }

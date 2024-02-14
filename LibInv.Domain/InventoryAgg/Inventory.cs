@@ -2,7 +2,7 @@
 
 namespace LibInventory.Domain.InventoryAgg;
 
-public class Inventory : BaseEntity
+public class Inventory : BaseEntity<int>
 {
     public int BookId { get; private set; }
     public double UnitPrice { get; private set; }

@@ -3,7 +3,7 @@ using LibBook.Domain.BookAgg;
 
 namespace LibBook.Domain.AuthorAgg;
 
-public class Author : BaseEntity
+public class Author : BaseEntity<int>
 {
     public string Name { get; set; }
     public string Description { get; set; }

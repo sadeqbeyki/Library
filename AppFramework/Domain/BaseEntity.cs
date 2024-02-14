@@ -2,9 +2,9 @@
 
 namespace AppFramework.Domain
 {
-    public class BaseEntity
+    public class BaseEntity<TKey>
     {
-        public int Id { get; private set; }
+        public TKey Id { get; private set; }
         public DateTime CreationDate { get; private set; }
         public bool IsDeleted { get; set; }
 

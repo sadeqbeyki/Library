@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AppFramework.Domain
 {
-    public interface IRepository<TEntity, TKey> where TEntity : BaseEntity
+    public interface IRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         IQueryable<TEntity> GetAll();
         Task<TEntity> GetByIdAsync(TKey id);
@@ -22,7 +22,7 @@ namespace AppFramework.Domain
         void SaveChanges();
     }
 
-    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : BaseEntity
+    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         private readonly DbContext _dbContext;
         private readonly DbSet<TEntity> _dbSet;

@@ -1,8 +1,8 @@
 ﻿using AppFramework.Application;
+using LibBook.ApplicationServices.Mapperly;
 using LibBook.Domain;
 using LibBook.Domain.AuthorAgg;
 using LibBook.Domain.BookAgg;
-using LibBook.Domain.BookCategoryAgg;
 using LibBook.Domain.PublisherAgg;
 using LibBook.Domain.TranslatorAgg;
 using LibBook.DomainContracts.Book;
@@ -144,6 +144,7 @@ public class BookService : IBookService
 
     public async Task<BookViewModel> GetById(int id)
     {
+        var r =await _authorRepository.GetByIdAsync(id); 
         var result = await _bookRepository.GetAll()
             .Select(book => new BookViewModel
             {
@@ -161,7 +162,7 @@ public class BookService : IBookService
                 Category = book.Category.Name,
             }).FirstOrDefaultAsync(b => b.Id == id);
 
-        return result;
+        return result ?? throw new Exception($"No book was found with this {id}");
     }
     #endregion
 

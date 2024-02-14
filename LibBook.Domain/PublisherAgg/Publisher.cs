@@ -2,7 +2,7 @@
 
 namespace LibBook.Domain.PublisherAgg
 {
-    public class Publisher : BaseEntity
+    public class Publisher : BaseEntity<int>
     {
         public string Name { get; set; }
         public string Description { get; set; }
