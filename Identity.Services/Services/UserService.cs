@@ -230,6 +230,7 @@ public class UserService : ServiceBase<UserService>, IUserService
             return (isSucceed: false, userId: existingUser.Id);
         }
         var user = _mapper.Map<ApplicationUser>(model);
+        user.EmailConfirmed = true;
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (!result.Succeeded)
@@ -239,7 +240,6 @@ public class UserService : ServiceBase<UserService>, IUserService
         }
 
         //confirm user
-        user.EmailConfirmed = true;
         model.Roles = new List<string> { "Member" };
 
         var addUserRole = await _userManager.AddToRolesAsync(user, model.Roles);
