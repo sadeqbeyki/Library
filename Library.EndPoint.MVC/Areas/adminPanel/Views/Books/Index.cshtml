@@ -1,0 +1,93 @@
+﻿@using Library.EndPoint.MVC.Areas.adminPanel.Models;
+@model BookWithCategoryViewModel
+
+@{
+    ViewData["Title"] = "Book Management";
+}
+
+<div class="card border-black mb-3">
+    <div class="card-body">
+        <div class="card-title">Search Book With Specific Details</div>
+        <form asp-controller="Books" asp-action="Index" class="form-inline" role="form" method="get">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="sr-only" asp-for="SearchModel.Title"></label>
+                        <input class="form-control" asp-for="SearchModel.Title" placeholder="Book Name">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="sr-only" asp-for="SearchModel.Code"></label>
+                        <input class="form-control" asp-for="SearchModel.Code" placeholder="Code">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="sr-only" asp-for="SearchModel.CategoryId"></label>
+                        <select class="form-control" asp-for="SearchModel.CategoryId" asp-items="Model.Categories">
+                            <option value="0">Book Category</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3 mb-3">
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">Search</button>
+                        <a class="btn btn-primary waves-effect waves-light m-l-10" asp-action="Index">Show All</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Book List</h5>
+    </div>
+    <div class="card-body">
+        <div class="card-title">
+            <a class="btn btn-primary btn-lg" asp-action="Create">Create Book</a>
+        </div>
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+
+                    <th>Title</th>
+                    <th>ISBN</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Category</th>
+
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Books)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+
+                        <td>@item.Title</td>
+                        <td>@item.ISBN</td>
+                        <td>@item.Code</td>
+                        <td>@item.Description</td>
+                        <td>@item.Category</td>
+                        <td>
+                            <a class="btn btn-success pull-right m-rl-5" asp-action="Update" asp-route-id="@item.Id">
+                                <i class="fa fa-edit"></i>Update
+                            </a>
+                            <a class="btn btn-danger pull-right m-rl-5" asp-action="Delete" asp-route-id="@item.Id">
+                                <i class="fa fa-remove"></i>Delete
+                            </a>
+                            <a class="btn btn-info pull-right m-rl-5" asp-action="Details" asp-route-id="@item.Id">
+                                <i class="fa fa-info"></i>Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

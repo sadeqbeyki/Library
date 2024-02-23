@@ -1,0 +1,97 @@
+﻿@using Library.EndPoint.MVC.Areas.adminPanel.Models;
+@model EditBookViewModel
+
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Update" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label asp-for="Book.Title">Book Title:</label>
+                <input asp-for="Book.Title" class="form-control" />
+                <span asp-validation-for="Book.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.Picture" class="control-label">Upload Picture:</label>
+                <input type="file" name="pictureFile" class="form-control" />
+                <span class="text-danger" asp-validation-for="Book.Picture"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.ISBN">ISBN:</label>
+                <input asp-for="Book.ISBN" class="form-control" />
+                <span asp-validation-for="Book.ISBN" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Book.Code">Code:</label>
+                <input asp-for="Book.Code" class="form-control" />
+                <span asp-validation-for="Book.Code" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Book.Description">Description:</label>
+                <textarea asp-for="Book.Description" class="form-control"></textarea>
+                <span asp-validation-for="Book.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Book.CategoryId">Choose a Category:</label>
+                <select class="form-control" asp-for="Book.CategoryId"
+                        asp-items='new SelectList(Model.BookCategories, "Id", "Name")'>
+                    <option value="">Select Category</option>
+                </select>
+                <span asp-validation-for="Book.CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Authors:</label>
+                <select class="form-control" id="authorInput" asp-items='new SelectList(Model.Authors,"Name")'>
+                    <option value="">Select Author</option>
+                </select>
+                <button type="button" id="addAuthorButton" class="btn btn-primary">Add</button>
+                <ul id="selectedAuthorsList" class="list-group" name="SelectedAuthors">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicateAuthorError" class="text-danger"></span>
+            </div>
+                
+            <div class="form-group">
+                <label class="control-label">Publishers:</label>
+                <select class="form-control" id="publisherInput" asp-items='new SelectList(Model.Publishers,"Name")'>
+                    <option value="">Select Publisher</option>
+                </select>
+                <button type="button" id="addPublisherButton" class="btn btn-primary">Add</button>
+                <ul id="selectedPublishersList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicatePublisherError" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Translators:</label>
+                <select class="form-control" id="translatorInput" asp-items='new SelectList(Model.Translators,"Name")'>
+                    <option value="">Select Translator</option>
+                </select>
+                <button type="button" id="addTranslatorButton" class="btn btn-primary">Add</button>
+                <ul id="selectedTranslatorsList" class="list-group">
+                    <!-- selected list... -->
+                </ul>
+                <span id="duplicateTranslatorError" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Book.Id" value="@Model.Book.Id" />
+
+            <input type="hidden" name="SelectedAuthors" id="SelectedAuthors" />
+            <input type="hidden" name="SelectedPublishers" id="SelectedPublishers" />
+            <input type="hidden" name="SelectedTranslators" id="SelectedTranslators" />
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-secondary">Back To Book List</a>
+        </form>
+    </div>
+</div>
+
+<script src="~/APTheme/js/CreateBook.js"></script>

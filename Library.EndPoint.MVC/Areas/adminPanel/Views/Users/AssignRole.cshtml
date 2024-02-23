@@ -1,0 +1,104 @@
+﻿@using Identity.Application.Interfaces
+@using Library.EndPoint.MVC.Areas.adminPanel.Models;
+@model UserRoleViewModel
+@inject IRoleService _roleManager
+@{
+    ViewData["Title"] = "Assign Role";
+}
+
+<div class="row">
+    <div class="col-6">
+        <div class="card border-dark">
+            <div class="row">
+                <div class="col-md-4 bg-dark rounded-left">
+                    <h5 class="card-title m-3">Assign Role To Member</h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <form asp-action="AssignRole" method="post">
+                            <div class="text-danger">@ViewBag.Error</div>
+                            <div class="text-success">@ViewBag.Success</div>
+                            <div class="form-group">
+                                <label asp-for="Assign.UserId" class="control-label">Choose a Member</label>
+                                <select class="form-control" asp-for="Assign.UserId"
+                                        asp-items='new SelectList(Model.Users, "Id", "UserName")'>
+                                    <option value="">Choose a Member</option>
+                                </select>
+                                <span asp-validation-for="Assign.UserId" class="error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Assign.RoleId" class="control-label">Choose a Role</label>
+                                <select class="form-control" asp-for="Assign.RoleId"
+                                        asp-items='new SelectList(Model.Roles, "Id", "Name")'>
+                                    <option value="">Choose a Role</option>
+                                </select>
+                                <span asp-validation-for="Assign.RoleId" class="error"></span>
+                            </div>
+                            <div>
+                                <a class="btn btn-secondary waves-effect" asp-action="Index">Back to list</a>
+                                <button type="submit" class="btn btn-info waves-effect waves-light">Assign</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="col-6">
+    <div class="card border-dark">
+        <div class="card-header">
+
+            <h5 class="card-title m-3">User Roles List</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Roles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.UserRoles)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>
+                                <ul>
+                                    @foreach (var roleName in user.Roles)
+                                    {
+                                        var role = await _roleManager.GetRoleByNameAsync(roleName);
+                                        if (role != null)
+                                        {
+                                            <li class="d-flex mb-1">
+                                                <form asp-controller="Users" asp-action="RemoveUserFromRole" asp-route-userId="@user.UserId" asp-route-roleId="@role.Id">
+                                                    <div class="input-group w-auto ">
+                                                        <div class="btn-group-toggle">
+                                                            <label class="btn btn-primary btn-sm" style="border-radius: 0;">
+                                                                @roleName
+                                                            </label>
+                                                        </div>
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-danger btn-sm" id="basic-addon1">&times;</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
