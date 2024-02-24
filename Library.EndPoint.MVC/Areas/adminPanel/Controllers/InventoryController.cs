@@ -1,11 +1,12 @@
 ﻿using LibBook.DomainContracts.Book;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using LibInventory.DomainContracts.Inventory;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList;
 using Library.EndPoint.MVC.Helper;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
+using Warehouse.Application.DTOs;
+using Warehouse.Service.Contracts;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]

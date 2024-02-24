@@ -2,8 +2,8 @@ using AppFramework.Application.Email;
 using Identity.Application;
 using Identity.Services;
 using LibBook.Configurations;
-using LibInventory.Configuration;
 using Logging.Persistance.Configurations;
+using Warehouse.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +50,7 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddIdentityApplication();
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
+
 builder.Services.AddInventoryInfrastructure(builder.Configuration);
 builder.Services.AddBookInfrastructure(builder.Configuration);
 #endregion

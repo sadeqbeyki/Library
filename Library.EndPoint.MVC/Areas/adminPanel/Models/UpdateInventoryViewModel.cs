@@ -1,5 +1,5 @@
-﻿using LibInventory.DomainContracts.Inventory;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Warehouse.Application.DTOs;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;
 

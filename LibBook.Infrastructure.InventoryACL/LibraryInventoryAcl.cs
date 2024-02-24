@@ -1,7 +1,8 @@
 ﻿using Identity.Application.Interfaces;
 using LibBook.Domain.BorrowAgg;
 using LibBook.Domain.Services;
-using LibInventory.DomainContracts.Inventory;
+using Warehouse.Application.DTOs;
+using Warehouse.Service.Contracts;
 
 namespace LibBook.Infrastructure.InventoryACL;
 
