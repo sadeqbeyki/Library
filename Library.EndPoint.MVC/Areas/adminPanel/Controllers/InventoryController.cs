@@ -7,6 +7,7 @@ using Library.EndPoint.MVC.Helper;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Warehouse.Application.DTOs;
 using Warehouse.Service.Contracts;
+using Warehouse.Application.DTOs.Inventory;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]

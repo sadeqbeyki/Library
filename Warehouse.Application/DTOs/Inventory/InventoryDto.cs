@@ -2,9 +2,9 @@
 using LibBook.DomainContracts.Book;
 using System.ComponentModel.DataAnnotations;
 
-namespace Warehouse.Application.DTOs;
+namespace Warehouse.Application.DTOs.Inventory;
 
-public class CreateInventory
+public class InventoryDto
 {
     [Range(1, 100000, ErrorMessage = ValidationMessages.IsRequired)]
     public int BookId { get; set; }

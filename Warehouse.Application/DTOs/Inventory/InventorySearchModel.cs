@@ -1,4 +1,4 @@
-﻿namespace Warehouse.Application.DTOs;
+﻿namespace Warehouse.Application.DTOs.Inventory;
 
 public class InventorySearchModel
 {

@@ -2,6 +2,8 @@
 using LibBook.Domain.Services;
 using Warehouse.Application.Contracts;
 using Warehouse.Application.DTOs;
+using Warehouse.Application.DTOs.Inventory;
+using Warehouse.Application.DTOs.InventoryOperation;
 using Warehouse.Domain.Entities.InventoryAgg;
 using Warehouse.Service.Contracts;
 
@@ -25,7 +27,6 @@ namespace Warehouse.Service.Services
 
             var inventory = new Inventory(command.BookId, command.UnitPrice);
             await _inventoryRepository.CreateAsync(inventory);
-            //_inventoryRepository.SaveChanges();
             return operation.Succeeded();
         }
 

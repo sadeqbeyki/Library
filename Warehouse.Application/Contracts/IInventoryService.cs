@@ -1,5 +1,7 @@
 ﻿using AppFramework.Application;
 using Warehouse.Application.DTOs;
+using Warehouse.Application.DTOs.Inventory;
+using Warehouse.Application.DTOs.InventoryOperation;
 
 namespace Warehouse.Service.Contracts;
 
