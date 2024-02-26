@@ -68,7 +68,7 @@ public class InventoryController : Controller
     [HttpPost]
     public async Task<IActionResult> Update(EditInventory command)
     {
-        var result = await _inventoryService.Edit(command);
+        var result = await _mediator.Send(new UpdateInventoryCommand(command));
         return RedirectToAction("Index", result);
     }
     [HttpGet]

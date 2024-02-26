@@ -17,5 +17,6 @@ internal sealed class GetInventoryQueryHandler : IRequestHandler<GetInventoryQue
     public Task<EditInventory> Handle(GetInventoryQuery request, CancellationToken cancellationToken)
     {
         var result = _inventoryService.GetDetails(request.id);
+        return Task.FromResult(result);
     }
 }
