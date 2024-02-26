@@ -8,31 +8,34 @@ using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Warehouse.Application.DTOs;
 using Warehouse.Service.Contracts;
 using Warehouse.Application.DTOs.Inventory;
+using Warehouse.Application.CQRS.Commands.Inventory;
+using MediatR;
+using Warehouse.Application.CQRS.Queries.Inventory;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 [Area("adminPanel")]
 public class InventoryController : Controller
 {
-    //public List<InventoryViewModel> Inventory = new();
-
     private readonly IBookService _bookService;
     private readonly IInventoryService _inventoryService;
+    private readonly IMediator _mediator;
 
-    public InventoryController(IBookService bookService, IInventoryService inventoryService)
+    public InventoryController(IBookService bookService, IInventoryService inventoryService, IMediator mediator)
     {
         _bookService = bookService;
         _inventoryService = inventoryService;
+        _mediator = mediator;
     }
 
     public async Task<IActionResult> Index(InventorySearchModel searchModel, int? page)
     {
         const int pageSize = 4;
-        var inventory = _inventoryService.Search(searchModel);
-        var paginatedLoans = PaginatedList<InventoryViewModel>.Create(inventory, page ?? 1, pageSize);
+        var result = await _mediator.Send(new SearchInventoryQuery(searchModel));
+        var paginatedInventory = PaginatedList<InventoryViewModel>.Create(result, page ?? 1, pageSize);
         var model = new InventoryViewModelWithSearchModel
         {
-            Inventory = paginatedLoans,
+            Inventory = paginatedInventory,
             SearchModel = searchModel,
             Books = new SelectList(await _bookService.GetBooks(), "Id", "Title").ToList(),
         };
@@ -49,12 +52,19 @@ public class InventoryController : Controller
         return View("Create", command);
     }
     [HttpPost]
-    public async Task<ActionResult> Create(CreateInventory command)
+    public async Task<ActionResult> Create(CreateInventoryCommand command)
     {
-        var result = await _inventoryService.Create(command);
+        var result = await _mediator.Send(command);
         return RedirectToAction("Index", result);
-        //return View("Index", result);
     }
+
+    //[HttpPost]
+    //public async Task<ActionResult> Create(CreateInventory command)
+    //{
+    //    var result = await _inventoryService.Create(command);
+    //    return RedirectToAction("Index", result);
+    //}
+
     [HttpGet]
     public async Task<IActionResult> Update(int id)
     {
