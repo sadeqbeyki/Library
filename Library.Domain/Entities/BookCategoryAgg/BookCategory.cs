@@ -18,6 +18,7 @@ public class BookCategory : BaseEntity<int>
     {
         Name = name;
         Description = description;
+        //Books = new List<Book>();
     }
 
     public void Edit(string name, string description)

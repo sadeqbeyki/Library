@@ -5,7 +5,7 @@ using Library.ACL;
 using Library.Infrastructure;
 using Logging.Persistance.Configurations;
 using Warehouse.Configuration;
-
+using Warehouse.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +55,7 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddInventoryInfrastructure(builder.Configuration);
 builder.Services.AddBookInfrastructure(builder.Configuration);
 builder.Services.AddACLConfiguration();
+builder.Services.AddInventoryApplication();
 #endregion
 
 

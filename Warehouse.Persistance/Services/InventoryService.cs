@@ -20,8 +20,10 @@ namespace Warehouse.Service.Services
 
         public async Task<OperationResult> Create(CreateInventory command)
         {
-            var operation = new OperationResult();
-            if (_inventoryRepository.Exists(x => x.BookId == command.BookId))
+            OperationResult operation = new();
+
+            var isExist = _inventoryRepository.Exists(x => x.BookId == command.BookId);
+            if (isExist)
                 return operation.Failed(ApplicationMessages.DuplicatedRecord);
 
             var inventory = new Inventory(command.BookId, command.UnitPrice);
