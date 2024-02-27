@@ -1,6 +1,6 @@
-﻿@using LibBook.DomainContracts.Borrow;
+﻿@using Library.Application.DTOs.Lend
 @using Library.EndPoint.MVC.Helper;
-@model PaginatedList<LoanDto>
+@model PaginatedList<LendDto>
 
 @{
     ViewData["Title"] = "Returned Loans";
@@ -21,7 +21,7 @@
                     <th>Book Title</th>
                     <th>Member</th>
                     <th>Employee</th>
-                    <th>Borrow Date</th>
+                    <th>Lend Date</th>
                     <th>Ideal Return Date</th>
                     <th>Return Employee</th>
                     <th>Return Date</th>

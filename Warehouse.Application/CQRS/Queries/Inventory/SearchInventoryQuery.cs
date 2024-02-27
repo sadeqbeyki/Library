@@ -1,7 +1,7 @@
 ﻿using MediatR;
+using Warehouse.Application.Contracts;
 using Warehouse.Application.DTOs;
 using Warehouse.Application.DTOs.Inventory;
-using Warehouse.Service.Contracts;
 
 namespace Warehouse.Application.CQRS.Queries.Inventory;
 

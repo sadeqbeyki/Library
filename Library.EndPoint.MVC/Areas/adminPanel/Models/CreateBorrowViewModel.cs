@@ -1,6 +1,6 @@
 ﻿using Identity.Application.DTOs.User;
-using LibBook.DomainContracts.Book;
-using LibBook.DomainContracts.Borrow;
+using Library.Application.DTOs.Book;
+using Library.Application.DTOs.Lend;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;
@@ -23,7 +23,7 @@ public class CreateBorrowViewModel
 
 public class UpdateBorrowViewModel
 {
-    public LoanDto Borrow { get; set; }
+    public LendDto Lend { get; set; }
     public List<UserDetailsDto> Members { get; set; }
     public List<BookViewModel> Books { get; set; }
 }

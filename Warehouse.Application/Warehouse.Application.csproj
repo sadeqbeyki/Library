@@ -8,8 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
-    <ProjectReference Include="..\LibBook.DomainContracts\LibBook.DomainContracts.csproj" />
-    <ProjectReference Include="..\LibInv.Domain\Warehouse.Domain.csproj" />
+    <ProjectReference Include="..\Library.Application\Library.Application.csproj" />
     <ProjectReference Include="..\Warehouse.Domain\Warehouse.Domain.csproj" />
   </ItemGroup>
 

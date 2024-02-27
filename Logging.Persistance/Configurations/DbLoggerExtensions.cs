@@ -1,7 +1,5 @@
 ﻿using Logging.Persistance.Domain;
-using Logging.Persistance.Persistance;
 using Logging.Persistance.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

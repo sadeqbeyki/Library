@@ -12,75 +12,75 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label asp-for="Borrow.MemberId" class="control-label">Choose a Member</label>
-                            <select class="form-control" asp-for="Borrow.MemberId"
+                            <label asp-for="Lend.MemberId" class="control-label">Choose a Member</label>
+                            <select class="form-control" asp-for="Lend.MemberId"
                                     asp-items='new SelectList(Model.Members, "Id", "UserName")'>
                                 <option value="">Choose a Member</option>
                             </select>
-                            <span asp-validation-for="Borrow.MemberId" class="error"></span>
+                            <span asp-validation-for="Lend.MemberId" class="error"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label asp-for="Borrow.BookId" class="control-label">Choose a Book</label>
-                            <select class="form-control" asp-for="Borrow.BookId"
+                            <label asp-for="Lend.BookId" class="control-label">Choose a Book</label>
+                            <select class="form-control" asp-for="Lend.BookId"
                                     asp-items='new SelectList(Model.Books, "Id", "Title")'>
                                 <option value="">Choose a Book</option>
                             </select>
-                            <span asp-validation-for="Borrow.BookId" class="error"></span>
+                            <span asp-validation-for="Lend.BookId" class="error"></span>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label asp-for="Borrow.EmployeeId" class="control-label">Employee</label>
-                            <input type="text" class="form-control" asp-for="Borrow.EmployeeId" hidden>
-                            <input type="text" class="form-control" asp-for="Borrow.EmployeeName" readonly>
-                            <span asp-validation-for="Borrow.EmployeeId" class="error"></span>
+                            <label asp-for="Lend.EmployeeId" class="control-label">Employee</label>
+                            <input type="text" class="form-control" asp-for="Lend.EmployeeId" hidden>
+                            <input type="text" class="form-control" asp-for="Lend.EmployeeName" readonly>
+                            <span asp-validation-for="Lend.EmployeeId" class="error"></span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label asp-for="Borrow.CreationDate" class="control-label">Borrow Date</label>
-                            <input type="text" class="form-control" asp-for="Borrow.CreationDate" readonly>
-                            <span asp-validation-for="Borrow.CreationDate" class="error"></span>
+                            <label asp-for="Lend.CreationDate" class="control-label">Lend Date</label>
+                            <input type="text" class="form-control" asp-for="Lend.CreationDate" readonly>
+                            <span asp-validation-for="Lend.CreationDate" class="error"></span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label asp-for="Borrow.IdealReturnDate" class="control-label">Ideal Return Date</label>
-                            <input type="text" class="form-control" asp-for="Borrow.IdealReturnDate" readonly>
-                            <span asp-validation-for="Borrow.IdealReturnDate" class="error"></span>
+                            <label asp-for="Lend.IdealReturnDate" class="control-label">Ideal Return Date</label>
+                            <input type="text" class="form-control" asp-for="Lend.IdealReturnDate" readonly>
+                            <span asp-validation-for="Lend.IdealReturnDate" class="error"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label asp-for="Borrow.ReturnEmployeeID" class="control-label">Return Employee</label>
-                                <input type="text" class="form-control" asp-for="Borrow.ReturnEmployeeID" readonly>
-                                <span asp-validation-for="Borrow.ReturnEmployeeID" class="error"></span>
+                                <label asp-for="Lend.ReturnEmployeeID" class="control-label">Return Employee</label>
+                                <input type="text" class="form-control" asp-for="Lend.ReturnEmployeeID" readonly>
+                                <span asp-validation-for="Lend.ReturnEmployeeID" class="error"></span>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label asp-for="Borrow.ReturnDate" class="control-label">Return Date</label>
-                                <input type="text" class="form-control" asp-for="Borrow.ReturnDate" readonly>
-                                <span asp-validation-for="Borrow.ReturnDate" class="error"></span>
+                                <label asp-for="Lend.ReturnDate" class="control-label">Return Date</label>
+                                <input type="text" class="form-control" asp-for="Lend.ReturnDate" readonly>
+                                <span asp-validation-for="Lend.ReturnDate" class="error"></span>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label asp-for="Borrow.Description" class="control-label">Description</label>
-                                <textarea class="form-control autogrow" asp-for="Borrow.Description"
+                                <label asp-for="Lend.Description" class="control-label">Description</label>
+                                <textarea class="form-control autogrow" asp-for="Lend.Description"
                                           style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px; max-height:200px;">
                                       </textarea>
-                                <span asp-validation-for="Borrow.Description" class="error"></span>
+                                <span asp-validation-for="Lend.Description" class="error"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" asp-for="Borrow.Id" value="@Model.Borrow.Id" />
+                <input type="hidden" asp-for="Lend.Id" value="@Model.Lend.Id" />
 
             </div>
             <div>

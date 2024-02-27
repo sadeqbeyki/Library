@@ -1,4 +1,4 @@
-﻿using LibBook.DomainContracts.Book;
+﻿using Library.Application.DTOs.Book;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;

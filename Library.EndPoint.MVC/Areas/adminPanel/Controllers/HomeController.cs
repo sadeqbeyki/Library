@@ -1,5 +1,5 @@
 ﻿using Identity.Domain.Entities.User;
-using LibBook.DomainContracts.Borrow;
+using Library.Application.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
@@ -9,11 +9,11 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class HomeController : Controller
 {
-    private readonly ILoanService _loanService;
+    private readonly ILendService _loanService;
     private readonly UserManager<ApplicationUser> _userManager;
 
     private readonly SignInManager<ApplicationUser> _signInManager;
-    public HomeController(ILoanService loanService,
+    public HomeController(ILendService loanService,
         UserManager<ApplicationUser> userManager)
     {
         _loanService = loanService;
@@ -25,7 +25,7 @@ public class HomeController : Controller
         return View();
     }
     [HttpGet]
-    public async Task<IActionResult> EmployeeBorrows(int? page)
+    public async Task<IActionResult> EmployeeLoans(int? page)
     {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
@@ -33,24 +33,24 @@ public class HomeController : Controller
             return RedirectToAction("Login", "Auth", "adminPanel");
         }
 
-        var loans = await _loanService.GetBorrowsByEmployeeId(user.Id);
+        var loans = await _loanService.GetLoansByEmployeeId(user.Id);
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
         var pagedLog = loans.ToPagedList(pageNumber, pageSize);
 
-        return View("EmployeeBorrows", pagedLog);
+        return View("EmployeeLoans", pagedLog);
     }
     [HttpGet]
-    public async Task<IActionResult> MemberBorrows(Guid memberId, int? page)
+    public async Task<IActionResult> MemberLoans(Guid memberId, int? page)
     {
-        var loans = await _loanService.GetBorrowsByMemberId(memberId);
+        var loans = await _loanService.GetLoansByMemberId(memberId);
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
         var pagedLog = loans.ToPagedList(pageNumber, pageSize);
 
-        return View("MemberBorrows", pagedLog);
+        return View("MemberLoans", pagedLog);
     }
     public async Task<int> GetOverdueLoansCount()
     {

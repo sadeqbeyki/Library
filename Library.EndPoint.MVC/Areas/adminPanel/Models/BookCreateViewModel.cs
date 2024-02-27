@@ -1,4 +1,4 @@
-﻿using LibBook.DomainContracts.BookCategory;
+﻿using Library.Application.DTOs.BookCategory;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;

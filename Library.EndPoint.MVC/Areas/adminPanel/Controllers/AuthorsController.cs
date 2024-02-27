@@ -1,5 +1,6 @@
 ﻿using AppFramework.Infrastructure;
-using LibBook.DomainContracts.Author;
+using Library.Application.Contracts;
+using Library.Application.DTOs.Author;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Warehouse.Application.Contracts;
 using Warehouse.Persistance;
 using Warehouse.Persistance.Repositories;
-using Warehouse.Service.Contracts;
 using Warehouse.Service.Services;
 
 namespace Warehouse.Configuration;

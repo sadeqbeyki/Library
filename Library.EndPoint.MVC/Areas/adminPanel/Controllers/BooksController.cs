@@ -1,8 +1,5 @@
-﻿using LibBook.DomainContracts.Author;
-using LibBook.DomainContracts.Book;
-using LibBook.DomainContracts.BookCategory;
-using LibBook.DomainContracts.Publisher;
-using LibBook.DomainContracts.Translator;
+﻿using Library.Application.Contracts;
+using Library.Application.DTOs.Book;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,9 +1,8 @@
-﻿using LibBook.Domain.BookCategoryAgg;
-using LibBook.DomainContracts.Author;
-using LibBook.DomainContracts.Book;
-using LibBook.DomainContracts.BookCategory;
-using LibBook.DomainContracts.Publisher;
-using LibBook.DomainContracts.Translator;
+﻿using Library.Application.DTOs.Author;
+using Library.Application.DTOs.Book;
+using Library.Application.DTOs.BookCategory;
+using Library.Application.DTOs.Publisher;
+using Library.Application.DTOs.Translator;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;
 

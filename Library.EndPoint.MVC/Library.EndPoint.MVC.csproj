@@ -21,13 +21,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
     <ProjectReference Include="..\Identity.Services\Identity.Services.csproj" />
-    <ProjectReference Include="..\LibBook.Configurations\LibBook.Configurations.csproj" />
-    <ProjectReference Include="..\LibBook.DomainContracts\LibBook.DomainContracts.csproj" />
-    <ProjectReference Include="..\LibInv.DomainContracts\Warehouse.Application.csproj" />
+    <ProjectReference Include="..\Library.ACL\Library.ACL.csproj" />
+    <ProjectReference Include="..\Library.Configuration\Library.Configuration.csproj" />
     <ProjectReference Include="..\Logging.Persistance\Logging.Persistance.csproj" />
     <ProjectReference Include="..\Warehouse.Application\Warehouse.Application.csproj" />
     <ProjectReference Include="..\Warehouse.Configuration\Warehouse.Configuration.csproj" />
-    <ProjectReference Include="..\Warehouse.Service\Warehouse.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

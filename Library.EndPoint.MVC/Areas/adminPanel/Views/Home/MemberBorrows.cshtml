@@ -1,9 +1,9 @@
-﻿@using LibBook.DomainContracts.Borrow;
+﻿@using Library.Application.DTOs.Lend;
 
 @using X.PagedList
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
-@model IPagedList<LoanDto>
+@model IPagedList<LendDto>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -26,7 +26,7 @@
                                     <th>Book</th>
                                     <th>Employee</th>
 
-                                    <th>Borrow Date</th>
+                                    <th>Lend Date</th>
                                     <th>Ideal Return Date</th>
                                     <th>Return Employee</th>
                                     <th>Return Date</th>
@@ -58,15 +58,16 @@
                                 }
                             </tbody>
                         </table>
-                        Page : @Html.PagedListPager(Model, page => Url.Action("MemberBorrows", new { page = page }),
-                        new PagedListRenderOptions {
+                        Page : @Html.PagedListPager(Model, page => Url.Action("MemberLoans", new { page = page }),
+                        new PagedListRenderOptions
+                        {
 
-                        DisplayLinkToIndividualPages = true,
-                        DisplayPageCountAndCurrentLocation = false,
-                        MaximumPageNumbersToDisplay = 7,
+                            DisplayLinkToIndividualPages = true,
+                            DisplayPageCountAndCurrentLocation = false,
+                            MaximumPageNumbersToDisplay = 7,
 
-                        LiElementClasses = new string[] { "page-item" },
-                        PageClasses = new string[] { "page-link" }
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" }
                         })
                     </div>
                 </div>

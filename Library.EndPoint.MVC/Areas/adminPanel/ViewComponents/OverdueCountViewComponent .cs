@@ -1,13 +1,14 @@
-﻿using LibBook.DomainContracts.Borrow;
+﻿using Library.Application.Contracts;
+using Library.Application.DTOs.Lend;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.ViewComponents;
 [ViewComponent(Name = "OverdueCount")]
 public class OverdueCountViewComponent : ViewComponent
 {
-    private readonly ILoanService _loanService;
+    private readonly ILendService _loanService;
 
-    public OverdueCountViewComponent(ILoanService loanService)
+    public OverdueCountViewComponent(ILendService loanService)
     {
         _loanService = loanService;
     }
@@ -18,7 +19,7 @@ public class OverdueCountViewComponent : ViewComponent
         return View(overdueLoans);
     }
 
-    private async Task<List<LoanDto>> GetItemsAsync()
+    private async Task<List<LendDto>> GetItemsAsync()
     {
         return await _loanService.GetOverdueLones();
     }

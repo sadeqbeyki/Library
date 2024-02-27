@@ -232,31 +232,31 @@
                 <div class="collapse" id="orders-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li>
-                            <a asp-controller="Borrows" asp-action="Index"
+                            <a asp-controller="Loans" asp-action="Index"
                                class="link-dark d-inline-flex text-decoration-none rounded">Loans</a>
                         </li>
                         <li>
-                            <a asp-controller="Borrows" asp-action="Lending"
+                            <a asp-controller="Loans" asp-action="Lending"
                                class="link-dark d-inline-flex text-decoration-none rounded">Add New Lend</a>
                         </li>
                         <li>
-                            <a hasp-controller="Borrows" asp-action="PendingLoans"
+                            <a asp-controller="Loans" asp-action="PendingLoans"
                                class="link-dark d-inline-flex text-decoration-none rounded">Pending Loans</a>
                         </li>
                         <li>
-                            <a asp-controller="Borrows" asp-action="ApprovedLoans"
+                            <a asp-controller="Loans" asp-action="ApprovedLoans"
                                class="link-dark d-inline-flex text-decoration-none rounded">Approved Loans</a>
                         </li>
                         <li>
-                            <a asp-controller="Borrows" asp-action="ReturnedLoans"
+                            <a asp-controller="Loans" asp-action="ReturnedLoans"
                                class="link-dark d-inline-flex text-decoration-none rounded">Returned Loans</a>
                         </li>
                         <li>
-                            <a asp-controller="Borrows" asp-action="OverdueLoans"
+                            <a asp-controller="Loans" asp-action="OverdueLoans"
                                class="link-dark d-inline-flex text-decoration-none rounded">Overdue Loans</a>
                         </li>
                         <li>
-                            <a asp-controller="Borrows" asp-action="DeletedLoans"
+                            <a asp-controller="Loans" asp-action="DeletedLoans"
                                class="link-dark d-inline-flex text-decoration-none rounded">Deleted Loans</a>
                         </li>
                     </ul>
@@ -337,19 +337,19 @@
 
             <ul class="dropdown-menu p-2 gap-1 mx-4 rounded-3 animated--grow-in">
                 <li>
-                    <a href="javascript:void(0);" onclick="GoToMemberBorrowsPage('@userId')"
+                    <a href="javascript:void(0);" onclick="GoToMemberLoansPage('@userId')"
                        class="dropdown-item d-flex gap-2 align-items-center">
                         <svg class="bi" width="16" height="16"><use xlink:href="#person" /></svg>
-                        Member Borrows
+                        Member Loans
                     </a>
                 </li>
                 @if (await _userService.IsInRoles(userId, new List<string> { "Admin", "Manager" }))
                 {
                     <li>
-                        <a asp-area="adminPanel" asp-controller="Home" asp-action="EmployeeBorrows"
+                        <a asp-area="adminPanel" asp-controller="Home" asp-action="EmployeeLoans"
                            class="dropdown-item d-flex gap-2 align-items-center">
                             <svg class="bi" width="16" height="16"><use xlink:href="#employee" /></svg>
-                            Employee Borrows
+                            Employee Loans
                         </a>
                     </li>
                 }
@@ -379,7 +379,7 @@
 
 
 <script>
-    function GoToMemberBorrowsPage(userId) {
-        window.location.href = '/adminPanel/Home/MemberBorrows?memberId=' + userId;
+    function GoToMemberLoansPage(userId) {
+        window.location.href = '/adminPanel/Home/MemberLoans?memberId=' + userId;
     }
 </script>

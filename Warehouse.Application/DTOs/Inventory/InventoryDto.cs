@@ -1,5 +1,5 @@
 ﻿using AppFramework.Application;
-using LibBook.DomainContracts.Book;
+using Library.Application.DTOs.Book;
 using System.ComponentModel.DataAnnotations;
 
 namespace Warehouse.Application.DTOs.Inventory;

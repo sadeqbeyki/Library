@@ -1,7 +1,8 @@
 using AppFramework.Application.Email;
 using Identity.Application;
 using Identity.Services;
-using LibBook.Configurations;
+using Library.ACL;
+using Library.Infrastructure;
 using Logging.Persistance.Configurations;
 using Warehouse.Configuration;
 
@@ -53,6 +54,7 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
 builder.Services.AddInventoryInfrastructure(builder.Configuration);
 builder.Services.AddBookInfrastructure(builder.Configuration);
+builder.Services.AddACLConfiguration();
 #endregion
 
 

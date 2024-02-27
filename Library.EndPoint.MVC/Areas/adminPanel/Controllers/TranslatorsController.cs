@@ -1,5 +1,6 @@
 ﻿using AppFramework.Infrastructure;
-using LibBook.DomainContracts.Translator;
+using Library.Application.Contracts;
+using Library.Application.DTOs.Translator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

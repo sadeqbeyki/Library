@@ -4,8 +4,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Principal;
 
 namespace Logging.Persistance.Persistance;
 

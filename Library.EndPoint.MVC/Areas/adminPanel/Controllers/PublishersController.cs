@@ -1,4 +1,5 @@
-﻿using LibBook.DomainContracts.Publisher;
+﻿using Library.Application.Contracts;
+using Library.Application.DTOs.Publisher;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

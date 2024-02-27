@@ -3,7 +3,7 @@ using Warehouse.Application.DTOs;
 using Warehouse.Application.DTOs.Inventory;
 using Warehouse.Application.DTOs.InventoryOperation;
 
-namespace Warehouse.Service.Contracts;
+namespace Warehouse.Application.Contracts;
 
 public interface IInventoryService
 {

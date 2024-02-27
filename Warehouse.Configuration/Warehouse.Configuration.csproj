@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -13,11 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibInv.ApplicationServices\Warehouse.Service.csproj" />
-    <ProjectReference Include="..\LibInv.DomainContracts\Warehouse.Application.csproj" />
-    <ProjectReference Include="..\Library.Persistance\Warehouse.Persistance.csproj" />
     <ProjectReference Include="..\Warehouse.Application\Warehouse.Application.csproj" />
-    <ProjectReference Include="..\Warehouse.Service\Warehouse.Service.csproj" />
+    <ProjectReference Include="..\Warehouse.Persistance\Warehouse.Persistance.csproj" />
   </ItemGroup>
 
 </Project>
