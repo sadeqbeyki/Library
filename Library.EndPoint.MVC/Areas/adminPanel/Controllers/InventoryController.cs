@@ -52,9 +52,9 @@ public class InventoryController : Controller
         return View("Create", command);
     }
     [HttpPost]
-    public async Task<ActionResult> Create(CreateInventoryCommand command)
+    public async Task<ActionResult> Create(CreateInventory model)
     {
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new CreateInventoryCommand(model));
         return RedirectToAction("Index", result);
     }
 
