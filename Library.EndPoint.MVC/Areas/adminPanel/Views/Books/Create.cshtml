@@ -61,36 +61,43 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label type="text" class="control-label">Authors:</label>
-                <select class="form-control" id="authorInput" asp-items='new SelectList(Model.Authors,"Name")'>
-                    <option value="">Select Author</option>
+
+            <div class="input-group p-2">
+                <label type="text" class="control-label">Authors: &nbsp;</label>
+                <select class="form-select" id="authorInput" asp-items='new SelectList(Model.Authors,"Name")'>
+                    <option selected>Choose Author...</option>
                 </select>
-                <button type="button" id="addAuthorButton" class="btn btn-primary">Add</button>
+                <button type="button" id="addAuthorButton" class="btn btn-outline-secondary">Add</button>
+            </div>
+            <div class="p-1">
                 <ul id="selectedAuthorsList" class="list-group" name="SelectedAuthors">
                     <!-- selected list... -->
                 </ul>
                 <span id="duplicateAuthorError" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label type="text" class="control-label">Publishers:</label>
-                <select class="form-control" id="publisherInput" asp-items='new SelectList(Model.Publishers,"Name")'>
-                    <option value="">Select Publisher</option>
+            <div class="input-group p-2">
+                <label type="text" class="control-label">Publishers: &nbsp;</label>
+                <select class="form-select" id="publisherInput" asp-items='new SelectList(Model.Publishers,"Name")'>
+                    <option value="">Choose Publisher...</option>
                 </select>
-                <button type="button" id="addPublisherButton" class="btn btn-primary">Add</button>
+                <button type="button" id="addPublisherButton" class="btn btn-outline-secondary">Add</button>
+            </div>
+            <div class="p-1">
                 <ul id="selectedPublishersList" class="list-group">
                     <!-- selected list... -->
                 </ul>
                 <span id="duplicatePublisherError" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label type="text" class="control-label">Translators:</label>
-                <select class="form-control" id="translatorInput" asp-items='new SelectList(Model.Translators,"Name")'>
-                    <option value="">Select Translator</option>
+            <div class="input-group p-2">
+                <label type="text" class="control-label">Translators: &nbsp;</label>
+                <select class="form-select" id="translatorInput" asp-items='new SelectList(Model.Translators,"Name")'>
+                    <option value="">Choose Translator...</option>
                 </select>
-                <button type="button" id="addTranslatorButton" class="btn btn-primary">Add</button>
+                <button type="button" id="addTranslatorButton" class="btn btn-outline-secondary">Add</button>
+            </div>
+            <div class="p-1">
                 <ul id="selectedTranslatorsList" class="list-group">
                     <!-- selected list... -->
                 </ul>
@@ -100,9 +107,11 @@
             <input type="hidden" name="SelectedAuthors" id="SelectedAuthors" />
             <input type="hidden" name="SelectedPublishers" id="SelectedPublishers" />
             <input type="hidden" name="SelectedTranslators" id="SelectedTranslators" />
+            <div class="p-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Back To Book List</a>
+            </div>
 
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a asp-action="Index" class="btn btn-secondary">Back To Book List</a>
         </form>
     </div>
 </div>
