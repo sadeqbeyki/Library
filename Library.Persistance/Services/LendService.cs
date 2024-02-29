@@ -174,6 +174,7 @@ public class LendService : ILendService
             IdealReturnDate = lend.IdealReturnDate,
             ReturnEmployeeID = lend.ReturnEmployeeID,
             ReturnEmployeeName = _loanRepository.GetReturnEmployeeName(lend.ReturnEmployeeID).Result,
+            //ReturnEmployeeName = _loanRepository.GetReturnEmployeeName(lend.ReturnEmployeeID).Result,
             ReturnDate = lend.ReturnDate,
             Description = lend.Description,
         }).ToList();
@@ -207,7 +208,9 @@ public class LendService : ILendService
             CreationDate = lend.CreationDate,
             IdealReturnDate = lend.IdealReturnDate,
             ReturnDate = lend.ReturnDate,
-            ReturnEmployeeName = _loanRepository.GetReturnEmployeeName(lend.ReturnEmployeeID).Result,
+            ReturnEmployeeID = lend.ReturnEmployeeID,
+            ReturnEmployeeName = await _IdentityAcl.GetUserName(lend.ReturnEmployeeID),
+            //ReturnEmployeeName = _loanRepository.GetReturnEmployeeName(lend.ReturnEmployeeID).Result,
             Description = lend.Description,
         };
         return dto;
