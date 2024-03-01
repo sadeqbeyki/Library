@@ -10,7 +10,6 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 public class PublishersController : Controller
 {
-    private readonly IPublisherService _publisherService;
     private readonly IMediator _mediator;
 
     public PublishersController(IMediator mediator)
@@ -18,14 +17,9 @@ public class PublishersController : Controller
         _mediator = mediator;
     }
 
-    public PublishersController(IPublisherService publisherService)
-    {
-        _publisherService = publisherService;
-    }
-
     public async Task<ActionResult<List<PublisherDto>>> Index()
     {
-        var result = await _publisherService.GetAll();
+        var result = await _mediator.Send(new GetPublishersQuery());
         return View(result);
     }
     [HttpGet]

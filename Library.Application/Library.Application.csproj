@@ -24,7 +24,6 @@
 		<Folder Include="CQRS\Queries\BookCategory\" />
 		<Folder Include="CQRS\Queries\Book\" />
 		<Folder Include="CQRS\Queries\Lend\" />
-		<Folder Include="CQRS\Queries\Publisher\" />
 		<Folder Include="CQRS\Queries\Translator\" />
 	</ItemGroup>
 
