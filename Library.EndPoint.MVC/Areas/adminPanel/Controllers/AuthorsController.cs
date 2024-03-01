@@ -1,6 +1,4 @@
-﻿using AppFramework.Infrastructure;
-using Library.Application.Contracts;
-using Library.Application.CQRS.Commands.Author;
+﻿using Library.Application.CQRS.Commands.Author;
 using Library.Application.DTOs.Author;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

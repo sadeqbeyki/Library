@@ -1,5 +1,7 @@
 ﻿using Library.Application.Contracts;
+using Library.Application.CQRS.Commands.Author;
 using Library.Application.DTOs.Publisher;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +11,12 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 public class PublishersController : Controller
 {
     private readonly IPublisherService _publisherService;
+    private readonly IMediator _mediator;
+
+    public PublishersController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     public PublishersController(IPublisherService publisherService)
     {
@@ -26,13 +34,13 @@ public class PublishersController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<ActionResult> Create(PublisherDto dto)
+    public async Task<ActionResult> Create(PublisherDto model)
     {
         if (!ModelState.IsValid)
         {
             return View();
         }
-        var result = await _publisherService.Create(dto);
+        var result = await _mediator.Send(new CreatePublisherCommand(model));
         return RedirectToAction("Index");
     }
 }
