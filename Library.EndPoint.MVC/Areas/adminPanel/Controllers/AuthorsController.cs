@@ -1,6 +1,8 @@
 ﻿using AppFramework.Infrastructure;
 using Library.Application.Contracts;
+using Library.Application.CQRS.Commands.Author;
 using Library.Application.DTOs.Author;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +12,12 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 public class AuthorsController : Controller
 {
     private readonly IAuthorService _authorService;
+    private readonly IMediator _mediator;
+
+    public AuthorsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     public AuthorsController(IAuthorService authorService)
     {
@@ -33,7 +41,7 @@ public class AuthorsController : Controller
         {
             return View();
         }
-        var result = await _authorService.Create(authorDto);
-        return RedirectToAction("Index");
+        var result = await _mediator.Send(new CreateAuthorCommand(authorDto));
+        return RedirectToAction("Index", result);
     }
 }

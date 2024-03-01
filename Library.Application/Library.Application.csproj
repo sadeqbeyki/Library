@@ -1,18 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AppFramework\AppFramework.csproj" />
-    <ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\AppFramework\AppFramework.csproj" />
+		<ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="CQRS\Commands\Book\" />
+		<Folder Include="CQRS\Commands\BookCategory\" />
+		<Folder Include="CQRS\Commands\Lend\" />
+		<Folder Include="CQRS\Commands\Publisher\" />
+		<Folder Include="CQRS\Commands\Translator\" />
+		<Folder Include="CQRS\Queries\Author\" />
+		<Folder Include="CQRS\Queries\BookCategory\" />
+		<Folder Include="CQRS\Queries\Book\" />
+		<Folder Include="CQRS\Queries\Lend\" />
+		<Folder Include="CQRS\Queries\Publisher\" />
+		<Folder Include="CQRS\Queries\Translator\" />
+	</ItemGroup>
 
 </Project>
