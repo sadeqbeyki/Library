@@ -22,7 +22,6 @@
 		<Folder Include="CQRS\Commands\Lend\" />
 		<Folder Include="CQRS\Commands\Publisher\" />
 		<Folder Include="CQRS\Commands\Translator\" />
-		<Folder Include="CQRS\Queries\Author\" />
 		<Folder Include="CQRS\Queries\BookCategory\" />
 		<Folder Include="CQRS\Queries\Book\" />
 		<Folder Include="CQRS\Queries\Lend\" />

@@ -11,7 +11,6 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 public class AuthorsController : Controller
 {
-    private readonly IAuthorService _authorService;
     private readonly IMediator _mediator;
 
     public AuthorsController(IMediator mediator)
@@ -19,14 +18,9 @@ public class AuthorsController : Controller
         _mediator = mediator;
     }
 
-    public AuthorsController(IAuthorService authorService)
-    {
-        _authorService = authorService;
-    }
-
     public async Task<ActionResult<List<AuthorDto>>> Index()
     {
-        var result = await _authorService.GetAll();
+        var result = await _mediator.Send(new GetAuthorsQuery());
         return View(result);
     }
     [HttpGet]
@@ -35,13 +29,13 @@ public class AuthorsController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<ActionResult> Create(AuthorDto authorDto)
+    public async Task<ActionResult> Create(AuthorDto model)
     {
         if (!ModelState.IsValid)
         {
             return View();
         }
-        var result = await _mediator.Send(new CreateAuthorCommand(authorDto));
+        var result = await _mediator.Send(new CreateAuthorCommand(model));
         return RedirectToAction("Index", result);
     }
 }
