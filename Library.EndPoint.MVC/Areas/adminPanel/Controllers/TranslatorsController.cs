@@ -1,6 +1,8 @@
 ﻿using AppFramework.Infrastructure;
 using Library.Application.Contracts;
+using Library.Application.CQRS.Commands.Author;
 using Library.Application.DTOs.Translator;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,16 +12,16 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 public class TranslatorsController : Controller
 {
-    private readonly ITranslatorService _translatorService;
+    private readonly IMediator _mediator;
 
-    public TranslatorsController(ITranslatorService translatorService)
+    public TranslatorsController(IMediator mediator)
     {
-        _translatorService = translatorService;
+        _mediator = mediator;
     }
 
     public async Task<ActionResult<List<TranslatorDto>>> Index()
     {
-        var result = await _translatorService.GetAll();
+        var result = await _mediator.Send(new GetTranslatorsQuery());
         return View(result);
     }
     [HttpGet]
@@ -28,13 +30,13 @@ public class TranslatorsController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<ActionResult> Create(TranslatorDto dto)
+    public async Task<ActionResult> Create(TranslatorDto model)
     {
         if (!ModelState.IsValid)
         {
             return View();
         }
-        var result = await _translatorService.Create(dto);
+        var result = await _mediator.Send(new CreateTranslatorCommand(model));
         return RedirectToAction("Index");
     }
 }
