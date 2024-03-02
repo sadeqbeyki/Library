@@ -18,7 +18,6 @@
 
 	<ItemGroup>
 		<Folder Include="CQRS\Commands\Book\" />
-		<Folder Include="CQRS\Commands\BookCategory\" />
 		<Folder Include="CQRS\Commands\Lend\" />
 		<Folder Include="CQRS\Queries\BookCategory\" />
 		<Folder Include="CQRS\Queries\Book\" />

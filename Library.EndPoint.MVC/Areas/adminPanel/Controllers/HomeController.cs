@@ -12,7 +12,6 @@ public class HomeController : Controller
     private readonly ILendService _loanService;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    private readonly SignInManager<ApplicationUser> _signInManager;
     public HomeController(ILendService loanService,
         UserManager<ApplicationUser> userManager)
     {

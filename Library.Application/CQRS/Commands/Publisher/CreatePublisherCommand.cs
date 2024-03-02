@@ -2,7 +2,7 @@
 using Library.Application.DTOs.Publisher;
 using MediatR;
 
-namespace Library.Application.CQRS.Commands.Author;
+namespace Library.Application.CQRS.Commands.Publisher;
 
 public record CreatePublisherCommand(PublisherDto dto) : IRequest<bool>;
 internal sealed class CreatePublisherCommandHandler(IPublisherService publisherService) : IRequestHandler<CreatePublisherCommand, bool>
