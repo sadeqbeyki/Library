@@ -5,7 +5,7 @@ using MediatR;
 namespace Library.Application.CQRS.Commands.BookCategory;
 
 public record CreateBookCategoryCommand(BookCategoryDto dto) : IRequest<bool>;
-internal sealed class CreateBookCategoryCommandHandler(IBookCategoryService bookCategoryService) 
+internal sealed class CreateBookCategoryCommandHandler(IBookCategoryService bookCategoryService)
                                                         : IRequestHandler<CreateBookCategoryCommand, bool>
 {
     private readonly IBookCategoryService _bookCategoryService = bookCategoryService;
@@ -16,3 +16,4 @@ internal sealed class CreateBookCategoryCommandHandler(IBookCategoryService book
         return result.IsSucceeded;
     }
 }
+

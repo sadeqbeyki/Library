@@ -1,6 +1,8 @@
-﻿using AppFramework.Infrastructure;
-using Library.Application.Contracts;
+﻿using Library.Application.Contracts;
+using Library.Application.CQRS.Commands.BookCategory;
+using Library.Application.CQRS.Queries.BookCategory;
 using Library.Application.DTOs.BookCategory;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +13,12 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 public class BookCategoriesController : Controller
 {
     private readonly IBookCategoryService _bookCategoryService;
+    private readonly IMediator _mediator;
+
+    public BookCategoriesController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     public BookCategoriesController(IBookCategoryService bookCategoryService)
     {
@@ -25,7 +33,7 @@ public class BookCategoriesController : Controller
     [HttpGet]
     public async Task<ActionResult<BookCategoryDto>> Details(int id)
     {
-        var result = await _bookCategoryService.GetById(id);
+        var result = await _mediator.Send(new GetBookCategoryQuery(id));
         if (result == null)
             return NotFound();
         return View(result);
@@ -42,13 +50,13 @@ public class BookCategoriesController : Controller
         {
             return View();
         }
-        var result = await _bookCategoryService.Create(dto);
+        var result = await _mediator.Send(new CreateBookCategoryCommand(dto));
         return RedirectToAction("Index", result);
     }
     [HttpGet]
     public async Task<ActionResult<BookCategoryDto>> Update(int id)
     {
-        var category = await _bookCategoryService.GetById(id);
+        var category = await _mediator.Send(new GetBookCategoryQuery(id));
         if (category != null)
         {
             return View(category);
@@ -62,13 +70,13 @@ public class BookCategoriesController : Controller
         {
             return View();
         }
-        var result = await _bookCategoryService.Update(id, dto);
+        var result = await _mediator.Send(new UpdateBookCategoryCommand(id, dto));
         return RedirectToAction("Index", result);
     }
     [HttpGet]
     public async Task<ActionResult<BookCategoryDto>> Delete(int id)
     {
-        var category = await _bookCategoryService.GetById(id);
+        var category = await _mediator.Send(new GetBookCategoryQuery(id));
         if (id == 0 || category == null)
         {
             return NoContent();
