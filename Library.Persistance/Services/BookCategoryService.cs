@@ -5,6 +5,7 @@ using Library.Application.DTOs.Book;
 using Library.Application.DTOs.BookCategory;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.BookCategoryAgg;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Library.Persistance.Services
@@ -46,10 +47,11 @@ namespace Library.Persistance.Services
             return dto;
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var result = await _repository.GetByIdAsync(id);
-            await _repository.DeleteAsync(result);
+            var category = await _repository.GetByIdAsync(id);
+            var result =  _repository.DeleteAsync(category);
+            return result.IsCompletedSuccessfully;
         }
 
         public async Task<OperationResult> Update(int id, BookCategoryDto dto)

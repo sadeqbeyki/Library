@@ -1,5 +1,4 @@
-﻿using Library.Application.Contracts;
-using Library.Application.CQRS.Commands.BookCategory;
+﻿using Library.Application.CQRS.Commands.BookCategory;
 using Library.Application.CQRS.Queries.BookCategory;
 using Library.Application.DTOs.BookCategory;
 using MediatR;
@@ -12,17 +11,11 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 public class BookCategoriesController : Controller
 {
-    private readonly IBookCategoryService _bookCategoryService;
     private readonly IMediator _mediator;
 
     public BookCategoriesController(IMediator mediator)
     {
         _mediator = mediator;
-    }
-
-    public BookCategoriesController(IBookCategoryService bookCategoryService)
-    {
-        _bookCategoryService = bookCategoryService;
     }
 
     public async Task<ActionResult<List<BookCategoryDto>>> Index()
@@ -87,7 +80,7 @@ public class BookCategoriesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> ConfirmDelete(int id)
     {
-        await _bookCategoryService.Delete(id);
+        await _mediator.Send(new DeleteBookCategoryCommand(id));
         return RedirectToAction("Index");
     }
 }

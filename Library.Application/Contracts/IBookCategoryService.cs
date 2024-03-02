@@ -11,7 +11,7 @@ public interface IBookCategoryService
 
     Task<OperationResult> Create(BookCategoryDto entity);
     Task<OperationResult> Update(int id, BookCategoryDto entity);
-    Task Delete(int id);
+    Task<bool> Delete(int id);
     Task<List<BookDto>> GetCategoryWithBooks(int id);
 
 }
