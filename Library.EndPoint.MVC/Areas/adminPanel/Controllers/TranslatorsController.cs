@@ -1,6 +1,7 @@
 ﻿using AppFramework.Infrastructure;
 using Library.Application.Contracts;
 using Library.Application.CQRS.Commands.Author;
+using Library.Application.CQRS.Commands.Translator;
 using Library.Application.DTOs.Translator;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

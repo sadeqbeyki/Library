@@ -20,7 +20,7 @@ public class BookCategoriesController : Controller
 
     public async Task<ActionResult<List<BookCategoryDto>>> Index()
     {
-        var result = await _bookCategoryService.GetCategories();
+        var result = await _mediator.Send(new GetBookCategoriesQuery());
         return View(result);
     }
     [HttpGet]

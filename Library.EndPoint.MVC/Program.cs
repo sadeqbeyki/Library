@@ -6,6 +6,7 @@ using Library.Infrastructure;
 using Logging.Persistance.Configurations;
 using Warehouse.Configuration;
 using Warehouse.Application;
+using Library.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,8 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddIdentityApplication();
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
+
+builder.Services.AddLibraryApplications();
 
 builder.Services.AddInventoryInfrastructure(builder.Configuration);
 builder.Services.AddBookInfrastructure(builder.Configuration);

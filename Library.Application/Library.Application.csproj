@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -17,7 +18,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="CQRS\Commands\Book\" />
 		<Folder Include="CQRS\Commands\Lend\" />
 		<Folder Include="CQRS\Queries\Book\" />
 		<Folder Include="CQRS\Queries\Lend\" />

@@ -4,6 +4,7 @@ using Library.Application.DTOs.Book;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.BookAgg;
 using Library.Domain.Entities.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Persistance.Services;
@@ -26,13 +27,14 @@ public class BookService : IBookService
         _publisherRepository = publisherRepository;
     }
     #region Create
-    public async Task<OperationResult> Create(BookDto model)
+    public async Task<OperationResult> Create(CreateBookModel model)
     {
         OperationResult operationResult = new();
         if (_bookRepository.Exists(x => x.Title == model.Title))
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        Book book = new(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, model.Picture);
+        byte[]? picture = await ConvertImageToByte(model.Image);
+        Book book = new(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, picture);
 
         await AddAuthors(model, book);
         await AddPublishers(model, book);
@@ -43,6 +45,19 @@ public class BookService : IBookService
             ? operationResult.Failed(ApplicationMessages.ProblemFound)
             : operationResult.Succeeded();
     }
+
+    private static async Task<byte[]?> ConvertImageToByte(IFormFile Image)
+    {
+        if (Image != null && Image.Length > 0)
+        {
+            using var memoryStream = new MemoryStream();
+            await Image.CopyToAsync(memoryStream);
+            byte[]? picture = memoryStream.ToArray();
+            return picture;
+        }
+        return null;
+    }
+
     private async Task AddAuthors(BookDto model, Book book)
     {
         if (model.Authors != null && model.Authors.Any())

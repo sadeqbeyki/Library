@@ -1,6 +1,10 @@
 ﻿using Library.Application.Contracts;
+using Library.Application.CQRS.Commands.Author;
+using Library.Application.CQRS.Commands.Book;
+using Library.Application.CQRS.Queries.BookCategory;
 using Library.Application.DTOs.Book;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,15 +23,19 @@ public class BooksController : Controller
     private readonly IAuthorService _authorService;
     private readonly IPublisherService _publisherService;
     private readonly ITranslatorService _translatorService;
+    private readonly IMediator _mediator;
+
+
 
     public BooksController(IBookService bookService, IBookCategoryService bookCategoryService,
-        IAuthorService authorService, IPublisherService publisherService, ITranslatorService translatorService)
+        IAuthorService authorService, IPublisherService publisherService, ITranslatorService translatorService, IMediator mediator)
     {
         _bookService = bookService;
         _bookCategoryService = bookCategoryService;
         _authorService = authorService;
         _publisherService = publisherService;
         _translatorService = translatorService;
+        _mediator = mediator;
     }
 
     #region Get
@@ -57,18 +65,18 @@ public class BooksController : Controller
     {
         var model = new BookCreateViewModel
         {
-            BookCategories = await _bookCategoryService.GetCategories(),
-            Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
-            Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
-            Translators = (await _translatorService.GetTranslators()).Select(translator => translator.Name).ToList()
+            BookCategories = await _mediator.Send(new GetBookCategoriesQuery()),
+            Authors = (await _mediator.Send(new GetAuthorsQuery())).Select(author => author.Name).ToList(),
+            Publishers = (await _mediator.Send(new GetPublishersQuery())).Select(publisher => publisher.Name).ToList(),
+            Translators = (await _mediator.Send(new GetTranslatorsQuery())).Select(translator => translator.Name).ToList()
         };
 
         return View(model);
     }
     [HttpPost]
-    public async Task<ActionResult> Create(BookDto model, IFormFile pictureFile)
+    public async Task<ActionResult> Create(CreateBookModel model)
     {
-        var bookCategory = await _bookCategoryService.GetById(model.CategoryId);
+        var bookCategory = await _mediator.Send(new GetBookCategoryQuery(model.CategoryId));
 
         var selectedAuthors = Request.Form["selectedAuthors"].ToString();
         var selectedPublishers = Request.Form["selectedPublishers"].ToString();
@@ -80,30 +88,13 @@ public class BooksController : Controller
         model.Publishers = selectedPublishers.Split(',').ToList();
         model.Translators = selectedTranslators.Split(',').ToList();
 
-        if (pictureFile != null && pictureFile.Length > 0)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await pictureFile.CopyToAsync(memoryStream);
-                model.Picture = memoryStream.ToArray();
-            }
-        }
-
         ModelState.Clear();
         TryValidateModel(model);
         if (ModelState.IsValid)
         {
-            var result = await _bookService.Create(model);
-            if (result.IsSucceeded)
-            {
-                return RedirectToAction("Index", result);
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "خطا در ایجاد کتاب.");
-            }
+            var result = await _mediator.Send(new CreateBookCommand(model));
+            return RedirectToAction("Index", result);
         }
-        //return View(model);
         return RedirectToAction("Create");
     }
     #endregion

@@ -11,7 +11,7 @@ public interface IBookService
 
     List<BookViewModel> Search(BookSearchModel searchModel);
 
-    Task<OperationResult> Create(BookDto bookDto);
+    Task<OperationResult> Create(CreateBookModel createModel);
     Task Delete(int id);
     Task<OperationResult> Update(BookViewModel model);
 }
