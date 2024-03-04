@@ -104,23 +104,20 @@ public class BooksController : Controller
     public async Task<ActionResult<BookViewModel>> Update(int id)
     {
         var book = await _bookService.GetById(id);
-        if (book == null)
+        if (book != null)
         {
-            return NotFound();
+            EditBookViewModel model = new()
+            {
+                Book = book,
+                BookCategories = await _mediator.Send(new GetBookCategoriesQuery()),
+                Authors = (await _mediator.Send(new GetAuthorsQuery())).Select(author => author.Name).ToList(),
+                Publishers = (await _mediator.Send(new GetPublishersQuery())).Select(publisher => publisher.Name).ToList(),
+                Translators = (await _mediator.Send(new GetTranslatorsQuery())).Select(translator => translator.Name).ToList()
+            };
+            return View(model);
         }
-
-        var model = new EditBookViewModel
-        {
-            Book = book,
-            BookCategories = await _bookCategoryService.GetCategories(),
-            Authors = (await _authorService.GetAuthors()).Select(author => author.Name).ToList(),
-            Publishers = (await _publisherService.GetPublishers()).Select(publisher => publisher.Name).ToList(),
-            Translators = (await _translatorService.GetTranslators()).Select(translator => translator.Name).ToList()
-        };
-
-        return View(model);
+        return NotFound();
     }
-
     [HttpPut, HttpPost]
     public async Task<IActionResult> Update(int id, EditBookViewModel model, IFormFile pictureFile)
     {
@@ -129,7 +126,7 @@ public class BooksController : Controller
             return BadRequest();
         }
 
-        var bookCategory = await _bookCategoryService.GetById(model.Book.CategoryId);
+        var bookCategory = await _mediator.Send(new GetBookCategoryQuery(model.Book.CategoryId));
 
         var selectedAuthors = Request.Form["selectedAuthors"].ToString();
         var selectedPublishers = Request.Form["selectedPublishers"].ToString();
@@ -142,27 +139,11 @@ public class BooksController : Controller
 
         if (pictureFile != null && pictureFile.Length > 0)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                await pictureFile.CopyToAsync(memoryStream);
-                model.Book.Picture = memoryStream.ToArray();
-            }
+            using var memoryStream = new MemoryStream();
+            await pictureFile.CopyToAsync(memoryStream);
+            model.Book.Picture = memoryStream.ToArray();
         }
-        //ModelState.Clear();
-        //TryValidateModel(model);
 
-        //if (!ModelState.IsValid)
-        //{
-        //    foreach (var modelState in ViewData.ModelState.Values)
-        //    {
-        //        foreach (var error in modelState.Errors)
-        //        {
-        //            return View(error);
-        //        }
-        //    }
-        //}
-        //else
-        //{
         var result = await _bookService.Update(model.Book);
         if (result.IsSucceeded)
         {
@@ -173,10 +154,50 @@ public class BooksController : Controller
         {
             ModelState.AddModelError(string.Empty, "خطا در ویرایش کتاب.");
         }
-        //}
+
 
         return View(model);
     }
+    //[HttpPut, HttpPost]
+    //public async Task<IActionResult> Update(int id, EditBookViewModel model, IFormFile pictureFile)
+    //{
+    //    if (id != model.Book.Id)
+    //    {
+    //        return BadRequest();
+    //    }
+
+    //    var bookCategory = await _mediator.Send(new GetBookCategoryQuery(model.Book.CategoryId));
+
+    //    var selectedAuthors = Request.Form["selectedAuthors"].ToString();
+    //    var selectedPublishers = Request.Form["selectedPublishers"].ToString();
+    //    var selectedTranslators = Request.Form["selectedTranslators"].ToString();
+
+    //    model.Book.Category = bookCategory.Name;
+    //    model.Book.Authors = selectedAuthors.Split(',').ToList();
+    //    model.Book.Publishers = selectedPublishers.Split(',').ToList();
+    //    model.Book.Translators = selectedTranslators.Split(',').ToList();
+
+    //    if (pictureFile != null && pictureFile.Length > 0)
+    //    {
+    //        using var memoryStream = new MemoryStream();
+    //        await pictureFile.CopyToAsync(memoryStream);
+    //        model.Book.Picture = memoryStream.ToArray();
+    //    }
+
+    //    var result = await _bookService.Update(model.Book);
+    //    if (result.IsSucceeded)
+    //    {
+    //        return RedirectToAction("Index");
+    //    }
+
+    //    else
+    //    {
+    //        ModelState.AddModelError(string.Empty, "خطا در ویرایش کتاب.");
+    //    }
+
+
+    //    return View(model);
+    //}
     #endregion
 
     #region Delete
