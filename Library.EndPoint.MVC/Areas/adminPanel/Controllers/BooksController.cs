@@ -1,6 +1,7 @@
 ﻿using Library.Application.Contracts;
 using Library.Application.CQRS.Commands.Author;
 using Library.Application.CQRS.Commands.Book;
+using Library.Application.CQRS.Queries.Book;
 using Library.Application.CQRS.Queries.BookCategory;
 using Library.Application.DTOs.Book;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
@@ -46,14 +47,14 @@ public class BooksController : Controller
         {
             Books = _bookService.Search(searchModel),
             SearchModel = searchModel,
-            Categories = new SelectList(await _bookCategoryService.GetCategories(), "Id", "Name").ToList()
+            Categories = new SelectList(await _mediator.Send(new GetBookCategoriesQuery()), "Id", "Name").ToList()
         };
         return View(model);
     }
     [HttpGet]
     public async Task<ActionResult<BookViewModel>> Details(int id)
     {
-        var result = await _bookService.GetById(id);
+        var result = await _mediator.Send(new GetBookQuery(id));
         if (result == null)
             return NotFound();
         return View(result);
