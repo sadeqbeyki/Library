@@ -47,36 +47,41 @@
                 <span asp-validation-for="Book.CategoryId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Authors:</label>
+            <div class="input-group p-2">
+                <label class="control-label"></label>
                 <select class="form-control" id="authorInput" asp-items='new SelectList(Model.Authors,"Name")'>
-                    <option value="">Select Author</option>
+                    <option value="">Choose Author</option>
                 </select>
-                <button type="button" id="addAuthorButton" class="btn btn-primary">Add</button>
+                <button type="button" id="addAuthorButton" class="btn btn-outline-secondary">Add</button>
+            </div>
+            <div class="p-1">
                 <ul id="selectedAuthorsList" class="list-group" name="SelectedAuthors">
                     <!-- selected list... -->
                 </ul>
                 <span id="duplicateAuthorError" class="text-danger"></span>
             </div>
-                
-            <div class="form-group">
-                <label class="control-label">Publishers:</label>
+            <div class="input-group p-2">
+                <label class="control-label"></label>
                 <select class="form-control" id="publisherInput" asp-items='new SelectList(Model.Publishers,"Name")'>
-                    <option value="">Select Publisher</option>
+                    <option value="">Choose Publisher</option>
                 </select>
-                <button type="button" id="addPublisherButton" class="btn btn-primary">Add</button>
+                <button type="button" id="addPublisherButton" class="btn btn-outline-secondary">Add</button>
+            </div>
+            <div class="p-1">
                 <ul id="selectedPublishersList" class="list-group">
                     <!-- selected list... -->
                 </ul>
                 <span id="duplicatePublisherError" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Translators:</label>
+            <div class="input-group p-2">
+                <label class="control-label"></label>
                 <select class="form-control" id="translatorInput" asp-items='new SelectList(Model.Translators,"Name")'>
-                    <option value="">Select Translator</option>
+                    <option value="">Choose Translator</option>
                 </select>
-                <button type="button" id="addTranslatorButton" class="btn btn-primary">Add</button>
+                <button type="button" id="addTranslatorButton" class="btn btn-outline-secondary">Add</button>
+            </div>
+            <div class="p-1">
                 <ul id="selectedTranslatorsList" class="list-group">
                     <!-- selected list... -->
                 </ul>
