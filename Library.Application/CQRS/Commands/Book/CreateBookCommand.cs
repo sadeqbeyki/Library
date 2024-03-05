@@ -23,3 +23,4 @@ internal sealed class CreateBookCommandHandler : IRequestHandler<CreateBookComma
         return result.IsSucceeded ? result.IsSucceeded : false;
     }
 }
+

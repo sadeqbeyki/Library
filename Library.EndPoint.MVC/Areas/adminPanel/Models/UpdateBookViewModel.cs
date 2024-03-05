@@ -5,11 +5,6 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Models;
 
 public class UpdateBookViewModel
 {
-
-}
-
-public class EditBookViewModel
-{
     public BookViewModel Book { get; set; }
     public List<BookCategoryDto> BookCategories { get; set; }
     public List<string> Authors { get; set; }

@@ -181,7 +181,7 @@ public class BookService : IBookService
 
     #region Update
 
-    public async Task<OperationResult> Update(BookViewModel model)
+    public async Task<OperationResult> Update(BookViewModel model, IFormFile? Image)
     {
         OperationResult operationResult = new();
         var book = await _bookRepository.GetByIdAsync(model.Id);
@@ -191,7 +191,9 @@ public class BookService : IBookService
         if (_bookRepository.Exists(x => x.Title == model.Title && x.Id != model.Id))
             return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        book.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, model.Picture);
+        byte[]? picture = await ConvertImageToByte(Image);
+
+        book.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, picture);
 
         book.BookAuthors.Clear();
         book.BookPublishers.Clear();
@@ -206,6 +208,7 @@ public class BookService : IBookService
                             ? operationResult.Failed(ApplicationMessages.ProblemFound)
                             : operationResult.Succeeded();
     }
+
     #endregion
 
     #region Delete

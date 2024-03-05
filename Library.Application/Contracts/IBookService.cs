@@ -1,5 +1,6 @@
 ﻿using AppFramework.Application;
 using Library.Application.DTOs.Book;
+using Microsoft.AspNetCore.Http;
 
 namespace Library.Application.Contracts;
 
@@ -13,5 +14,5 @@ public interface IBookService
 
     Task<OperationResult> Create(CreateBookModel createModel);
     Task Delete(int id);
-    Task<OperationResult> Update(BookViewModel model);
+    Task<OperationResult> Update(BookViewModel model, IFormFile? Image);
 }
