@@ -2,7 +2,7 @@
 using Library.Application.DTOs.Publisher;
 using MediatR;
 
-namespace Library.Application.CQRS.Commands.Author;
+namespace Library.Application.CQRS.Queries.Publisher;
 
 public record GetPublishersQuery : IRequest<List<PublisherDto>>;
 internal sealed class GetPublishersQueryHandler(IPublisherService publisherService) : IRequestHandler<GetPublishersQuery, List<PublisherDto>>

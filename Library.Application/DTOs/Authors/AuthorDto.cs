@@ -1,4 +1,4 @@
-﻿namespace Library.Application.DTOs.Author
+﻿namespace Library.Application.DTOs.Authors
 {
     public class AuthorDto
     {

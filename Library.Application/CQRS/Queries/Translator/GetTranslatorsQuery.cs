@@ -2,7 +2,7 @@
 using Library.Application.DTOs.Translator;
 using MediatR;
 
-namespace Library.Application.CQRS.Commands.Author;
+namespace Library.Application.CQRS.Queries.Translator;
 
 public record GetTranslatorsQuery : IRequest<List<TranslatorDto>>;
 internal sealed class GetTranslatorsQueryHandler(ITranslatorService translatorService) : IRequestHandler<GetTranslatorsQuery, List<TranslatorDto>>

@@ -43,7 +43,7 @@ public class LoansController : Controller
         {
             Loans = paginatedLoans,
             SearchModel = searchModel,
-            Books = new SelectList(await _mediator.Send(new GetAllBooksQuery()), "Id", "Title").ToList(),
+            Books = new SelectList(await _mediator.Send(new GetBooksQuery()), "Id", "Title").ToList(),
         };
 
         return View(model);
@@ -111,8 +111,9 @@ public class LoansController : Controller
     {
         var command = new CreateBorrowViewModel
         {
+            //todo: call "GetAllUsersAsync" with api or acl
             Members = await _userService.GetAllUsersAsync(),
-            Books = await _bookService.GetAll(),
+            Books = await _mediator.Send(new GetAllBooksQuery()),
         };
         return View("Lending", command);
     }
@@ -198,36 +199,4 @@ public class LoansController : Controller
         return RedirectToAction("Return", model);
     }
     #endregion
-
-    //public class PaginatedList<T>
-    //{
-    //    public int PageIndex { get; private set; }
-    //    public int TotalPages { get; private set; }
-    //    public int TotalCount { get; private set; }
-    //    public List<T> Items { get; private set; }
-
-    //    public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
-    //    {
-    //        PageIndex = pageIndex;
-    //        TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-    //        TotalCount = count;
-    //        Items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-    //    }
-
-    //    public bool HasPreviousPage
-    //    {
-    //        get { return PageIndex > 1; }
-    //    }
-
-    //    public bool HasNextPage
-    //    {
-    //        get { return PageIndex < TotalPages; }
-    //    }
-
-    //    public static PaginatedList<T> Create(List<T> source, int pageIndex, int pageSize)
-    //    {
-    //        int count = source.Count;
-    //        return new PaginatedList<T>(source, count, pageIndex, pageSize);
-    //    }
-    //}
 }
