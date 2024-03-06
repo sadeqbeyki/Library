@@ -19,7 +19,6 @@
 
 	<ItemGroup>
 		<Folder Include="CQRS\Commands\Lend\" />
-		<Folder Include="CQRS\Queries\Lend\" />
 	</ItemGroup>
 
 </Project>

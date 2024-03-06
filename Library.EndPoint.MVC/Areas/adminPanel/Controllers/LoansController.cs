@@ -1,8 +1,10 @@
 ﻿using Identity.Application.Interfaces;
 using Library.Application.Contracts;
+using Library.Application.CQRS.Queries.Book;
 using Library.Application.DTOs.Lend;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Library.EndPoint.MVC.Helper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,13 +18,15 @@ public class LoansController : Controller
     private readonly ILendService _lendService;
     private readonly IBookService _bookService;
     private readonly IUserService _userService;
+    private readonly IMediator _mediator;
 
 
-    public LoansController(ILendService lendService, IBookService bookService, IUserService userService)
+    public LoansController(ILendService lendService, IBookService bookService, IUserService userService, IMediator mediator)
     {
         _lendService = lendService;
         _bookService = bookService;
         _userService = userService;
+        _mediator = mediator;
     }
 
     #region Search
@@ -39,7 +43,7 @@ public class LoansController : Controller
         {
             Loans = paginatedLoans,
             SearchModel = searchModel,
-            Books = new SelectList(await _bookService.GetBooks(), "Id", "Title").ToList(),
+            Books = new SelectList(await _mediator.Send(new GetAllBooksQuery()), "Id", "Title").ToList(),
         };
 
         return View(model);
