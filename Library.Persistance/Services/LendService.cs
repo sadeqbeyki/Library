@@ -118,9 +118,9 @@ public class LendService : ILendService
         return result;
     }
 
-    public List<LendDto> GetApprovedLoans()
+    public async Task<List<LendDto>> GetApprovedLoans()
     {
-        var loans = _loanRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && !x.IsReturned).ToList();
+        var loans = await _loanRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && !x.IsReturned).ToListAsync();
         var result = loans.Select(lend => new LendDto
         {
             Id = lend.Id,
@@ -137,9 +137,9 @@ public class LendService : ILendService
         return result;
     }
 
-    public List<LendDto> GetReturnedLoans()
+    public async Task<List<LendDto>> GetReturnedLoans()
     {
-        var loans = _loanRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned).ToList();
+        var loans =await _loanRepository.GetAll().Where(x => !x.IsDeleted && x.IsApproved && x.IsReturned).ToListAsync();
         var result = loans.Select(lend => new LendDto
         {
             Id = lend.Id,
@@ -158,9 +158,9 @@ public class LendService : ILendService
         return result;
     }
 
-    public List<LendDto> GetDeletedLoans()
+    public async Task<List<LendDto>> GetDeletedLoans()
     {
-        var loans = _loanRepository.GetAll().Where(x => x.IsDeleted).ToList();
+        var loans = await _loanRepository.GetAll().Where(x => x.IsDeleted).ToListAsync();
         var result = loans.Select(lend => new LendDto
         {
             Id = lend.Id,

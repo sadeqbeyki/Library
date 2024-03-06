@@ -9,9 +9,9 @@ public interface ILendService
     List<LendDto> Search(LendSearchModel searchModel);
 
     Task<List<LendDto>> GetPendingLoans();
-    List<LendDto> GetApprovedLoans();
-    List<LendDto> GetReturnedLoans();
-    List<LendDto> GetDeletedLoans();
+    Task<List<LendDto>> GetApprovedLoans();
+    Task<List<LendDto>> GetReturnedLoans();
+    Task<List<LendDto>> GetDeletedLoans();
 
     Task<LendDto> GetLendById(int lendId);
     Task<List<LendDto>> GetLoansByMemberId(Guid memberId);

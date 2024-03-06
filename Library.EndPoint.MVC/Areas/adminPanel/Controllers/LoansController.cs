@@ -53,23 +53,23 @@ public class LoansController : Controller
     #region Read
     public async Task<ActionResult<List<LendDto>>> PendingLoans(int? page)
     {
-        List<LendDto> loans = await _lendService.GetPendingLoans();
+        List<LendDto> loans = await _mediator.Send(new GetPendingLoansQuery());
 
         const int pageSize = 5;
         var paginatedLoans = PaginatedList<LendDto>.Create(loans, page ?? 1, pageSize);
         return View("PendingLoans", paginatedLoans);
     }
-    public ActionResult<List<LendDto>> ApprovedLoans(int? page)
+    public async Task<ActionResult<List<LendDto>>> ApprovedLoans(int? page)
     {
-        List<LendDto> loans = _lendService.GetApprovedLoans();
+        List<LendDto> loans = await _mediator.Send(new GetApprovedLoansQuery());
 
         const int pageSize = 5;
         var paginatedLoans = PaginatedList<LendDto>.Create(loans, page ?? 1, pageSize);
         return View("ApprovedLoans", paginatedLoans);
     }
-    public ActionResult<List<LendDto>> ReturnedLoans(int? page)
+    public async Task<ActionResult<List<LendDto>>> ReturnedLoans(int? page)
     {
-        List<LendDto> loans = _lendService.GetReturnedLoans();
+        List<LendDto> loans = await _mediator.Send(new GetReturnedLoansQuery());
 
         const int pageSize = 5;
         var paginatedLoans = PaginatedList<LendDto>.Create(loans, page ?? 1, pageSize);
@@ -77,16 +77,16 @@ public class LoansController : Controller
     }
     public async Task<ActionResult<List<LendDto>>> OverdueLoans(int? page)
     {
-        List<LendDto> loans = await _lendService.GetOverdueLones();
+        List<LendDto> loans = await _mediator.Send(new GetOverdueLonesQuery());
 
         int pageSize = 5;
         var pagedLog = loans.ToPagedList(page ?? 1, pageSize);
 
         return View("OverdueLoans", pagedLog);
     }
-    public ActionResult<List<LendDto>> DeletedLoans(int? page)
+    public async Task<ActionResult<List<LendDto>>> DeletedLoans(int? page)
     {
-        List<LendDto> loans = _lendService.GetDeletedLoans();
+        List<LendDto> loans = await _mediator.Send(new GetDeletedLoansQuery());
 
         int pageNumber = page ?? 1;
         int pageSize = 5;
@@ -98,7 +98,7 @@ public class LoansController : Controller
     [HttpGet]
     public async Task<ActionResult<LendDto>> Details(int id)
     {
-        var result = await _lendService.GetLendById(id);
+        var result = await _mediator.Send(new GetLendByIdQuery(id));
         if (result == null)
             return NotFound();
         return View(result);
