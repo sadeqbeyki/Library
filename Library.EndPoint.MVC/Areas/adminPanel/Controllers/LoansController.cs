@@ -1,6 +1,7 @@
 ﻿using Identity.Application.Interfaces;
 using Library.Application.Contracts;
 using Library.Application.CQRS.Queries.Book;
+using Library.Application.CQRS.Queries.Lend;
 using Library.Application.DTOs.Lend;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Library.EndPoint.MVC.Helper;
@@ -32,10 +33,9 @@ public class LoansController : Controller
     #region Search
     public async Task<ActionResult<List<LendDto>>> Index(LendSearchModel searchModel, int? page)
     {
-        //List<LoanDto> loans = _loanService.GetAll();
         const int pageSize = 5;
 
-        var loans = _lendService.Search(searchModel);
+        var loans = await _mediator.Send(new SearchLendQuery(searchModel));
 
         var paginatedLoans = PaginatedList<LendDto>.Create(loans, page ?? 1, pageSize);
 
