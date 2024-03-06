@@ -16,26 +16,10 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 public class BooksController : Controller
 {
-    public List<BookViewModel> Books = new();
-    //public SelectList BookCategories;
-
-    private readonly IBookService _bookService;
-    private readonly IBookCategoryService _bookCategoryService;
-    private readonly IAuthorService _authorService;
-    private readonly IPublisherService _publisherService;
-    private readonly ITranslatorService _translatorService;
     private readonly IMediator _mediator;
 
-
-
-    public BooksController(IBookService bookService, IBookCategoryService bookCategoryService,
-        IAuthorService authorService, IPublisherService publisherService, ITranslatorService translatorService, IMediator mediator)
+    public BooksController(IMediator mediator)
     {
-        _bookService = bookService;
-        _bookCategoryService = bookCategoryService;
-        _authorService = authorService;
-        _publisherService = publisherService;
-        _translatorService = translatorService;
         _mediator = mediator;
     }
 
@@ -45,7 +29,7 @@ public class BooksController : Controller
     {
         BookWithCategoryViewModel model = new()
         {
-            Books = _bookService.Search(searchModel),
+            Books = await _mediator.Send(new SearchBookQuery(searchModel)),
             SearchModel = searchModel,
             Categories = new SelectList(await _mediator.Send(new GetBookCategoriesQuery()), "Id", "Name").ToList()
         };
@@ -104,7 +88,7 @@ public class BooksController : Controller
     [HttpGet]
     public async Task<ActionResult<BookViewModel>> Update(int id)
     {
-        var book = await _bookService.GetById(id);
+        var book = await _mediator.Send(new GetBookQuery(id));
         if (book != null)
         {
             UpdateBookViewModel model = new()
@@ -122,11 +106,6 @@ public class BooksController : Controller
     [HttpPut, HttpPost]
     public async Task<IActionResult> Update(int id, UpdateBookViewModel model, IFormFile pictureFile)
     {
-        if (id != model.Book.Id)
-        {
-            return BadRequest();
-        }
-
         var bookCategory = await _mediator.Send(new GetBookCategoryQuery(model.Book.CategoryId));
 
         var selectedAuthors = Request.Form["selectedAuthors"].ToString();
@@ -134,23 +113,23 @@ public class BooksController : Controller
         var selectedTranslators = Request.Form["selectedTranslators"].ToString();
 
         model.Book.Category = bookCategory.Name;
-        model.Book.Authors = selectedAuthors.Split(',').ToList();
-        model.Book.Publishers = selectedPublishers.Split(',').ToList();
-        model.Book.Translators = selectedTranslators.Split(',').ToList();
+        model.Book.Authors = [..selectedAuthors.Split(',')];
+        model.Book.Publishers = [.. selectedPublishers.Split(',')];
+        model.Book.Translators = [.. selectedTranslators.Split(',')];
 
         var result = await _mediator.Send(new UpdateBookCommand(model.Book, pictureFile));
         if (result)
             return RedirectToAction("Index");
         return View(model);
     }
-    
+
     #endregion
 
     #region Delete
     [HttpGet]
     public async Task<ActionResult<BookViewModel>> Delete(int id)
     {
-        var result = await _bookService.GetById(id);
+        var result = await _mediator.Send(new GetBookQuery(id));
         if (result == null)
             return NotFound();
         return View(result);
@@ -159,7 +138,7 @@ public class BooksController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> ConfirmDelete(int id)
     {
-        await _bookService.Delete(id);
+        await _mediator.Send(new RemoveBookCommand(id));
         return RedirectToAction("Index");
     }
     #endregion
