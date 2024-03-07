@@ -8,17 +8,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Library.ACL\Library.ACL.csproj" />
 		<ProjectReference Include="..\AppFramework\AppFramework.csproj" />
 		<ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="CQRS\Commands\Lend\" />
 	</ItemGroup>
 
 </Project>

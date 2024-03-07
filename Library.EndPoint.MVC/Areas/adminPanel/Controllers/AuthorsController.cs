@@ -1,4 +1,4 @@
-﻿using Library.Application.CQRS.Commands.Author;
+﻿using Library.Application.CQRS.Commands.Authors;
 using Library.Application.DTOs.Authors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

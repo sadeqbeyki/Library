@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Interfaces;
 using Library.Application.Contracts;
+using Library.Application.CQRS.Commands.Lends;
 using Library.Application.CQRS.Queries.Book;
 using Library.Application.CQRS.Queries.Lend;
 using Library.Application.DTOs.Lend;
@@ -120,7 +121,7 @@ public class LoansController : Controller
     [HttpPost]
     public async Task<ActionResult> Lending(LendDto model)
     {
-        var result = await _lendService.Lending(model);
+        var result = await _mediator.Send(new LendingCommand(model));
         if (!result.IsSucceeded)
             return RedirectToAction("Lending", model);
         return RedirectToAction("PendingLoans", result);
