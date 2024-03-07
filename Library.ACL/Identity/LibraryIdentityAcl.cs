@@ -1,4 +1,5 @@
-﻿using Identity.Application.Interfaces;
+﻿using Identity.Application.DTOs.User;
+using Identity.Application.Interfaces;
 
 namespace Library.ACL.Identity;
 
@@ -27,5 +28,11 @@ public class LibraryIdentityAcl : ILibraryIdentityAcl
     {
         var userId = _userService.GetCurrentUserId();
         return userId;
+    }
+
+    public async Task<List<UserDetailsDto>> GetAllUsersAsync()
+    {
+        var result = await _userService.GetAllUsersAsync();
+        return result;
     }
 }

@@ -37,54 +37,7 @@ public class LendService : ILendService
         _bookRepository = bookRepository;
     }
 
-    #region Create
-    public async Task<OperationResult> Lending(LendDto model)
-    {
-        OperationResult operationResult = new();
-        if (model.BookId <= 0 || model.MemberId == null)
-            return operationResult.Failed(ApplicationMessages.ModelIsNull);
 
-        Lend lend = new(
-            model.BookId,
-            model.MemberId,
-            _IdentityAcl.GetCurrentUserId(),
-            model.IdealReturnDate,
-            model.ReturnEmployeeID,
-            model.ReturnDate,
-            model.Description
-            );
-
-        var result = await _loanRepository.CreateAsync(lend);
-        return operationResult.Succeeded();
-    }
-
-    public async Task<OperationResult> SubmitLend(int lendId)
-    {
-        OperationResult operationResult = new();
-
-        Lend lend = await _loanRepository.GetByIdAsync(lendId);
-        if (lend == null)
-            return operationResult.Failed(ApplicationMessages.RecordNotFound);
-
-        //lend duplicate book check
-        var memberDuplicateLoans = await _loanRepository.GetDuplicatedLoans(lend.MemberID, lend.BookId);
-        if (memberDuplicateLoans.Count > 0)
-            return operationResult.Failed(ApplicationMessages.DuplicateLendByMember);
-
-        //Member Overdue Loans
-        var memberOverdueLoans = await _loanRepository.GetMemberOverdueLoans(lend.MemberID);
-        if (memberOverdueLoans.Count > 0)
-            return operationResult.Failed(ApplicationMessages.MemberDidntReturnedTheBook);
-
-        if (_inventoryAcl.BorrowFromInventory(lend) == true)
-        {
-            lend.IsApproved = true;
-            _loanRepository.SaveChanges();
-            return operationResult.Succeeded();
-        }
-        return operationResult.Failed();
-    }
-    #endregion
 
     #region Read
     public List<LendDto> GetAll()
@@ -261,45 +214,7 @@ public class LendService : ILendService
 
     #endregion
 
-    #region Return
-    public OperationResult Returning(LendDto dto)
-    {
-        OperationResult operationResult = new();
-
-        var lend = _loanRepository.GetByIdAsync(dto.Id).Result;
-        if (lend == null)
-            return operationResult.Failed(ApplicationMessages.RecordNotFound);
-        var returnEmployeeID = _IdentityAcl.GetCurrentUserId();
-        lend.Edit(dto.BookId, dto.MemberId, dto.EmployeeId, dto.IdealReturnDate, returnEmployeeID, DateTime.Now, dto.Description);
-
-        if (ReturnLoan(dto.Id).IsSucceeded)
-        {
-            _loanRepository.UpdateAsync(lend);
-            return operationResult.Succeeded();
-        }
-        else
-        {
-            return operationResult.Failed(ApplicationMessages.ReturnFailed);
-        }
-    }
-
-    private OperationResult ReturnLoan(int lendId)
-    {
-        OperationResult operationResult = new();
-        Lend lend = _loanRepository.GetByIdAsync(lendId).Result;
-        if (lend == null)
-            operationResult.Failed(ApplicationMessages.RecordNotFound);
-        if (_inventoryAcl.ReturnToInventory(lend) == true)
-        {
-            lend.IsReturned = true;
-            _loanRepository.SaveChanges();
-            return operationResult.Succeeded();
-        }
-        return operationResult.Failed();
-    }
-    #endregion
-
-    #region Delete
+     #region Delete
     public async Task Delete(int lendId)
     {
         var lend = await _loanRepository.GetByIdAsync(lendId);

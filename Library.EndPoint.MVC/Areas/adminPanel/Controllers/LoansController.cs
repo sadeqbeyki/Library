@@ -1,4 +1,5 @@
-﻿using Identity.Application.Interfaces;
+﻿using Identity.Application.Features.Query.User;
+using Identity.Application.Interfaces;
 using Library.Application.Contracts;
 using Library.Application.CQRS.Commands.Lends;
 using Library.Application.CQRS.Queries.Book;
@@ -113,7 +114,8 @@ public class LoansController : Controller
         var command = new CreateBorrowViewModel
         {
             //todo: call "GetAllUsersAsync" with api or acl
-            Members = await _userService.GetAllUsersAsync(),
+            //Members = await _userService.GetAllUsersAsync(),
+            Members = await _mediator.Send(new GetAllUsersQuery()),
             Books = await _mediator.Send(new GetAllBooksQuery()),
         };
         return View("Lending", command);
@@ -192,9 +194,9 @@ public class LoansController : Controller
         return View("Return", model);
     }
     [HttpPut, HttpPost]
-    public IActionResult Return(UpdateBorrowViewModel model)
+    public async Task<ActionResult> Return(UpdateBorrowViewModel model)
     {
-        var result = _lendService.Returning(model.Lend);
+        var result = await _mediator.Send(new ReturnLendCommand(model.Lend));
         if (result.IsSucceeded)
             return RedirectToAction("ApprovedLoans", result);
         return RedirectToAction("Return", model);
