@@ -129,7 +129,7 @@ public class LoansController : Controller
 
     public async Task<ActionResult> SubmitLend(int id)
     {
-        var result = await _lendService.SubmitLend(id);
+        var result = await _mediator.Send(new SubmitLendCommand(id));
         if (result.IsSucceeded)
         {
             return RedirectToAction("PendingLoans");
