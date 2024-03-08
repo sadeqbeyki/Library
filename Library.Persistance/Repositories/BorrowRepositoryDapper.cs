@@ -1,4 +1,4 @@
-﻿using Library.Application.DTOs.Lend;
+﻿using Library.Application.DTOs.Lends;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 

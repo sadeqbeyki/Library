@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Warehouse.Application.DTOs.Inventory;
+using Warehouse.Application.DTOs.Inventories;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;
 

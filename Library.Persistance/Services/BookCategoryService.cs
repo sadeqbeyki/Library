@@ -1,11 +1,9 @@
 ﻿using AppFramework.Application;
-using AutoMapper;
 using Library.Application.Contracts;
 using Library.Application.DTOs.Book;
 using Library.Application.DTOs.BookCategory;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.BookCategoryAgg;
-using Microsoft.AspNetCore.Mvc;
 
 
 namespace Library.Persistance.Services

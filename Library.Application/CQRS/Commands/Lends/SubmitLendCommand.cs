@@ -1,5 +1,5 @@
 ﻿using AppFramework.Application;
-using Library.ACL.Inventory;
+using Library.Application.ACLs;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.LendAgg;
 using MediatR;
@@ -40,7 +40,7 @@ internal sealed class SubmitLendCommandHandler : IRequestHandler<SubmitLendComma
         if (memberOverdueLoans.Count > 0)
             return operationResult.Failed(ApplicationMessages.MemberDidntReturnedTheBook);
 
-        if (_inventoryAcl.BorrowFromInventory(lend) == true)
+        if (await _inventoryAcl.BorrowFromInventory(lend) == true)
         {
             lend.IsApproved = true;
             _lendRepository.SaveChanges();

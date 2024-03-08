@@ -1,6 +1,6 @@
 ﻿using Identity.Application.DTOs.User;
 using Library.Application.DTOs.Book;
-using Library.Application.DTOs.Lend;
+using Library.Application.DTOs.Lends;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;

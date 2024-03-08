@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Warehouse.Application.Contracts;
 using Warehouse.Persistance;
 using Warehouse.Persistance.Repositories;
-using Warehouse.Service.Services;
 
 namespace Warehouse.Configuration;
 
@@ -13,7 +12,6 @@ public static class ServiceExtentions
 {
     public static void AddInventoryInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<IInventoryService, InventoryService>();
         services.AddTransient<IInventoryRepository, InventoryRepository>();
 
 

@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using Library.Application.DTOs.Lend;
+using Library.Application.DTOs.Lends;
 using Library.Domain.Entities.LendAgg;
 
 namespace Library.Application.Interfaces;

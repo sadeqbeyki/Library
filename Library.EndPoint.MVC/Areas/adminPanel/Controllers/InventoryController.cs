@@ -5,12 +5,14 @@ using X.PagedList;
 using Library.EndPoint.MVC.Helper;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Warehouse.Application.DTOs;
-using Warehouse.Application.DTOs.Inventory;
-using Warehouse.Application.CQRS.Commands.Inventory;
 using MediatR;
-using Warehouse.Application.CQRS.Queries.Inventory;
 using Library.Application.Contracts;
 using Warehouse.Application.Contracts;
+using Warehouse.Application.DTOs.InventoryOperation;
+using Warehouse.Application.DTOs.Inventories;
+using Warehouse.Application.CQRS.Queries.Inventories;
+using Library.Application.CQRS.Queries.Book;
+using Warehouse.Application.CQRS.Commands.Inventories;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
@@ -18,13 +20,11 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 public class InventoryController : Controller
 {
     private readonly IBookService _bookService;
-    private readonly IInventoryService _inventoryService;
     private readonly IMediator _mediator;
 
-    public InventoryController(IBookService bookService, IInventoryService inventoryService, IMediator mediator)
+    public InventoryController(IBookService bookService, IMediator mediator)
     {
         _bookService = bookService;
-        _inventoryService = inventoryService;
         _mediator = mediator;
     }
 
@@ -47,7 +47,7 @@ public class InventoryController : Controller
     {
         var command = new CreateInventory
         {
-            Books = await _bookService.GetBooks()
+            Books = await _mediator.Send(new GetBooksQuery())
         };
         return View("Create", command);
     }
@@ -83,7 +83,7 @@ public class InventoryController : Controller
     [HttpPost]
     public async Task<IActionResult> Increase(IncreaseInventory command)
     {
-        var result = await _inventoryService.Increase(command);
+        var result = await _mediator.Send(new IncreaseInventoryItemCommand(command));
         return RedirectToAction("Index", result);
     }
     [HttpGet]
@@ -98,13 +98,13 @@ public class InventoryController : Controller
     [HttpPost]
     public async Task<IActionResult> Decrease(DecreaseInventory command)
     {
-        var result = await _inventoryService.Decrease(command);
+        var result = await _mediator.Send(new DecreaseInventoryItemCommand(command));
         return RedirectToAction("Index", result);
     }
     [HttpGet]
-    public IActionResult OperationLog(int id, int? page)
+    public async Task<ActionResult>OperationLog(int id, int? page)
     {
-        var log = _inventoryService.GetOperationLog(id);
+        var log = await _mediator.Send(new GetOperationLogQuery(id));
 
         int pageSize = 6;
         var pagedLog = log.ToPagedList(page ?? 1, pageSize);

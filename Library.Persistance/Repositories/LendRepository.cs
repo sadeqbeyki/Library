@@ -1,6 +1,6 @@
 ﻿using AppFramework.Domain;
-using Library.ACL.Identity;
-using Library.Application.DTOs.Lend;
+using Library.Application.ACLs;
+using Library.Application.DTOs.Lends;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.LendAgg;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +11,9 @@ namespace Library.Persistance.Repositories;
 public partial class LendRepository : Repository<Lend, int>, ILendRepository
 {
     private readonly BookDbContext _bookDbContext;
-    private readonly ILibraryIdentityAcl _IdentityAcl;
+    private readonly IIdentityAcl _IdentityAcl;
     private readonly IBookRepository _bookRepository;
-    public LendRepository(BookDbContext dbContext, ILibraryIdentityAcl identityAcl, IBookRepository bookRepository) : base(dbContext)
+    public LendRepository(BookDbContext dbContext, IIdentityAcl identityAcl, IBookRepository bookRepository) : base(dbContext)
     {
         _bookDbContext = dbContext;
         _IdentityAcl = identityAcl;

@@ -1,12 +1,13 @@
 using AppFramework.Application.Email;
 using Identity.Application;
 using Identity.Services;
-using Library.ACL;
 using Library.Infrastructure;
 using Logging.Persistance.Configurations;
 using Warehouse.Configuration;
 using Warehouse.Application;
 using Library.Application;
+using Identity.ACL;
+using Inventory.ACL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +58,8 @@ builder.Services.AddLibraryApplications();
 
 builder.Services.AddInventoryInfrastructure(builder.Configuration);
 builder.Services.AddBookInfrastructure(builder.Configuration);
-builder.Services.AddACLConfiguration();
+builder.Services.AddIdentityACL();
+builder.Services.AddInventoryACL();
 builder.Services.AddInventoryApplication();
 #endregion
 

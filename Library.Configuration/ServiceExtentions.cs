@@ -24,13 +24,11 @@ public static class ServiceExtentions
         services.AddScoped<IPublisherService, PublisherService>();
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
-        services.AddScoped<IAuthorService, AuthorService>();
 
         services.AddScoped<ITranslatorRepository, TranslatorRepository>();
         services.AddScoped<ITranslatorService, TranslatorService>();
 
         services.AddScoped<ILendRepository, LendRepository>();
-        services.AddScoped<ILendService, LendService>();
 
         services.AddDbContext<BookDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

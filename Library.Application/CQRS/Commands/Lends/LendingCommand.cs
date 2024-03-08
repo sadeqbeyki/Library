@@ -1,9 +1,9 @@
 ﻿using AppFramework.Application;
-using Library.Application.DTOs.Lend;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.LendAgg;
 using MediatR;
-using Library.ACL.Identity;
+using Library.Application.DTOs.Lends;
+using Library.Application.ACLs;
 
 namespace Library.Application.CQRS.Commands.Lends;
 
@@ -13,8 +13,8 @@ public record LendingCommand(LendDto Dto) : IRequest<OperationResult>
 internal sealed class LendingCommandHandler : IRequestHandler<LendingCommand, OperationResult>
 {
     private readonly ILendRepository _lendRepository;
-    private readonly ILibraryIdentityAcl _IdentityAcl;
-    public LendingCommandHandler(ILendRepository lendRepository, ILibraryIdentityAcl identityAcl)
+    private readonly IIdentityAcl _IdentityAcl;
+    public LendingCommandHandler(ILendRepository lendRepository, IIdentityAcl identityAcl)
     {
         _lendRepository = lendRepository;
         _IdentityAcl = identityAcl;

@@ -1,4 +1,4 @@
-﻿using Library.Application.DTOs.Lend;
+﻿using Library.Application.DTOs.Lends;
 using Library.EndPoint.MVC.Helper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 

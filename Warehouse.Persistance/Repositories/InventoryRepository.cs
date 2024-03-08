@@ -5,7 +5,7 @@ using Identity.Persistance;
 using Library.Persistance;
 using Warehouse.Application.Contracts;
 using Warehouse.Application.DTOs;
-using Warehouse.Application.DTOs.Inventory;
+using Warehouse.Application.DTOs.Inventories;
 using Warehouse.Application.DTOs.InventoryOperation;
 using Warehouse.Domain.Entities.InventoryAgg;
 
@@ -30,7 +30,7 @@ namespace Warehouse.Persistance.Repositories
             return _inventoryDbContext.Inventory.FirstOrDefault(b => b.BookId == bookId);
         }
 
-        public EditInventory GetDetails(int id)
+        public async Task<EditInventory> GetDetails(int id)
         {
             return _inventoryDbContext.Inventory.Select(i => new EditInventory
             {

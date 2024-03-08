@@ -1,5 +1,6 @@
 ﻿using Identity.Domain.Entities.User;
-using Library.Application.Contracts;
+using Library.Application.CQRS.Queries.Lends;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
@@ -9,14 +10,16 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class HomeController : Controller
 {
-    private readonly ILendService _loanService;
+    private readonly IMediator _mediator;
+
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public HomeController(ILendService loanService,
-        UserManager<ApplicationUser> userManager)
+    public HomeController(UserManager<ApplicationUser> userManager,
+        IMediator mediator)
     {
-        _loanService = loanService;
+
         _userManager = userManager;
+        _mediator = mediator;
     }
 
     public IActionResult Index()
@@ -32,7 +35,7 @@ public class HomeController : Controller
             return RedirectToAction("Login", "Auth", "adminPanel");
         }
 
-        var loans = await _loanService.GetLoansByEmployeeId(user.Id);
+        var loans = await _mediator.Send(new GetLoansByEmployeeIdQuery(user.Id));
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -43,7 +46,7 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> MemberLoans(Guid memberId, int? page)
     {
-        var loans = await _loanService.GetLoansByMemberId(memberId);
+        var loans = await _mediator.Send(new GetLoansByMemberIdQuery(memberId));
 
         int pageNumber = page ?? 1;
         int pageSize = 6;
@@ -56,7 +59,7 @@ public class HomeController : Controller
         if (User.Identity.IsAuthenticated)
         {
             var user = User;
-            var overdueLoans = await _loanService.GetOverdueLones();
+            var overdueLoans = await _mediator.Send(new GetOverdueLonesQuery());
             return overdueLoans.Count;
         }
         else

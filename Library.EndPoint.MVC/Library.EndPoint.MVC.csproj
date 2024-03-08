@@ -19,9 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Identity.ACL\Identity.ACL.csproj" />
     <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
     <ProjectReference Include="..\Identity.Services\Identity.Services.csproj" />
-    <ProjectReference Include="..\Library.ACL\Library.ACL.csproj" />
+    <ProjectReference Include="..\Inventory.ACL\Inventory.ACL.csproj" />
     <ProjectReference Include="..\Library.Configuration\Library.Configuration.csproj" />
     <ProjectReference Include="..\Logging.Persistance\Logging.Persistance.csproj" />
     <ProjectReference Include="..\Warehouse.Application\Warehouse.Application.csproj" />

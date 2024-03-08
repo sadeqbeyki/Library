@@ -4,7 +4,8 @@ using Library.Application.Contracts;
 using Library.Application.CQRS.Commands.Lends;
 using Library.Application.CQRS.Queries.Book;
 using Library.Application.CQRS.Queries.Lend;
-using Library.Application.DTOs.Lend;
+using Library.Application.CQRS.Queries.Lends;
+using Library.Application.DTOs.Lends;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Library.EndPoint.MVC.Helper;
 using MediatR;
@@ -18,17 +19,11 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 public class LoansController : Controller
 {
-    private readonly ILendService _lendService;
-    private readonly IBookService _bookService;
-    private readonly IUserService _userService;
     private readonly IMediator _mediator;
 
 
-    public LoansController(ILendService lendService, IBookService bookService, IUserService userService, IMediator mediator)
+    public LoansController(IMediator mediator)
     {
-        _lendService = lendService;
-        _bookService = bookService;
-        _userService = userService;
         _mediator = mediator;
     }
 
@@ -146,17 +141,17 @@ public class LoansController : Controller
     {
         var model = new UpdateBorrowViewModel
         {
-            Lend = await _lendService.GetLendById(id),
-            Members = await _userService.GetAllUsersAsync(),
-            Books = await _bookService.GetAll(),
+            Lend = await _mediator.Send(new GetLendByIdQuery(id)),
+            Members = await _mediator.Send(new GetAllUsersQuery()),
+            Books = await _mediator.Send(new GetAllBooksQuery()),
         };
 
         return View("Update", model);
     }
     [HttpPut, HttpPost]
-    public IActionResult Update(UpdateBorrowViewModel model)
+    public async Task<ActionResult> Update(UpdateBorrowViewModel model)
     {
-        var result = _lendService.Update(model.Lend);
+        var result = await _mediator.Send(new UpdateLendCommand(model.Lend));
         if (result.IsSucceeded)
             return RedirectToAction("Index", result);
         return RedirectToAction("Update", model);
@@ -175,7 +170,7 @@ public class LoansController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult SoftDelete(LendDto model)
     {
-        _lendService.SoftDelete(model);
+        _mediator.Send(new SoftDeleteLendCommand(model));
         return RedirectToAction("Index");
     }
     #endregion
@@ -186,9 +181,9 @@ public class LoansController : Controller
     {
         var model = new UpdateBorrowViewModel
         {
-            Lend = await _lendService.GetLendById(id),
-            Members = await _userService.GetAllUsersAsync(),
-            Books = await _bookService.GetAll(),
+            Lend = await _mediator.Send(new GetLendByIdQuery(id)),
+            Members = await _mediator.Send(new GetAllUsersQuery()),
+            Books = await _mediator.Send(new GetAllBooksQuery()),
         };
 
         return View("Return", model);

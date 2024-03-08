@@ -1,8 +1,9 @@
-﻿using Library.Application.Contracts;
-using Library.Application.CQRS.Commands.Author;
+﻿using Library.Application.CQRS.Commands.Authors;
 using Library.Application.CQRS.Commands.Book;
 using Library.Application.CQRS.Queries.Book;
 using Library.Application.CQRS.Queries.BookCategory;
+using Library.Application.CQRS.Queries.Publisher;
+using Library.Application.CQRS.Queries.Translator;
 using Library.Application.DTOs.Book;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using MediatR;

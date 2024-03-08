@@ -1,10 +1,9 @@
 ﻿using AppFramework.Application;
-using Library.Application.DTOs.Lend;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.LendAgg;
 using MediatR;
-using Library.ACL.Identity;
-using Library.ACL.Inventory;
+using Library.Application.DTOs.Lends;
+using Library.Application.ACLs;
 
 namespace Library.Application.CQRS.Commands.Lends;
 
@@ -14,9 +13,9 @@ public record ReturnLendCommand(LendDto Dto) : IRequest<OperationResult>
 internal sealed class ReturnLendCommandHandler : IRequestHandler<ReturnLendCommand, OperationResult>
 {
     private readonly ILendRepository _lendRepository;
-    private readonly ILibraryIdentityAcl _IdentityAcl;
+    private readonly IIdentityAcl _IdentityAcl;
     private readonly ILibraryInventoryAcl _inventoryAcl;
-    public ReturnLendCommandHandler(ILendRepository lendRepository, ILibraryIdentityAcl identityAcl, ILibraryInventoryAcl inventoryAcl)
+    public ReturnLendCommandHandler(ILendRepository lendRepository, IIdentityAcl identityAcl, ILibraryInventoryAcl inventoryAcl)
     {
         _lendRepository = lendRepository;
         _IdentityAcl = identityAcl;
@@ -34,7 +33,8 @@ internal sealed class ReturnLendCommandHandler : IRequestHandler<ReturnLendComma
         lend.Edit(request.Dto.BookId, request.Dto.MemberId, request.Dto.EmployeeId,
                     request.Dto.IdealReturnDate, returnEmployeeID, DateTime.Now, request.Dto.Description);
 
-        if (ReturnLoan(request.Dto.Id).IsSucceeded)
+        var result = await ReturnLoan(request.Dto.Id);
+        if (result.IsSucceeded)
         {
             await _lendRepository.UpdateAsync(lend);
             return operationResult.Succeeded();
@@ -44,13 +44,14 @@ internal sealed class ReturnLendCommandHandler : IRequestHandler<ReturnLendComma
             return operationResult.Failed(ApplicationMessages.ReturnFailed);
         }
     }
-    private OperationResult ReturnLoan(int lendId)
+    private async Task<OperationResult> ReturnLoan(int lendId)
     {
         OperationResult operationResult = new();
         Lend lend = _lendRepository.GetByIdAsync(lendId).Result;
         if (lend == null)
             operationResult.Failed(ApplicationMessages.RecordNotFound);
-        if (_inventoryAcl.ReturnToInventory(lend) == true)
+        var result = await _inventoryAcl.ReturnToInventory(lend);
+        if (result)
         {
             lend.IsReturned = true;
             _lendRepository.SaveChanges();

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Library.Application.DTOs.BookCategory;
-using Library.Application.DTOs.Lend;
+using Library.Application.DTOs.Lends;
 using Library.Domain.Entities.BookCategoryAgg;
 using Library.Domain.Entities.LendAgg;
 

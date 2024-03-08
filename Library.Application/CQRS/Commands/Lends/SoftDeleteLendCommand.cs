@@ -1,4 +1,4 @@
-﻿using Library.Application.DTOs.Lend;
+﻿using Library.Application.DTOs.Lends;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.LendAgg;
 using MediatR;
