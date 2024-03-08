@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using Library.Application.DTOs.Book;
+using Library.Application.DTOs.Books;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.BookAgg;
 using Microsoft.EntityFrameworkCore;

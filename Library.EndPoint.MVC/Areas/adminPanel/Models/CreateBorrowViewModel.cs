@@ -1,5 +1,5 @@
 ﻿using Identity.Application.DTOs.User;
-using Library.Application.DTOs.Book;
+using Library.Application.DTOs.Books;
 using Library.Application.DTOs.Lends;
 using System.ComponentModel.DataAnnotations;
 

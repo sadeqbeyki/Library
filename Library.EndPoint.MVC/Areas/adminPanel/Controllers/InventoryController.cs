@@ -13,6 +13,7 @@ using Warehouse.Application.DTOs.Inventories;
 using Warehouse.Application.CQRS.Queries.Inventories;
 using Library.Application.CQRS.Queries.Book;
 using Warehouse.Application.CQRS.Commands.Inventories;
+using Library.Application.CQRS.Queries.Books;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
@@ -37,7 +38,7 @@ public class InventoryController : Controller
         {
             Inventory = paginatedInventory,
             SearchModel = searchModel,
-            Books = new SelectList(await _bookService.GetBooks(), "Id", "Title").ToList(),
+            Books = new SelectList(await _mediator.Send(new GetBooksQuery()), "Id", "Title").ToList(),
         };
 
         return View(model);

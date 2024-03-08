@@ -1,52 +1,31 @@
-﻿using AppFramework.Application;
-using Library.Application.Contracts;
-using Library.Application.DTOs.Book;
+﻿using Library.Application.Contracts;
+using Library.Application.DTOs.Books;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.BookAgg;
 using Library.Domain.Entities.Common;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace Library.Persistance.Services;
 
 public class BookService : IBookService
 {
-    private readonly IBookRepository _bookRepository;
+
     private readonly IAuthorRepository _authorRepository;
     private readonly ITranslatorRepository _translatorRepository;
     private readonly IPublisherRepository _publisherRepository;
 
-    public BookService(IBookRepository bookRepository,
+    public BookService(
         IAuthorRepository authorRepository,
         ITranslatorRepository translatorRepository,
         IPublisherRepository publisherRepository)
     {
-        _bookRepository = bookRepository;
         _authorRepository = authorRepository;
         _translatorRepository = translatorRepository;
         _publisherRepository = publisherRepository;
     }
-    #region Create
-    public async Task<OperationResult> Create(CreateBookModel model)
-    {
-        OperationResult operationResult = new();
-        if (_bookRepository.Exists(x => x.Title == model.Title))
-            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
 
-        byte[]? picture = await ConvertImageToByte(model.Image);
-        Book book = new(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, picture);
 
-        await AddAuthors(model, book);
-        await AddPublishers(model, book);
-        await AddTranslators(model, book);
-
-        var result = await _bookRepository.CreateAsync(book);
-        return result == null
-            ? operationResult.Failed(ApplicationMessages.ProblemFound)
-            : operationResult.Succeeded();
-    }
-
-    private static async Task<byte[]?> ConvertImageToByte(IFormFile Image)
+    public async Task<byte[]?> ConvertImageToByte(IFormFile Image)
     {
         if (Image != null && Image.Length > 0)
         {
@@ -58,7 +37,7 @@ public class BookService : IBookService
         return null;
     }
 
-    private async Task AddAuthors(BookDto model, Book book)
+    public async Task AddAuthors(BookDto model, Book book)
     {
         if (model.Authors != null && model.Authors.Any())
         {
@@ -80,7 +59,7 @@ public class BookService : IBookService
             }
         }
     }
-    private async Task AddPublishers(BookDto model, Book book)
+    public async Task AddPublishers(BookDto model, Book book)
     {
         if (model.Publishers != null && model.Publishers.Any())
         {
@@ -102,7 +81,7 @@ public class BookService : IBookService
             }
         }
     }
-    private async Task AddTranslators(BookDto model, Book book)
+    public async Task AddTranslators(BookDto model, Book book)
     {
         if (model.Translators != null && model.Translators.Any())
         {
@@ -124,99 +103,5 @@ public class BookService : IBookService
             }
         }
     }
-
-    #endregion
-
-    #region Read
-    public Task<List<BookViewModel>> GetAll()
-    {
-        var result = _bookRepository.GetAll()
-            .Select(book => new BookViewModel
-            {
-                Id = book.Id,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                Code = book.Code,
-                Description = book.Description,
-                Category = book.Category.Name,
-            }).ToList();
-
-        return Task.FromResult(result);
-    }
-
-    //select box in inventory
-    public async Task<List<BookViewModel>> GetBooks()
-    {
-        return await _bookRepository.GetBooks();
-    }
-
-    public List<BookViewModel> Search(BookSearchModel searchModel)
-    {
-        return _bookRepository.Search(searchModel);
-    }
-
-    public async Task<BookViewModel> GetById(int id)
-    {
-        var r = await _authorRepository.GetByIdAsync(id);
-        var result = await _bookRepository.GetAll()
-            .Select(book => new BookViewModel
-            {
-                Id = book.Id,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                Code = book.Code,
-                Description = book.Description,
-                CategoryId = book.CategoryId,
-                Picture = book.Picture,
-
-                Authors = book.BookAuthors.Select(ab => ab.Author.Name).ToList(),
-                Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
-                Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
-                Category = book.Category.Name,
-            }).FirstOrDefaultAsync(b => b.Id == id);
-
-        return result ?? throw new Exception($"No book was found with this {id}");
-    }
-    #endregion
-
-    #region Update
-
-    public async Task<OperationResult> Update(BookViewModel model, IFormFile? Image)
-    {
-        OperationResult operationResult = new();
-        var book = await _bookRepository.GetByIdAsync(model.Id);
-
-        if (book == null) return operationResult.Failed(ApplicationMessages.RecordNotFound);
-
-        if (_bookRepository.Exists(x => x.Title == model.Title && x.Id != model.Id))
-            return operationResult.Failed(ApplicationMessages.DuplicatedRecord);
-
-        byte[]? picture = await ConvertImageToByte(Image);
-
-        book.Edit(model.Title, model.ISBN, model.Code, model.Description, model.CategoryId, picture);
-
-        book.BookAuthors.Clear();
-        book.BookPublishers.Clear();
-        book.BookTranslators.Clear();
-
-        await AddAuthors(model, book);
-        await AddPublishers(model, book);
-        await AddTranslators(model, book);
-
-        var result = _bookRepository.UpdateAsync(book);
-        return result == null
-                            ? operationResult.Failed(ApplicationMessages.ProblemFound)
-                            : operationResult.Succeeded();
-    }
-
-    #endregion
-
-    #region Delete
-    public async Task Delete(int id)
-    {
-        var result = await _bookRepository.GetByIdAsync(id);
-        await _bookRepository.DeleteAsync(result);
-    }
-    #endregion
 
 }

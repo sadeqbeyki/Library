@@ -1,18 +1,14 @@
 ﻿using AppFramework.Application;
-using Library.Application.DTOs.Book;
+using Library.Application.DTOs.Books;
+using Library.Domain.Entities.BookAgg;
 using Microsoft.AspNetCore.Http;
 
 namespace Library.Application.Contracts;
 
 public interface IBookService
 {
-    Task<BookViewModel> GetById(int id);
-    Task<List<BookViewModel>> GetAll();
-    Task<List<BookViewModel>> GetBooks();
-
-    List<BookViewModel> Search(BookSearchModel searchModel);
-
-    Task<OperationResult> Create(CreateBookModel createModel);
-    Task Delete(int id);
-    Task<OperationResult> Update(BookViewModel model, IFormFile? Image);
+    Task AddAuthors(BookDto model, Book book);
+    Task AddPublishers(BookDto model, Book book);
+    Task AddTranslators(BookDto model, Book book);
+    Task<byte[]?> ConvertImageToByte(IFormFile Image);
 }

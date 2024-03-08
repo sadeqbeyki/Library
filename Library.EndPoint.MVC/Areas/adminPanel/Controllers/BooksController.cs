@@ -4,7 +4,7 @@ using Library.Application.CQRS.Queries.Book;
 using Library.Application.CQRS.Queries.BookCategory;
 using Library.Application.CQRS.Queries.Publisher;
 using Library.Application.CQRS.Queries.Translator;
-using Library.Application.DTOs.Book;
+using Library.Application.DTOs.Books;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

@@ -1,7 +1,7 @@
 ﻿using AppFramework.Application;
 using Library.Application.Contracts;
-using Library.Application.DTOs.Book;
 using Library.Application.DTOs.BookCategory;
+using Library.Application.DTOs.Books;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.BookCategoryAgg;
 

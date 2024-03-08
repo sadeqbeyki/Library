@@ -1,6 +1,6 @@
 ﻿using AppFramework.Application;
-using Library.Application.DTOs.Book;
 using Library.Application.DTOs.BookCategory;
+using Library.Application.DTOs.Books;
 
 namespace Library.Application.Contracts;
 

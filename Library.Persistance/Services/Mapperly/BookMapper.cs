@@ -1,4 +1,4 @@
-﻿using Library.Application.DTOs.Book;
+﻿using Library.Application.DTOs.Books;
 using Library.Domain.Entities.BookAgg;
 using Riok.Mapperly.Abstractions;
 
