@@ -1,4 +1,4 @@
-﻿namespace Library.Application.DTOs.BookCategory;
+﻿namespace Library.Application.DTOs.BookCategories;
 
 public class BookCategoryDto
 {

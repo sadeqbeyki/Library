@@ -1,6 +1,6 @@
 ﻿using Library.Application.CQRS.Commands.Translator;
 using Library.Application.CQRS.Queries.Translator;
-using Library.Application.DTOs.Translator;
+using Library.Application.DTOs.Translators;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

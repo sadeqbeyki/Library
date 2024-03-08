@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using Library.Application.DTOs.Translator;
+using Library.Application.DTOs.Translators;
 using Library.Application.Interfaces;
 using Library.Domain.Entities.BookAgg;
 using Library.Domain.Entities.TranslatorAgg;

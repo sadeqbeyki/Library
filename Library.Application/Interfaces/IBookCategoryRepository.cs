@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using Library.Application.DTOs.BookCategory;
+using Library.Application.DTOs.BookCategories;
 using Library.Domain.Entities.BookAgg;
 using Library.Domain.Entities.BookCategoryAgg;
 

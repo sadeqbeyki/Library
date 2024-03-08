@@ -1,4 +1,4 @@
-﻿using Library.Application.DTOs.BookCategory;
+﻿using Library.Application.DTOs.BookCategories;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Models;

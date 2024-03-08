@@ -1,6 +1,6 @@
 ﻿using Library.Application.CQRS.Commands.BookCategory;
 using Library.Application.CQRS.Queries.BookCategory;
-using Library.Application.DTOs.BookCategory;
+using Library.Application.DTOs.BookCategories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

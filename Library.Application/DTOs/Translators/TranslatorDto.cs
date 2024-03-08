@@ -1,6 +1,6 @@
-﻿namespace Library.Application.DTOs.Publisher
+﻿namespace Library.Application.DTOs.Translators
 {
-    public class PublisherDto
+    public class TranslatorDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

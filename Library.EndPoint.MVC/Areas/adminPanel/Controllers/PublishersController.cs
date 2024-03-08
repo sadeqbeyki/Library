@@ -1,6 +1,6 @@
 ﻿using Library.Application.CQRS.Commands.Publisher;
 using Library.Application.CQRS.Queries.Publisher;
-using Library.Application.DTOs.Publisher;
+using Library.Application.DTOs.Publishers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

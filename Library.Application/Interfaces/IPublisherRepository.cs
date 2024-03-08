@@ -1,5 +1,5 @@
 ﻿using AppFramework.Domain;
-using Library.Application.DTOs.Publisher;
+using Library.Application.DTOs.Publishers;
 using Library.Domain.Entities.BookAgg;
 using Library.Domain.Entities.PublisherAgg;
 
