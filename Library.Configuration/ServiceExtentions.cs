@@ -15,18 +15,15 @@ public static class ServiceExtentions
     public static void AddBookInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IBookCategoryRepository, BookCategoryRepository>();
-        services.AddScoped<IBookCategoryService, BookCategoryService>();
 
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IBookService, BookService>();
 
         services.AddScoped<IPublisherRepository, PublisherRepository>();
-        services.AddScoped<IPublisherService, PublisherService>();
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
 
         services.AddScoped<ITranslatorRepository, TranslatorRepository>();
-        services.AddScoped<ITranslatorService, TranslatorService>();
 
         services.AddScoped<ILendRepository, LendRepository>();
 

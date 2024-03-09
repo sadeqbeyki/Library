@@ -16,7 +16,7 @@ public class LendDto
     public DateTime CreationDate { get; set; }
     public DateTime IdealReturnDate { get; set; }
     public Guid? ReturnEmployeeID { get; set; }
-    public string ReturnEmployeeName { get; set; }
+    public string? ReturnEmployeeName { get; set; }
     public DateTime? ReturnDate { get; set; }
     public string Description { get; set; }
 }

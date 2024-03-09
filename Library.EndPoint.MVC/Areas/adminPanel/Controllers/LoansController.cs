@@ -1,8 +1,6 @@
 ﻿using Identity.Application.Features.Query.User;
-using Identity.Application.Interfaces;
-using Library.Application.Contracts;
 using Library.Application.CQRS.Commands.Lends;
-using Library.Application.CQRS.Queries.Book;
+using Library.Application.CQRS.Queries.Books;
 using Library.Application.CQRS.Queries.Lend;
 using Library.Application.CQRS.Queries.Lends;
 using Library.Application.DTOs.Lends;

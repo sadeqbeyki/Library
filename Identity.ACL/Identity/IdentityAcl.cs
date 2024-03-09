@@ -20,6 +20,8 @@ public class IdentityAcl : IIdentityAcl
     }
     public async Task<string> GetUserName(Guid? id)
     {
+        if (id == null)
+            return "";
         var userName = await _userService.GetUserNameAsync(id);
         return userName;
     }

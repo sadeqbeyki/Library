@@ -6,12 +6,9 @@ using Library.EndPoint.MVC.Helper;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using Warehouse.Application.DTOs;
 using MediatR;
-using Library.Application.Contracts;
-using Warehouse.Application.Contracts;
 using Warehouse.Application.DTOs.InventoryOperation;
 using Warehouse.Application.DTOs.Inventories;
 using Warehouse.Application.CQRS.Queries.Inventories;
-using Library.Application.CQRS.Queries.Book;
 using Warehouse.Application.CQRS.Commands.Inventories;
 using Library.Application.CQRS.Queries.Books;
 
@@ -20,12 +17,10 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 public class InventoryController : Controller
 {
-    private readonly IBookService _bookService;
     private readonly IMediator _mediator;
 
-    public InventoryController(IBookService bookService, IMediator mediator)
+    public InventoryController(IMediator mediator)
     {
-        _bookService = bookService;
         _mediator = mediator;
     }
 
@@ -63,7 +58,7 @@ public class InventoryController : Controller
     public async Task<IActionResult> Update(int id)
     {
         var result = await _mediator.Send(new GetInventoryQuery(id));
-        result.Books = await _bookService.GetBooks();
+        result.Books = await _mediator.Send(new GetBooksQuery());
         return View("Update", result);
     }
     [HttpPost]

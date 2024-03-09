@@ -1,9 +1,9 @@
 ﻿using Library.Application.CQRS.Commands.Authors;
-using Library.Application.CQRS.Commands.Book;
-using Library.Application.CQRS.Queries.Book;
-using Library.Application.CQRS.Queries.BookCategory;
-using Library.Application.CQRS.Queries.Publisher;
-using Library.Application.CQRS.Queries.Translator;
+using Library.Application.CQRS.Commands.Books;
+using Library.Application.CQRS.Queries.BookCategories;
+using Library.Application.CQRS.Queries.Books;
+using Library.Application.CQRS.Queries.Publishers;
+using Library.Application.CQRS.Queries.Translators;
 using Library.Application.DTOs.Books;
 using Library.EndPoint.MVC.Areas.adminPanel.Models;
 using MediatR;
@@ -119,7 +119,7 @@ public class BooksController : Controller
         model.Book.Translators = [.. selectedTranslators.Split(',')];
 
         var result = await _mediator.Send(new UpdateBookCommand(model.Book, pictureFile));
-        if (result)
+        if (result.IsSucceeded)
             return RedirectToAction("Index");
         return View(model);
     }

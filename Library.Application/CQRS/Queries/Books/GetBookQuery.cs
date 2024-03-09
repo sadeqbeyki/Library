@@ -9,15 +9,9 @@ namespace Library.Application.CQRS.Queries.Books;
 public record  GetBookQuery(int id):IRequest<BookViewModel>
 {
 }
-internal sealed class GetBookQueryHandler : IRequestHandler<GetBookQuery, BookViewModel>
+internal sealed class GetBookQueryHandler(IBookRepository bookRepository) : IRequestHandler<GetBookQuery, BookViewModel>
 {
-    private readonly IBookService _bookService;
-    private readonly IBookRepository _bookRepository;
-
-    public GetBookQueryHandler(IBookService bookService)
-    {
-        _bookService = bookService;
-    }
+    private readonly IBookRepository _bookRepository = bookRepository;
 
     public async Task<BookViewModel> Handle(GetBookQuery request, CancellationToken cancellationToken)
     {
