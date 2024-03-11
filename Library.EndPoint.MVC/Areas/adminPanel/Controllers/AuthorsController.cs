@@ -22,6 +22,12 @@ public class AuthorsController : Controller
         return View(result);
     }
     [HttpGet]
+    public async Task<ActionResult> Details(int id)
+    {
+        var result = await _mediator.Send(new GetAuthorByIdQuery(id));
+        return View("Details", result);
+    }
+    [HttpGet]
     public ActionResult<AuthorDto> Create()
     {
         return View();

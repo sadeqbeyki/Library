@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library.Application.CQRS.Queries.Books;
 
-public record  GetBookQuery(int id):IRequest<BookViewModel>
+public record GetBookQuery(int Id) : IRequest<BookViewModel>
 {
 }
 internal sealed class GetBookQueryHandler(IBookRepository bookRepository) : IRequestHandler<GetBookQuery, BookViewModel>
@@ -30,8 +30,8 @@ internal sealed class GetBookQueryHandler(IBookRepository bookRepository) : IReq
                 Publishers = book.BookPublishers.Select(ab => ab.Publisher.Name).ToList(),
                 Translators = book.BookTranslators.Select(ab => ab.Translator.Name).ToList(),
                 Category = book.Category.Name,
-            }).FirstOrDefaultAsync(b => b.Id == request.id);
+            }).FirstOrDefaultAsync(b => b.Id == request.Id);
 
-        return result ?? throw new Exception($"No book was found with this {request.id}");
+        return result ?? throw new Exception($"No book was found with this {request.Id}");
     }
 }
