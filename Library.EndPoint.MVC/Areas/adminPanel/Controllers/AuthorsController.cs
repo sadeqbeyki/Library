@@ -1,5 +1,8 @@
 ﻿using Library.Application.CQRS.Commands.Authors;
+using Library.Application.CQRS.Commands.Books;
+using Library.Application.CQRS.Queries.Books;
 using Library.Application.DTOs.Authors;
+using Library.Application.DTOs.Books;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,4 +61,21 @@ public class AuthorsController : Controller
         var result = await _mediator.Send(new UpdateAuthorCommand(id , model));
         return RedirectToAction("Index", result);
     }
+    #region Delete
+    [HttpGet]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var result = await _mediator.Send(new GetAuthorByIdQuery(id));
+        if (result == null)
+            return NotFound();
+        return View(result);
+    }
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> ConfirmDelete(int id)
+    {
+        await _mediator.Send(new RemoveAuthorCommand(id));
+        return RedirectToAction("Index");
+    }
+    #endregion
 }
