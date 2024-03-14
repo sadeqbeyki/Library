@@ -1,0 +1,42 @@
+﻿@using Library.Application.DTOs.Translators;
+@model TranslatorDto
+
+@{
+    ViewData["Title"] = "Update Translator";
+}
+
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-action="Update" method="post">
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label">Name</label>
+                            <input type="text" class="form-control" asp-for="Name" required>
+                            <span asp-validation-for="Name" class="error"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group no-margin">
+                                <label asp-for="Description" class="control-label">Description</label>
+                                <textarea class="form-control autogrow" asp-for="Description"
+                                          style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;" required></textarea>
+                                <span asp-validation-for="Description" class="error"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+                <a class="btn btn-default waves-effect" asp-action="Index">Back</a>
+                <button type="submit" class="btn btn-info waves-effect waves-light">Update</button>
+            </div>
+        </form>
+    </div>
+</div>

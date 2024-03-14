@@ -1,10 +1,10 @@
-﻿using Library.Application.DTOs.Publishers;
+﻿using Library.Application.DTOs.Translators;
 using Library.Application.Interfaces;
 using MediatR;
 
 namespace Library.Application.CQRS.Commands.Translators;
 
-public record UpdateTranslatorCommand(int id, PublisherDto dto) : IRequest<int>;
+public record UpdateTranslatorCommand(int id, TranslatorDto dto) : IRequest<int>;
 internal sealed class UpdateTranslatorCommandHandler(ITranslatorRepository translatorRepository) 
                                                         : IRequestHandler<UpdateTranslatorCommand, int>
 {
