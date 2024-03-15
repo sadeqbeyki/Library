@@ -46,19 +46,19 @@ public class AuthorsController : Controller
         return RedirectToAction("Index", result);
     }
     [HttpGet]
-    public async Task<ActionResult<AuthorDto>> Update([FromForm]int id)
+    public async Task<ActionResult<AuthorDto>> Update(int id)
     {
         var result = await _mediator.Send(new GetAuthorByIdQuery(id));
         return View("Update",result);
     }
     [HttpPost]
-    public async Task<ActionResult> Update(int id, AuthorDto model)
+    public async Task<ActionResult> Update(AuthorDto model)
     {
         if (!ModelState.IsValid)
         {
             return View();
         }
-        var result = await _mediator.Send(new UpdateAuthorCommand(id , model));
+        var result = await _mediator.Send(new UpdateAuthorCommand(model));
         return RedirectToAction("Index", result);
     }
     #region Delete

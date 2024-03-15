@@ -4,7 +4,7 @@ using Library.Application.Interfaces;
 
 namespace Library.Application.CQRS.Commands.Authors;
 
-public record UpdateAuthorCommand(int id, AuthorDto Dto) : IRequest<int>;
+public record UpdateAuthorCommand(AuthorDto Dto) : IRequest<int>;
 
 internal sealed class UpdateAuthorCommandHandler(IAuthorRepository authorRepository) : IRequestHandler<UpdateAuthorCommand, int>
 {
@@ -12,7 +12,7 @@ internal sealed class UpdateAuthorCommandHandler(IAuthorRepository authorReposit
 
     public async Task<int> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetByIdAsync(request.id);
+        var author = await _authorRepository.GetByIdAsync(request.Dto.Id);
         if (author != null)
         author.Name = request.Dto.Name;
         author.Description = request.Dto.Description;

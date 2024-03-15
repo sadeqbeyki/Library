@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Library.Application.CQRS.Commands.Translators;
 
-public record UpdateTranslatorCommand(int id, TranslatorDto dto) : IRequest<int>;
+public record UpdateTranslatorCommand(TranslatorDto dto) : IRequest<int>;
 internal sealed class UpdateTranslatorCommandHandler(ITranslatorRepository translatorRepository) 
                                                         : IRequestHandler<UpdateTranslatorCommand, int>
 {
@@ -12,7 +12,7 @@ internal sealed class UpdateTranslatorCommandHandler(ITranslatorRepository trans
 
     public async Task<int> Handle(UpdateTranslatorCommand request, CancellationToken cancellationToken)
     {
-        var translator = await _translatorRepository.GetByIdAsync(request.id);
+        var translator = await _translatorRepository.GetByIdAsync(request.dto.Id);
         if (translator == null)
             throw new KeyNotFoundException("i couldn't find a translator with this id!");
 
@@ -20,6 +20,6 @@ internal sealed class UpdateTranslatorCommandHandler(ITranslatorRepository trans
         translator.Description = request.dto.Description;
 
         await _translatorRepository.UpdateAsync(translator);
-        return request.id;
+        return translator.Id;
     }
 }

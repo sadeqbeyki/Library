@@ -48,13 +48,13 @@ public class TranslatorsController : Controller
         return View("Update", result);
     }
     [HttpPost]
-    public async Task<ActionResult> Update(int id, TranslatorDto model)
+    public async Task<ActionResult> Update(TranslatorDto model)
     {
         if (!ModelState.IsValid)
         {
             return View();
         }
-        var result = await _mediator.Send(new UpdateTranslatorCommand(id, model));
+        var result = await _mediator.Send(new UpdateTranslatorCommand(model));
         return RedirectToAction("Index", result);
     }
 }
