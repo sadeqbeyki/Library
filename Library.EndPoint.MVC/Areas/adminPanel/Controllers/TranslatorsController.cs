@@ -20,6 +20,12 @@ public class TranslatorsController : Controller
         _mediator = mediator;
     }
 
+    [HttpGet]
+    public async Task<ActionResult> Details(int id)
+    {
+        var result = await _mediator.Send(new GetTranslatorQuery(id));
+        return View("Details", result);
+    }
     public async Task<ActionResult<List<TranslatorDto>>> Index()
     {
         var result = await _mediator.Send(new GetTranslatorsQuery());
@@ -42,7 +48,7 @@ public class TranslatorsController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<TranslatorDto>> Update([FromForm] int id)
+    public async Task<ActionResult<TranslatorDto>> Update(int id)
     {
         var result = await _mediator.Send(new GetTranslatorQuery(id));
         return View("Update", result);
