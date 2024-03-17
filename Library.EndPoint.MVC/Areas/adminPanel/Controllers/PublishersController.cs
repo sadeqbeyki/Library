@@ -1,4 +1,5 @@
-﻿using Library.Application.CQRS.Commands.Publishers;
+﻿using Library.Application.CQRS.Commands.Authors;
+using Library.Application.CQRS.Commands.Publishers;
 using Library.Application.CQRS.Queries.Publishers;
 using Library.Application.DTOs.Publishers;
 using MediatR;
@@ -21,6 +22,12 @@ public class PublishersController : Controller
     {
         var result = await _mediator.Send(new GetPublishersQuery());
         return View(result);
+    }
+    [HttpGet]
+    public async Task<ActionResult> Details(int id)
+    {
+        var result = await _mediator.Send(new GetPublisherQuery(id));
+        return View("Details", result);
     }
     [HttpGet]
     public ActionResult<PublisherDto> Create()
