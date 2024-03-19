@@ -61,4 +61,21 @@ public class PublishersController : Controller
         var result = await _mediator.Send(new UpdatePublisherCommand(model));
         return RedirectToAction("Index", result);
     }
+    #region Delete
+    [HttpGet]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var result = await _mediator.Send(new GetPublisherQuery(id));
+        if (result == null)
+            return NotFound();
+        return View(result);
+    }
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> ConfirmDelete(int id)
+    {
+        await _mediator.Send(new DeletePublisherCommand(id));
+        return RedirectToAction("Index");
+    }
+    #endregion
 }
