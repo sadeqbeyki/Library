@@ -63,4 +63,22 @@ public class TranslatorsController : Controller
         var result = await _mediator.Send(new UpdateTranslatorCommand(model));
         return RedirectToAction("Index", result);
     }
+
+    #region Delete
+    [HttpGet]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var result = await _mediator.Send(new GetTranslatorQuery(id));
+        if (result == null)
+            return NotFound();
+        return View(result);
+    }
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> ConfirmDelete(int id)
+    {
+        await _mediator.Send(new DeleteTranslatorCommand(id));
+        return RedirectToAction("Index");
+    }
+    #endregion
 }
