@@ -11,7 +11,7 @@ internal sealed class UpdatePublisherCommandHandler(IPublisherRepository publish
 
     public async Task<int> Handle(UpdatePublisherCommand request, CancellationToken cancellationToken)
     {
-        var publisher = await _publisherRepository.GetByIdAsync(request.dto.id);
+        var publisher = await _publisherRepository.GetByIdAsync(request.dto.Id);
         if (publisher != null)
         {
             publisher.Name = request.dto.Name;
