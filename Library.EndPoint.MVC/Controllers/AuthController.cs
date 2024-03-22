@@ -51,7 +51,8 @@ public class AuthController : Controller
         {
             return RedirectToAction("Index", "Home", new { token = result.AccessToken });
         }
-        return response;
+        return RedirectToAction("AccessDenied");
+        //return response;
 
     }
 
