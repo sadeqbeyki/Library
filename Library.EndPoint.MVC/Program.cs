@@ -8,6 +8,7 @@ using Warehouse.Application;
 using Library.Application;
 using Identity.ACL;
 using Inventory.ACL;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +89,15 @@ app.UseRouting();
 // app.UseRateLimiter();
 // app.UseRequestLocalization();
 // app.UseCors();
+
+//app.UseStatusCodePages(async context =>
+//{
+//    var response = context.HttpContext.Response;
+//    if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+//    {
+//        response.Redirect("/AccessDenied");
+//    }
+//});
 
 app.UseAuthentication();
 app.UseAuthorization();

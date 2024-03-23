@@ -21,8 +21,14 @@ public class AuthorsController : Controller
 
     public async Task<ActionResult<List<AuthorDto>>> Index()
     {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("AccessDenied", "Error");
+        }
         var result = await _mediator.Send(new GetAuthorsQuery());
         return View(result);
+        //return RedirectToAction("AccessDenied");
+
     }
     [HttpGet]
     public async Task<ActionResult> Details(int id)
