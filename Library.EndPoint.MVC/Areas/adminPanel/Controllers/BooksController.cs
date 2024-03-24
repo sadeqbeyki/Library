@@ -15,14 +15,9 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
 [Authorize(Roles = "Admin, Manager")]
-public class BooksController : Controller
+public class BooksController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public BooksController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     #region Get
     [HttpGet]

@@ -10,14 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 [Authorize(Roles = "Admin, Manager")]
-public class AuthorsController : Controller
+public class AuthorsController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public AuthorsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     public async Task<ActionResult<List<AuthorDto>>> Index()
     {
@@ -27,7 +22,6 @@ public class AuthorsController : Controller
         }
         var result = await _mediator.Send(new GetAuthorsQuery());
         return View(result);
-        //return RedirectToAction("AccessDenied");
 
     }
     [HttpGet]

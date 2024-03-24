@@ -15,15 +15,9 @@ using X.PagedList;
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 [Authorize(Roles = "Admin, Manager")]
-public class LoansController : Controller
+public class LoansController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-
-    public LoansController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     #region Search
     public async Task<ActionResult<List<LendDto>>> Index(LendSearchModel searchModel, int? page)

@@ -10,14 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 [Authorize(Roles = "Admin, Manager")]
-public class PublishersController : Controller
+public class PublishersController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public PublishersController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     public async Task<ActionResult<List<PublisherDto>>> Index()
     {

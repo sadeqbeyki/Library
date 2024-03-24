@@ -8,14 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Area("adminPanel")]
 [Authorize(Roles = "Admin")]
-public class RolesController : Controller
+public class RolesController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public RolesController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     public async Task<IActionResult> Index()
     {

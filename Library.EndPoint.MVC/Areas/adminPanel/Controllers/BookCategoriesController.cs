@@ -9,14 +9,9 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
 [Authorize(Roles = "Admin, Manager")]
-public class BookCategoriesController : Controller
+public class BookCategoriesController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public BookCategoriesController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     public async Task<ActionResult<List<BookCategoryDto>>> Index()
     {

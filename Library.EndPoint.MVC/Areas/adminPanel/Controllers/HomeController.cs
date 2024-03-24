@@ -8,19 +8,12 @@ using X.PagedList;
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
-public class HomeController : Controller
+public class HomeController(UserManager<ApplicationUser> userManager,
+    IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
+    private readonly IMediator _mediator = mediator;
 
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public HomeController(UserManager<ApplicationUser> userManager,
-        IMediator mediator)
-    {
-
-        _userManager = userManager;
-        _mediator = mediator;
-    }
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     public IActionResult Index()
     {

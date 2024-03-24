@@ -11,14 +11,9 @@ namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 
 [Area("adminPanel")]
 [Authorize(Roles = "Admin, Manager")]
-public class TranslatorsController : Controller
+public class TranslatorsController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public TranslatorsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     [HttpGet]
     public async Task<ActionResult> Details(int id)

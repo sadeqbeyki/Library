@@ -15,14 +15,9 @@ using Library.Application.CQRS.Queries.Books;
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 [Area("adminPanel")]
-public class InventoryController : Controller
+public class InventoryController(IMediator mediator) : Controller
 {
-    private readonly IMediator _mediator;
-
-    public InventoryController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly IMediator _mediator = mediator;
 
     public async Task<IActionResult> Index(InventorySearchModel searchModel, int? page)
     {
