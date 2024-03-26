@@ -17,7 +17,11 @@ public sealed class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQ
 
     public async Task<UserDetailsDto> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
     {
-        var user = await _iUserService.GetUserByIdAsync(request.UserId, cancellationToken);
-        return user;
+        if (request.UserId != null)
+        {
+            var user = await _iUserService.GetUserByIdAsync(request.UserId, cancellationToken);
+            return user;
+        }
+        return View();
     }
 }

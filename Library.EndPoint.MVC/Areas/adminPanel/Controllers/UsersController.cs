@@ -77,10 +77,6 @@ public class UsersController : Controller
     public async Task<ActionResult> Delete(Guid id)
     {
         var user = await _mediator.Send(new GetUserDetailsQuery(id));
-        if (id == null || user == null)
-        {
-            return View();
-        }
         return View(user);
     }
 
