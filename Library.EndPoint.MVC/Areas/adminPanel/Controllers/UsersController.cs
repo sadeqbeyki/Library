@@ -67,9 +67,6 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<ActionResult> Update(UpdateUserDto dto)
     {
-        //if (!ModelState.IsValid)
-        //    return View(dto);
-
         var user = await _mediator.Send(new UpdateUserCommand(dto));
         return RedirectToAction("Index", user);
     }
@@ -116,9 +113,6 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> RemoveUserFromRole(Guid userId, Guid roleId)
     {
-        if (userId == null || roleId == null)
-            return BadRequest();
-
         var result = await _mediator.Send(new RemoveUserRoleCommand()
         {
             UserId = userId,

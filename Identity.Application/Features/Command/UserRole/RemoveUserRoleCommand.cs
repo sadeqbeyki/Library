@@ -20,6 +20,8 @@ public sealed class RemoveUserRoleCommandHandler : IRequestHandler<RemoveUserRol
 
     public async Task<bool> Handle(RemoveUserRoleCommand request, CancellationToken cancellationToken)
     {
+        if (request.UserId == null || request.RoleId == null)
+            throw new Exception("cant find user or role");
         var result = await _userService.RemoveUserRole(request.UserId, request.RoleId);
         return result;
     }
