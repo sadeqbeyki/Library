@@ -22,6 +22,6 @@ public sealed class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQ
             var user = await _iUserService.GetUserByIdAsync(request.UserId, cancellationToken);
             return user;
         }
-        return View();
+        throw new Exception("not found!");
     }
 }
