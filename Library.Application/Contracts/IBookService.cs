@@ -1,6 +1,5 @@
 ﻿using Library.Application.DTOs.Books;
 using Library.Domain.Entities.BookAgg;
-using Microsoft.AspNetCore.Http;
 
 namespace Library.Application.Contracts;
 
