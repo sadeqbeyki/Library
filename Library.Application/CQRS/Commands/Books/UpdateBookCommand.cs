@@ -3,6 +3,7 @@ using Library.Application.Contracts;
 using Library.Application.DTOs.Books;
 using Library.Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Library.Application.CQRS.Commands.Books;
 

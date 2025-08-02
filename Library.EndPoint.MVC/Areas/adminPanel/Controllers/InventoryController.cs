@@ -11,6 +11,7 @@ using Warehouse.Application.DTOs.Inventories;
 using Warehouse.Application.CQRS.Queries.Inventories;
 using Warehouse.Application.CQRS.Commands.Inventories;
 using Library.Application.CQRS.Queries.Books;
+using X.PagedList.Extensions;
 
 namespace Library.EndPoint.MVC.Areas.adminPanel.Controllers;
 [Authorize(Roles = "Admin, Manager")]

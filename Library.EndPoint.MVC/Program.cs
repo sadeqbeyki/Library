@@ -8,7 +8,9 @@ using Warehouse.Application;
 using Library.Application;
 using Identity.ACL;
 using Inventory.ACL;
-using System.Net;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,9 +48,14 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: fals
 
 
 
+
 #region DependencyInjection
-builder.Services.AddAutoMapper(typeof(IdentityMapProfile));
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// -------------------- AutoMapper --------------------
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+});
+// -------------------- AutoMapper --------------------
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 
